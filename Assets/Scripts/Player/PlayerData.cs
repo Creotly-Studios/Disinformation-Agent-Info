@@ -5,7 +5,6 @@ public class PlayerData : ScriptableObject
 {
     [Header("MAIN_STATS")] 
     public int maxHealth = 10;
-    public int punchDamage = 1;
     
     [Header("MOVEMENT")]
     public float speed = 5f;
@@ -16,4 +15,10 @@ public class PlayerData : ScriptableObject
     public float jumpHeight = 2f;
     public float jumpForwardForce = 2f;
     public float turnSmoothTime = 0.1f;
+
+    [Header("INTERACTION")] 
+    public float detectRadius = 2;
+    public float detectRange = 2;
+    
+    
 }

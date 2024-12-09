@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    public Animator animator;
     private PlayerMovement _playerMovement;
 
     private const string MOVEMENT = "m_Speed";
@@ -11,7 +11,6 @@ public class PlayerAnimation : MonoBehaviour
     void Start()
     {
         _playerMovement = GetComponent<PlayerMovement>();
-        animator.SetBool(JUMP, false);
     }
 
     // Update is called once per frame

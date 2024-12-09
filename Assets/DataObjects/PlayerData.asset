@@ -13,8 +13,7 @@ MonoBehaviour:
   m_Name: PlayerData
   m_EditorClassIdentifier: 
   maxHealth: 10
-  punchDamage: 1
-  speed: 3.75
+  speed: 3.5
   sprintSpeed: 5.5
   sprintDuration: 10
   sprintCooldown: 5
@@ -22,3 +21,5 @@ MonoBehaviour:
   jumpHeight: 0.5
   jumpForwardForce: 0.5
   turnSmoothTime: 0.1
+  detectRadius: 0.91
+  detectRange: 0.06

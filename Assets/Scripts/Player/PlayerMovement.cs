@@ -19,9 +19,12 @@ public class PlayerMovement : MonoBehaviour
     public bool IsSprinting { get; private set; }
     private float _sprintTimeRemaining;
     private float _sprintCooldownRemaining;
+    
+    public bool CanMove { get; private set; }
 
     void Start()
     {
+        SetCanMove(true);
         _camera = Camera.main;
         _characterController = GetComponent<CharacterController>();
         _sprintTimeRemaining = playerData.sprintDuration;
@@ -31,15 +34,17 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         HandleGravityAndJump();
-        HandleSprintInput();
         _input = InputManager.instance.currentMovementInput;
         Move();
     }
 
     public void Move()
     {
+        if (!CanMove)
+            return;
+        
         Vector3 dir = new Vector3(_input.x, 0, _input.y);
-            float currentSpeed = IsSprinting ? playerData.sprintSpeed : playerData.speed;
+        float currentSpeed = GetSpeedValue();
         if (dir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
@@ -79,30 +84,29 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    void HandleSprintInput()
+    float GetSpeedValue()
     {
-        if (_sprintCooldownRemaining > 0) { _sprintCooldownRemaining -= Time.deltaTime; }
-
-        if (IsSprinting)
+        float givenSpeed;
+        if (InputManager.instance.sprintPressed)
         {
-            _sprintTimeRemaining -= Time.deltaTime;
-
-            if (_sprintTimeRemaining <= 0)
-            {
-                IsSprinting = false;
-                _sprintCooldownRemaining = playerData.sprintCooldown;
-            }
-        }
-
-        if (!IsSprinting && _sprintCooldownRemaining <= 0 && InputManager.instance.sprintPressed)
-        {
+            givenSpeed = playerData.sprintSpeed;
             IsSprinting = true;
-            _sprintTimeRemaining = playerData.sprintDuration;
         }
+        else
+        {
+            givenSpeed = playerData.speed;
+            IsSprinting = false;
+        }
+        return givenSpeed;
     }
 
     public bool IsGrounded()
     {
         return _characterController.isGrounded;
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        CanMove = canMove;
     }
 }
