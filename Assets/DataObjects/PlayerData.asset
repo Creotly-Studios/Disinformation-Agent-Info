@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e07c8e28b2157b409f8a135a4e40f56, type: 3}
+  m_Name: PlayerData
+  m_EditorClassIdentifier: 
+  maxHealth: 10
+  speed: 3.5
+  sprintSpeed: 5.5
+  sprintDuration: 10
+  sprintCooldown: 5
+  gravity: -9.81
+  jumpHeight: 0.5
+  jumpForwardForce: 0.5
+  turnSmoothTime: 0.1
+  detectRadius: 0.91
+  detectRange: 0.06
