@@ -88,6 +88,7 @@ public class MainMenu : MonoBehaviour
                 SetCurrentPanel(CurrentPanel.None);
                 break;
             case CurrentPanel.Stats:
+                SetCurrentPanel(CurrentPanel.Options);
                 break;
         }
     }
@@ -100,6 +101,7 @@ public class MainMenu : MonoBehaviour
                 SetCurrentPanel(CurrentPanel.Stats);
                 break;
             case CurrentPanel.Options:
+                SetCurrentPanel(CurrentPanel.Stats);
                 break;
             case CurrentPanel.Stats:
                 SetCurrentPanel(CurrentPanel.None);

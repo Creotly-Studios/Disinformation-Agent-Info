@@ -1,10 +1,22 @@
 using System;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class OptionsPanel : MonoBehaviour
 {
+    [SerializeField] private Button sfxButton;
+    [SerializeField] private TextMeshProUGUI sfxText;
+    
+
     void Start()
     {
+        sfxButton.onClick.AddListener(() =>
+        {
+            SFXPlayer.Instance.ChangeVolume();
+            UpdateText();
+        });
+        
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
         Hide();
     }
@@ -28,7 +40,13 @@ public class OptionsPanel : MonoBehaviour
 
     void Show()
     {
+        UpdateText();
         gameObject.SetActive(true);
+    }
+
+    void UpdateText()
+    {
+        sfxText.text = $" SFX: {SFXPlayer.Instance.GetVolume() * 10}";
     }
     
 }

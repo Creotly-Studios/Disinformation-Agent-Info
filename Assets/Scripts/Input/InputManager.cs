@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 public class InputManager : MonoBehaviour
 {
@@ -9,16 +10,15 @@ public class InputManager : MonoBehaviour
     public InputSystem_Actions InputSystemActions { get; set; }
 
     public Vector2 currentMovementInput;
-    private bool _isMovementPressed;
+    public bool isMovementPressed;
     
-<<<<<<< Updated upstream
-=======
+
     public bool jumpPressed = false;
     public bool attackPressed = false;
     public bool interactPressed = false;
     public bool pausePressed = false;
+    public bool sprintPressed;
 
->>>>>>> Stashed changes
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
@@ -30,11 +30,6 @@ public class InputManager : MonoBehaviour
 
     void Start()
     {
-<<<<<<< Updated upstream
-        _inputSystemActions.Player.Move.started += ctx => OnMove(ctx);
-        _inputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
-        _inputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
-=======
         InputSystemActions.Player.Move.started += ctx => OnMove(ctx);
         InputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
         InputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
@@ -78,13 +73,12 @@ public class InputManager : MonoBehaviour
     private void OnJump(InputAction.CallbackContext ctx)
     {
         jumpPressed = ctx.ReadValueAsButton();
->>>>>>> Stashed changes
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
         currentMovementInput = ctx.ReadValue<Vector2>();
-        _isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
+        isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
     }
 
     private void OnEnable()
