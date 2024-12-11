@@ -3,12 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-<<<<<<< Updated upstream
-=======
     private Player _player;
     private PlayerData _playerData;
     
->>>>>>> Stashed changes
     private CharacterController _characterController;
     
     private Camera _camera;
@@ -24,10 +21,6 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-<<<<<<< Updated upstream
-        _camera = Camera.main;
-        _characterController = GetComponent<CharacterController>();
-=======
         _player = GetComponent<Player>();
         _playerData = _player.playerData;
         
@@ -36,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _sprintTimeRemaining = _playerData.sprintDuration;
         _sprintCooldownRemaining = 0f;
->>>>>>> Stashed changes
     }
 
     // Update is called once per frame
@@ -55,21 +47,11 @@ public class PlayerMovement : MonoBehaviour
         if (dir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
-<<<<<<< Updated upstream
-            float angle = Mathf.SmoothDamp(transform.eulerAngles.y, targetAngle,
-                ref turnSmoothVel,
-                turnSmoothTime);
-            transform.rotation = Quaternion.Euler(0f, angle, 0f);
-
-            Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
-            _characterController.Move(moveDir * speed * Time.deltaTime);
-=======
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, _playerData.turnSmoothTime);
             transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             _characterController.Move((moveDir * currentSpeed + _jumpForwardVelocity) * Time.deltaTime);
->>>>>>> Stashed changes
         }
     }
 
@@ -77,15 +59,6 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_characterController.isGrounded)
         {
-<<<<<<< Updated upstream
-            _characterController.Move(new Vector3(0, -0.05f, 0));
-        }
-        else
-        {
-            _characterController.Move(new Vector3(0, gravity, 0));
-        }
-    }
-=======
             if (_verticalVelocity < 0)
             {
                 _verticalVelocity = -2f;
@@ -129,5 +102,4 @@ public class PlayerMovement : MonoBehaviour
     {
         CanMove = canMove;
     }
->>>>>>> Stashed changes
 }
