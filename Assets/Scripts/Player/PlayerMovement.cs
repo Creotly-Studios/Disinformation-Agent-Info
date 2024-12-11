@@ -3,6 +3,12 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+<<<<<<< Updated upstream
+=======
+    private Player _player;
+    private PlayerData _playerData;
+    
+>>>>>>> Stashed changes
     private CharacterController _characterController;
     
     private Camera _camera;
@@ -18,8 +24,19 @@ public class PlayerMovement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+<<<<<<< Updated upstream
         _camera = Camera.main;
         _characterController = GetComponent<CharacterController>();
+=======
+        _player = GetComponent<Player>();
+        _playerData = _player.playerData;
+        
+        SetCanMove(true);
+        _camera = Camera.main;
+        _characterController = GetComponent<CharacterController>();
+        _sprintTimeRemaining = _playerData.sprintDuration;
+        _sprintCooldownRemaining = 0f;
+>>>>>>> Stashed changes
     }
 
     // Update is called once per frame
@@ -27,7 +44,9 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleGravity();
         _input = InputManager.instance.currentMovementInput;
+ 
         Move();
+        
     }
 
     public void Move()
@@ -36,6 +55,7 @@ public class PlayerMovement : MonoBehaviour
         if (dir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
+<<<<<<< Updated upstream
             float angle = Mathf.SmoothDamp(transform.eulerAngles.y, targetAngle,
                 ref turnSmoothVel,
                 turnSmoothTime);
@@ -43,6 +63,13 @@ public class PlayerMovement : MonoBehaviour
 
             Vector3 moveDir = Quaternion.Euler(0, targetAngle, 0) * Vector3.forward;
             _characterController.Move(moveDir * speed * Time.deltaTime);
+=======
+            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, _playerData.turnSmoothTime);
+            transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+
+            Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
+            _characterController.Move((moveDir * currentSpeed + _jumpForwardVelocity) * Time.deltaTime);
+>>>>>>> Stashed changes
         }
     }
 
@@ -50,6 +77,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (_characterController.isGrounded)
         {
+<<<<<<< Updated upstream
             _characterController.Move(new Vector3(0, -0.05f, 0));
         }
         else
@@ -57,4 +85,49 @@ public class PlayerMovement : MonoBehaviour
             _characterController.Move(new Vector3(0, gravity, 0));
         }
     }
+=======
+            if (_verticalVelocity < 0)
+            {
+                _verticalVelocity = -2f;
+                _jumpForwardVelocity = Vector3.zero;
+            }
+            
+            if (InputManager.instance.jumpPressed)
+            {
+                _verticalVelocity = Mathf.Sqrt(_playerData.jumpHeight * -2f * _playerData.gravity);
+                _jumpForwardVelocity = transform.forward * _playerData.jumpForwardForce;
+            }
+        }
+        else
+        {
+            _verticalVelocity += _playerData.gravity * Time.deltaTime;
+        }
+    }
+
+    float GetSpeedValue()
+    {
+        float givenSpeed;
+        if (InputManager.instance.sprintPressed)
+        {
+            givenSpeed = _playerData.sprintSpeed;
+            IsSprinting = true;
+        }
+        else
+        {
+            givenSpeed = _playerData.speed;
+            IsSprinting = false;
+        }
+        return givenSpeed;
+    }
+
+    public bool IsGrounded()
+    {
+        return _characterController.isGrounded;
+    }
+
+    public void SetCanMove(bool canMove)
+    {
+        CanMove = canMove;
+    }
+>>>>>>> Stashed changes
 }
