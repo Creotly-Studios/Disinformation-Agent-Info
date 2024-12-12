@@ -20,7 +20,7 @@ public class PlayerPhysicsIInteraction : MonoBehaviour
             forceDir.y = 0;
             forceDir.Normalize();
             
-            rb.AddForceAtPosition(forceDir * _player.playerData.pushForce, transform.position, ForceMode.Impulse);
+            rb.AddForceAtPosition(forceDir * _player.PlayerData.pushForce, transform.position, ForceMode.Impulse);
         }
     }
 }

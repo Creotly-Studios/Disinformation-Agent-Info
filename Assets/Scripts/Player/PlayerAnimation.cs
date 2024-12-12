@@ -2,43 +2,68 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    public Animator animator;
-    private PlayerMovement _playerMovement;
+    Player player;
 
-    private const string MOVEMENT = "m_Speed";
-    private const string JUMP = "isJumping";
+    private bool hasHashed;
+    private int movementHash;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        _playerMovement = GetComponent<PlayerMovement>();
+        player = GetComponent<Player>();
+    }
+
+    private void OnEnable()
+    {
+        if (hasHashed)
+        {
+            return;
+        }
+
+        AnimatorHashing.StringToHash();
+    }
+
+    private void Start()
+    {
+        movementHash = Animator.StringToHash("m_Speed");
+    }
+
+    private void OnDisable()
+    {
+        if (hasHashed)
+        {
+            hasHashed = false;
+        }
+    }
+
+    /// <summary>
+    /// Handles Character Movement Animation
+    /// </summary>
+    public void SetBlendTreeParameter_Movement(float movementInput, bool isSprinting, float delta)
+    {
+        float snappedMovement = movementInput;
+
+        if(isSprinting)
+        {
+            snappedMovement = 1.0f;
+        }
+        player.animator.SetFloat(movementHash, snappedMovement, 0.1f, delta);
+    }
+
+    /// <summary>
+    /// Handles Playing Animation with Root Motion
+    /// </summary>
+    public void PlayTargetAnimation(int targetAnimation, bool performAction, float transitionDuration = 0.1f)
+    {
+        player.animator.applyRootMotion = performAction;
+        player.animator.SetBool(AnimatorHashing.performingActionHash, performAction);
+        player.animator.CrossFade(targetAnimation, transitionDuration);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (InputManager.instance.isMovementPressed)
-        {
-            if (_playerMovement.IsSprinting)
-            {
-                animator.SetFloat(MOVEMENT, 1f);
-            }
-            else
-            {
-                animator.SetFloat(MOVEMENT, 0.1f);
-            }
-        }
-        else
-        {
-            animator.SetFloat(MOVEMENT, 0);
-        }
-
-        if (!_playerMovement.IsGrounded())
-        {
-            animator.SetBool(JUMP, true);
-        }
-        else
-        {
-            animator.SetBool(JUMP, false);
-        }
+        bool isGrounded = (player.PlayerMovement.IsGrounded() != true);
+        player.animator.SetBool(AnimatorHashing.jumpingAnimatorHash, isGrounded);
     }
 }

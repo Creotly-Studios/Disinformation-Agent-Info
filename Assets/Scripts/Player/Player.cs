@@ -4,35 +4,70 @@ public class Player : MonoBehaviour
 {
     //Unity Compenets
     public Animator animator { get; private set; }
+    public CharacterController CharacterController {  get; private set; }
 
     //Created Components
-    public PlayerStatistics playerStatistics { get; private set; }
+    public PlayerMovement PlayerMovement { get; private set; }
+    public PlayerAnimation PlayerAnimation { get; private set; }
+    public PlayerStatistics PlayerStatistics { get; private set; }
+    public PlayerInteraction PlayerInteraction { get; private set; }
+    [field: SerializeField] public PlayerData PlayerData { get; private set; }
+
+    [Header("Player UI")]
+    [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
+    [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
 
     //Status
-    public bool isSprinting;
+    public bool isDead;
+    public bool sprintFlag;
     public bool performingAction;
-
+ 
     private void Awake()
     {
+        PlayerData = Instantiate(PlayerData);
+
         animator = GetComponentInChildren<Animator>();
-        playerStatistics = GetComponent<PlayerStatistics>();
+        CharacterController = GetComponent<CharacterController>();
+
+        PlayerMovement = GetComponent<PlayerMovement>();
+        PlayerAnimation = GetComponent<PlayerAnimation>();
+        PlayerStatistics = GetComponent<PlayerStatistics>();
+    }
+
+    private void Start()
+    {
+        PlayerStatistics.ResetUI();
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (isDead)
+        {
+            return;
+        }
         float delta = Time.deltaTime;
-        playerStatistics.RegenerateEndurance(delta);
+
+        HandleStatusChanges();
+        PlayerMovement.PlayerMovement_Update(delta);
+        PlayerStatistics.PlayerStatistic_Update(delta);
     }
 
     private void LateUpdate()
     {
-        isSprinting = IsSprinting();
-        performingAction = animator.GetBool("PerformingAction");
+        if (isDead)
+        {
+            return;
+        }
+        float delta = Time.deltaTime;
+
+        performingAction = animator.GetBool(AnimatorHashing.performingActionHash);
     }
 
-    private bool IsSprinting()
+    //Functionalities
+    private void HandleStatusChanges()
     {
-        return (animator.GetFloat("m_Speed") > 0.65f);
+        //Sprint
+        sprintFlag = (InputManager.instance.sprintPressed);
     }
 }

@@ -12,7 +12,7 @@ public class PlayerInteraction : MonoBehaviour
     void Start()
     {
         _player = GetComponent<Player>();
-        _playerData = _player.playerData;
+        _playerData = _player.PlayerData;
     }
 
     // Update is called once per frame

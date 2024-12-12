@@ -3,54 +3,55 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
-    private Player _player;
-    private PlayerData _playerData;
-    
-    private CharacterController _characterController;
-    
+    private Player player;
+
     private Camera _camera;
     private Vector2 _input;
     private Vector3 _currentMoveInput;
-    
-    //
-    [SerializeField] private float speed = 5f;
-    [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float turnSmoothTime = 0.1f;
+
+    private bool isSprinting;
+    private float _turnSmoothVel;
     private float _verticalVelocity;
     private Vector3 _jumpForwardVelocity;
+
+    [SerializeField] private float speed = 5f;
     [SerializeField] private float currentSpeed;
-    private float _turnSmoothVel;
+    [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float turnSmoothTime = 0.1f;
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+    }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _player = GetComponent<Player>();
-        _playerData = _player.playerData;
-        
         SetCanMove(true);
         _camera = Camera.main;
-        _characterController = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
-    void Update()
+    public void PlayerMovement_Update(float delta)
     {
-        HandleGravity();
+        HandleGravity(delta);
         _input = InputManager.instance.currentMovementInput;
-        Move();
+        Move(delta);
         
     }
 
-    public void Move()
+    public void Move(float delta)
     {
         Vector3 dir = new Vector3(_input.x, 0, _input.y);
+        isSprinting = (player.sprintFlag && InputManager.instance.isMovementPressed && player.PlayerStatistics.CurrentEndurance >= 10.5f);
+
         if (dir.magnitude >= 0.1f)
         {
             // Calculate the target angle based on input direction and camera's rotation
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
     
             // Smoothly transition to the target angle
-            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, _playerData.turnSmoothTime);
+            float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, player.PlayerData.turnSmoothTime);
     
             // Apply the rotation
             transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
@@ -60,21 +61,28 @@ public class PlayerMovement : MonoBehaviour
 
             // Move the character in the direction of the target rotation
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            _characterController.Move((moveDir * currentSpeed + _jumpForwardVelocity) * Time.deltaTime);
+            player.CharacterController.Move((moveDir * currentSpeed + _jumpForwardVelocity) * delta);
         }
         else
         {
             // Apply only jump forward velocity if no movement input
-            _characterController.Move(_jumpForwardVelocity * Time.deltaTime);
+            player.CharacterController.Move(_jumpForwardVelocity * delta);
         }
 
-        // Apply vertical movement (gravity and jump)
-        _characterController.Move(new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
+        // Apply vertical movement (gravity and jump) and Handle Player Movement Animations
+        if(isSprinting)
+        {
+            player.PlayerStatistics.ReduceEndurancePeriodically(10f, delta);
+        }
+        player.CharacterController.Move(new Vector3(0, _verticalVelocity, 0) * delta);
+
+        float movemenentPressed = (InputManager.instance.isMovementPressed) ? 0.1f : 0f;
+        player.PlayerAnimation.SetBlendTreeParameter_Movement(movemenentPressed, isSprinting, delta);
     }
 
-    void HandleGravity()
+    void HandleGravity(float delta)
     {
-        if (_characterController.isGrounded)
+        if (player.CharacterController.isGrounded)
         {
             if (_verticalVelocity < 0)
             {
@@ -84,37 +92,25 @@ public class PlayerMovement : MonoBehaviour
             
             if (InputManager.instance.jumpPressed)
             {
-                _verticalVelocity = Mathf.Sqrt(_playerData.jumpHeight * -2f * _playerData.gravity);
-                _jumpForwardVelocity = transform.forward * _playerData.jumpForwardForce;
+                _verticalVelocity = Mathf.Sqrt(player.PlayerData.jumpHeight * -2f * player.PlayerData.gravity);
+                _jumpForwardVelocity = transform.forward * player.PlayerData.jumpForwardForce;
             }
         }
         else
         {
-            _verticalVelocity += _playerData.gravity * Time.deltaTime;
+            _verticalVelocity += player.PlayerData.gravity * delta;
         }
     }
 
     float GetSpeedValue()
     {
-        float givenSpeed;
-        if (InputManager.instance.sprintPressed)
-        {
-            givenSpeed = _playerData.sprintSpeed;
-            IsSprinting = true;
-        }
-        else
-        {
-            givenSpeed = _playerData.speed;
-            IsSprinting = false;
-        }
+        float givenSpeed = (isSprinting) ? player.PlayerData.sprintSpeed : player.PlayerData.speed;
         return givenSpeed;
     }
 
-    public bool IsSprinting { get; set; }
-
     public bool IsGrounded()
     {
-        return _characterController.isGrounded;
+        return player.CharacterController.isGrounded;
     }
 
     public void SetCanMove(bool canMove)

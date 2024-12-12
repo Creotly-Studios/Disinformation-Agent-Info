@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerCombat : MonoBehaviour
 {
-    [SerializeField] private Animator _animator;
-    
+    Player player;
+
     public List<PunchSO> combo;
     private float _lastClickedTime;
     private float _lastComboEnd;
@@ -17,19 +17,15 @@ public class PlayerCombat : MonoBehaviour
     public float sphereRadius = 0.5f; // Radius of the sphere
     public Transform attackPoint;
 
-    private PlayerMovement _playerMovement;
-    
-    
-    void Start()
+    private void Awake()
     {
-        _animator = GetComponent<PlayerAnimation>().animator;
-        _playerMovement = GetComponent<PlayerMovement>();
+        player = GetComponent<Player>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (InputManager.instance.attackPressed && _playerMovement.IsGrounded())
+        if (InputManager.instance.attackPressed && player.PlayerMovement.IsGrounded())
         {
             Attack();
         }
@@ -43,9 +39,9 @@ public class PlayerCombat : MonoBehaviour
             CancelInvoke("EndCombo");
             if (Time.time - _lastClickedTime >= timeBetweenAttackUsage)
             {
-                _animator.runtimeAnimatorController = combo[_comboCounter].animatorOV;
-                _animator.Play("Attack", 0, 0);
-                _playerMovement.SetCanMove(false);
+                player.animator.runtimeAnimatorController = combo[_comboCounter].animatorOV;
+                player.animator.Play("Attack", 0, 0);
+                player.PlayerMovement.SetCanMove(false);
                 CheckAndDamage(combo[_comboCounter].damage);
                 _comboCounter++;
                 _lastClickedTime = Time.time;
@@ -60,10 +56,10 @@ public class PlayerCombat : MonoBehaviour
 
     private void ExitAttack()
     {
-        if (_animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && _animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
             Invoke("EndCombo", 1);
-            _playerMovement.SetCanMove(true);
+            player.PlayerMovement.SetCanMove(true);
         }
     }
 

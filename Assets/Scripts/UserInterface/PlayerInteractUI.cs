@@ -3,15 +3,22 @@ using UnityEngine;
 
 public class PlayerInteractUI : MonoBehaviour
 {
+    Player player;
+
     [SerializeField] private GameObject interactUI;
     [SerializeField] private TextMeshProUGUI interactObjText; 
         
     private PlayerInteraction _playerInteraction;
-    
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _playerInteraction = Player.instance.gameObject.GetComponent<PlayerInteraction>();
+        _playerInteraction = player.PlayerInteraction;
     }
 
     // Update is called once per frame
