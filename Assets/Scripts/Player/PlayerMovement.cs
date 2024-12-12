@@ -3,6 +3,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
+    Player player;
     [SerializeField] private PlayerData playerData;
     private CharacterController _characterController;
     
@@ -17,18 +18,19 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _jumpForwardVelocity;
 
     public bool IsSprinting { get; private set; }
-    private float _sprintTimeRemaining;
-    private float _sprintCooldownRemaining;
     
     public bool CanMove { get; private set; }
+
+    private void Awake()
+    {
+        player = GetComponent<Player>();
+    }
 
     void Start()
     {
         SetCanMove(true);
         _camera = Camera.main;
         _characterController = GetComponent<CharacterController>();
-        _sprintTimeRemaining = playerData.sprintDuration;
-        _sprintCooldownRemaining = 0f;
     }
 
     void Update()
@@ -87,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
     float GetSpeedValue()
     {
         float givenSpeed;
-        if (InputManager.instance.sprintPressed)
+        if (InputManager.instance.sprintPressed && player.playerStatistics.CurrentEndurance > 0.15f)
         {
             givenSpeed = playerData.sprintSpeed;
             IsSprinting = true;

@@ -1409,7 +1409,9 @@ GameObject:
   - component: {fileID: 2016829243}
   - component: {fileID: 2016829242}
   - component: {fileID: 2016829245}
+  - component: {fileID: 2016829251}
   - component: {fileID: 2016829246}
+  - component: {fileID: 2016829250}
   - component: {fileID: 2016829247}
   - component: {fileID: 2016829248}
   - component: {fileID: 2016829249}
@@ -1577,6 +1579,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: 20d05bc1dcbab24418dcc097db5c74b1, type: 2}
   detectTransform: {fileID: 1091264384}
+--- !u!114 &2016829250
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016829240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b941e1e227a56eb458cc6cf555ec7ca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxEndurance: 100
+  enduranceTickTimer: 0
+  enduranceMultiplier: 2.25
+  enduranceRegenerateTimer: 0
+--- !u!114 &2016829251
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2016829240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3acaa6a264287849ac64338c279f0f7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isSprinting: 0
+  performingAction: 0
 --- !u!1 &2060772906
 GameObject:
   m_ObjectHideFlags: 0
