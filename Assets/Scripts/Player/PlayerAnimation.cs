@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class PlayerAnimation : MonoBehaviour
 {
-    Player player;
     public Animator animator;
     private PlayerMovement _playerMovement;
 
@@ -11,25 +10,21 @@ public class PlayerAnimation : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        player = GetComponent<Player>();
         _playerMovement = GetComponent<PlayerMovement>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        float delta = Time.deltaTime;
-
         if (InputManager.instance.isMovementPressed)
         {
             if (_playerMovement.IsSprinting)
             {
                 animator.SetFloat(MOVEMENT, 1f);
-                player.playerStatistics.ReduceEndurancePeriodically(10.0f, delta);
             }
             else
             {
-                animator.SetFloat(MOVEMENT, 0.5f);
+                animator.SetFloat(MOVEMENT, 0.1f);
             }
         }
         else
@@ -40,7 +35,6 @@ public class PlayerAnimation : MonoBehaviour
         if (!_playerMovement.IsGrounded())
         {
             animator.SetBool(JUMP, true);
-            player.playerStatistics.ReduceEndurancePeriodically(10.0f, 1.0f);
         }
         else
         {

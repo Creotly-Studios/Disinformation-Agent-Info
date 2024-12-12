@@ -29,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (InputManager.instance.attackPressed)
+        if (InputManager.instance.attackPressed && _playerMovement.IsGrounded())
         {
             Attack();
         }
@@ -72,6 +72,15 @@ public class PlayerCombat : MonoBehaviour
         _comboCounter = 0;
         _lastComboEnd = Time.time;
     }
+    
+    public void PlayerAttackScreenShake()
+    {
+        // if (cam != null)
+        // {
+        //     impulseSource.GenerateImpulse(0.75f);
+        //
+        // }
+    }
 
     void CheckAndDamage(int damage)
     {
@@ -95,8 +104,6 @@ public class PlayerCombat : MonoBehaviour
             }
     }
     
-
-
     private void OnDrawGizmos()
     {
         if (attackPoint != null)
@@ -107,4 +114,5 @@ public class PlayerCombat : MonoBehaviour
             Gizmos.DrawWireSphere(attackPoint.position + attackPoint.forward * attackRange, sphereRadius);
         }
     }
+    
 }

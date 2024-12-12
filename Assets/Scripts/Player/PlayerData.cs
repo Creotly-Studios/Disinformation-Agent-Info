@@ -19,6 +19,7 @@ public class PlayerData : ScriptableObject
     [Header("INTERACTION")] 
     public float detectRadius = 2;
     public float detectRange = 2;
-    
-    
+    [Space] public float pushForce = 5f;
+
+
 }

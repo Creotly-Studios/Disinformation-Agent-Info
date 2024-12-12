@@ -7,42 +7,52 @@ public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
 
-    private InputSystem_Actions _inputSystemActions;
+    public InputSystem_Actions InputSystemActions { get; set; }
 
     public Vector2 currentMovementInput;
-    public bool isMovementPressed = false;
-    public bool sprintPressed = false;
+    public bool isMovementPressed;
     
+
     public bool jumpPressed = false;
     public bool attackPressed = false;
     public bool interactPressed = false;
+    public bool pausePressed = false;
+    public bool sprintPressed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
 
     private void Awake()
     {
         instance = this;
-        _inputSystemActions = new InputSystem_Actions();
+        InputSystemActions = new InputSystem_Actions();
         DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
     {
-        _inputSystemActions.Player.Move.started += ctx => OnMove(ctx);
-        _inputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
-        _inputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
+        InputSystemActions.Player.Move.started += ctx => OnMove(ctx);
+        InputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
+        InputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
         
-        _inputSystemActions.Player.Jump.started += ctx => OnJump(ctx);
-        _inputSystemActions.Player.Jump.canceled += ctx => OnJump(ctx);
+        InputSystemActions.Player.Jump.started += ctx => OnJump(ctx);
+        InputSystemActions.Player.Jump.canceled += ctx => OnJump(ctx);
         
-        _inputSystemActions.Player.Sprint.started += ctx => OnSprint(ctx);
-        _inputSystemActions.Player.Sprint.canceled += ctx => OnSprint(ctx);
+        InputSystemActions.Player.Sprint.started += ctx => OnSprint(ctx);
+        InputSystemActions.Player.Sprint.canceled += ctx => OnSprint(ctx);
         
-        _inputSystemActions.Player.Attack.started += ctx => OnAttack(ctx);
-        _inputSystemActions.Player.Attack.canceled += ctx => OnAttack(ctx);
+        InputSystemActions.Player.Attack.started += ctx => OnAttack(ctx);
+        InputSystemActions.Player.Attack.canceled += ctx => OnAttack(ctx);
         
-        _inputSystemActions.Player.Interact.started += ctx => OnInteract(ctx);
-        _inputSystemActions.Player.Interact.canceled += ctx => OnInteract(ctx);
+        InputSystemActions.Player.Interact.started += ctx => OnInteract(ctx);
+        InputSystemActions.Player.Interact.canceled += ctx => OnInteract(ctx);
+        
+        InputSystemActions.Player.Pause.started += ctx => OnPause(ctx, false);
+        InputSystemActions.Player.Pause.canceled += ctx => OnPause(ctx, true);
+    }
+
+    private void OnPause(InputAction.CallbackContext ctx, bool y)
+    {
+        pausePressed = y;
     }
 
     private void OnInteract(InputAction.CallbackContext ctx)
@@ -73,11 +83,11 @@ public class InputManager : MonoBehaviour
 
     private void OnEnable()
     {
-        _inputSystemActions.Enable();
+        InputSystemActions.Enable();
     }
 
     private void OnDisable()
     {
-        _inputSystemActions.Disable();
+        InputSystemActions.Disable();
     }
 }
