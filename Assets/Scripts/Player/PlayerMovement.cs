@@ -36,8 +36,10 @@ public class PlayerMovement : MonoBehaviour
     {
         HandleGravity(delta);
         _input = InputManager.instance.currentMovementInput;
-        Move(delta);
-        
+        if (CanMove)
+        {
+            Move(delta);
+        }
     }
 
     public void Move(float delta)

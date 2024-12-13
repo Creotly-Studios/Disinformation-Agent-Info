@@ -1,10 +1,13 @@
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    //Unity Compenets
-    public Animator animator { get; private set; }
-    public CharacterController CharacterController {  get; private set; }
+    public static Player Instance;
+
+    //Unity Components
+    public Animator Animator { get; private set; }
+    public CharacterController CharacterController { get; private set; }
 
     //Created Components
     public PlayerMovement PlayerMovement { get; private set; }
@@ -14,24 +17,33 @@ public class Player : MonoBehaviour
     [field: SerializeField] public PlayerData PlayerData { get; private set; }
 
     [Header("Player UI")]
-    [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
+    [field: SerializeField]
+    public BarSliderUI healthBarUI { get; private set; }
+
     [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
 
     //Status
     public bool isDead;
     public bool sprintFlag;
     public bool performingAction;
- 
-    private void Awake()
+
+    [Space] [SerializeField] public CinemachineImpulseSource cameraImpulseSource;
+
+private void Awake()
     {
+        if (Instance == null)
+        {
+            Instance = this;
+        }   
         PlayerData = Instantiate(PlayerData);
 
-        animator = GetComponentInChildren<Animator>();
+        Animator = GetComponentInChildren<Animator>();
         CharacterController = GetComponent<CharacterController>();
 
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerAnimation = GetComponent<PlayerAnimation>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
+        PlayerInteraction = GetComponent<PlayerInteraction>();
     }
 
     private void Start()
@@ -61,7 +73,7 @@ public class Player : MonoBehaviour
         }
         float delta = Time.deltaTime;
 
-        performingAction = animator.GetBool(AnimatorHashing.performingActionHash);
+        performingAction = Animator.GetBool(AnimatorHashing.performingActionHash);
     }
 
     //Functionalities

@@ -39,8 +39,8 @@ public class PlayerCombat : MonoBehaviour
             CancelInvoke("EndCombo");
             if (Time.time - _lastClickedTime >= timeBetweenAttackUsage)
             {
-                player.animator.runtimeAnimatorController = combo[_comboCounter].animatorOV;
-                player.animator.Play("Attack", 0, 0);
+                player.Animator.runtimeAnimatorController = combo[_comboCounter].animatorOV;
+                player.Animator.Play("Attack", 0, 0);
                 player.PlayerMovement.SetCanMove(false);
                 CheckAndDamage(combo[_comboCounter].damage);
                 _comboCounter++;
@@ -56,7 +56,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void ExitAttack()
     {
-        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        if (player.Animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && player.Animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
             Invoke("EndCombo", 1);
             player.PlayerMovement.SetCanMove(true);
@@ -71,11 +71,10 @@ public class PlayerCombat : MonoBehaviour
     
     public void PlayerAttackScreenShake()
     {
-        // if (cam != null)
-        // {
-        //     impulseSource.GenerateImpulse(0.75f);
-        //
-        // }
+       
+        player.cameraImpulseSource.GenerateImpulse(0.75f);
+        
+      
     }
 
     void CheckAndDamage(int damage)

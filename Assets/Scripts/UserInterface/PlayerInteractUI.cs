@@ -3,22 +3,20 @@ using UnityEngine;
 
 public class PlayerInteractUI : MonoBehaviour
 {
-    Player player;
+    Player _player;
+    private PlayerInteraction _playerInteraction;
 
     [SerializeField] private GameObject interactUI;
-    [SerializeField] private TextMeshProUGUI interactObjText; 
-        
-    private PlayerInteraction _playerInteraction;
 
     private void Awake()
     {
-        player = GetComponent<Player>();
+        _player = GetComponent<Player>();
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        _playerInteraction = player.PlayerInteraction;
+        _playerInteraction = _player.PlayerInteraction;
     }
 
     // Update is called once per frame
@@ -36,13 +34,11 @@ public class PlayerInteractUI : MonoBehaviour
     
     void Hide()
     {
-        interactObjText.text = "";
         interactUI.SetActive(false);
     }
 
     void Show()
     {
-        interactObjText.text = _playerInteraction.GetInteractableObject().GetComponent<IInteractable>().GetInteractText();
         interactUI.SetActive(true);
     }
     

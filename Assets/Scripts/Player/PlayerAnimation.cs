@@ -47,7 +47,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             snappedMovement = 1.0f;
         }
-        player.animator.SetFloat(movementHash, snappedMovement, 0.1f, delta);
+        player.Animator.SetFloat(movementHash, snappedMovement, 0.1f, delta);
     }
 
     /// <summary>
@@ -55,15 +55,15 @@ public class PlayerAnimation : MonoBehaviour
     /// </summary>
     public void PlayTargetAnimation(int targetAnimation, bool performAction, float transitionDuration = 0.1f)
     {
-        player.animator.applyRootMotion = performAction;
-        player.animator.SetBool(AnimatorHashing.performingActionHash, performAction);
-        player.animator.CrossFade(targetAnimation, transitionDuration);
+        player.Animator.applyRootMotion = performAction;
+        player.Animator.SetBool(AnimatorHashing.performingActionHash, performAction);
+        player.Animator.CrossFade(targetAnimation, transitionDuration);
     }
 
     // Update is called once per frame
     void Update()
     {
         bool isGrounded = (player.PlayerMovement.IsGrounded() != true);
-        player.animator.SetBool(AnimatorHashing.jumpingAnimatorHash, isGrounded);
+        player.Animator.SetBool(AnimatorHashing.jumpingAnimatorHash, isGrounded);
     }
 }

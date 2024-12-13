@@ -52,4 +52,9 @@ public class GameManager : MonoBehaviour
     {
         return isGamePaused;
     }
+    
+    public bool IsGameOver()
+    {
+        return true;
+    }
 }
