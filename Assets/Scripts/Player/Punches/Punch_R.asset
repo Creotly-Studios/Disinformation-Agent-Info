@@ -12,6 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 801c34ed1f98cb648b0668754ccb52ab, type: 3}
   m_Name: Punch_R
   m_EditorClassIdentifier: 
+  damage: 1
   punchName: Punch Right
   animatorOV: {fileID: 22100000, guid: 96074d708d5e5654b925d0760174655b, type: 2}
-  damage: 1
+  weight: 15
+  recoveryTime: 1.5
+  attackAngle:
+    lowerBound: -180
+    upperBound: 180
+  distanceToAttack:
+    lowerBound: 0
+    upperBound: 2.5

@@ -39,8 +39,8 @@ public class PlayerCombat : MonoBehaviour
             CancelInvoke("EndCombo");
             if (Time.time - _lastClickedTime >= timeBetweenAttackUsage)
             {
-                player.animator.runtimeAnimatorController = combo[_comboCounter].animatorOV;
-                player.animator.Play("Attack", 0, 0);
+                combo[_comboCounter].PerformAttackAction(player.animator);
+
                 player.PlayerMovement.SetCanMove(false);
                 CheckAndDamage(combo[_comboCounter].damage);
                 _comboCounter++;
@@ -94,7 +94,7 @@ public class PlayerCombat : MonoBehaviour
                     if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
                     {
                         Debug.Log($"Hit {hit.collider.name} in front!");
-                        damagable.Damage(damage);
+                        damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
                     }
                 }
             }

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerStatistics : MonoBehaviour
+public class PlayerStatistics : MonoBehaviour, IDamagable
 {
     Player player;
 
@@ -34,12 +34,6 @@ public class PlayerStatistics : MonoBehaviour
         player.enduranceBarUI.SetCurrentValue(CurrentEndurance);
     }
 
-    //Can Add UI To Display
-
-    /// <summary>
-    /// Reduces Character Health Life, if health is lower than zero handles death
-    /// </summary>
-    /// <param name="healthDamage"></param>
     public void TakeDamage(float healthDamage, int damageAnimation)
     {
         CurrentHealth -= healthDamage;

@@ -13,13 +13,14 @@ public class Player : MonoBehaviour
     public PlayerInteraction PlayerInteraction { get; private set; }
     [field: SerializeField] public PlayerData PlayerData { get; private set; }
 
-    [Header("Player UI")]
+    [field: Header("Player UI")]
     [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
     [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
 
     //Status
     public bool isDead;
     public bool sprintFlag;
+    public bool isAttacking;
     public bool performingAction;
  
     private void Awake()
@@ -61,7 +62,7 @@ public class Player : MonoBehaviour
         }
         float delta = Time.deltaTime;
 
-        performingAction = animator.GetBool(AnimatorHashing.performingActionHash);
+        performingAction = animator.GetBool(AnimatorHashing.isPerformingActionHash);
     }
 
     //Functionalities

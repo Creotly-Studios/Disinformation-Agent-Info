@@ -56,7 +56,7 @@ public class PlayerAnimation : MonoBehaviour
     public void PlayTargetAnimation(int targetAnimation, bool performAction, float transitionDuration = 0.1f)
     {
         player.animator.applyRootMotion = performAction;
-        player.animator.SetBool(AnimatorHashing.performingActionHash, performAction);
+        player.animator.SetBool(AnimatorHashing.isPerformingActionHash, performAction);
         player.animator.CrossFade(targetAnimation, transitionDuration);
     }
 
@@ -64,6 +64,6 @@ public class PlayerAnimation : MonoBehaviour
     void Update()
     {
         bool isGrounded = (player.PlayerMovement.IsGrounded() != true);
-        player.animator.SetBool(AnimatorHashing.jumpingAnimatorHash, isGrounded);
+        player.animator.SetBool(AnimatorHashing.isJumpingHash, isGrounded);
     }
 }
