@@ -22,7 +22,6 @@ public class InputManager : MonoBehaviour
     {
         instance = this;
         InputSystemActions = new InputSystem_Actions();
-        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()

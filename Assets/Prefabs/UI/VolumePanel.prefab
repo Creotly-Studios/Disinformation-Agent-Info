@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5068686384881185507}
   - component: {fileID: 9090551846925698215}
   m_Layer: 5
-  m_Name: SFXVolume (1)
+  m_Name: MusicVolume
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -148,7 +148,7 @@ RectTransform:
   m_GameObject: {fileID: 2446755647961968964}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8000001, y: 0.8000001, z: 0.8000001}
+  m_LocalScale: {x: 0.80000013, y: 0.80000013, z: 0.80000013}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 535796174000759062}
@@ -264,7 +264,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'SFX: 9'
+  m_text: 'Music: 9'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 316ea7b32b1202a4bb793991574b2a5e, type: 2}
   m_sharedMaterial: {fileID: -5064868404349815975, guid: 316ea7b32b1202a4bb793991574b2a5e, type: 2}
@@ -425,7 +425,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}

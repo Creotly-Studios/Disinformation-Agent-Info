@@ -1,19 +1,31 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private Button menuBtn;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         GetComponent<CanvasGroup>().alpha = 1;
         GameManager.instance.OnGamePause += GameManager_OnGamePaused;
+        menuBtn.onClick.AddListener(() =>
+            {
+                LevelLoader.LoadLevel(0);
+            });
         Hide();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnEnable()
     {
-        
+        GameManager.instance.OnGamePause += GameManager_OnGamePaused;
+    }
+
+    private void OnDisable()
+    {
+        if (GameManager.instance != null)
+            GameManager.instance.OnGamePause -= GameManager_OnGamePaused;
     }
     
     void GameManager_OnGamePaused(object sender, System.EventArgs e)
@@ -27,13 +39,11 @@ public class PauseMenu : MonoBehaviour
 
     private void Show()
     {
-        // pauseBtn.gameObject.SetActive(false);
         gameObject.SetActive(true);
     }
 
     private void Hide()
     {
-        // pauseBtn.gameObject.SetActive(true);
         gameObject.SetActive(false);
     }
 }
