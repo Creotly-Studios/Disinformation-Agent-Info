@@ -25,6 +25,9 @@ public class PlayerCombat : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (player.isDead)
+            return;
+        
         if (InputManager.instance.attackPressed && player.PlayerMovement.IsGrounded())
         {
             Attack();

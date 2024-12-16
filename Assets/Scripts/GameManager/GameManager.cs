@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     
     public event EventHandler OnStateChange;
+    public event EventHandler OnPlayerDie;
     public event EventHandler OnGamePause;
     
     private bool isGamePaused = false;
@@ -59,5 +60,10 @@ public class GameManager : MonoBehaviour
     public bool IsGameOver()
     {
         return true;
+    }
+
+    public void PlayerDie()
+    {
+        OnPlayerDie?.Invoke(this, EventArgs.Empty);
     }
 }

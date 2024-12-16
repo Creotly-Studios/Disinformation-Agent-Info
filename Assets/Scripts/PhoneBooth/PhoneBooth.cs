@@ -8,11 +8,15 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     [Space]
     [SerializeField] private int sceneLoadIndex;
     [SerializeField] private float sceneLoadDelay = 2f;
+    [SerializeField] bool canBeUsed;
     // Scene index to load
 
     public void Interact()
     {
-        StartCoroutine(LoadTheLevel());
+        if (canBeUsed)
+        {
+            StartCoroutine(LoadTheLevel());
+        }
     }
 
     private IEnumerator LoadTheLevel()
@@ -28,5 +32,10 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     public string GetInteractText()
     {
     	return interactText;
+    }
+
+    public void SetUsage(bool _)
+    {
+        canBeUsed = _;
     }
 }
