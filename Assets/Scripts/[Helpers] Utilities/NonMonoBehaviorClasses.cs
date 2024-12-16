@@ -14,6 +14,38 @@ public struct BoundaryFloat
 }
 
 [System.Serializable]
+public class CharacterProfile
+{
+    NPC character;
+
+    [Header("Topic Stans")]
+    [Range(1, 10)] public int proScience;
+    [Range(1, 10)] public int economicsFan;
+    [Range(1, 10)] public int governmentRating;
+
+    [Header("Traits")]
+    [Range(1, 10)] public int suscpiciousLevels;
+    [Range(1, 10)] public int susceptibleToAnger;
+
+    public void Initialize(NPC character)
+    {
+        this.character = character;
+    }
+
+    public void ApplyChoiceEffect(int choiceImpact)
+    {
+        character.warmingUpRadar += choiceImpact;
+        character.ChangeEmotion();
+    }
+
+    public void Reset()
+    {
+        character.warmingUpRadar = 50;
+        character.ChangeEmotion();
+    }
+}
+
+[System.Serializable]
 public class VisualTarget
 {
     private float lastDetected;

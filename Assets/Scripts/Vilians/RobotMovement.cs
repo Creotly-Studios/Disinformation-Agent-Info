@@ -1,3 +1,4 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -5,20 +6,42 @@ public class RobotMovement : MonoBehaviour
 {
     Robot robot;
 
+    [Header("Locomotion Parameters")]
     public float movementSpeed;
     public float rotationSpeed;
+
+    [Header("Gravity Parameters")]
+    [SerializeField] private Vector3 verticalVelocity;
+    [SerializeField] protected float gravityForce = -30.0f;
 
     private void Awake()
     {
         robot = GetComponent<Robot>();
     }
 
-    private void RobotMovement_Update()
+    public void RobotMovement_Update(float delta)
     {
-
+        HandleGravity(delta);
     }
 
     //Functionalities
+
+    private void HandleGravity(float delta)
+    {
+        robot.isGrounded = robot.characterController.isGrounded;
+        if(robot.isGrounded)
+        {
+            if (verticalVelocity.y < 0)
+            {
+                verticalVelocity.y = -2f;
+            }
+        }
+        else
+        {
+            verticalVelocity.y += gravityForce * delta;
+        }
+        robot.characterController.Move(verticalVelocity * delta);
+    }
 
     public void HandleRotationWhileAttacking(Robot robot)
     {
@@ -45,7 +68,6 @@ public class RobotMovement : MonoBehaviour
         {
             targetDirection = robot.transform.forward;
         }
-
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
         robot.transform.rotation = Quaternion.Slerp(robot.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
@@ -73,7 +95,6 @@ public class RobotMovement : MonoBehaviour
         {
             robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_L_180, true);
         }
-
     }
 
     public void RotateTowardsTarget()

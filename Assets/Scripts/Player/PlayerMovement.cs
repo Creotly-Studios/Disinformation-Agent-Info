@@ -34,6 +34,11 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     public void PlayerMovement_Update(float delta)
     {
+        if(DialogueManager.Instance.dialogueIsPlaying)
+        {
+            return;
+        }
+
         HandleGravity(delta);
         _input = InputManager.instance.currentMovementInput;
         Move(delta);

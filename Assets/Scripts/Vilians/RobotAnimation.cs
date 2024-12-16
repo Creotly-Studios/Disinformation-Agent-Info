@@ -4,13 +4,13 @@ public class RobotAnimation : MonoBehaviour
 {
     Robot robot;
 
-    //HashNames
-    protected int verticalMovementHash;
-    protected int horizontalMovementHash;
-
     //Parameters
     private bool hasHashed;
-    protected Vector3 deltaPosition;
+    private Vector3 deltaPosition;
+
+    //HashNames
+    private int verticalMovementHash;
+    private int horizontalMovementHash;
 
     protected virtual void Awake()
     {
@@ -28,12 +28,6 @@ public class RobotAnimation : MonoBehaviour
         horizontalMovementHash = Animator.StringToHash("horizontalMovement");
     }
 
-    // Start is called before the first frame update
-    protected virtual void Start()
-    {
-
-    }
-
     private void OnDisable()
     {
         if (hasHashed != true)
@@ -43,9 +37,9 @@ public class RobotAnimation : MonoBehaviour
         hasHashed = false;
     }
 
-    protected virtual void OnAnimatorMove()
+    private void OnAnimatorMove()
     {
-        if (robot.isGrounded)
+        if (robot.isGrounded != true)
         {
             return;
         }
@@ -55,7 +49,6 @@ public class RobotAnimation : MonoBehaviour
         robot.transform.rotation *= robot.animator.deltaRotation;
     }
 
-    // Update is called once per frame
     public virtual void CharacterAnimatorManager_Update(float delta)
     {
 

@@ -17,6 +17,10 @@ public class Player : MonoBehaviour
     [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
     [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
 
+    [Header("Player Info")]
+    [SerializeField] private Sprite characterImage;
+    [SerializeField] private DialogueCharacterInformation speakerInfo;
+
     //Status
     public bool isDead;
     public bool sprintFlag;
@@ -37,7 +41,10 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        speakerInfo = Instantiate(speakerInfo);
+        
         PlayerStatistics.ResetUI();
+        DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
     }
 
     // Update is called once per frame

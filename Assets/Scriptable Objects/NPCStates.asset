@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5616134cf85113c40a7aeeb4152ceb76, type: 3}
+  m_Name: NPCStates
+  m_EditorClassIdentifier: 
+  sphereRadius: 12.5
+  idleTimeDefault: 7.5
+  interactTimeDefault: 10
+  patrolMode: 0

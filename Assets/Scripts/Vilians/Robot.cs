@@ -27,7 +27,7 @@ public class Robot : MonoBehaviour
     [HideInInspector] public bool isDead;
     [HideInInspector] public bool isMoving;
     [HideInInspector] public bool canRotate;
-    [HideInInspector] public bool isGrounded;
+    public bool isGrounded;
     [HideInInspector] public bool performingAction;
     [HideInInspector] public bool isRotatingWithRootMotion;
 
@@ -79,8 +79,10 @@ public class Robot : MonoBehaviour
         {
             return;
         }
+
         SetAnimatorBools();
         float delta = Time.deltaTime;
+        robotMovement.RobotMovement_Update(delta);
 
         GetTarget();
         HandleStateChange();
@@ -107,6 +109,12 @@ public class Robot : MonoBehaviour
 
     private void HandleStateChange()
     {
+        if (DialogueManager.Instance.dialogueIsPlaying)
+        {
+            isMoving = false;
+            return;
+        }
+
         if (currentState != null)
         {
             var nextState = currentState.RobotState_Update(this);
@@ -115,7 +123,6 @@ public class Robot : MonoBehaviour
                 currentState = nextState;
             }
         }
-
         agent.transform.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         CheckIfMoving();
     }
@@ -156,7 +163,6 @@ public class Robot : MonoBehaviour
     {
         if (currentVisualTarget == null)
         {
-            print("gotcha");
             return;
         }
 

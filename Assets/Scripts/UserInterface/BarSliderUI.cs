@@ -3,9 +3,9 @@ using UnityEngine.UI;
 
 public class BarSliderUI : MonoBehaviour
 {
-    private Slider barSlider;
+    protected Slider barSlider;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         barSlider = GetComponent<Slider>();
     }

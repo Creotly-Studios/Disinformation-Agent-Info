@@ -18,6 +18,11 @@ public class PlayerInteraction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (DialogueManager.Instance.dialogueIsPlaying)
+        {
+            return;
+        }
+
         if (InputManager.instance.interactPressed)
         {
             Interact();
