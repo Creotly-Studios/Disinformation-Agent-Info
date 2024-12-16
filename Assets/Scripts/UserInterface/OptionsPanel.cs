@@ -5,15 +5,26 @@ using UnityEngine.UI;
 
 public class OptionsPanel : MonoBehaviour
 {
+    [Header("SFX Player UI")]
     [SerializeField] private Button sfxButton;
     [SerializeField] private TextMeshProUGUI sfxText;
     
-
+    [Header("Music Manager UI")]
+    [SerializeField] private Button musicButton;
+    [SerializeField] private TextMeshProUGUI musicText;
+    
     void Start()
     {
+        UpdateText();
         sfxButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.ChangeVolume();
+            UpdateText();
+        });
+        
+        musicButton.onClick.AddListener(() =>
+        {
+            MusicManager.Instance.ChangeVolume();
             UpdateText();
         });
         
@@ -46,7 +57,8 @@ public class OptionsPanel : MonoBehaviour
 
     void UpdateText()
     {
-        sfxText.text = $" SFX: {SFXPlayer.Instance.GetVolume() * 10}";
+        sfxText.text = $"SFX: {Mathf.Ceil(SFXPlayer.Instance.GetVolume() * 10)}";
+        musicText.text = $"Music: {Mathf.Ceil(MusicManager.Instance.GetVolume() * 10)}";
     }
     
 }

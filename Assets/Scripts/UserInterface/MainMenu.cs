@@ -5,8 +5,10 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public static MainMenu instance;
-    
-    [SerializeField] private Button playButton;
+
+    [SerializeField] private Button startNewGameButton;
+    [SerializeField] private Button continueGameButton;
+    [SerializeField] private Button playEndlessButton; // New button for endless mode
     [SerializeField] private Button statsButton;
     [SerializeField] private Button optionsButton;
     [SerializeField] private Button creditsButton;
@@ -15,16 +17,21 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button redirectButton;
     [Space]
     [SerializeField] private int creditLevelIndex;
-    [SerializeField] private int levelSelectionIndex;
+
+    [Space]
+    [SerializeField] private int firstLevelIndex; //level1 tutorial index lol
+    [SerializeField] private int currentLevelIndex; //store last level player played
     public enum CurrentPanel
     {
         None, Options, Stats
     }
-
     [Space] public CurrentPanel currentPanel;
     public event EventHandler OnPanelChanged;
-
     [Space] [SerializeField] private CanvasGroup sidePanelsHolder;
+
+    [Header("Debug checking for the UI in the menu ")]
+    [SerializeField] private bool hasGameData = true;
+    [SerializeField] private bool hasCompletedGame =true;
 
     private void Awake()
     {
@@ -33,10 +40,21 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        CheckGameData(); // Call the function to check game data
+
         SetCurrentPanel(CurrentPanel.None);
-        playButton.onClick.AddListener(() =>
+        startNewGameButton.onClick.AddListener(() =>
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene(levelSelectionIndex);
+            UnityEngine.SceneManagement.SceneManager.LoadScene(firstLevelIndex);
+        });
+        continueGameButton.onClick.AddListener(() =>
+        {
+            UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevelIndex);
+        });
+        playEndlessButton.onClick.AddListener(() =>
+        {
+            // Load endless mode scene or logic
+            Debug.Log("Play Endless mode!");
         });
         statsButton.onClick.AddListener(() =>
         {
@@ -60,10 +78,21 @@ public class MainMenu : MonoBehaviour
         });
         sidePanelsHolder.alpha = 1;
     }
-    
+
     void Update()
     {
-        
+
+    }
+
+    public void CheckGameData()
+    {
+        // check if there is existing game data
+        //bool hasGameData = SaveSystem.HasSaveData(); // also do so here pls
+        continueGameButton.gameObject.SetActive(hasGameData);
+
+        // check if the player has completed the game
+        //bool hasCompletedGame = SaveSystem.HasCompletedGame(); //implement thsi bool return in the save system pls
+        playEndlessButton.gameObject.SetActive(hasCompletedGame);
     }
 
     public void SetCurrentPanel(CurrentPanel cp)
@@ -71,12 +100,10 @@ public class MainMenu : MonoBehaviour
         currentPanel = cp;
         OnPanelChanged?.Invoke(this, EventArgs.Empty);
     }
-
     public CurrentPanel GetCurrentPanel()
     {
         return currentPanel;
     }
-
     void OnOptionsClick()
     {
         switch (currentPanel)
@@ -92,7 +119,7 @@ public class MainMenu : MonoBehaviour
                 break;
         }
     }
-    
+
     void OnStatsClick()
     {
         switch (currentPanel)
@@ -108,8 +135,4 @@ public class MainMenu : MonoBehaviour
                 break;
         }
     }
-    
-    
 }
-
-

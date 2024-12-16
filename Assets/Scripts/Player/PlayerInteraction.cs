@@ -13,20 +13,7 @@ public class PlayerInteraction : MonoBehaviour
     {
         _player = GetComponent<Player>();
         _playerData = _player.PlayerData;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (DialogueManager.Instance.dialogueIsPlaying)
-        {
-            return;
-        }
-
-        if (InputManager.instance.interactPressed)
-        {
-            Interact();
-        }
+        InputManager.instance.InputSystemActions.Player.Interact.started += _ => Interact();
     }
 
     void Interact()

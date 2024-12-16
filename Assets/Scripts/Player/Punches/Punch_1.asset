@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801c34ed1f98cb648b0668754ccb52ab, type: 3}
+  m_Name: Punch_1
+  m_EditorClassIdentifier: 
+  damage: 2
+  punchName: Punch Combo
+  animatorOV: {fileID: 22100000, guid: f62f6427699853841a3187557c29d08e, type: 2}
+  weight: 30
+  recoveryTime: 1.5
+  attackAngle:
+    lowerBound: -180
+    upperBound: 180
+  distanceToAttack:
+    lowerBound: 0
+    upperBound: 2.5

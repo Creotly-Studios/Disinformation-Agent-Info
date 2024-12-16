@@ -14,25 +14,27 @@ public class GameManager : MonoBehaviour
     {
         if (instance != null)
         {
-            Destroy(this.gameObject);
             return;
         }
         instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnDestroy()
     {
-        InputManager.instance.InputSystemActions.Player.Pause.performed += _ => TogglePause();
+        OnGamePause = null;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Start()
     {
-
+        InputManager.instance.InputSystemActions.Player.Pause.performed += ctx => TogglePause();
     }
-    
+
+    private void OnDisable()
+    {
+        if (InputManager.instance != null)
+            InputManager.instance.InputSystemActions.Player.Pause.performed -= ctx => TogglePause();
+    }
+
     public void TogglePause()
     {
         isGamePaused = !isGamePaused;
@@ -48,8 +50,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+
     public bool IsGamePaused()
     {
         return isGamePaused;
+    }
+    
+    public bool IsGameOver()
+    {
+        return true;
     }
 }

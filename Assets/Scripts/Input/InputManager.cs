@@ -13,8 +13,6 @@ public class InputManager : MonoBehaviour
 
     public bool jumpPressed = false;
     public bool attackPressed = false;
-    public bool interactPressed = false;
-    public bool pausePressed = false;
     public bool sprintPressed;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -23,7 +21,6 @@ public class InputManager : MonoBehaviour
     {
         instance = this;
         InputSystemActions = new InputSystem_Actions();
-        DontDestroyOnLoad(this.gameObject);
     }
 
     void Start()
@@ -40,22 +37,6 @@ public class InputManager : MonoBehaviour
         
         InputSystemActions.Player.Attack.started += ctx => OnAttack(ctx);
         InputSystemActions.Player.Attack.canceled += ctx => OnAttack(ctx);
-        
-        InputSystemActions.Player.Interact.started += ctx => OnInteract(ctx);
-        InputSystemActions.Player.Interact.canceled += ctx => OnInteract(ctx);
-        
-        InputSystemActions.Player.Pause.started += ctx => OnPause(ctx, false);
-        InputSystemActions.Player.Pause.canceled += ctx => OnPause(ctx, true);
-    }
-
-    private void OnPause(InputAction.CallbackContext ctx, bool y)
-    {
-        pausePressed = y;
-    }
-
-    private void OnInteract(InputAction.CallbackContext ctx)
-    {
-        interactPressed = ctx.ReadValueAsButton();
     }
 
     private void OnAttack(InputAction.CallbackContext ctx)

@@ -1225,7 +1225,6 @@ GameObject:
   - component: {fileID: 1123467487}
   - component: {fileID: 1123467486}
   - component: {fileID: 1123467485}
-  - component: {fileID: 1123467490}
   - component: {fileID: 1123467489}
   m_Layer: 5
   m_Name: GameplayCanvas
@@ -1233,7 +1232,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1123467485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1329,20 +1328,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &1123467490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1123467484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0257049a569937f4c8c03c33294e57df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  interactUI: {fileID: 534708824}
-  interactObjText: {fileID: 1280314011}
 --- !u!1 &1150434531
 GameObject:
   m_ObjectHideFlags: 0
