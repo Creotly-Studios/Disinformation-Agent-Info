@@ -57,7 +57,7 @@ public class PlayerStatistics : MonoBehaviour
     {
         CurrentHealth = 0.0f;
         player.isDead = true;
-
+        GameManager.instance.PlayerDie();
         player.healthBarUI.SetCurrentValue(CurrentHealth);
         player.PlayerAnimation.PlayTargetAnimation(AnimatorHashing.deathAnimation, true);
     }

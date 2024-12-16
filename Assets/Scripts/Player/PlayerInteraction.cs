@@ -18,6 +18,9 @@ public class PlayerInteraction : MonoBehaviour
 
     void Interact()
     {
+        if (_player.isDead)
+            return;
+
         RaycastHit[] hits = Physics.SphereCastAll(detectTransform.position, _playerData.detectRadius,
             detectTransform.forward, _playerData.detectRange);
         foreach (RaycastHit hit in hits)
