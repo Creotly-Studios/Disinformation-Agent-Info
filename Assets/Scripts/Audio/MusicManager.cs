@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MusicManager : MonoBehaviour
@@ -13,6 +11,7 @@ public class MusicManager : MonoBehaviour
 
     public float musicVolume = 1;
     private AudioSource _musicSource;
+    [SerializeField] private GameObject musicManagerGameObject;
 
     private void Awake()
     {
@@ -32,7 +31,7 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
-        _musicSource = GetComponent<AudioSource>();
+        _musicSource = musicManagerGameObject.GetComponent<AudioSource>();
     }
 
     void Update()

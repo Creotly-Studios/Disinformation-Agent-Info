@@ -646,8 +646,6 @@ MonoBehaviour:
   isMovementPressed: 0
   jumpPressed: 0
   attackPressed: 0
-  interactPressed: 0
-  pausePressed: 0
   sprintPressed: 0
 --- !u!114 &408981996
 MonoBehaviour:
@@ -854,6 +852,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e67e7f9fedf8bb84d924bb3eb53c9eba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  menuBtn: {fileID: 0}
 --- !u!225 &764983052
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -2983,7 +2982,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theInteractionText: interact with Joe
+  profile:
+    proScience: 0
+    economicsFan: 0
+    governmentRating: 0
+    suscpiciousLevels: 0
+    susceptibleToAnger: 0
+  canInteract: 0
+  haveDialogue: 0
+  canMove: 1
+  warmingUpRadar: 0
+  angleLimit:
+    lowerBound: 0
+    upperBound: 0
+  <npcState>k__BackingField: {fileID: 0}
+  targetAngle: 0
+  targetDistance: 0
+  targetPosition: {x: 0, y: 0, z: 0}
+  targetDirection: {x: 0, y: 0, z: 0}
+  isDead: 0
+  isMoving: 0
+  canRotate: 0
+  isGrounded: 0
+  performingAction: 0
+  isRotatingWithRootMotion: 0
 --- !u!1001 &4845628418423479319
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2992,6 +3014,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1477805417257151745, guid: 579a1d9586ec9fe4bb700e223cc5bb58, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1477805417257151745, guid: 579a1d9586ec9fe4bb700e223cc5bb58, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2993215215536942971, guid: 579a1d9586ec9fe4bb700e223cc5bb58, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2993215215536942971, guid: 579a1d9586ec9fe4bb700e223cc5bb58, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4350174759658968379, guid: 579a1d9586ec9fe4bb700e223cc5bb58, type: 3}
       propertyPath: m_Name
       value: Player

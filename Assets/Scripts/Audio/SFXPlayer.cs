@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(AudioSource))]
 public class SFXPlayer : MonoBehaviour
 {
     public static SFXPlayer Instance
@@ -14,6 +11,7 @@ public class SFXPlayer : MonoBehaviour
 
     public float sfxVolume = 1;
     private AudioSource _sfxSource;
+    [SerializeField] private GameObject sfxPlayerObject;
 
     private void Awake()
     {
@@ -32,7 +30,7 @@ public class SFXPlayer : MonoBehaviour
 
     void Start()
     {
-        _sfxSource = GetComponent<AudioSource>();
+        _sfxSource = sfxPlayerObject.GetComponent<AudioSource>();
     }
 
     void Update()

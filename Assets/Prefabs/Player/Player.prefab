@@ -1074,10 +1074,13 @@ MonoBehaviour:
   <PlayerData>k__BackingField: {fileID: 11400000, guid: 20d05bc1dcbab24418dcc097db5c74b1, type: 2}
   <healthBarUI>k__BackingField: {fileID: 7525556074402085222}
   <enduranceBarUI>k__BackingField: {fileID: 6150650270809857402}
+  characterImage: {fileID: 0}
+  speakerInfo: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
   isDead: 0
   sprintFlag: 0
+  isAttacking: 0
   performingAction: 0
-  cameraImpulseSource: {fileID: 0}
+  cameraImpulseSource: {fileID: 6967135119301274277}
 --- !u!114 &8048588774497057534
 MonoBehaviour:
   m_ObjectHideFlags: 0

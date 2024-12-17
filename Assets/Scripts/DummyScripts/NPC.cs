@@ -25,6 +25,7 @@ public class NPC : MonoBehaviour
     public bool haveDialogue;
 
     [Header("NPC Parameters")]
+    public bool canMove = true;
     public int warmingUpRadar;
     public BoundaryFloat angleLimit;
     [field: SerializeField] public NPCStates npcState { get; private set; }
@@ -79,7 +80,7 @@ public class NPC : MonoBehaviour
 
     private void HandleStateChange()
     {
-        if (DialogueManager.Instance.dialogueIsPlaying)
+        if (DialogueManager.Instance.dialogueIsPlaying || canMove != true)
         {
             isMoving = false;
             return;

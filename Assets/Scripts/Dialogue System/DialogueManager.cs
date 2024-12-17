@@ -91,10 +91,16 @@ public class DialogueManager : MonoBehaviour
             {
                 StartCoroutine(ExitDialogueMode());
             }
+
             if (currentSpeaker != null)
             {
+                if(currentDialogueStory.currentTags.Contains("stage:Gameplay"))
+                {
+                    StartCoroutine(ExitDialogueMode());
+                    //TriggerGamePlay();
+                    return;
+                }
                 currentDialogueStory.variablesState["npcEmotion"] = currentSpeaker.currentEmotion.ToString();
-
                 dialogueUIPanel.DisplayChoicesUI(currentDialogueStory);
                 dialogueUIPanel.DisplayText(currentSpeaker, text);
             }

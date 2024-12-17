@@ -66,7 +66,7 @@ public class MainMenu : MonoBehaviour
         });
         redirectButton.onClick.AddListener(() =>
         {
-            //open user browser and redirect to the site url
+            OpenDisinformationURL();
         });
         creditsButton.onClick.AddListener(() =>
         {
@@ -77,11 +77,6 @@ public class MainMenu : MonoBehaviour
             Application.Quit();
         });
         sidePanelsHolder.alpha = 1;
-    }
-
-    void Update()
-    {
-
     }
 
     public void CheckGameData()
@@ -104,6 +99,12 @@ public class MainMenu : MonoBehaviour
     {
         return currentPanel;
     }
+
+    void OpenDisinformationURL()
+    {
+        Application.OpenURL("https://web-agentinfo.vercel.app/");
+    }
+
     void OnOptionsClick()
     {
         switch (currentPanel)

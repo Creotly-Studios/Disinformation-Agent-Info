@@ -26,5 +26,5 @@ Good. Head through that door over there and begin the simulation. Prove yourself
 -> Simulation
 
 === Simulation ===
-Impressive, Agent Kim. You scored a solid {playerScore}. That’s better than most recruits. #speaker:Maggie
+Impressive, Agent Kim. You scored a solid {playerScore}. That’s better than most recruits. #speaker:Maggie #stage:Gameplay
 -> END
