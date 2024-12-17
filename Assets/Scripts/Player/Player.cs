@@ -1,12 +1,12 @@
-using Unity.Cinemachine;
 using UnityEngine;
+using Unity.Cinemachine;
 
 public class Player : MonoBehaviour
 {
     public static Player Instance;
 
     //Unity Components
-    public Animator Animator { get; private set; }
+    public Animator animator { get; private set; }
     public CharacterController CharacterController { get; private set; }
 
     //Created Components
@@ -42,7 +42,7 @@ private void Awake()
         }   
         PlayerData = Instantiate(PlayerData);
 
-        Animator = GetComponentInChildren<Animator>();
+        animator = GetComponentInChildren<Animator>();
         CharacterController = GetComponent<CharacterController>();
 
         PlayerMovement = GetComponent<PlayerMovement>();

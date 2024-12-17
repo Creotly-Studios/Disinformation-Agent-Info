@@ -47,7 +47,7 @@ public class PlayerAnimation : MonoBehaviour
         {
             snappedMovement = 1.0f;
         }
-        player.Animator.SetFloat(movementHash, snappedMovement, 0.1f, delta);
+        player.animator.SetFloat(movementHash, snappedMovement, 0.1f, delta);
     }
 
     /// <summary>
