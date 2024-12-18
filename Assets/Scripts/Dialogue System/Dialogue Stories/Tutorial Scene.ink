@@ -22,7 +22,7 @@ Well then, let me fill in the blanks. You’ve been drafted into the Information
 -> Continue
 
 === Continue ===
-Good. Head through that door over there and begin the simulation. Prove yourself, Agent. #speaker:Maggie
+Good. Here we use phone booths as our transportaion system. Head over and interact with that phone booth and begin the simulation. Prove yourself, Agent. #speaker:Maggie
 -> Simulation
 
 === Simulation ===

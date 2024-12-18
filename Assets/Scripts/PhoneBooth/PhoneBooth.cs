@@ -11,6 +11,13 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     [SerializeField] bool canBeUsed;
     // Scene index to load
 
+    public bool activatedByDialogue;
+
+    void Start()
+    {
+        SetActiveByDialogue();
+    }
+
     public void Interact()
     {
         if (canBeUsed)
@@ -38,4 +45,18 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     {
         canBeUsed = _;
     }
+
+    public void ActivateBooth()
+    {
+        SetUsage(true);
+    }
+
+    public void SetActiveByDialogue()
+    {
+        if (DialogueManager.Instance != null && activatedByDialogue)
+        {
+            DialogueManager.Instance.OnDialogueEnd.AddListener(ActivateBooth);
+        }
+    }
+
 }

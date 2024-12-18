@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
         if (player.isDead)
             return;
         
-        if (InputManager.instance.attackPressed && player.PlayerMovement.IsGrounded())
+        if (InputManager.instance.attackPressed && CanFight())
         {
             Attack();
         }
@@ -59,7 +60,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void ExitAttack()
     {
-        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
             Invoke("EndCombo", 1);
             player.PlayerMovement.SetCanMove(true);
@@ -111,6 +112,11 @@ public class PlayerCombat : MonoBehaviour
             Gizmos.DrawLine(attackPoint.position, attackPoint.position + attackPoint.forward * attackRange);
             Gizmos.DrawWireSphere(attackPoint.position + attackPoint.forward * attackRange, sphereRadius);
         }
+    }
+
+    public bool CanFight()
+    {
+        return player.PlayerMovement.IsGrounded() && !DialogueManager.Instance.dialogueIsPlaying && !EventSystem.current.IsPointerOverGameObject();
     }
     
 }

@@ -102,7 +102,7 @@ public class MainMenu : MonoBehaviour
 
     void OpenDisinformationURL()
     {
-        Application.OpenURL("https://web-agentinfo.vercel.app/");
+        Application.OpenURL("https://gamejam-agentinfo.vercel.app");
     }
 
     void OnOptionsClick()
