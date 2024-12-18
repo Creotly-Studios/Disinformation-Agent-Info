@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sfxVolume: 1
   sfxPlayerObject: {fileID: 1666650127741794817}
+  sfxList: {fileID: 11400000, guid: 05d3f8335219aac48bbe04f190b7e2e6, type: 2}
 --- !u!114 &5670082271953751330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,12 +235,12 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 45aa4bbf9aba1c84789899e33125d067, type: 3}
+  m_Resource: {fileID: 8300000, guid: 45aa4bbf9aba1c84789899e33125d067, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0

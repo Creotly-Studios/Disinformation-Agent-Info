@@ -20,25 +20,10 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (_player.isDead)
             return;
+        if (!PlayerCanInteract())
+            return;
 
-        RaycastHit[] hits = Physics.SphereCastAll(detectTransform.position, _playerData.detectRadius,
-            detectTransform.forward, _playerData.detectRange);
-        foreach (RaycastHit hit in hits)
-        {
-            // Check if the object hit has an enemy tag or component
-            IInteractable interactable = hit.collider.GetComponent<IInteractable>();
-            if (interactable != null)
-            {
-                // Check if the enemy is in front of the player
-                Vector3 directionToEnemy = (hit.collider.transform.position - detectTransform.position).normalized;
-                float dotProduct = Vector3.Dot(detectTransform.forward, directionToEnemy);
-
-                if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
-                {
-                    interactable.Interact();
-                }
-            }
-        }
+        GetInteractableObject().GetComponent<IInteractable>().Interact();
     }
 
     private void OnDrawGizmos()
@@ -73,6 +58,11 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public bool PlayerCanInteract()
+    {
+        return GetInteractableObject() != null && !DialogueManager.Instance.dialogueIsPlaying;
     }
 
 }

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerCombat : MonoBehaviour
 {
@@ -28,7 +29,7 @@ public class PlayerCombat : MonoBehaviour
         if (player.isDead)
             return;
         
-        if (InputManager.instance.attackPressed && player.PlayerMovement.IsGrounded())
+        if (InputManager.instance.attackPressed && CanFight())
         {
             Attack();
         }
@@ -45,6 +46,7 @@ public class PlayerCombat : MonoBehaviour
                 combo[_comboCounter].PerformAttackAction(player.animator);
 
                 player.PlayerMovement.SetCanMove(false);
+                PlayPunchSound();
                 CheckAndDamage(combo[_comboCounter].damage);
                 _comboCounter++;
                 _lastClickedTime = Time.time;
@@ -59,7 +61,7 @@ public class PlayerCombat : MonoBehaviour
 
     private void ExitAttack()
     {
-        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 0.9f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
+        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
         {
             Invoke("EndCombo", 1);
             player.PlayerMovement.SetCanMove(true);
@@ -74,10 +76,7 @@ public class PlayerCombat : MonoBehaviour
     
     public void PlayerAttackScreenShake()
     {
-       
-        player.cameraImpulseSource.GenerateImpulse(0.75f);
-        
-      
+        player.cameraImpulseSource.GenerateImpulse(1);
     }
 
     void CheckAndDamage(int damage)
@@ -97,6 +96,7 @@ public class PlayerCombat : MonoBehaviour
                     {
                         Debug.Log($"Hit {hit.collider.name} in front!");
                         damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
+                        PlayerAttackScreenShake();
                     }
                 }
             }
@@ -111,6 +111,16 @@ public class PlayerCombat : MonoBehaviour
             Gizmos.DrawLine(attackPoint.position, attackPoint.position + attackPoint.forward * attackRange);
             Gizmos.DrawWireSphere(attackPoint.position + attackPoint.forward * attackRange, sphereRadius);
         }
+    }
+
+    public bool CanFight()
+    {
+        return player.PlayerMovement.IsGrounded() && !DialogueManager.Instance.dialogueIsPlaying && !EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void PlayPunchSound()
+    {
+        SFXPlayer.Instance.PlaySFX(player.SFXPlayer.sfxList.playerPunch);
     }
     
 }

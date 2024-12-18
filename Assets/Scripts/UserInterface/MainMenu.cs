@@ -45,35 +45,42 @@ public class MainMenu : MonoBehaviour
         SetCurrentPanel(CurrentPanel.None);
         startNewGameButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             UnityEngine.SceneManagement.SceneManager.LoadScene(firstLevelIndex);
         });
         continueGameButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevelIndex);
         });
         playEndlessButton.onClick.AddListener(() =>
         {
-            // Load endless mode scene or logic
+            SFXPlayer.Instance.PlayClickSound();
             Debug.Log("Play Endless mode!");
         });
         statsButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             OnStatsClick();
         });
         optionsButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             OnOptionsClick();
         });
         redirectButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             OpenDisinformationURL();
         });
         creditsButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             LevelLoader.LoadLevel(creditLevelIndex);
         });
         quitButton.onClick.AddListener(() =>
         {
+            SFXPlayer.Instance.PlayClickSound();
             Application.Quit();
         });
         sidePanelsHolder.alpha = 1;
@@ -102,7 +109,7 @@ public class MainMenu : MonoBehaviour
 
     void OpenDisinformationURL()
     {
-        Application.OpenURL("https://web-agentinfo.vercel.app/");
+        Application.OpenURL("https://gamejam-agentinfo.vercel.app");
     }
 
     void OnOptionsClick()

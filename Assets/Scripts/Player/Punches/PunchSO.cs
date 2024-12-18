@@ -19,7 +19,8 @@ public class PunchSO : ScriptableObject
     public void PerformAttackAction(Animator animator)
     {
         animator.runtimeAnimatorController = animatorOV;
-        AnimatorHashing.PlayTargetAnimation(animator, AnimatorHashing.attackingHash, true);
+        animator.Play("Attack", 0, 0);
+        // AnimatorHashing.PlayTargetAnimation(animator, AnimatorHashing.attackingHash, true);
     }
 
     //vfx

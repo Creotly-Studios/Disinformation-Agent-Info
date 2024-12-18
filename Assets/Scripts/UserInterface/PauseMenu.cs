@@ -17,16 +17,16 @@ public class PauseMenu : MonoBehaviour
         Hide();
     }
 
-    private void OnEnable()
-    {
-        GameManager.instance.OnGamePause += GameManager_OnGamePaused;
-    }
+    // private void OnEnable()
+    // {
+    //     GameManager.instance.OnGamePause += GameManager_OnGamePaused;
+    // }
 
-    private void OnDisable()
-    {
-        if (GameManager.instance != null)
-            GameManager.instance.OnGamePause -= GameManager_OnGamePaused;
-    }
+    // private void OnDisable()
+    // {
+    //     if (GameManager.instance != null)
+    //         GameManager.instance.OnGamePause -= GameManager_OnGamePaused;
+    // }
     
     void GameManager_OnGamePaused(object sender, System.EventArgs e)
     {

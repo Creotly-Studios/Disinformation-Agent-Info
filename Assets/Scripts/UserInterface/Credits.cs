@@ -4,6 +4,8 @@ using UnityEngine.UI;
 public class Credits : MonoBehaviour
 {
     [SerializeField] private Button menuButton;
+    [Space]
+    [SerializeField] private Button redirectButton;
 
     void Start()
     {
@@ -11,5 +13,15 @@ public class Credits : MonoBehaviour
         {
             LevelLoader.LoadLevel(0);
         });
+        redirectButton.onClick.AddListener(() =>
+        {
+            OpenDisinformationURL();
+            SFXPlayer.Instance.PlayClickSound();
+        });
+    }
+
+    void OpenDisinformationURL()
+    {
+        Application.OpenURL("https://gamejam-agentinfo.vercel.app");
     }
 }

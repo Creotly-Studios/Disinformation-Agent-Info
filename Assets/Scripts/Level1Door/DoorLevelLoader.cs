@@ -6,15 +6,21 @@ public class DoorLevelLoader : MonoBehaviour, IInteractable
     public string interactText { get; set; }
     
     [Space]
-	private int sceneLoadIndex = 0;
+	[SerializeField] private int sceneLoadIndex = 0;
 
     public void Interact()
     {
+        PlayDoorSound();
         LevelLoader.LoadLevel(sceneLoadIndex);
     }
 
     public string GetInteractText()
     {
     	return interactText;
+    }
+
+    public void PlayDoorSound()
+    {
+        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithDoor);
     }
 }

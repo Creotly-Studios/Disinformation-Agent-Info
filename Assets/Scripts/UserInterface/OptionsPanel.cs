@@ -19,12 +19,14 @@ public class OptionsPanel : MonoBehaviour
         sfxButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.ChangeVolume();
+            SFXPlayer.Instance.PlayClickSound();
             UpdateText();
         });
         
         musicButton.onClick.AddListener(() =>
         {
             MusicManager.Instance.ChangeVolume();
+            SFXPlayer.Instance.PlayClickSound();
             UpdateText();
         });
         

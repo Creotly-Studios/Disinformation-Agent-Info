@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using Ink.Runtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,9 +16,9 @@ public class DialogueManager : MonoBehaviour
     public Story currentDialogueStory { get; private set; }
     public SpeakerType currentSpeakerType { get; private set; }
 
-    //Tags
+    // Tags
     private const string PLAYER_TAG = "Player";
-    
+
     [Header("Dialogue Parameters")]
     [SerializeField] private DialogueUIPanel dialogueUIPanel;
 
@@ -26,11 +27,15 @@ public class DialogueManager : MonoBehaviour
     private DialogueCharacterInformation playableCharacterSpeaker;
     private List<DialogueCharacterInformation> activeSpeakers = new List<DialogueCharacterInformation>();
 
+    [Header("Events")]
+    public UnityEvent OnDialogueStart;
+    public UnityEvent OnDialogueEnd;
+
     private void Awake()
     {
-        if (Instance != null)
+        if (Instance != null && Instance != this)
         {
-            Debug.LogError($"Cannot have more than one DialogueManager. {Instance} already exists.");
+            Debug.LogWarning("A duplicate DialogueManager was found and destroyed.");
             Destroy(gameObject);
             return;
         }
@@ -53,7 +58,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if(InputManager.instance.jumpPressed && canContinue && currentDialogueStory.currentChoices.Count == 0)
+        if (InputManager.instance.jumpPressed && canContinue && currentDialogueStory.currentChoices.Count == 0)
         {
             ContinueDialogueStory();
         }
@@ -75,6 +80,10 @@ public class DialogueManager : MonoBehaviour
         dialogueUIPanel.gameObject.SetActive(true);
         dialogueUIPanel.DisableUIChoices();
         currentDialogueStory = new Story(inkJsonStory.text);
+
+        // Trigger the "On Dialogue Start" UnityEvent
+        OnDialogueStart?.Invoke();
+
         ContinueDialogueStory();
     }
 
@@ -87,19 +96,20 @@ public class DialogueManager : MonoBehaviour
             string text = currentDialogueStory.Continue();
             CheckWhoIsSpeaking(currentDialogueStory.currentTags);
 
-            if(text.Equals("") && currentDialogueStory.canContinue != true)
+            if (text.Equals("") && !currentDialogueStory.canContinue)
             {
                 StartCoroutine(ExitDialogueMode());
             }
 
             if (currentSpeaker != null)
             {
-                if(currentDialogueStory.currentTags.Contains("stage:Gameplay"))
+                if (currentDialogueStory.currentTags.Contains("stage:Gameplay"))
                 {
                     StartCoroutine(ExitDialogueMode());
-                    //TriggerGamePlay();
+                    // TriggerGameplay();
                     return;
                 }
+
                 currentDialogueStory.variablesState["npcEmotion"] = currentSpeaker.currentEmotion.ToString();
                 dialogueUIPanel.DisplayChoicesUI(currentDialogueStory);
                 dialogueUIPanel.DisplayText(currentSpeaker, text);
@@ -120,6 +130,9 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogueStory = null;
         dialogueUIPanel.ExitPanel();
+
+        // Trigger the "On Dialogue End" UnityEvent
+        OnDialogueEnd?.Invoke();
     }
 
     private void CheckWhoIsSpeaking(List<string> currentTag)
@@ -128,7 +141,7 @@ public class DialogueManager : MonoBehaviour
         {
             string[] splitTag = tag.Split(':');
 
-            if(splitTag.Length != 2 )
+            if (splitTag.Length != 2)
             {
                 Debug.LogError("Error Parsing Tag: " + tag);
                 return;
@@ -140,7 +153,7 @@ public class DialogueManager : MonoBehaviour
 
     private void SetCharacter(string tagValue)
     {
-        if(tagValue.Equals(PLAYER_TAG))
+        if (tagValue.Equals(PLAYER_TAG))
         {
             currentSpeakerType = SpeakerType.Player;
             currentSpeaker = playableCharacterSpeaker;

@@ -11,10 +11,18 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     [SerializeField] bool canBeUsed;
     // Scene index to load
 
+    public bool activatedByDialogue;
+
+    void Start()
+    {
+        SetActiveByDialogue();
+    }
+
     public void Interact()
     {
         if (canBeUsed)
         {
+            PlayPhoneBoothSound();
             StartCoroutine(LoadTheLevel());
         }
     }
@@ -38,4 +46,23 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     {
         canBeUsed = _;
     }
+
+    public void ActivateBooth()
+    {
+        SetUsage(true);
+    }
+
+    public void SetActiveByDialogue()
+    {
+        if (DialogueManager.Instance != null && activatedByDialogue)
+        {
+            DialogueManager.Instance.OnDialogueEnd.AddListener(ActivateBooth);
+        }
+    }
+
+    public void PlayPhoneBoothSound()
+    {
+        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithPhoneBooth);
+    }
+
 }

@@ -19,28 +19,33 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float gravity = -9.81f;
     [SerializeField] private float turnSmoothTime = 0.1f;
 
+    [Header("Internal SFX Settings")]
+    [SerializeField] private float walkFootstepInterval = 0.5f; // Time between footsteps when walking
+    [SerializeField] private float sprintFootstepInterval = 0.3f; // Time between footsteps when sprinting
+    private float footstepTimer = 0f;
+
     private void Awake()
     {
         player = GetComponent<Player>();
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         SetCanMove(true);
         _camera = Camera.main;
+        InputManager.instance.InputSystemActions.Player.Jump.performed += _ => OnJumpStarted();
     }
 
-    // Update is called once per frame
     public void PlayerMovement_Update(float delta)
     {
-        if(DialogueManager.Instance.dialogueIsPlaying)
+        if (DialogueManager.Instance.dialogueIsPlaying)
         {
             return;
         }
 
         HandleGravity(delta);
         _input = InputManager.instance.currentMovementInput;
+
         if (CanMove)
         {
             Move(delta);
@@ -54,37 +59,43 @@ public class PlayerMovement : MonoBehaviour
 
         if (dir.magnitude >= 0.1f)
         {
-            // Calculate the target angle based on input direction and camera's rotation
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + _camera.transform.eulerAngles.y;
-    
-            // Smoothly transition to the target angle
             float smoothedAngle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, player.PlayerData.turnSmoothTime);
-    
-            // Apply the rotation
             transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
-    
-            // Determine movement speed based on sprinting
-            float currentSpeed = GetSpeedValue();
 
-            // Move the character in the direction of the target rotation
+            float currentSpeed = GetSpeedValue();
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             player.CharacterController.Move((moveDir * currentSpeed + _jumpForwardVelocity) * delta);
+
+             // Determine the footstep interval based on sprinting or walking
+            float currentFootstepInterval = isSprinting ? sprintFootstepInterval : walkFootstepInterval;
+
+            // Play footstep sound at intervals
+            if (player.CharacterController.isGrounded && footstepTimer <= 0f)
+            {
+                PlayFootstepSound();
+                footstepTimer = currentFootstepInterval;
+            }
         }
         else
         {
-            // Apply only jump forward velocity if no movement input
             player.CharacterController.Move(_jumpForwardVelocity * delta);
         }
 
-        // Apply vertical movement (gravity and jump) and Handle Player Movement Animations
-        if(isSprinting)
+        if (isSprinting)
         {
             player.PlayerStatistics.ReduceEndurancePeriodically(10f, delta);
         }
+
         player.CharacterController.Move(new Vector3(0, _verticalVelocity, 0) * delta);
 
         float movemenentPressed = (InputManager.instance.isMovementPressed) ? 0.1f : 0f;
         player.PlayerAnimation.SetBlendTreeParameter_Movement(movemenentPressed, isSprinting, delta);
+
+        if (footstepTimer > 0f)
+        {
+            footstepTimer -= delta;
+        }
     }
 
     void HandleGravity(float delta)
@@ -96,16 +107,20 @@ public class PlayerMovement : MonoBehaviour
                 _verticalVelocity = -2f;
                 _jumpForwardVelocity = Vector3.zero;
             }
-            
-            if (InputManager.instance.jumpPressed)
-            {
-                _verticalVelocity = Mathf.Sqrt(player.PlayerData.jumpHeight * -2f * player.PlayerData.gravity);
-                _jumpForwardVelocity = transform.forward * player.PlayerData.jumpForwardForce;
-            }
         }
         else
         {
             _verticalVelocity += player.PlayerData.gravity * delta;
+        }
+    }
+
+    void OnJumpStarted()
+    {
+        if (player.CharacterController.isGrounded && !DialogueManager.Instance.dialogueIsPlaying)
+        {
+            PlayJumpSound();
+            _verticalVelocity = Mathf.Sqrt(player.PlayerData.jumpHeight * -2f * player.PlayerData.gravity);
+            _jumpForwardVelocity = transform.forward * player.PlayerData.jumpForwardForce;
         }
     }
 
@@ -126,4 +141,23 @@ public class PlayerMovement : MonoBehaviour
     }
 
     public bool CanMove { get; set; }
+
+    public void PlayFootstepSound()
+    {
+        if (player.SFXPlayer.sfxList.playerFootStep.Length > 0)
+        {
+
+            int randomIndex = Random.Range(0, player.SFXPlayer.sfxList.playerFootStep.Length);
+            AudioClip randomFootstep = player.SFXPlayer.sfxList.playerFootStep[randomIndex];
+
+            // Play the selected sound
+            SFXPlayer.Instance.PlaySFX(randomFootstep, player.SFXPlayer.GetVolume()/2f);
+        }
+    }
+
+
+    public void PlayJumpSound()
+    {
+        SFXPlayer.Instance.PlaySFX(player.SFXPlayer.sfxList.playerJump);
+    }
 }
