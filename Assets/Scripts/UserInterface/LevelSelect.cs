@@ -29,6 +29,7 @@ public class LevelSelect : MonoBehaviour
             {
                 currentSelectedIndex = 0;
             }
+            SFXPlayer.Instance.PlayClickSound();
         });
         selectRight.onClick.AddListener(() =>
         {
@@ -41,14 +42,17 @@ public class LevelSelect : MonoBehaviour
             {
                 currentSelectedIndex = 0;
             }
+            SFXPlayer.Instance.PlayClickSound();
         });
         menuButton.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(0);
+            SFXPlayer.Instance.PlayClickSound();
         });
         playButton.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(currentSelectedIndex + startLevelIndex);
+            SFXPlayer.Instance.PlayClickSound();
         });
     }
     

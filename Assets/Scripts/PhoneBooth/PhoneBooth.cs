@@ -22,6 +22,7 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     {
         if (canBeUsed)
         {
+            PlayPhoneBoothSound();
             StartCoroutine(LoadTheLevel());
         }
     }
@@ -57,6 +58,11 @@ public class PhoneBooth : MonoBehaviour, IInteractable
         {
             DialogueManager.Instance.OnDialogueEnd.AddListener(ActivateBooth);
         }
+    }
+
+    public void PlayPhoneBoothSound()
+    {
+        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithPhoneBooth);
     }
 
 }

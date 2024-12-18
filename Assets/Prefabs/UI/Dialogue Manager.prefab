@@ -61,6 +61,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3832962385040461402}
     m_Modifications:
+    - target: {fileID: 190325377070840291, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2669ca6db4916bc4ea9671d245cb9f06, type: 3}
+    - target: {fileID: 190325377070840291, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 1.33
+      objectReference: {fileID: 0}
     - target: {fileID: 4490766905838714035, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -141,9 +149,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5509841960614615540, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2669ca6db4916bc4ea9671d245cb9f06, type: 3}
+    - target: {fileID: 5509841960614615540, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 1.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 6589985755348833257, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2669ca6db4916bc4ea9671d245cb9f06, type: 3}
+    - target: {fileID: 6589985755348833257, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 1.33
+      objectReference: {fileID: 0}
     - target: {fileID: 7562738282426691405, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
       propertyPath: m_Name
       value: Dialogue UI
+      objectReference: {fileID: 0}
+    - target: {fileID: 7880296073677998137, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 2669ca6db4916bc4ea9671d245cb9f06, type: 3}
+    - target: {fileID: 7880296073677998137, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 1.33
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

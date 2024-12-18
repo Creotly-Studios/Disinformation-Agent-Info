@@ -22,6 +22,12 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
 
     public void Interact()
     {
+        PlayInteractNPCSound();
         DialogueManager.Instance.HandleDialogue(characterInformation, inkText);
+    }
+
+    public void PlayInteractNPCSound()
+    {
+        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithNpc);
     }
 }

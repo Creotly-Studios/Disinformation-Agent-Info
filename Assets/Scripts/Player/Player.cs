@@ -34,6 +34,8 @@ public class Player : MonoBehaviour
 
     [Space] [SerializeField] public CinemachineImpulseSource cameraImpulseSource;
 
+    public SFXPlayer SFXPlayer{get; private set;}
+
 private void Awake()
     {
         if (Instance == null)
@@ -49,10 +51,12 @@ private void Awake()
         PlayerAnimation = GetComponent<PlayerAnimation>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
         PlayerInteraction = GetComponent<PlayerInteraction>();
+
     }
 
     private void Start()
     {
+        SFXPlayer = SFXPlayer.Instance;
         speakerInfo = Instantiate(speakerInfo);
         
         PlayerStatistics.ResetUI();

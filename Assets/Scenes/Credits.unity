@@ -237,6 +237,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuButton: {fileID: 941966262}
+  redirectButton: {fileID: 1300013309}
 --- !u!1 &597927802
 GameObject:
   m_ObjectHideFlags: 0
@@ -321,7 +322,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.15
+  m_fontSize: 74.8
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -647,8 +648,8 @@ MonoBehaviour:
 
     Programmer - Chidera Nwosu
 
-    Irrelevant
-    Person - Alex John Miracle'
+    Web
+    Dev / Programmer - Alex John Miracle'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 316ea7b32b1202a4bb793991574b2a5e, type: 2}
   m_sharedMaterial: {fileID: -5064868404349815975, guid: 316ea7b32b1202a4bb793991574b2a5e, type: 2}
@@ -766,7 +767,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -30.9375, y: 30.9375}
-  m_SizeDelta: {x: 500, y: 150}
+  m_SizeDelta: {x: 700, y: 250}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1300013308
 MonoBehaviour:

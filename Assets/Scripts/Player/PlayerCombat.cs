@@ -46,6 +46,7 @@ public class PlayerCombat : MonoBehaviour
                 combo[_comboCounter].PerformAttackAction(player.animator);
 
                 player.PlayerMovement.SetCanMove(false);
+                PlayPunchSound();
                 CheckAndDamage(combo[_comboCounter].damage);
                 _comboCounter++;
                 _lastClickedTime = Time.time;
@@ -75,10 +76,7 @@ public class PlayerCombat : MonoBehaviour
     
     public void PlayerAttackScreenShake()
     {
-       
-        player.cameraImpulseSource.GenerateImpulse(0.75f);
-        
-      
+        player.cameraImpulseSource.GenerateImpulse(1);
     }
 
     void CheckAndDamage(int damage)
@@ -98,6 +96,7 @@ public class PlayerCombat : MonoBehaviour
                     {
                         Debug.Log($"Hit {hit.collider.name} in front!");
                         damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
+                        PlayerAttackScreenShake();
                     }
                 }
             }
@@ -117,6 +116,11 @@ public class PlayerCombat : MonoBehaviour
     public bool CanFight()
     {
         return player.PlayerMovement.IsGrounded() && !DialogueManager.Instance.dialogueIsPlaying && !EventSystem.current.IsPointerOverGameObject();
+    }
+
+    public void PlayPunchSound()
+    {
+        SFXPlayer.Instance.PlaySFX(player.SFXPlayer.sfxList.playerPunch);
     }
     
 }

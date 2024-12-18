@@ -13,6 +13,8 @@ public class SFXPlayer : MonoBehaviour
     private AudioSource _sfxSource;
     [SerializeField] private GameObject sfxPlayerObject;
 
+    public SounfEffects sfxList;
+
     private void Awake()
     {
         sfxVolume = PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME);
@@ -75,5 +77,10 @@ public class SFXPlayer : MonoBehaviour
         sfxVolume = 0;
         PlayerPrefs.SetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME, _sfxVolume);
         PlayerPrefs.Save();
+    }
+
+    public void PlayClickSound()
+    {
+        PlaySFX(sfxList.buttonClick);
     }
 }

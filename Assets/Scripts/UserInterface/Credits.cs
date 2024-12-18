@@ -16,6 +16,7 @@ public class Credits : MonoBehaviour
         redirectButton.onClick.AddListener(() =>
         {
             OpenDisinformationURL();
+            SFXPlayer.Instance.PlayClickSound();
         });
     }
 
