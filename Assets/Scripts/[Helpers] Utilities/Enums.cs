@@ -1,4 +1,25 @@
-using UnityEngine;
+
+public enum PostType
+{
+    TextOnly,
+    TextWithImage
+}
+
+public enum NoticeType
+{
+    Hint,
+    Exit,
+    Progress,
+    Congratulations
+}
+
+public enum PostFactType
+{
+    None,
+    Information,
+    Misinformation,
+    Disinformation
+}
 
 public enum PatrolMode
 {
