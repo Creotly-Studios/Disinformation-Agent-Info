@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SocialMediaComputer : MonoBehaviour, IInteractable
 {
-    SM_Manager sM_Manager;
+    ComputerPanel_UI sM_Manager;
 
     [SerializeField] private string theInteractionText = "";
     public string interactText { get; set; }
@@ -13,7 +13,7 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
     void Start()
     {
         socialM_Canvas.GetComponent<CanvasGroup>().alpha = 1;
-        sM_Manager = GetComponent<SM_Manager>();
+        sM_Manager = GetComponent<ComputerPanel_UI>();
         HideSocial();
     }
 
