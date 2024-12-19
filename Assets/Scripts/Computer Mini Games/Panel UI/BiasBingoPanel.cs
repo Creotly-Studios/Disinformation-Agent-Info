@@ -127,17 +127,42 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void InitializeButton(int i)
     {
+        // Validate input first
+        if (i < 0 || i >= uiButton.Count)
+        {
+            Debug.LogError("Invalid button index");
+            return;
+        }
+
+        // Store selected answer and disable button
         selectedAnswer = uiButton[i].choiceText.text;
         uiButton[i].choiceButton.interactable = false;
 
+        // Validate currentPostClass and its postSO
+        if (currentPostClass == null || currentPostClass.postSO == null)
+        {
+            Debug.LogError("Current post or post SO is null");
+            return;
+        }
+
+        // Find answers
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
         DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPostClass.postSO.answer);
-        if (hasSet == true)
+
+        if (hasSet)
         {
             return;
         }
 
         hasSet = true;
+        
+        // Validate found answers
+        if (pickedAnswer == null || correctAnswer == null)
+        {
+            Debug.LogError("Could not find picked or correct answer buttons");
+            return;
+        }
+
         if (selectedAnswer.Equals(currentPostClass.postSO.answer))
         {
             currentScore++;
@@ -145,6 +170,7 @@ public class BiasBingoPanel : MonoBehaviour
             correctAnswer.choiceButton.image.color = Color.green;
             return;
         }
+        
         pickedAnswer.choiceButton.image.color = Color.red;
         correctAnswer.choiceButton.image.color = Color.green;
     }
@@ -157,14 +183,26 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void SelectPostSO()
     {
-        if (dynamicContentList.Count <= 0)
+        if (dynamicContentList == null || dynamicContentList.Count <= 0)
         {
+            Debug.LogWarning("No more posts available");
             return;
         }
+
         BingoPostSO currentPost = GetPostSO();
+        if (currentPost == null)
+        {
+            Debug.LogError("Failed to get valid post SO");
+            return;
+        }
 
         InitializePostContents(currentPost);
         dynamicContentList.Remove(currentPost);
+        
+        if (currentPostClass == null)
+        {
+            currentPostClass = new PostClass();
+        }
         currentPostClass.Initialize(currentPost);
     }
 
