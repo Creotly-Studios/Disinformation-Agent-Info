@@ -26,7 +26,7 @@ public class NPC : MonoBehaviour
 
     [Header("NPC Parameters")]
     public bool canMove = true;
-    public int warmingUpRadar;
+    public float warmingUpRadar;
     public BoundaryFloat angleLimit;
     [field: SerializeField] public NPCStates npcState { get; private set; }
     public CharacterType characterType { get; private set; } = CharacterType.NPC;
@@ -76,6 +76,18 @@ public class NPC : MonoBehaviour
         
         HandleStateChange();
         npcFunctions.NPCFunctions_Update(delta);
+    }
+
+    public void UpdateWarmRadar(Response response)
+    {
+        warmingUpRadar += response.Evaluate(profile);
+
+        QuestSO quest = QuestManager.Instance.activeQuest;
+        if(warmingUpRadar >= 75.0f && quest.currentObjective.objectiveType == ObjectiveType.ConvinceNPC)
+        {
+            quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+        }
+        ChangeEmotion();
     }
 
     private void HandleStateChange()
@@ -141,7 +153,7 @@ public class NPC : MonoBehaviour
         return false;
     }
 
-    public void ChangeEmotion()
+    private void ChangeEmotion()
     {
         if(warmingUpRadar < 36)
         {

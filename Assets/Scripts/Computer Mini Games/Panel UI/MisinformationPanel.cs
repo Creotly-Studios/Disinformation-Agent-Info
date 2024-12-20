@@ -7,30 +7,16 @@ using System.Collections.Generic;
 
 public class MisinformationPanel : MonoBehaviour
 {
-    private class PostClass
-    {
-        public PostSO postSO;
-        public bool hasChecked;
-
-        public void Initialize(PostSO postSO)
-        {
-            hasChecked = false;
-            this.postSO = postSO;
-        }
-    }
-
     //Status
     private bool hasSet;
     private int currentScore;
     private float remainingTime;
     private bool hasInitialized;
 
-    //Current Data
-    private WaitForSeconds waitForSeconds;
-    private PostClass currentPostClass = new();
-
     //Parameters
+    private PostSO currentPost;
     private PostFactType selectedPostType;
+    private WaitForSeconds waitForSeconds;
     private ComputerPanel_UI computerPanelUI;
     private List<PostSO> dynamicContentList = new List<PostSO>();
 
@@ -68,12 +54,12 @@ public class MisinformationPanel : MonoBehaviour
             return;
         }
 
-        SetCurrentPost();
         currentScore = 0;
         remainingTime = maxTime;
-
         scoreCount.text = currentScore.ToString();
-        dynamicContentList = contentArray.ToList();
+
+        InitalizePosts();
+        SetCurrentPost();
 
         hintButton.onClick.AddListener(() => HintButton());
         exitButton.onClick.AddListener(() => SubmitButton());
@@ -102,10 +88,14 @@ public class MisinformationPanel : MonoBehaviour
         hasInitialized = false;
     }
 
-    private void Update()
+    public void Misinformation_Update()
     {
-        TimerCountdown(Time.deltaTime);
+        if(gameObject.activeSelf != true)
+        {
+            return;
+        }
 
+        TimerCountdown(Time.deltaTime);
         if(selectedPostType == PostFactType.None)
         {
             return;
@@ -119,8 +109,8 @@ public class MisinformationPanel : MonoBehaviour
         selectedPostType = PostFactType.None;
         yield return waitForSeconds;
 
-        currentPostClass.hasChecked = true;
-        if (currentPostClass.postSO == null || currentPostClass.hasChecked)
+        currentPost.hasChecked = true;
+        if (currentPost == null || currentPost.hasChecked)
         {
             SetCurrentPost();
         }
@@ -138,10 +128,9 @@ public class MisinformationPanel : MonoBehaviour
         misInfo_Btn.interactable = true;
         disInfo_Btn.interactable = true;
 
-        PostSO currentContent = GetPost();
-        InitializePostContents(currentContent);
-        dynamicContentList.Remove(currentContent);
-        currentPostClass.Initialize(currentContent);
+        currentPost = GetPost();
+        InitializePostContents(currentPost);
+        dynamicContentList.Remove(currentPost);
     }
 
     private PostSO GetPost()
@@ -150,7 +139,16 @@ public class MisinformationPanel : MonoBehaviour
         return dynamicContentList[random];
     }
 
-    public void InitializePostContents(PostSO post)
+    private void InitalizePosts()
+    {
+        dynamicContentList = contentArray.ToList();
+        for (int i = 0; i < dynamicContentList.Count; i++)
+        {
+            dynamicContentList[i] = Instantiate(dynamicContentList[i]);
+        }
+    }
+
+    private void InitializePostContents(PostSO post)
     {
         authorName.text = post.postAuthor;
         postContent.text = post.postContent;
@@ -195,10 +193,16 @@ public class MisinformationPanel : MonoBehaviour
         }
 
         hasSet = true;
-        if (currentPostClass.postSO.postFactType == selectedPostType)
+        if (currentPost.postFactType == selectedPostType)
         {
             currentScore++;
             scoreCount.text = currentScore.ToString();
+
+            QuestSO quest = QuestManager.Instance.activeQuest;
+            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.MisInfoGames)
+            {
+                quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+            }
             return;
         }
         Debug.Log("False");

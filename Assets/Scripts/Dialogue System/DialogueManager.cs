@@ -9,7 +9,8 @@ public class DialogueManager : MonoBehaviour
     public static DialogueManager Instance { get; private set; }
 
     private WaitForSeconds exitPanelSeconds;
-
+    public NPC NPCharacter { get; private set; }
+    
     // Status
     public bool canContinue;
     public bool dialogueIsPlaying { get; private set; }
@@ -23,9 +24,9 @@ public class DialogueManager : MonoBehaviour
     [SerializeField] private DialogueUIPanel dialogueUIPanel;
 
     [Header("Active Speakers")]
+    private DialogueCharacterInformation activeSpeakers;
     private DialogueCharacterInformation currentSpeaker;
     private DialogueCharacterInformation playableCharacterSpeaker;
-    private List<DialogueCharacterInformation> activeSpeakers = new List<DialogueCharacterInformation>();
 
     [Header("Events")]
     public UnityEvent OnDialogueStart;
@@ -69,11 +70,12 @@ public class DialogueManager : MonoBehaviour
         playableCharacterSpeaker = speaker;
     }
 
-    public void HandleDialogue(DialogueCharacterInformation speaker, TextAsset inkJsonStory)
+    public void HandleDialogue(DialogueCharacterInformation speaker, TextAsset inkJsonStory, NPC npc = null)
     {
-        if (!activeSpeakers.Contains(speaker))
+        activeSpeakers = speaker;
+        if(npc != null)
         {
-            activeSpeakers.Add(speaker);
+            NPCharacter = npc;
         }
 
         dialogueIsPlaying = true;
@@ -124,8 +126,6 @@ public class DialogueManager : MonoBehaviour
     private IEnumerator ExitDialogueMode()
     {
         yield return exitPanelSeconds;
-
-        activeSpeakers.Clear();
         dialogueIsPlaying = false;
 
         currentDialogueStory = null;
@@ -159,18 +159,8 @@ public class DialogueManager : MonoBehaviour
             currentSpeaker = playableCharacterSpeaker;
             return;
         }
-        currentSpeaker = PickRandomSpeaker();
+        currentSpeaker = activeSpeakers;
         currentSpeakerType = SpeakerType.Other;
-    }
-
-    private DialogueCharacterInformation PickRandomSpeaker()
-    {
-        if (activeSpeakers.Count > 0)
-        {
-            int randomIndex = Random.Range(0, activeSpeakers.Count);
-            return activeSpeakers[randomIndex];
-        }
-        return null;
     }
 
     public void OnChoiceSelected(int choiceIndex)

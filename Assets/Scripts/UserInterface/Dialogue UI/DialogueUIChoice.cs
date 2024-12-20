@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DialogueUIChoice : MonoBehaviour
 {
+    public Response response;
     public Button choiceButton;
     private Choice dialoguechoice;
     public TextMeshProUGUI choiceText;
@@ -19,6 +20,12 @@ public class DialogueUIChoice : MonoBehaviour
     private void MakeChoice(int choiceIndex, DialogueUIPanel uiPanel)
     {
         DialogueManager.Instance.OnChoiceSelected(choiceIndex);
+
+        NPC npc = DialogueManager.Instance.NPCharacter;
+        if(npc != null)
+        {
+            npc.warmingUpRadar += response.Evaluate(npc.profile);
+        }
         uiPanel.DisableUIChoices();
     }
 }

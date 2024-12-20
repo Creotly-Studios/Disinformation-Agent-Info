@@ -33,6 +33,11 @@ public class GameManager : MonoBehaviour
         MusicManager.Instance.SetVolume(0.5f);
     }
 
+    void Update()
+    {
+        QuestManager.Instance.Quest_Update();
+    }
+
     private void OnDestroy()
     {
         OnGamePause = null;

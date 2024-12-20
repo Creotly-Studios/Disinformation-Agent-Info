@@ -41,5 +41,11 @@ public class RobotStatistics : MonoBehaviour, IDamagable
 
         robot.healthBarUI.SetCurrentValue(CurrentHealth);
         robot.robotAnimation.PlayTargetAnimation(AnimatorHashing.deathAnimation, true);
+
+        QuestSO quest = QuestManager.Instance.activeQuest;
+        if(quest != null && quest.currentObjective.objectiveType == ObjectiveType.FightBots)
+        {
+            quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+        }
     }
 }

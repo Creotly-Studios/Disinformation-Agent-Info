@@ -970,13 +970,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile:
-    proScience: 0
-    economicsFan: 0
-    governmentRating: 0
-    suscpiciousLevels: 0
-    susceptibleToAnger: 0
+    ignorant: 4
+    factLover: 6
+    echoChamber: 4
+    loyaltyToSource: 8
+    susceptibleToAnger: 4
   canInteract: 0
   haveDialogue: 0
+  canMove: 1
   warmingUpRadar: 0
   angleLimit:
     lowerBound: -180
@@ -1032,6 +1033,7 @@ MonoBehaviour:
   <interactText>k__BackingField: 
   inkText: {fileID: 4900000, guid: 0fe8fe7ee5e6a6a488670e479efdf2e6, type: 3}
   characterImage: {fileID: 0}
+  speakerType: 0
   characterInformation: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
 --- !u!114 &9146208425935454466
 MonoBehaviour:

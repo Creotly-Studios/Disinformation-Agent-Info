@@ -58,6 +58,7 @@ private void Awake()
     {
         SFXPlayer = SFXPlayer.Instance;
         speakerInfo = Instantiate(speakerInfo);
+        speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
         
         PlayerStatistics.ResetUI();
         DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
