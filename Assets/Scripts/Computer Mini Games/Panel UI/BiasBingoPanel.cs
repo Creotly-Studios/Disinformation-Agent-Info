@@ -127,9 +127,25 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void InitializeButton(int i)
     {
+        // Validate input first
+        if (i < 0 || i >= uiButton.Count)
+        {
+            Debug.LogError("Invalid button index");
+            return;
+        }
+
+        // Store selected answer and disable button
         selectedAnswer = uiButton[i].choiceText.text;
         uiButton[i].choiceButton.interactable = false;
 
+        // Validate currentPostClass and its postSO
+        if (currentPostClass == null || currentPostClass.postSO == null)
+        {
+            Debug.LogError("Current post or post SO is null");
+            return;
+        }
+
+        // Find answers
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
         DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.answer);
         if (hasSet == true)
@@ -151,6 +167,7 @@ public class BiasBingoPanel : MonoBehaviour
             }
             return;
         }
+        
         pickedAnswer.choiceButton.image.color = Color.red;
         correctAnswer.choiceButton.image.color = Color.green;
     }
@@ -163,8 +180,9 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void SelectPostSO()
     {
-        if (dynamicContentList.Count <= 0)
+        if (dynamicContentList == null || dynamicContentList.Count <= 0)
         {
+            Debug.LogWarning("No more posts available");
             return;
         }
 
