@@ -433,6 +433,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  response:
+    responseType: 0
   choiceButton: {fileID: 5676333948431023372}
   choiceText: {fileID: 5891005876293401042}
 --- !u!1 &1320736106909935651
@@ -484,6 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  response:
+    responseType: 1
   choiceButton: {fileID: 6072357708249028744}
   choiceText: {fileID: 993527123035508727}
 --- !u!1 &1590191259572182534
@@ -1819,6 +1823,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  response:
+    responseType: 3
   choiceButton: {fileID: 4044521815909857321}
   choiceText: {fileID: 5124285801875383092}
 --- !u!1 &5961478545369550915
@@ -2043,6 +2049,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  response:
+    responseType: 2
   choiceButton: {fileID: 6918846698051334617}
   choiceText: {fileID: 2443798549283700571}
 --- !u!1 &7503912920546502569

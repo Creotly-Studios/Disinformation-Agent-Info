@@ -138,13 +138,6 @@ public class BiasBingoPanel : MonoBehaviour
         selectedAnswer = uiButton[i].choiceText.text;
         uiButton[i].choiceButton.interactable = false;
 
-        // Validate currentPostClass and its postSO
-        if (currentPostClass == null || currentPostClass.postSO == null)
-        {
-            Debug.LogError("Current post or post SO is null");
-            return;
-        }
-
         // Find answers
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
         DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.answer);
