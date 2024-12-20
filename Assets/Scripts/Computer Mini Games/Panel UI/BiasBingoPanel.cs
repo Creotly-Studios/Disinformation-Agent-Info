@@ -37,6 +37,10 @@ public class BiasBingoPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreCount;
     [SerializeField] private TextMeshProUGUI countDownTimer;
 
+    [Space]
+    [SerializeField] private GameObject postPanel;
+    [SerializeField] private GameObject answersPanel;
+
     private void Awake()
     {
         waitForSeconds = new WaitForSeconds(1.5f);
@@ -49,7 +53,7 @@ public class BiasBingoPanel : MonoBehaviour
         {
             return;
         }
-       
+
         currentScore = 0;
         remainingTime = maxTime;
         scoreCount.text = currentScore.ToString();
@@ -66,6 +70,7 @@ public class BiasBingoPanel : MonoBehaviour
         uiButton[3].choiceButton.onClick.AddListener(() => InitializeButton(3));
 
         hasInitialized = true;
+        ShowPanel();
     }
 
     private void OnDisable()
@@ -127,28 +132,41 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void InitializeButton(int i)
     {
-        // Validate input first
+        // Validate index
         if (i < 0 || i >= uiButton.Count)
         {
-            Debug.LogError("Invalid button index");
+            Debug.LogError($"Invalid button index: {i}. List count: {uiButton.Count}");
             return;
         }
 
-        // Store selected answer and disable button
-        selectedAnswer = uiButton[i].choiceText.text;
-        uiButton[i].choiceButton.interactable = false;
-
-        // Validate currentPostClass and its postSO
-        if (currentPostClass == null || currentPostClass.postSO == null)
+        // Validate UI Button and choiceText
+        var button = uiButton[i];
+        if (button == null)
         {
-            Debug.LogError("Current post or post SO is null");
+            Debug.LogError($"uiButton[{i}] is null");
             return;
         }
 
-        // Find answers
+        if (button.choiceText == null)
+        {
+            Debug.LogError($"choiceText is null for button at index {i}");
+            return;
+        }
+
+        // Process button click
+        selectedAnswer = button.choiceText.text;
+        button.choiceButton.interactable = false;
+
+        if (currentPost == null)
+        {
+            Debug.LogError("Current post is null");
+            return;
+        }
+
+        // Evaluate answer
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
         DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.answer);
-        if (hasSet == true)
+        if (hasSet)
         {
             return;
         }
@@ -161,16 +179,18 @@ public class BiasBingoPanel : MonoBehaviour
             correctAnswer.choiceButton.image.color = Color.green;
 
             QuestSO quest = QuestManager.Instance.activeQuest;
-            if(quest != null && quest.currentObjective.objectiveType == ObjectiveType.BiasBingo)
+            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.BiasBingo)
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
-            return;
         }
-        
-        pickedAnswer.choiceButton.image.color = Color.red;
-        correctAnswer.choiceButton.image.color = Color.green;
+        else
+        {
+            pickedAnswer.choiceButton.image.color = Color.red;
+            correctAnswer.choiceButton.image.color = Color.green;
+        }
     }
+
 
     private BingoPostSO GetPostSO()
     {
@@ -182,7 +202,8 @@ public class BiasBingoPanel : MonoBehaviour
     {
         if (dynamicContentList == null || dynamicContentList.Count <= 0)
         {
-            Debug.LogWarning("No more posts available");
+            Debug.Log("All posts have been answered.");
+            HidePanel();
             return;
         }
 
@@ -227,5 +248,17 @@ public class BiasBingoPanel : MonoBehaviour
     private void SubmitButton()
     {
         computerPanelUI.DisablePanels();
+    }
+
+    void HidePanel()
+    {
+        postPanel.SetActive(false);
+        answersPanel.SetActive(false);
+    }
+
+    void ShowPanel()
+    {
+        postPanel.SetActive(true);
+        answersPanel.SetActive(true);
     }
 }

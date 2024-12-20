@@ -68,8 +68,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theInteractionText: Phone Booth
-  sceneLoadIndex: 0
+  sceneLoadIndex: 3
   sceneLoadDelay: 2
+  canBeUsed: 0
+  mesh: {fileID: 8266239582154577925}
+  meshActiveAtStart: 0
+  activatedByDialogue: 0
 --- !u!1 &8266239582154577925
 GameObject:
   m_ObjectHideFlags: 0
@@ -134,8 +138,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2f73bf7509960a84bac7b93fab308f28, type: 2}
-  - {fileID: 2100000, guid: 2f73bf7509960a84bac7b93fab308f28, type: 2}
+  - {fileID: 2100000, guid: c9aeb56df5773454e965885a3135b13e, type: 2}
+  - {fileID: 2100000, guid: dbcb84ff314b9a8479db4b4fe5a6c199, type: 2}
   - {fileID: 2100000, guid: dbcb84ff314b9a8479db4b4fe5a6c199, type: 2}
   - {fileID: 2100000, guid: 9923a4a4170be8a4680447e913acecc2, type: 2}
   m_StaticBatchInfo:
