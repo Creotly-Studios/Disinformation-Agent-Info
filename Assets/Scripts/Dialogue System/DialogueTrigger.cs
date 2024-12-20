@@ -2,17 +2,24 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour, IInteractable
 {
+    private NPC character;
     [field: SerializeField] public string interactText {get; set;}
 
     [Header("Parameters")]
     [SerializeField] private TextAsset inkText;
     [SerializeField] private Sprite characterImage;
+    [SerializeField] private TypeOfSpeaker speakerType;
     public DialogueCharacterInformation characterInformation;
+
+    private void Awake()
+    {
+        character = GetComponent<NPC>();
+    }
 
     private void Start()
     {
         characterInformation = Instantiate(characterInformation);
-        characterInformation.Initialize(name, characterImage, EmotionState.Calm);
+        characterInformation.Initialize(name, characterImage, speakerType, EmotionState.Calm);
     }
 
     public string GetInteractText()
@@ -23,7 +30,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     public void Interact()
     {
         PlayInteractNPCSound();
-        DialogueManager.Instance.HandleDialogue(characterInformation, inkText);
+        QuestManager.Instance.TriggerDialogue(characterInformation, character);
     }
 
     public void PlayInteractNPCSound()

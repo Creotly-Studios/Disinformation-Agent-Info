@@ -5,6 +5,31 @@ public enum PostType
     TextWithImage
 }
 
+public enum ResponseType
+{
+    Logical,
+    Reserved,
+    Emotional,
+    Argumentative
+}
+
+public enum ObjectiveType
+{
+    BiasBingo,
+    FightBots,
+    ConvinceNPC,
+    MisInfoGames,
+    SpotTheSource
+}
+
+public enum TypeOfSpeaker
+{
+    NPC,
+    Player,
+    Villain,
+    Instructor
+}
+
 public enum NoticeType
 {
     Hint,

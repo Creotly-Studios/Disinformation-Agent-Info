@@ -7,18 +7,6 @@ using System.Collections.Generic;
 
 public class SpotTheSourcePanel : MonoBehaviour
 {
-    private class PostClass
-    {
-        public bool hasChecked;
-        public SourcePostSO postSO;
-
-        public void Initialize(SourcePostSO postSO)
-        {
-            hasChecked = false;
-            this.postSO = postSO;
-        }
-    }
-
     //Status
     private bool hasSet;
     private int currentScore;
@@ -27,10 +15,8 @@ public class SpotTheSourcePanel : MonoBehaviour
     private string selectedAnswer = "";
     private WaitForSeconds waitForSeconds;
 
-    //Current Data
-    private PostClass currentPostClass = new();
-
     //Parameters
+    private SourcePostSO currentPost;
     private ComputerPanel_UI computerPanelUI;
     private List<SourcePostSO> dynamicContentList = new();
 
@@ -64,12 +50,12 @@ public class SpotTheSourcePanel : MonoBehaviour
         {
             return;
         }
-        SelectPostSO();
         currentScore = 0;
         remainingTime = maxTime;
 
+        InitalizePosts();
+        SelectPostSO();
         scoreCount.text = currentScore.ToString();
-        dynamicContentList = contentArray.ToList();
 
         hintButton.onClick.AddListener(() => HintButton());
         exitButton.onClick.AddListener(() => SubmitButton());
@@ -100,10 +86,14 @@ public class SpotTheSourcePanel : MonoBehaviour
         hasInitialized = false;
     }
 
-    private void Update()
+    public void SpotSource_Update()
     {
-        TimerCountdown(Time.deltaTime);
+        if (gameObject.activeSelf != true)
+        {
+            return;
+        }
 
+        TimerCountdown(Time.deltaTime);
         if(selectedAnswer.Equals(""))
         {
             return;
@@ -117,8 +107,8 @@ public class SpotTheSourcePanel : MonoBehaviour
         selectedAnswer = "";
         yield return waitForSeconds;
 
-        currentPostClass.hasChecked = true;
-        if(currentPostClass.postSO == null || currentPostClass.hasChecked)
+        currentPost.hasChecked = true;
+        if(currentPost == null || currentPost.hasChecked)
         {
             SelectPostSO();
             uiButton.ForEach(x => x.choiceButton.interactable = true);
@@ -131,22 +121,28 @@ public class SpotTheSourcePanel : MonoBehaviour
         uiButton[i].choiceButton.interactable = false;
 
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
-        DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPostClass.postSO.correctAnswer);
+        DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.correctAnswer);
         if(hasSet == true)
         {
             return;
         }
 
         hasSet = true;
-        if (selectedAnswer.Equals(currentPostClass.postSO.correctAnswer))
+        if (selectedAnswer.Equals(currentPost.correctAnswer))
         {
             currentScore++;
             scoreCount.text = currentScore.ToString();
             correctAnswer.choiceButton.image.color = Color.green;
+
+            QuestSO quest = QuestManager.Instance.activeQuest;
+            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.SpotTheSource)
+            {
+                quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+            }
             return;
         }
-        pickedAnswer.choiceButton.image.color = Color.red;
-        correctAnswer.choiceButton.image.color = Color.green;
+        if(pickedAnswer != null ) { pickedAnswer.choiceButton.image.color = Color.red; }
+        if(correctAnswer != null ) { correctAnswer.choiceButton.image.color = Color.green; }
     }
 
     private SourcePostSO GetPostSO()
@@ -155,17 +151,25 @@ public class SpotTheSourcePanel : MonoBehaviour
         return dynamicContentList[random];
     }
 
+    private void InitalizePosts()
+    {
+        dynamicContentList = contentArray.ToList();
+        for (int i = 0; i < dynamicContentList.Count; i++)
+        {
+            dynamicContentList[i] = Instantiate(dynamicContentList[i]);
+        }
+    }
+
     private void SelectPostSO()
     {
         if(dynamicContentList.Count <= 0)
         {
             return;
         }
-        SourcePostSO currentPost = GetPostSO();
 
+        currentPost = GetPostSO();
         InitializePostContents(currentPost);
         dynamicContentList.Remove(currentPost);
-        currentPostClass.Initialize(currentPost);
     }
 
     private void InitializePostContents(SourcePostSO postSO)

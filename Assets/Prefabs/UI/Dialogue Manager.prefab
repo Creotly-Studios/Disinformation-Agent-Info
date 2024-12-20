@@ -69,6 +69,14 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 1.33
       objectReference: {fileID: 0}
+    - target: {fileID: 1878876302632418019, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: response.responseType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2843558914299943481, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: response.responseType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4490766905838714035, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -157,6 +165,10 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 1.33
       objectReference: {fileID: 0}
+    - target: {fileID: 5663141224838659566, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: m_Color.a
+      value: 0.8235294
+      objectReference: {fileID: 0}
     - target: {fileID: 6589985755348833257, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -176,6 +188,10 @@ PrefabInstance:
     - target: {fileID: 7880296073677998137, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
       propertyPath: m_PixelsPerUnitMultiplier
       value: 1.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8905547025774751097, guid: 14c16a94af18ed444ba4848622045da9, type: 3}
+      propertyPath: response.responseType
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

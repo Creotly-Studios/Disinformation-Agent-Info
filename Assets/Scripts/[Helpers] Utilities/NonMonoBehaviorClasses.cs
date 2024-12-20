@@ -14,34 +14,75 @@ public struct BoundaryFloat
 }
 
 [System.Serializable]
+public struct Response
+{
+    public ResponseType responseType;
+
+    public float Evaluate(CharacterProfile profile)
+    {
+        float baseImpact = CalculateBaseImpact();
+        float impact = baseImpact;
+
+        impact += profile.ignorant * 0.4f;
+        impact += profile.loyaltyToSource * 0.2f;
+
+        impact -= profile.factLover * baseImpact * 0.5f;
+        impact -= profile.echoChamber * baseImpact * 0.6f;
+        impact -= profile.susceptibleToAnger * baseImpact * 0.5f;
+
+        return Mathf.Clamp(impact, -15f, 15f);
+    }
+
+    private float CalculateBaseImpact()
+    {
+        float baseImpact = 0.0f;
+
+        switch(responseType)
+        {
+            case ResponseType.Logical:
+                baseImpact = 7f;
+                break;
+            case ResponseType.Reserved:
+                baseImpact = 2.5f;
+                break;
+            case ResponseType.Emotional:
+                baseImpact = -3f;
+                break;
+            case ResponseType.Argumentative:
+                baseImpact = -2.0f;
+                break;
+        }
+        return baseImpact;
+    }
+}
+
+[System.Serializable]
+public class QuestObjectives
+{
+    public bool isDone;
+    public int targetValue;
+    public int progressValue;
+    public ObjectiveType objectiveType;
+    [TextArea] public string description;
+}
+
+[System.Serializable]
 public class CharacterProfile
 {
     NPC character;
 
     [Header("Topic Stans")]
-    [Range(1, 10)] public int proScience;
-    [Range(1, 10)] public int economicsFan;
-    [Range(1, 10)] public int governmentRating;
+    [Range(1, 10)] public int ignorant;
+    [Range(1, 10)] public int factLover;
 
     [Header("Traits")]
-    [Range(1, 10)] public int suscpiciousLevels;
+    [Range(1, 10)] public int echoChamber;
+    [Range(1, 10)] public int loyaltyToSource;
     [Range(1, 10)] public int susceptibleToAnger;
 
     public void Initialize(NPC character)
     {
         this.character = character;
-    }
-
-    public void ApplyChoiceEffect(int choiceImpact)
-    {
-        character.warmingUpRadar += choiceImpact;
-        character.ChangeEmotion();
-    }
-
-    public void Reset()
-    {
-        character.warmingUpRadar = 50;
-        character.ChangeEmotion();
     }
 }
 

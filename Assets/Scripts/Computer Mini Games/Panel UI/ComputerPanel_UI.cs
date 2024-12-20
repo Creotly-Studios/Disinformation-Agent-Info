@@ -15,9 +15,9 @@ public class ComputerPanel_UI : MonoBehaviour
 
     [Header("User Interface")]
     [SerializeField] private GameObject mainMenuPanel;
-    [SerializeField] private GameObject biasBingoPanel;
-    [SerializeField] private GameObject infoMatchPanel;
-    [SerializeField] public GameObject spotTheSourcePanel;
+    [SerializeField] private BiasBingoPanel biasBingoPanel;
+    [SerializeField] private MisinformationPanel infoMatchPanel;
+    [SerializeField] public SpotTheSourcePanel spotTheSourcePanel;
 
     private void OnEnable()
     {
@@ -27,9 +27,9 @@ public class ComputerPanel_UI : MonoBehaviour
         }
 
         hasInitalized = true;
-        biasBingo_Btn.onClick.AddListener(() => DisplayPanel(biasBingoPanel));
-        infoMatch_Btn.onClick.AddListener(() => DisplayPanel(infoMatchPanel));
-        spotSource_Btn.onClick.AddListener(() => DisplayPanel(spotTheSourcePanel));
+        biasBingo_Btn.onClick.AddListener(() => DisplayPanel(biasBingoPanel.gameObject));
+        infoMatch_Btn.onClick.AddListener(() => DisplayPanel(infoMatchPanel.gameObject));
+        spotSource_Btn.onClick.AddListener(() => DisplayPanel(spotTheSourcePanel.gameObject));
     }
 
     private void OnDisable()
@@ -40,18 +40,18 @@ public class ComputerPanel_UI : MonoBehaviour
         }
 
         hasInitalized = false;
-        biasBingo_Btn.onClick.RemoveListener(() => DisplayPanel(biasBingoPanel));
-        infoMatch_Btn.onClick.RemoveListener(() => DisplayPanel(infoMatchPanel));
-        spotSource_Btn.onClick.RemoveListener(() => DisplayPanel(spotTheSourcePanel));
+        biasBingo_Btn.onClick.RemoveListener(() => DisplayPanel(biasBingoPanel.gameObject));
+        infoMatch_Btn.onClick.RemoveListener(() => DisplayPanel(infoMatchPanel.gameObject));
+        spotSource_Btn.onClick.RemoveListener(() => DisplayPanel(spotTheSourcePanel.gameObject));
     }
 
     public void DisablePanels()
     {
         mainMenuPanel.SetActive(true);
 
-        biasBingoPanel.SetActive(false);
-        infoMatchPanel.SetActive(false);
-        spotTheSourcePanel.SetActive(false);
+        biasBingoPanel.gameObject.SetActive(false);
+        infoMatchPanel.gameObject.SetActive(false);
+        spotTheSourcePanel.gameObject.SetActive(false);
         popupPanel.gameObject.SetActive(false);
     }
 
@@ -64,5 +64,42 @@ public class ComputerPanel_UI : MonoBehaviour
     private void Start()
     {
         DisablePanels();
+    }
+
+    private void Update()
+    {
+        UnlockGames();
+
+        biasBingoPanel.BiasBingPanel_Update();
+        spotTheSourcePanel.SpotSource_Update();
+        infoMatchPanel.Misinformation_Update();
+    }
+
+    private void UnlockGames()
+    {
+        QuestSO activeQuest = QuestManager.Instance.activeQuest;
+
+        if(activeQuest == null)
+        {
+            return;
+        }
+
+        if(activeQuest.currentObjective.objectiveType == ObjectiveType.BiasBingo)
+        {
+            biasBingo_Btn.interactable = true;
+            infoMatch_Btn.interactable = false;
+            spotSource_Btn.interactable = false;
+            return;
+        }
+        else if(activeQuest.currentObjective.objectiveType == ObjectiveType.SpotTheSource)
+        {
+            spotSource_Btn.interactable = true;
+            biasBingo_Btn.interactable = false;
+            infoMatch_Btn.interactable = false;
+            return;
+        }
+        infoMatch_Btn.interactable = true;
+        biasBingo_Btn.interactable = false;
+        spotSource_Btn.interactable = false;
     }
 }

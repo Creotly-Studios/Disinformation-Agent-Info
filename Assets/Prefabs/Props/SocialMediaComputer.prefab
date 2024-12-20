@@ -1540,8 +1540,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de3989f749fcdcf498a46c9d3cd2469b, type: 2}
   - {fileID: 11400000, guid: 6d2cb31843e4aed49b92e39da4ad5f7e, type: 2}
   - {fileID: 11400000, guid: 0e9080b4a1b233d428e8c07a974bd665, type: 2}
-  - {fileID: 11400000, guid: e592a73c8c2f94748b373497b8387377, type: 2}
-  - {fileID: 11400000, guid: ad63ac8d2bc9ff14dbc68107708ae75f, type: 2}
   uiButton:
   - {fileID: 7594753241976910170}
   - {fileID: 8172110503016283995}
@@ -2732,7 +2730,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4039138187707054802
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2849,9 +2847,9 @@ MonoBehaviour:
   spotSource_Btn: {fileID: 9110857805919048188}
   popupPanel: {fileID: 1654783955173901644}
   mainMenuPanel: {fileID: 1148244160208489718}
-  biasBingoPanel: {fileID: 1166645302379914837}
-  infoMatchPanel: {fileID: 6069333631078437185}
-  spotTheSourcePanel: {fileID: 1250835041265393533}
+  biasBingoPanel: {fileID: 2513220354290959428}
+  infoMatchPanel: {fileID: 2300348391776566013}
+  spotTheSourcePanel: {fileID: 845352412929841117}
 --- !u!1 &1991434293932602026
 GameObject:
   m_ObjectHideFlags: 0

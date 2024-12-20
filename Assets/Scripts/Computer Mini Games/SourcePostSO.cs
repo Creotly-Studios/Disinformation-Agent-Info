@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SourcePostSO", menuName = "Scriptable Objects/SourcePostSO")]
 public class SourcePostSO : ScriptableObject
 {
+    public bool hasChecked;
+
     [Header("Information")]
     public string title;
     public string authorName;

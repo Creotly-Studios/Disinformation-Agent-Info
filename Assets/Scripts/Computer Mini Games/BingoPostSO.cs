@@ -9,5 +9,6 @@ public class BingoPostSO : ScriptableObject
 
     [Header("Options")]
     public string answer;
+    public bool hasChecked;
     public string[] options;
 }
