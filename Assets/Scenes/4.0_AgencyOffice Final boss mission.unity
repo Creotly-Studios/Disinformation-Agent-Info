@@ -597,7 +597,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3732782991864987049, guid: f062f4c25b22dbc4995eb9023e02ec8b, type: 3}
       propertyPath: sceneLoadIndex
-      value: 4
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3732782991864987049, guid: f062f4c25b22dbc4995eb9023e02ec8b, type: 3}
       propertyPath: activatedByDialogue
@@ -1463,6 +1463,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 658201863}
   m_CullTransparentMesh: 1
+--- !u!1001 &692791705
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.9037628
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.37999964
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -18.800003
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 23486042697782121, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2510266553685655934, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
+      propertyPath: m_Name
+      value: Quest Manager
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: bdeff7ebb9d24654da7094e453c3f220, type: 3}
 --- !u!1 &703531503
 GameObject:
   m_ObjectHideFlags: 0
@@ -4015,10 +4072,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile:
-    proScience: 0
-    economicsFan: 0
-    governmentRating: 0
-    suscpiciousLevels: 0
+    ignorant: 0
+    factLover: 0
+    echoChamber: 0
+    loyaltyToSource: 0
     susceptibleToAnger: 0
   canInteract: 0
   haveDialogue: 0
@@ -4066,8 +4123,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <interactText>k__BackingField: 
-  inkText: {fileID: 4900000, guid: 0fe8fe7ee5e6a6a488670e479efdf2e6, type: 3}
+  inkText: {fileID: 4900000, guid: 268209d578c60024591230016e444fcc, type: 3}
   characterImage: {fileID: 0}
+  speakerType: 0
   characterInformation: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
 --- !u!95 &1904829285
 Animator:
@@ -6235,6 +6293,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theInteractionText: Exit Door
+  sceneLoadIndex: 0
 --- !u!65 &3469287836864716812
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7227,3 +7286,4 @@ SceneRoots:
   - {fileID: 1904829281}
   - {fileID: 322142798}
   - {fileID: 1851726495}
+  - {fileID: 692791705}

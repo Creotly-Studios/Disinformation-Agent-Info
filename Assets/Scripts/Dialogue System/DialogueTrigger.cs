@@ -30,7 +30,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     public void Interact()
     {
         PlayInteractNPCSound();
-        QuestManager.Instance.TriggerDialogue(characterInformation, character);
+        QuestManager.Instance.TriggerDialogue(characterInformation, character, inkText);
     }
 
     public void PlayInteractNPCSound()

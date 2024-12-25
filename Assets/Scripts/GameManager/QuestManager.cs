@@ -37,14 +37,14 @@ public class QuestManager : MonoBehaviour
         
     }
 
-    public void TriggerDialogue(DialogueCharacterInformation speaker, NPC npc = null)
+    public void TriggerDialogue(DialogueCharacterInformation speaker, NPC npc = null, TextAsset textAsset = null)
     {
         if(speaker.speakerType == TypeOfSpeaker.Instructor)
         {
             DialogueManager.Instance.HandleDialogue(speaker, instructionDialogue);
             return;
         }
-        TextAsset randomDialogue = PickRandomDialogue();
+        TextAsset randomDialogue = textAsset;
         DialogueManager.Instance.HandleDialogue(speaker, randomDialogue, npc);
     }
 

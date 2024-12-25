@@ -19,6 +19,7 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     void Start()
     {
         mesh.SetActive(meshActiveAtStart);
+        GetComponent<BoxCollider>().enabled = meshActiveAtStart;
         SetActiveByDialogue();
     }
 
@@ -54,6 +55,7 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     public void ActivateBooth()
     {
         mesh.SetActive(true);
+        GetComponent<BoxCollider>().enabled = true;
         SetUsage(true);
     }
 

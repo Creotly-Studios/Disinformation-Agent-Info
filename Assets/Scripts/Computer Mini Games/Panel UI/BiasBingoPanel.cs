@@ -7,15 +7,16 @@ using System.Collections.Generic;
 
 public class BiasBingoPanel : MonoBehaviour
 {
-    //Status
+    // Status
     private bool hasSet;
     private int currentScore;
     private bool hasInitialized;
     private float remainingTime;
+    private bool isGameOver;
     private string selectedAnswer = "";
     private WaitForSeconds waitForSeconds;
 
-    //Current Data
+    // Current Data
     private BingoPostSO currentPost;
     private ComputerPanel_UI computerPanelUI;
     private List<BingoPostSO> dynamicContentList = new();
@@ -24,22 +25,28 @@ public class BiasBingoPanel : MonoBehaviour
     [SerializeField] private float maxTime;
     [SerializeField] private BingoPostSO[] contentArray;
 
-    [Header("Idenifer Buttons")]
+    [Header("Identifier Buttons")]
     [SerializeField] private List<DialogueUIChoice> uiButton = new();
 
     [Header("Post Properties")]
     [SerializeField] private TextMeshProUGUI authorName;
     [SerializeField] private TextMeshProUGUI postContent;
 
-    [Header("UI Prpoperties")]
+    [Header("UI Properties")]
     [SerializeField] private Button hintButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private TextMeshProUGUI scoreCount;
     [SerializeField] private TextMeshProUGUI countDownTimer;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI gameOverText;
 
     [Space]
     [SerializeField] private GameObject postPanel;
     [SerializeField] private GameObject answersPanel;
+
+    [Header("Hint System")]
+    [SerializeField] private int maxHints = 3;
+    private int remainingHints;
 
     private void Awake()
     {
@@ -56,12 +63,19 @@ public class BiasBingoPanel : MonoBehaviour
 
         currentScore = 0;
         remainingTime = maxTime;
+        remainingHints = maxHints;
+        isGameOver = false;
         scoreCount.text = currentScore.ToString();
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
 
         InitalizePosts();
         SelectPostSO();
 
-        hintButton.onClick.AddListener(() => HintButton());
+        // hintButton.onClick.AddListener(() => HintButton());
         exitButton.onClick.AddListener(() => SubmitButton());
 
         uiButton[0].choiceButton.onClick.AddListener(() => InitializeButton(0));
@@ -80,7 +94,7 @@ public class BiasBingoPanel : MonoBehaviour
             return;
         }
         dynamicContentList.Clear();
-        hintButton.onClick.RemoveListener(() => HintButton());
+        // hintButton.onClick.RemoveListener(() => HintButton());
         exitButton.onClick.RemoveListener(() => SubmitButton());
 
         uiButton[0].choiceButton.onClick.RemoveListener(() => InitializeButton(0));
@@ -102,7 +116,7 @@ public class BiasBingoPanel : MonoBehaviour
 
     public void BiasBingPanel_Update()
     {
-        if (gameObject.activeSelf != true)
+        if (gameObject.activeSelf != true || isGameOver)
         {
             return;
         }
@@ -132,6 +146,8 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void InitializeButton(int i)
     {
+        if (isGameOver) return;
+
         // Validate index
         if (i < 0 || i >= uiButton.Count)
         {
@@ -153,19 +169,14 @@ public class BiasBingoPanel : MonoBehaviour
             return;
         }
 
-        // Process button click
+        // Store selected answer and disable button
         selectedAnswer = button.choiceText.text;
         button.choiceButton.interactable = false;
 
-        if (currentPost == null)
-        {
-            Debug.LogError("Current post is null");
-            return;
-        }
-
-        // Evaluate answer
+        // Find answers and evaluate
         DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
         DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.answer);
+        
         if (hasSet)
         {
             return;
@@ -191,7 +202,6 @@ public class BiasBingoPanel : MonoBehaviour
         }
     }
 
-
     private BingoPostSO GetPostSO()
     {
         int random = Random.Range(0, dynamicContentList.Count);
@@ -203,7 +213,7 @@ public class BiasBingoPanel : MonoBehaviour
         if (dynamicContentList == null || dynamicContentList.Count <= 0)
         {
             Debug.Log("All posts have been answered.");
-            HidePanel();
+            EndGame("Congratulations! You've completed all posts!");
             return;
         }
 
@@ -226,10 +236,14 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
+        if (isGameOver) return;
+
         remainingTime -= delta;
         if (remainingTime <= 0.0f)
         {
             remainingTime = 0.0f;
+            EndGame("Time's up!");
+            return;
         }
 
         int minutes = Mathf.FloorToInt(remainingTime / 60);
@@ -237,12 +251,43 @@ public class BiasBingoPanel : MonoBehaviour
         int milliSecond = Mathf.FloorToInt((remainingTime * 1000) % 1000);
 
         countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
-        countDownTimer.text = string.Format("{0:00} : {1:00} : {2: 000}", minutes, seconds, milliSecond);
+        countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
     }
 
     private void HintButton()
     {
+        if (isGameOver || remainingHints <= 0 || currentPost == null) return;
 
+        remainingHints--;
+        hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Hint ({remainingHints})";
+
+        // Disable two wrong answers randomly
+        var wrongAnswers = uiButton
+            .Where(x => x.choiceText.text != currentPost.answer && x.choiceButton.interactable)
+            .ToList();
+
+        if (wrongAnswers.Count >= 2)
+        {
+            // Randomly select 2 wrong answers to disable
+            for (int i = 0; i < 2; i++)
+            {
+                int randomIndex = Random.Range(0, wrongAnswers.Count);
+                wrongAnswers[randomIndex].choiceButton.interactable = false;
+                wrongAnswers[randomIndex].choiceButton.image.color = Color.gray;
+                wrongAnswers.RemoveAt(randomIndex);
+            }
+        }
+
+        if (remainingHints <= 0)
+        {
+            hintButton.interactable = false;
+        }
+    }
+
+    private void EndGame(string message)
+    {
+        isGameOver = true;
+        HidePanel();
     }
 
     private void SubmitButton()
