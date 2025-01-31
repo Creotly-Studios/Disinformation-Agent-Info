@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class SocialMediaComputer : MonoBehaviour, IInteractable
 {
@@ -9,6 +10,8 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
 
     [SerializeField] private GameObject socialM_Canvas;
     public bool isShowingSocial;
+
+    public UnityEvent OnInterated;
 
     void Start()
     {
@@ -27,6 +30,7 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
 
     void ShowSocial()
     {
+        OnInterated?.Invoke();
         socialM_Canvas.SetActive(true);
         isShowingSocial = true;
     }

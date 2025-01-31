@@ -15,7 +15,6 @@ public class MusicManager : MonoBehaviour
 
     private void Awake()
     {
-        musicVolume = PlayerPrefs.GetFloat(PLAYER_PREFS_MUSIC_VOLUME);
         if (instance == null)
         {
             instance = this;
@@ -31,6 +30,7 @@ public class MusicManager : MonoBehaviour
 
     void Start()
     {
+        musicVolume = PlayerPrefs.GetFloat(PLAYER_PREFS_MUSIC_VOLUME);
         _musicSource = musicManagerGameObject.GetComponent<AudioSource>();
     }
 

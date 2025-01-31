@@ -29,13 +29,14 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InputManager.instance.InputSystemActions.Player.Pause.performed += ctx => TogglePause();
-        SFXPlayer.Instance.SetVolume(0.5f);
-        MusicManager.Instance.SetVolume(0.5f);
     }
 
     void Update()
     {
-        QuestManager.Instance.Quest_Update();
+        if (QuestManager.Instance != null)
+        {
+            QuestManager.Instance.Quest_Update();
+        }
     }
 
     private void OnDestroy()

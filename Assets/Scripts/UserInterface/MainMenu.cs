@@ -36,22 +36,24 @@ public class MainMenu : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetFloat("SFX", 1);
+        PlayerPrefs.SetFloat("Music", 0.5f);
     }
 
     void Start()
     {
         CheckGameData(); // Call the function to check game data
-
         SetCurrentPanel(CurrentPanel.None);
         startNewGameButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.PlayClickSound();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(firstLevelIndex);
+            LevelLoader.LoadLevel(firstLevelIndex);
         });
         continueGameButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.PlayClickSound();
-            UnityEngine.SceneManagement.SceneManager.LoadScene(currentLevelIndex);
+            LevelLoader.LoadLevel(currentLevelIndex);
         });
         playEndlessButton.onClick.AddListener(() =>
         {

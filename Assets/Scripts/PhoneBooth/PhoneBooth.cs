@@ -11,10 +11,15 @@ public class PhoneBooth : MonoBehaviour, IInteractable
     [SerializeField] bool canBeUsed;
     // Scene index to load
 
+    [SerializeField] GameObject mesh;
+    [SerializeField] bool meshActiveAtStart;
+
     public bool activatedByDialogue;
 
     void Start()
     {
+        mesh.SetActive(meshActiveAtStart);
+        GetComponent<BoxCollider>().enabled = meshActiveAtStart;
         SetActiveByDialogue();
     }
 
@@ -49,6 +54,8 @@ public class PhoneBooth : MonoBehaviour, IInteractable
 
     public void ActivateBooth()
     {
+        mesh.SetActive(true);
+        GetComponent<BoxCollider>().enabled = true;
         SetUsage(true);
     }
 

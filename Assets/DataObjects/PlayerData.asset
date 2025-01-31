@@ -14,13 +14,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 10
   speed: 3
-  sprintSpeed: 5.5
+  sprintSpeed: 6
   sprintDuration: 20
   sprintCooldown: 5
-  gravity: -19.62
-  jumpHeight: 1
-  jumpForwardForce: 0.5
+  gravity: -30
+  jumpHeight: 1.5
+  jumpForwardForce: 8.01
   turnSmoothTime: 0.1
-  detectRadius: 1.5
+  dashForce: 2
+  detectRadius: 0.35
   detectRange: 1
   pushForce: 0.75
+  attackRange: 0.35
+  attackSphereSize: 1.25
+  attackDamage: 1
+  combo:
+  - {fileID: 11400000, guid: 033a4436254055d45bdb95e7d0dcbb5a, type: 2}
+  - {fileID: 11400000, guid: 010ffaef771ec5641825cc600bb7f6ec, type: 2}
+  - {fileID: 11400000, guid: 2d81a853e1aca7c4398d2688d683fc8e, type: 2}
+  timeBetweenCombos: 0.375
+  timeBetweenAttackUsage: 0.375
+  timeBetweenAttacks: 0

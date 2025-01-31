@@ -94,4 +94,9 @@ private void Awake()
         //Sprint
         sprintFlag = (InputManager.instance.sprintPressed);
     }
+
+    public void Damage()
+    {
+        Debug.Log("hit");
+    }
 }
