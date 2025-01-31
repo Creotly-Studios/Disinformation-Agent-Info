@@ -75,10 +75,10 @@ public class RobotStates_Idle : RobotStates
             else
             {
                 destinationSet = false;
+		idleTime = idleTimeDefault;
                 robot.agent.enabled = true;
 
                 patrolMode = PatrolMode.Walk;
-                return Walk(robot);
             }
         }
         return this;
@@ -97,7 +97,6 @@ public class RobotStates_Idle : RobotStates
             robot.isMoving = false;
             robot.agent.enabled = false;
             patrolMode = PatrolMode.Idle;
-            return SwitchState(Idle(robot), robot);
         }
         return this;
     }
