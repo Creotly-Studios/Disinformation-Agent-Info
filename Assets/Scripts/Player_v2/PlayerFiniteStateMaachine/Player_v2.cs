@@ -1,14 +1,25 @@
+using System;
 using UnityEngine;
 
 public class Player_v2 : MonoBehaviour
 {
+    public static Player_v2 Instance { get; private set; }
     public CharacterController controller { get; private set; }
+    [SerializeField]
+    private PlayerData playerData;
+    public PlayerData PlayerData { get; private set; }
 
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
     public PlayerCombatSystem CombatSystem { get; private set; }
     public Animator Anim;
+    #endregion
+
+    #region Events
+    public event EventHandler<GameObject> OnInteractObjectFind; 
+    
+
     #endregion
 
     #region PlayerStates
@@ -28,14 +39,18 @@ public class Player_v2 : MonoBehaviour
     #region Checks
     public Transform checkTransform;
     #endregion
-    [SerializeField]
-    private PlayerData playerData;
-    public PlayerData PlayerData { get; private set; }
-
+    
     #region UnityCallbackFunctions
     private void Awake()
     {
+        if (Instance != null)
+        {
+            Debug.LogError("There is more than one Player (Instance) in the scene");
+        }
+        Instance = this;
+        
         StateMachine = new PlayerStateMachine();
+        PlayerData = playerData;
 
         IdleState = new PlayerIdleState(this, StateMachine, playerData, "idle");
         MoveState = new PlayerMoveState(this, StateMachine, playerData, "move");
@@ -55,12 +70,12 @@ public class Player_v2 : MonoBehaviour
         controller = GetComponent<CharacterController>();
         //initialize the state machine
         StateMachine.Initialize(IdleState);
-        PlayerData = playerData;
     }
 
     void Update()
     {
         StateMachine.CurrentState.LogicUpdate();
+        InvokeIInteractableFoundEvent();
         Debug.Log(StateMachine.CurrentState);
     }
 
@@ -68,6 +83,32 @@ public class Player_v2 : MonoBehaviour
     {
         StateMachine.CurrentState.PhysicsUpdate();
         ApplyGravity();
+    }
+
+    #endregion
+
+    #region Check Functions
+    public bool IsGrounded() => controller.isGrounded;
+
+    public GameObject GetInteractableObject()
+    {
+        RaycastHit[] hits = Physics.SphereCastAll(checkTransform.position, playerData.detectRadius, checkTransform.forward, playerData.detectRange);
+        foreach (RaycastHit hit in hits)
+        {
+            GameObject inter = hit.collider.gameObject;
+            IInteractable interactable = inter.GetComponent<IInteractable>();
+            if (interactable != null)
+            {
+                Vector3 directionToEnemy = (hit.collider.transform.position - checkTransform.position).normalized;
+                float dotProduct = Vector3.Dot(checkTransform.forward, directionToEnemy);
+
+                if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
+                {
+                    return inter;
+                }
+            }
+        }
+        return null;
     }
 
     #endregion
@@ -139,6 +180,24 @@ public class Player_v2 : MonoBehaviour
             Gizmos.DrawWireSphere(checkTransform.position, playerData.attackSphereSize);
             Gizmos.DrawLine(checkTransform.position, checkTransform.position + checkTransform.forward * playerData.attackRange);
             Gizmos.DrawWireSphere(checkTransform.position + checkTransform.forward * playerData.attackRange, playerData.attackSphereSize);
+        }
+    }
+    
+    public bool hasInteracableObject { get; private set; }
+    void InvokeIInteractableFoundEvent()
+    {
+        if (GetInteractableObject() != null && !hasInteracableObject)
+        {
+            //event
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
+            hasInteracableObject = true;
+            
+        }
+        else
+        {
+            //event
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
+            hasInteracableObject = false;
         }
     }
 

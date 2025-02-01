@@ -20,7 +20,7 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
         HideSocial();
     }
 
-    public void Interact()
+    public void Interact(Player_v2 player)
     {
         if (!isShowingSocial)
         {

@@ -23,7 +23,7 @@ public class PhoneBooth : MonoBehaviour, IInteractable
         SetActiveByDialogue();
     }
 
-    public void Interact()
+    public void Interact(Player_v2 player)
     {
         if (canBeUsed)
         {

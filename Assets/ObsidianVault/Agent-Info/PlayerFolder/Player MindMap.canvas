@@ -6,11 +6,11 @@
 		{"id":"320fbc9cc059f2ed","type":"text","text":"Ability State","x":-325,"y":482,"width":250,"height":60,"color":"4"},
 		{"id":"29f37f8ba065fc24","type":"text","text":"Jump State","x":-680,"y":487,"width":250,"height":55,"color":"4"},
 		{"id":"4b9ea8014e8d3a28","type":"text","text":"Dash State","x":-680,"y":542,"width":250,"height":50,"color":"4"},
-		{"id":"1ae9a2ce6b67b817","type":"text","text":"In air State","x":-325,"y":640,"width":250,"height":60,"color":"5"},
+		{"id":"1ae9a2ce6b67b817","type":"text","text":"In Air State","x":-325,"y":640,"width":250,"height":60,"color":"5"},
 		{"id":"4ee60c04c7aea5b6","type":"text","text":"Grounded State","x":-325,"y":390,"width":250,"height":50,"color":"2"},
-		{"id":"b58680ccf1a58694","type":"text","text":"Dialogue State","x":-340,"y":766,"width":250,"height":60},
-		{"id":"f842bfec0d5b94aa","type":"file","file":"PlayerFolder/Player.md","x":-116,"y":-80,"width":400,"height":132,"color":"6"},
-		{"id":"63e5249bd1d80cfd","type":"text","text":"Player State Machine","x":-41,"y":120,"width":250,"height":106,"color":"6"}
+		{"id":"f842bfec0d5b94aa","type":"file","file":"PlayerFolder/Player.md","x":-116,"y":-80,"width":400,"height":200,"color":"6"},
+		{"id":"63e5249bd1d80cfd","type":"text","text":"Player State Machine","x":-41,"y":120,"width":250,"height":106,"color":"6"},
+		{"id":"b58680ccf1a58694","type":"text","text":"Dialogue State","x":159,"y":800,"width":250,"height":60,"color":"2"}
 	],
 	"edges":[
 		{"id":"a32d2590e596baf1","fromNode":"f842bfec0d5b94aa","fromSide":"bottom","toNode":"63e5249bd1d80cfd","toSide":"top","color":"6"},
@@ -20,14 +20,14 @@
 		{"id":"76a27cfcf8f43113","fromNode":"63e5249bd1d80cfd","fromSide":"bottom","toNode":"1ae9a2ce6b67b817","toSide":"top","color":"3"},
 		{"id":"3d45c6e34b472576","fromNode":"4ee60c04c7aea5b6","fromSide":"left","toNode":"8e1ea9e97ba210c3","toSide":"right","color":"2"},
 		{"id":"9b2ddb3a079a4928","fromNode":"4ee60c04c7aea5b6","fromSide":"left","toNode":"ad89a46257933aa2","toSide":"right","color":"2"},
-		{"id":"cb4c30ea7d2e96d3","fromNode":"8e1ea9e97ba210c3","fromSide":"left","toNode":"ad89a46257933aa2","toSide":"left"},
-		{"id":"b3805ad69ca3bb3e","fromNode":"ad89a46257933aa2","fromSide":"left","toNode":"8e1ea9e97ba210c3","toSide":"left"},
+		{"id":"cb4c30ea7d2e96d3","fromNode":"8e1ea9e97ba210c3","fromSide":"left","toNode":"ad89a46257933aa2","toSide":"left","color":"2"},
 		{"id":"d0e86b375113463f","fromNode":"320fbc9cc059f2ed","fromSide":"right","toNode":"1ae9a2ce6b67b817","toSide":"right","color":"4"},
 		{"id":"cdfd33c42f832531","fromNode":"320fbc9cc059f2ed","fromSide":"left","toNode":"29f37f8ba065fc24","toSide":"right","color":"4"},
 		{"id":"feea151834c840d2","fromNode":"4ee60c04c7aea5b6","fromSide":"bottom","toNode":"320fbc9cc059f2ed","toSide":"top"},
 		{"id":"c4082c580ad89ef4","fromNode":"320fbc9cc059f2ed","fromSide":"left","toNode":"4b9ea8014e8d3a28","toSide":"right","color":"4"},
 		{"id":"990a4c72e6d936fb","fromNode":"1ae9a2ce6b67b817","fromSide":"right","toNode":"4ee60c04c7aea5b6","toSide":"top","color":"5"},
 		{"id":"208a4e8a552deec9","fromNode":"320fbc9cc059f2ed","fromSide":"right","toNode":"4ee60c04c7aea5b6","toSide":"top","color":"4"},
-		{"id":"afc60ce5e6f0ba81","fromNode":"63e5249bd1d80cfd","fromSide":"bottom","toNode":"b58680ccf1a58694","toSide":"top","color":"#d4ff00"}
+		{"id":"aa1de40afe1383c0","fromNode":"4ee60c04c7aea5b6","fromSide":"right","toNode":"b58680ccf1a58694","toSide":"left","color":"2"},
+		{"id":"4f65679806de098f","fromNode":"ad89a46257933aa2","fromSide":"left","toNode":"8e1ea9e97ba210c3","toSide":"left","color":"2"}
 	]
 }
