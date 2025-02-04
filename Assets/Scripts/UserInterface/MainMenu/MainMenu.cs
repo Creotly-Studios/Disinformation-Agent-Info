@@ -12,17 +12,13 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button quitButton;
     [Space]
     [SerializeField] private Button redirectButton;
-    [Space]
-    [SerializeField] private int creditLevelIndex;
 
-    [Space]
-    [SerializeField] private int firstLevelIndex; //level1 tutorial index lol
-    [SerializeField] private int currentLevelIndex; //store last level player played
     public enum CurrentPanel
     {
         None, StartPanel, OptionsPanel
     }
     [Space] public CurrentPanel currentPanel;
+    
     public event EventHandler<MainMenu> OnPanelChanged;
     [Space] [SerializeField] private CanvasGroup sidePanelsHolder;
 
@@ -44,6 +40,7 @@ public class MainMenu : MonoBehaviour
         startButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.PlayClickSound();
+            SetCurrentPanel(CurrentPanel.StartPanel);
             Debug.Log("start game");
         });
         playEndlessButton.onClick.AddListener(() =>
@@ -54,7 +51,7 @@ public class MainMenu : MonoBehaviour
         optionsButton.onClick.AddListener(() =>
         {
             SFXPlayer.Instance.PlayClickSound();
-            
+            SetCurrentPanel(CurrentPanel.OptionsPanel);
             Debug.Log("open options menu");
         });
         redirectButton.onClick.AddListener(() =>

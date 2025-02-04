@@ -22,11 +22,11 @@ MonoBehaviour:
   jumpForwardForce: 8.01
   turnSmoothTime: 0.1
   dashForce: 2
-  detectRadius: 0.35
-  detectRange: 1
+  detectRadius: 1.25
+  detectRange: 1.55
   pushForce: 0.75
   attackRange: 0.35
-  attackSphereSize: 1.25
+  attackSphereSize: 1.75
   attackDamage: 1
   combo:
   - {fileID: 11400000, guid: 033a4436254055d45bdb95e7d0dcbb5a, type: 2}

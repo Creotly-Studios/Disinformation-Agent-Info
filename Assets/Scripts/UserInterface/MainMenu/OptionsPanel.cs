@@ -38,7 +38,7 @@ public class OptionsPanel : MonoBehaviour
         {
             _mainMenu.SetCurrentPanelToNone();
         });
-        
+        SetCanvasOpacity(1);
         Hide();
     }
 
@@ -70,6 +70,14 @@ public class OptionsPanel : MonoBehaviour
     {
         sfxText.text = $"SFX: {Mathf.Ceil(SFXPlayer.Instance.GetVolume() * 10)}";
         musicText.text = $"Music: {Mathf.Ceil(MusicManager.Instance.GetVolume() * 10)}";
+    }
+
+    void SetCanvasOpacity(int value)
+    {
+        if (GetComponent<CanvasGroup>() != null)
+        {
+            GetComponent<CanvasGroup>().alpha = value;
+        }
     }
     
 }

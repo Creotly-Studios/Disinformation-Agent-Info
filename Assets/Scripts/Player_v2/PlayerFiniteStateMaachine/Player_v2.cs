@@ -111,6 +111,7 @@ public class Player_v2 : MonoBehaviour
         StateMachine.CurrentState.LogicUpdate();
         
         InvokeIInteractableFoundEvent();
+        OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         PlayerStatistics.PlayerStatistic_Update(delta);
     }
 
@@ -226,18 +227,18 @@ public class Player_v2 : MonoBehaviour
     public bool hasInteracableObject { get; private set; }
     void InvokeIInteractableFoundEvent()
     {
-        if (GetInteractableObject() != null && !hasInteracableObject)
+        if (GetInteractableObject() != null)
         {
             //event
-            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             hasInteracableObject = true;
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             
         }
         else
         {
             //event
-            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             hasInteracableObject = false;
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         }
     }
 
