@@ -8,7 +8,7 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GetComponent<CanvasGroup>().alpha = 1;
+        SetCanvasOpacity(1);
         GameManager.instance.OnGamePause += GameManager_OnGamePaused;
         menuBtn.onClick.AddListener(() =>
             {
@@ -45,5 +45,13 @@ public class PauseMenu : MonoBehaviour
     private void Hide()
     {
         gameObject.SetActive(false);
+    }
+    
+    void SetCanvasOpacity(int value)
+    {
+        if (GetComponent<CanvasGroup>() != null)
+        {
+            GetComponent<CanvasGroup>().alpha = value;
+        }
     }
 }
