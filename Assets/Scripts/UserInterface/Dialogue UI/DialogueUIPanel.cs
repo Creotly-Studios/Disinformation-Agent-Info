@@ -5,11 +5,15 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 
 public class DialogueUIPanel : MonoBehaviour
 {
+    private bool skipFlag;
+
     [Header("Panel")]
     public Transform dialoguePanel;
+    [SerializeField] private Button skipButton;
 
     [Header("Player Speaker Panel")]
     public Image playerImage;
@@ -33,6 +37,7 @@ public class DialogueUIPanel : MonoBehaviour
     private void Awake()
     {
         typingSpeed = new WaitForSeconds(0.05f);
+        skipButton.onClick.AddListener(() => HandleSkip());
     }
 
     public void StopDisplayCoroutine()
@@ -75,6 +80,11 @@ public class DialogueUIPanel : MonoBehaviour
             }
         }
         typingCoroutine = StartCoroutine(StartTypingText(dialogueText));
+    }
+
+    private void HandleSkip()
+    {
+        skipFlag = true;
     }
 
     public void DisableUIChoices()
@@ -126,6 +136,11 @@ public class DialogueUIPanel : MonoBehaviour
             playerTextDialogue.text = "";
             foreach (char c in text)
             {
+                if (skipFlag == true)
+                {
+                    playerTextDialogue.text = text;
+                    break;
+                }
                 playerTextDialogue.text += c;
                 yield return typingSpeed;
             }
@@ -135,10 +150,17 @@ public class DialogueUIPanel : MonoBehaviour
             speakerTextDialogue.text = "";
             foreach (char c in text)
             {
+                if (skipFlag == true)
+                {
+                    speakerTextDialogue.text = text;
+                    break;
+                }
                 speakerTextDialogue.text += c;
                 yield return typingSpeed;
             }
         }
+        print(0);
+        skipFlag = false;
         DialogueManager.Instance.canContinue = true;
     }
 }

@@ -25,47 +25,87 @@ public class Player_v2 : MonoBehaviour
 
     #endregion
 
+    #region PlayerFunction Components
+    public PlayerMovement PlayerMovement { get; private set; }
+    public PlayerAnimation PlayerAnimation { get; private set; }
+    public PlayerStatistics PlayerStatistics { get; private set; }
+
+    [Header("Player Info")]
+    [SerializeField] private Sprite characterImage;
+    [SerializeField] private DialogueCharacterInformation speakerInfo;
+    [field: SerializeField] public PlayerData PlayerData { get; private set; }
+
+    [Header("Player UI")]
+    [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
+    [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
+    #endregion
+
     #region Checks
     public Transform checkTransform;
     #endregion
-    [SerializeField]
-    private PlayerData playerData;
-    public PlayerData PlayerData { get; private set; }
+
+    //Status
+    public bool isDead;
+    public bool sprintFlag;
+    public bool isAttacking;
+    public bool performingAction;
 
     #region UnityCallbackFunctions
     private void Awake()
     {
+        PlayerData = Instantiate(PlayerData);
         StateMachine = new PlayerStateMachine();
 
-        IdleState = new PlayerIdleState(this, StateMachine, playerData, "idle");
-        MoveState = new PlayerMoveState(this, StateMachine, playerData, "move");
-        JumpState = new PlayerJumpState(this, StateMachine, playerData, "jump");
-        InAirState = new PlayerInAirState(this, StateMachine, playerData, "inAir");
-        LandState = new PlayerLandState(this, StateMachine, playerData, "move");
-        DashState = new PlayerDashState(this, StateMachine, playerData, "dash");
-        InteractState = new PlayerInteractState(this, StateMachine, playerData, "interact");
-        AtttackState = new PlayerAttackState(this, StateMachine, playerData, "isAttacking");
-        DialogueState = new PlayerDialogueState(this, StateMachine, playerData, "idle");
+        controller = GetComponent<CharacterController>();
+        InputHandler = GetComponent<PlayerInputHandler>();
+        CombatSystem = GetComponent<PlayerCombatSystem>();
+
+        PlayerMovement = GetComponent<PlayerMovement>();
+        PlayerAnimation = GetComponent<PlayerAnimation>();
+        PlayerStatistics = GetComponent<PlayerStatistics>();
+
+        IdleState = new PlayerIdleState(this, StateMachine, PlayerData, "idle");
+        MoveState = new PlayerMoveState(this, StateMachine, PlayerData, "move");
+        JumpState = new PlayerJumpState(this, StateMachine, PlayerData, "jump");
+        InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
+        LandState = new PlayerLandState(this, StateMachine, PlayerData, "move");
+        DashState = new PlayerDashState(this, StateMachine, PlayerData, "dash");
+        InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
+        AtttackState = new PlayerAttackState(this, StateMachine, PlayerData, "isAttacking");
+        DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
     }
 
     void Start()
     {
-        InputHandler = GetComponent<PlayerInputHandler>();
-        CombatSystem = GetComponent<PlayerCombatSystem>();
-        controller = GetComponent<CharacterController>();
         //initialize the state machine
         StateMachine.Initialize(IdleState);
-        PlayerData = playerData;
+        speakerInfo = Instantiate(speakerInfo);
+        speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
+
+        PlayerStatistics.ResetUI();
+        DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
     }
 
     void Update()
     {
-        StateMachine.CurrentState.LogicUpdate();
+        if (isDead)
+        {
+            return;
+        }
+        float delta = Time.deltaTime;
         Debug.Log(StateMachine.CurrentState);
+
+        StateMachine.CurrentState.LogicUpdate();
+        PlayerStatistics.PlayerStatistic_Update(delta);
     }
 
     private void FixedUpdate()
     {
+        if (isDead)
+        {
+            return;
+        }
+
         StateMachine.CurrentState.PhysicsUpdate();
         ApplyGravity();
     }
@@ -79,10 +119,10 @@ public class Player_v2 : MonoBehaviour
         controller.Move(velocity);
     }
 
+    private float _verticalVelocity;
     public void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
     public void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
 
-    private float _verticalVelocity;
     void ApplyGravity()
     {
         if (controller.isGrounded)
@@ -91,7 +131,7 @@ public class Player_v2 : MonoBehaviour
         }
         else
         {
-            _verticalVelocity += playerData.gravity * Time.deltaTime;
+            _verticalVelocity += PlayerData.gravity * Time.deltaTime;
 
             _verticalVelocity = Mathf.Max(_verticalVelocity, -53f); // Terminal velocity ~53 m/s
         }
@@ -103,7 +143,7 @@ public class Player_v2 : MonoBehaviour
     {
         if (controller.isGrounded)
         {
-            _verticalVelocity = Mathf.Sqrt(playerData.jumpHeight * -2f * playerData.gravity);
+            _verticalVelocity = Mathf.Sqrt(PlayerData.jumpHeight * -2f * PlayerData.gravity);
         }
         Move(new Vector3(0, _verticalVelocity, 0) * Time.deltaTime);
     }
@@ -114,7 +154,7 @@ public class Player_v2 : MonoBehaviour
         {
 
         }
-        Move(transform.forward * playerData.dashForce);
+        Move(transform.forward * PlayerData.dashForce);
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -127,7 +167,7 @@ public class Player_v2 : MonoBehaviour
             forceDir.y = 0;
             forceDir.Normalize();
 
-            rb.AddForceAtPosition(forceDir * playerData.pushForce, transform.position, ForceMode.Impulse);
+            rb.AddForceAtPosition(forceDir * PlayerData.pushForce, transform.position, ForceMode.Impulse);
         }
     }
 
@@ -136,9 +176,9 @@ public class Player_v2 : MonoBehaviour
         if (checkTransform != null)
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(checkTransform.position, playerData.attackSphereSize);
-            Gizmos.DrawLine(checkTransform.position, checkTransform.position + checkTransform.forward * playerData.attackRange);
-            Gizmos.DrawWireSphere(checkTransform.position + checkTransform.forward * playerData.attackRange, playerData.attackSphereSize);
+            Gizmos.DrawWireSphere(checkTransform.position, PlayerData.attackSphereSize);
+            Gizmos.DrawLine(checkTransform.position, checkTransform.position + checkTransform.forward * PlayerData.attackRange);
+            Gizmos.DrawWireSphere(checkTransform.position + checkTransform.forward * PlayerData.attackRange, PlayerData.attackSphereSize);
         }
     }
 
