@@ -27,7 +27,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         return "jjj";
     }
 
-    public void Interact()
+    public void Interact(Player_v2 player)
     {
         PlayInteractNPCSound();
         QuestManager.Instance.TriggerDialogue(characterInformation, character, inkText);

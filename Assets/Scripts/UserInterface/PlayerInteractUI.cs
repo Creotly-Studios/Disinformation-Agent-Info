@@ -1,26 +1,17 @@
 using UnityEngine;
 public class PlayerInteractUI : MonoBehaviour
 {
-    Player _player;
-    private PlayerInteraction _playerInteraction;
-
     [SerializeField] private GameObject interactUI;
-
-    private void Awake()
-    {
-        _player = GetComponent<Player>();
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
-        _playerInteraction = _player.PlayerInteraction;
+        Player_v2.Instance.OnInteractObjectFind += Player_PlayerHasInteractableObject;
+        Hide();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Player_PlayerHasInteractableObject(object sender, GameObject e)
     {
-        if (_playerInteraction.PlayerCanInteract())
+        if (e != null)
         {
             Show();
         }

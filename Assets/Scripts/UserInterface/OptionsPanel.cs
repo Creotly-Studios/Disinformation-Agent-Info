@@ -12,7 +12,10 @@ public class OptionsPanel : MonoBehaviour
     [Header("Music Manager UI")]
     [SerializeField] private Button musicButton;
     [SerializeField] private TextMeshProUGUI musicText;
-    
+
+    private MainMenu _mainMenu;
+
+    [Space] [SerializeField] private Button closePanelButton;
     void Start()
     {
         UpdateText();
@@ -31,12 +34,18 @@ public class OptionsPanel : MonoBehaviour
         });
         
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
+        closePanelButton.onClick.AddListener(() =>
+        {
+            _mainMenu.SetCurrentPanelToNone();
+        });
+        
         Hide();
     }
 
-    private void MainMenu_OnPanelChanged(object sender, EventArgs e)
+    private void MainMenu_OnPanelChanged(object sender, MainMenu e)
     {
-        if (MainMenu.instance.GetCurrentPanel() == MainMenu.CurrentPanel.Options)
+        _mainMenu = e;
+        if (_mainMenu.GetCurrentPanel() == MainMenu.CurrentPanel.OptionsPanel)
         {
             Show();
         }

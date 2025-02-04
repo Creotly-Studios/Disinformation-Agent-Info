@@ -8,7 +8,7 @@ public class DoorLevelLoader : MonoBehaviour, IInteractable
     [Space]
 	[SerializeField] private int sceneLoadIndex = 0;
 
-    public void Interact()
+    public void Interact(Player_v2 player)
     {
         PlayDoorSound();
         LevelLoader.LoadLevel(sceneLoadIndex);
