@@ -39,11 +39,6 @@ public class RobotStates_Idle : RobotStates
 
     private RobotStates IdleState_Updater(Robot robot)
     {
-        if (robot.AngleOfTarget < robot.angleLimit.lowerBound || robot.AngleOfTarget > robot.angleLimit.upperBound)
-        {
-            robot.robotMovement.PivotTowardsTarget(robot);
-        }
-
         robot.robotMovement.RotateTowardsTarget();
         if (patrolMode == PatrolMode.Idle)
         {

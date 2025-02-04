@@ -7,9 +7,6 @@ public class RobotStates_Combat : RobotStates
     private bool hasAction;
     private List<PunchSO> possibleActions = new List<PunchSO>();
 
-    //Attack Bools
-    private bool pivotAfterAttack;
-
     [Header("Selected Attack Styles")]
     [SerializeField] PunchSO currentAttack;
     [SerializeField] PunchSO[] attackArray;
@@ -94,11 +91,6 @@ public class RobotStates_Combat : RobotStates
             hasPerformedAction = true;
             AttackTarget(robot);
             return this;
-        }
-
-        if (pivotAfterAttack)
-        {
-            robot.robotMovement.PivotTowardsTarget(robot);
         }
         //robot.robotAnimation.PlayTargetAnimation(AnimatorHashing.stepBackHash, true);
         recoveryTimer = currentAttack.recoveryTime;

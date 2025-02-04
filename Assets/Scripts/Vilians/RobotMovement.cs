@@ -72,31 +72,6 @@ public class RobotMovement : MonoBehaviour
         robot.transform.rotation = Quaternion.Slerp(robot.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
-    public void PivotTowardsTarget(Robot robot)
-    {
-        if (robot.performingAction)
-        {
-            return;
-        }
-
-        if (robot.AngleOfTarget >= 20 && robot.AngleOfTarget <= 145)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_R_90, true);
-        }
-        else if (robot.AngleOfTarget >= -145 && robot.AngleOfTarget <= -20)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_L_90, true);
-        }
-        else if (robot.AngleOfTarget > 145 && robot.AngleOfTarget <= 180)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_R_180, true);
-        }
-        else if (robot.AngleOfTarget < -145 && robot.AngleOfTarget >= -180)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_L_180, true);
-        }
-    }
-
     public void RotateTowardsTarget()
     {
         if (robot.isMoving == true)

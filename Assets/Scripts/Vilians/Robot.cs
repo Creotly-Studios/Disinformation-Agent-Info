@@ -33,7 +33,6 @@ public class Robot : MonoBehaviour
 
     [Header("Target Properties")]
     public VisualTarget target;
-    public BoundaryFloat angleLimit;
     public Player currentVisualTarget { get; private set; }
     public List<VisualTarget> potentialTargets = new List<VisualTarget>();
 

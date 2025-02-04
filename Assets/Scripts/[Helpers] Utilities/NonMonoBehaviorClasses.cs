@@ -97,11 +97,9 @@ public class VisualTarget
     [field: SerializeField] public Player Target { get; private set; }
 
     [field: Header("Target Information")]
+    public float targetScore;
     [field: SerializeField] public float TargetAngle { get; private set; }
     [field: SerializeField] public float TargetDistance { get; private set; }
-
-    [Header("Target Score")]
-    public float targetScore;
 
     public VisualTarget(Player potentialTarget)
     {
