@@ -1,4 +1,6 @@
+using TMPro;
 using UnityEngine;
+
 public class PlayerInteractUI : MonoBehaviour
 {
     Player _player;
