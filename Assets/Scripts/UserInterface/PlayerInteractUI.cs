@@ -4,6 +4,7 @@ using UnityEngine;
 public class PlayerInteractUI : MonoBehaviour
 {
     [SerializeField] private GameObject interactUI;
+    [SerializeField] private TextMeshProUGUI interactText;
     
     void Start()
     {
@@ -16,9 +17,11 @@ public class PlayerInteractUI : MonoBehaviour
         if (e != null)
         {
             Show();
+            interactText.text = e.GetComponent<IInteractable>().GetInteractText();
         }
         else
         {
+            interactText.text = "";
             Hide();
         }
     }

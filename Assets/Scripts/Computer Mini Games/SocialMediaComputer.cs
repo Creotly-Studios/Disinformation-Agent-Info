@@ -3,10 +3,11 @@ using UnityEngine.Events;
 
 public class SocialMediaComputer : MonoBehaviour, IInteractable
 {
+    private Player_v2 _player;
+    
     ComputerPanel_UI sM_Manager;
-
-    [SerializeField] private string theInteractionText = "";
-    public string interactText { get; set; }
+    
+    [SerializeField] private string interactText;
 
     [SerializeField] private GameObject socialM_Canvas;
     public bool isShowingSocial;
@@ -22,10 +23,12 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
 
     public void Interact(Player_v2 player)
     {
+        _player = player;
         if (!isShowingSocial)
         {
             ShowSocial();
         }
+        DeactivatePlayer();
     }
 
     void ShowSocial()
@@ -44,5 +47,15 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
     public string GetInteractText()
     {
     	return interactText;
+    }
+    
+    public void ActivatePlayer()
+    { 
+        if (_player != null) _player.StateMachine.ChangeState(_player.IdleState);
+    }
+
+    public void DeactivatePlayer()
+    { 
+        if (_player != null) _player.StateMachine.ChangeState(_player.InactiveState);
     }
 }

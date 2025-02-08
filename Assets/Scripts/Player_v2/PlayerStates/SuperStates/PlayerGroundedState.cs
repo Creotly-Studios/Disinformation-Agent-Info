@@ -65,7 +65,7 @@ public class PlayerGroundedState : PlayerState
             isAttacking = true;
             if (isAttacking)
             {
-                stateMachine.ChangeState(player.AtttackState);
+                stateMachine.ChangeState(player.AttackState);
             }
         }
 

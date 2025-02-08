@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private Button replayBtn;
+    [SerializeField] private Button resumeBtn;
     [SerializeField] private Button menuBtn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -14,6 +16,14 @@ public class PauseMenu : MonoBehaviour
             {
                 LevelLoader.LoadLevel(0);
             });
+        resumeBtn.onClick.AddListener(() =>
+        {
+            GameManager.instance.TogglePause();
+        });
+        replayBtn.onClick.AddListener(() =>
+        {
+            LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        });
         Hide();
     }
 

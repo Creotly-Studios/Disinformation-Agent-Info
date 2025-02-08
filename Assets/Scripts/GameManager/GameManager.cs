@@ -52,9 +52,7 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
-        if(dialogueManager != null && !dialogueManager.dialogueIsPlaying) {
-            Pause();
-        }
+        Pause();
     }
 
 
