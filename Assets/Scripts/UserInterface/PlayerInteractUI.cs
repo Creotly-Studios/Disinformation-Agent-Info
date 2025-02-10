@@ -7,8 +7,9 @@ public class PlayerInteractUI : MonoBehaviour
     private PlayerInteraction _playerInteraction;
 
     [SerializeField] private GameObject interactUI;
-
-    private void Awake()
+    [SerializeField] private TextMeshProUGUI interactText;
+    
+    void Start()
     {
         _player = GetComponent<Player>();
     }
@@ -25,9 +26,11 @@ public class PlayerInteractUI : MonoBehaviour
         if (_playerInteraction.PlayerCanInteract())
         {
             Show();
+            interactText.text = e.GetComponent<IInteractable>().GetInteractText();
         }
         else
         {
+            interactText.text = "";
             Hide();
         }
     }

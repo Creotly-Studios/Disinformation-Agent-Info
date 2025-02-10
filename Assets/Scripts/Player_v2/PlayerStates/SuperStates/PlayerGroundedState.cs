@@ -56,7 +56,12 @@ public class PlayerGroundedState : PlayerState
 
         if (attackInput == true)
         {
-            player.CombatSystem.Attack();
+            // player.CombatSystem.Attack();
+            isAttacking = true;
+            if (isAttacking)
+            {
+                stateMachine.ChangeState(player.AttackState);
+            }
         }
 
     }

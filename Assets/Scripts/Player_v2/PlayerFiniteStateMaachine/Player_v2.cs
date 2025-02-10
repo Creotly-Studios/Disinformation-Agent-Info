@@ -29,8 +29,10 @@ public class Player_v2 : MonoBehaviour
     public PlayerLandState LandState { get; private set; }
     public PlayerDashState DashState { get; private set; }
     public PlayerInteractState InteractState { get; private set; }
-    public PlayerAttackState AtttackState { get; private set; }
+    public PlayerAttackState AttackState { get; private set; }
     public PlayerDialogueState DialogueState { get; private set; }
+    
+    public PlayerInactiveState InactiveState { get; private set; }
 
     #endregion
 
@@ -228,20 +230,20 @@ public class Player_v2 : MonoBehaviour
         }
     }
     
-    public bool hasInteracableObject { get; private set; }
+    public bool hasInteractableObject { get; private set; }
     void InvokeIInteractableFoundEvent()
     {
         if (GetInteractableObject() != null)
         {
             //event
-            hasInteracableObject = true;
+            hasInteractableObject = true;
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             
         }
         else
         {
             //event
-            hasInteracableObject = false;
+            hasInteractableObject = false;
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         }
     }

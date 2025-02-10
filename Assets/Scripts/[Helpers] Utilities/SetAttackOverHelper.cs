@@ -7,6 +7,6 @@ public class SetAttackOverHelper : MonoBehaviour
 
     public void AttackOver()
     {
-        player.AtttackState.AnimationFinishTrigger();
+        player.AttackState.AnimationFinishTrigger();
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ComputerPanel_UI : MonoBehaviour
@@ -9,6 +10,11 @@ public class ComputerPanel_UI : MonoBehaviour
     [SerializeField] private Button biasBingo_Btn;
     [SerializeField] private Button infoMatch_Btn;
     [SerializeField] private Button spotSource_Btn;
+    [Space]
+    [SerializeField] private Button exitButton;
+    
+    [Header("Popup Panels")]
+    [SerializeField] private NoticePopup popupPanel;
 
     [Header("User Interface")]
     [SerializeField] private GameObject mainMenuPanel;
@@ -19,6 +25,9 @@ public class ComputerPanel_UI : MonoBehaviour
     [field: Header("Popup Panels")]
     [field: SerializeField] public NoticePopup popupPanel { get; private set; }
 
+    [Space]
+    [SerializeField] private UnityEvent onExitComputer;
+    
     private void OnEnable()
     {
         if(hasInitalized == true)
@@ -30,6 +39,10 @@ public class ComputerPanel_UI : MonoBehaviour
         biasBingo_Btn.onClick.AddListener(() => DisplayPanel(biasBingoPanel.gameObject));
         infoMatch_Btn.onClick.AddListener(() => DisplayPanel(infoMatchPanel.gameObject));
         spotSource_Btn.onClick.AddListener(() => DisplayPanel(spotTheSourcePanel.gameObject));
+        exitButton.onClick.AddListener(() =>
+        {
+            onExitComputer?.Invoke();
+        });
     }
 
     private void OnDisable()
@@ -77,6 +90,8 @@ public class ComputerPanel_UI : MonoBehaviour
 
     private void UnlockGames()
     {
+        if (QuestManager.Instance == null) return;
+         
         QuestSO activeQuest = QuestManager.Instance.activeQuest;
 
         if(activeQuest == null)
