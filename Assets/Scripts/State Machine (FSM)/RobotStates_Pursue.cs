@@ -14,12 +14,12 @@ public class RobotStates_Pursue : RobotStates
         }
 
         timeInState -= Time.deltaTime;
-        if (robot.target.Target == null)
+        if (robot.target.Source == null)
         {
             return SwitchState(robot.idleState, robot);
         }
 
-        if (robot.agent.enabled == false)
+        if(robot.dontMove != true && robot.agent.enabled == false)
         {
             robot.agent.enabled = true;
         }
@@ -38,12 +38,11 @@ public class RobotStates_Pursue : RobotStates
         {
             robot.robotAnimation.HandleAnimation(robot.agent.stoppingDistance);
 
-            Vector3 targetPosition = robot.target.Target.transform.position;
+            Vector3 targetPosition = robot.target.TargetPosition;
             robot.robotMovement.HandleMovement(targetPosition, robot.robotMovement.movementSpeed);
         }
         else
         {
-            Debug.Log("reached");
             robot.isMoving = false;
             robot.agent.enabled = false;
             return SwitchState(robot.combatState, robot);

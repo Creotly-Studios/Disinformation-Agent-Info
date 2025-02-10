@@ -8,6 +8,9 @@ using System.Collections.Generic;
 
 public class DialogueUIPanel : MonoBehaviour
 {
+    private bool skipFlag;
+    private bool isTyping;
+
     [Header("Panel")]
     public Transform dialoguePanel;
 
@@ -77,6 +80,15 @@ public class DialogueUIPanel : MonoBehaviour
         typingCoroutine = StartCoroutine(StartTypingText(dialogueText));
     }
 
+    private void HandleSkip()
+    {
+        if(isTyping == false)
+        {
+            return;
+        }
+        skipFlag = true;
+    }
+
     public void DisableUIChoices()
     {
         foreach(var choicesUI in choicesUIList)
@@ -120,12 +132,18 @@ public class DialogueUIPanel : MonoBehaviour
 
     private IEnumerator StartTypingText(string text)
     {
+        isTyping = true;
         DialogueManager.Instance.canContinue = false;
         if(DialogueManager.Instance.currentSpeakerType == SpeakerType.Player)
         {
             playerTextDialogue.text = "";
             foreach (char c in text)
             {
+                if(skipFlag == true)
+                {
+                    playerTextDialogue.text = text;
+                    break;
+                }
                 playerTextDialogue.text += c;
                 yield return typingSpeed;
             }
@@ -139,6 +157,8 @@ public class DialogueUIPanel : MonoBehaviour
                 yield return typingSpeed;
             }
         }
+        isTyping = false;
+        skipFlag = false;
         DialogueManager.Instance.canContinue = true;
     }
 }

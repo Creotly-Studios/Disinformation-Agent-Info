@@ -23,20 +23,20 @@ public class PlayerCombatSystem : MonoBehaviour
 
     public void Attack()
     {
-        if (Time.time - _lastComboEnd > playerData.timeBetweenCombos && _comboCounter <= playerData.combo.Count)
+        if (Time.time - _lastComboEnd > playerData.timeBetweenCombos && _comboCounter <= playerData.attackArray.Count)
         {
             CancelInvoke("EndCombo");
             if (Time.time - _lastClickedTime >= playerData.timeBetweenAttackUsage)
             {
                 player.MoveState.FreezeInput();
-                playerData.combo[_comboCounter].PerformAttackAction(player.Anim);
+                playerData.attackArray[_comboCounter].PerformAttackAction(player.Anim);
 
-                CheckAndDamage(playerData.combo[_comboCounter].damage);
+                CheckAndDamage(playerData.attackArray[_comboCounter].damage);
                 
                 _comboCounter++;
                 _lastClickedTime = Time.time;
 
-                if (_comboCounter >= playerData.combo.Count)
+                if (_comboCounter >= playerData.attackArray.Count)
                 {
                     _comboCounter = 0;
                 }

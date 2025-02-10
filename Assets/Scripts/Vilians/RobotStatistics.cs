@@ -40,6 +40,7 @@ public class RobotStatistics : MonoBehaviour, IDamagable
         robot.isDead = true;
 
         robot.healthBarUI.SetCurrentValue(CurrentHealth);
+        EnemyCombatControllerScript.Instance.RemoveEnemy(robot);
         robot.robotAnimation.PlayTargetAnimation(AnimatorHashing.deathAnimation, true);
 
         QuestSO quest = QuestManager.Instance.activeQuest;

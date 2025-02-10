@@ -9,24 +9,33 @@ public class PlayerInputHandler : MonoBehaviour
     public InputSystem_Actions InputSystemActions { get; set; }
 
     public Vector2 MovementInput {get; private set;}
+    public Vector2 CameraInput { get; private set; }
+
     public bool JumpInput {get; private set;}
     public bool DashInput { get; private set; }
     public bool SprintInput { get; private set; }
     public bool InteractInput { get; private set; }
     public bool AttackInput { get; private set; }
 
-    private void Awake()
+    private void OnEnable()
     {
-        InputSystemActions = new InputSystem_Actions();
+        if(InputSystemActions == null)
+        {
+            InputSystemActions = new InputSystem_Actions();
+            InputSystemActions.Player.Jump.started += ctx => OnJumpInput(ctx);
+            InputSystemActions.Player.Jump.canceled += ctx => OnJumpInput(ctx);
+
+            InputSystemActions.Player.Look.performed += i => CameraInput = i.ReadValue<Vector2>();
+            InputSystemActions.Player.Interact.started += _ => { };
+        }
+        InputSystemActions.Enable();
+    }
+
+    private void OnDisable()
+    {
+        InputSystemActions.Disable();
     }
     
-    private void Start() {
-        InputSystemActions.Player.Jump.started += ctx => OnJumpInput(ctx);
-        InputSystemActions.Player.Jump.canceled += ctx => OnJumpInput(ctx);
-        InputSystemActions.Player.Interact.started += _ => {};
-
-    }
-
     public void OnMovementInput(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();

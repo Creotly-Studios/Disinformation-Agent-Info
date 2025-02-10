@@ -4,10 +4,8 @@ using UnityEngine;
 public class Player_v2 : MonoBehaviour
 {
     public static Player_v2 Instance { get; private set; }
+    public PlayerCombat playerCombat { get; private set; }
     public CharacterController controller { get; private set; }
-    [SerializeField]
-    private PlayerData playerData;
-    public PlayerData PlayerData { get; private set; }
 
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
@@ -55,7 +53,7 @@ public class Player_v2 : MonoBehaviour
     public Transform checkTransform;
     #endregion
 
-    //Status
+    [Header("Status")]
     public bool isDead;
     public bool sprintFlag;
     public bool isAttacking;
@@ -64,24 +62,20 @@ public class Player_v2 : MonoBehaviour
     #region UnityCallbackFunctions
     private void Awake()
     {
-        PlayerData = Instantiate(PlayerData);
-    
-    #region UnityCallbackFunctions
-    private void Awake()
-    {
         if (Instance != null)
         {
             Debug.LogError("There is more than one Player (Instance) in the scene");
         }
         Instance = this;
-        
-        StateMachine = new PlayerStateMachine();
-        PlayerData = playerData;
 
+        PlayerData = Instantiate(PlayerData);
+
+        StateMachine = new PlayerStateMachine();
         controller = GetComponent<CharacterController>();
         InputHandler = GetComponent<PlayerInputHandler>();
         CombatSystem = GetComponent<PlayerCombatSystem>();
 
+        playerCombat = GetComponent<PlayerCombat>();
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerAnimation = GetComponent<PlayerAnimation>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
@@ -89,12 +83,12 @@ public class Player_v2 : MonoBehaviour
         IdleState = new PlayerIdleState(this, StateMachine, PlayerData, "idle");
         MoveState = new PlayerMoveState(this, StateMachine, PlayerData, "move");
         JumpState = new PlayerJumpState(this, StateMachine, PlayerData, "jump");
-        InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
         LandState = new PlayerLandState(this, StateMachine, PlayerData, "move");
         DashState = new PlayerDashState(this, StateMachine, PlayerData, "dash");
+        InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
+        DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
         AtttackState = new PlayerAttackState(this, StateMachine, PlayerData, "isAttacking");
-        DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
     }
 
     void Start()
@@ -105,7 +99,7 @@ public class Player_v2 : MonoBehaviour
         speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
 
         PlayerStatistics.ResetUI();
-        DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
+        if(DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
     }
 
     void Update()
@@ -115,10 +109,13 @@ public class Player_v2 : MonoBehaviour
             return;
         }
         float delta = Time.deltaTime;
-        Debug.Log(StateMachine.CurrentState);
+        playerCombat.PlayerCombat_Updater(this);
+
         StateMachine.CurrentState.LogicUpdate();
         
         InvokeIInteractableFoundEvent();
+        OnInteractObjectFind?.Invoke(this, GetInteractableObject());
+
         PlayerStatistics.PlayerStatistic_Update(delta);
     }
 
@@ -140,7 +137,7 @@ public class Player_v2 : MonoBehaviour
 
     public GameObject GetInteractableObject()
     {
-        RaycastHit[] hits = Physics.SphereCastAll(checkTransform.position, playerData.detectRadius, checkTransform.forward, playerData.detectRange);
+        RaycastHit[] hits = Physics.SphereCastAll(checkTransform.position, PlayerData.detectRadius, checkTransform.forward, PlayerData.detectRange);
         foreach (RaycastHit hit in hits)
         {
             GameObject inter = hit.collider.gameObject;
@@ -234,28 +231,22 @@ public class Player_v2 : MonoBehaviour
     public bool hasInteracableObject { get; private set; }
     void InvokeIInteractableFoundEvent()
     {
-        if (GetInteractableObject() != null && !hasInteracableObject)
+        if (GetInteractableObject() != null)
         {
             //event
-            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             hasInteracableObject = true;
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             
         }
         else
         {
             //event
-            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             hasInteracableObject = false;
+            OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         }
     }
 
 
 
     #endregion
-
-
-
-
-
-
 }

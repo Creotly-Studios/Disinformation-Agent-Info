@@ -12,5 +12,6 @@ public class SourcePostSO : ScriptableObject
 
     [Header("Answers")]
     public string[] options;
+    [TextArea] public string answerExplanation;
     [field: SerializeField] public string correctAnswer { get; private set; }
 }

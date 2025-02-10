@@ -54,7 +54,7 @@ public class MisinformationPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        if(hasInitialized)
+        if (hasInitialized)
         {
             return;
         }
@@ -85,7 +85,7 @@ public class MisinformationPanel : MonoBehaviour
 
     private void OnDisable()
     {
-        if(hasInitialized != true)
+        if (hasInitialized != true)
         {
             return;
         }
@@ -102,13 +102,13 @@ public class MisinformationPanel : MonoBehaviour
 
     public void Misinformation_Update()
     {
-        if(gameObject.activeSelf != true || isGameOver)
+        if (gameObject.activeSelf != true || isGameOver)
         {
             return;
         }
 
         TimerCountdown(Time.deltaTime);
-        if(selectedPostType == PostFactType.None)
+        if (selectedPostType == PostFactType.None)
         {
             return;
         }
@@ -130,7 +130,7 @@ public class MisinformationPanel : MonoBehaviour
 
     private void SetCurrentPost()
     {
-        if(dynamicContentList.Count == 0)
+        if (dynamicContentList.Count == 0)
         {
             EndGame("Congratulations! You've completed all posts!");
             return;
@@ -170,7 +170,8 @@ public class MisinformationPanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
-        if (isGameOver) return;
+        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
+        if (isGameOver || popUp) return;
 
         remainingTime -= delta;
         if (remainingTime <= 0.0f)
@@ -239,8 +240,9 @@ public class MisinformationPanel : MonoBehaviour
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;
         }
-        Debug.Log("False");
+        computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
     }
 }

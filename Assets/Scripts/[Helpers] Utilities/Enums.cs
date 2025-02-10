@@ -34,6 +34,8 @@ public enum NoticeType
 {
     Hint,
     Exit,
+    Wrong,
+    Correct,
     Progress,
     Congratulations
 }

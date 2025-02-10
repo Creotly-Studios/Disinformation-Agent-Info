@@ -70,7 +70,4 @@ public class PlayerGroundedState : PlayerState
     {
         input = Vector2.zero;
     }
-
-
-
 }

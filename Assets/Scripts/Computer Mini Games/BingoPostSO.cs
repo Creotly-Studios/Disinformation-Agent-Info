@@ -6,6 +6,7 @@ public class BingoPostSO : ScriptableObject
     [Header("Information")]
     public string authorName;
     [TextArea] public string article;
+    [TextArea] public string answerExplanation;
 
     [Header("Options")]
     public string answer;
