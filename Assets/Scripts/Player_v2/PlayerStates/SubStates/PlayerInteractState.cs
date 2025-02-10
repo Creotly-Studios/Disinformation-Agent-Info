@@ -26,7 +26,7 @@ public class PlayerInteractState : PlayerAbilityState
         base.Enter();
         if (GetInteractableObject() != null)
         {
-            GetInteractableObject().GetComponent<IInteractable>().Interact();
+            GetInteractableObject().GetComponent<IInteractable>().Interact(player);
         }
         player.InputHandler.UseeInteractInput();
         isAbilityDone = true;

@@ -8,6 +8,8 @@ public class PlayerGroundedState : PlayerState
     private bool interactInput;
     private bool attackInput;
 
+    public bool isAttacking { get; private set; }
+
     public PlayerGroundedState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }

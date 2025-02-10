@@ -23,7 +23,7 @@ public class PlayerInteraction : MonoBehaviour
         if (!PlayerCanInteract())
             return;
 
-        GetInteractableObject().GetComponent<IInteractable>().Interact();
+        //GetInteractableObject().GetComponent<IInteractable>().Interact(player);
     }
 
     private void OnDrawGizmos()

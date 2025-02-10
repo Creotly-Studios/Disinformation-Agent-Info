@@ -12,9 +12,6 @@ public class ComputerPanel_UI : MonoBehaviour
     [SerializeField] private Button spotSource_Btn;
     [Space]
     [SerializeField] private Button exitButton;
-    
-    [Header("Popup Panels")]
-    [SerializeField] private NoticePopup popupPanel;
 
     [Header("User Interface")]
     [SerializeField] private GameObject mainMenuPanel;

@@ -8,11 +8,14 @@ public class OptionsPanel : MonoBehaviour
     [Header("SFX Player UI")]
     [SerializeField] private Button sfxButton;
     [SerializeField] private TextMeshProUGUI sfxText;
-    
+
     [Header("Music Manager UI")]
     [SerializeField] private Button musicButton;
     [SerializeField] private TextMeshProUGUI musicText;
-    
+
+    private MainMenu _mainMenu;
+
+    [Space][SerializeField] private Button closePanelButton;
     void Start()
     {
         UpdateText();
@@ -22,14 +25,14 @@ public class OptionsPanel : MonoBehaviour
             SFXPlayer.Instance.PlayClickSound();
             UpdateText();
         });
-        
+
         musicButton.onClick.AddListener(() =>
         {
             MusicManager.Instance.ChangeVolume();
             SFXPlayer.Instance.PlayClickSound();
             UpdateText();
         });
-        
+
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
         closePanelButton.onClick.AddListener(() =>
         {
@@ -39,9 +42,10 @@ public class OptionsPanel : MonoBehaviour
         Hide();
     }
 
-    private void MainMenu_OnPanelChanged(object sender, EventArgs e)
+    private void MainMenu_OnPanelChanged(object sender, MainMenu e)
     {
-        if (MainMenu.instance.GetCurrentPanel() == MainMenu.CurrentPanel.Options)
+        _mainMenu = e;
+        if (_mainMenu.GetCurrentPanel() == MainMenu.CurrentPanel.OptionsPanel)
         {
             Show();
         }
@@ -75,5 +79,5 @@ public class OptionsPanel : MonoBehaviour
             GetComponent<CanvasGroup>().alpha = value;
         }
     }
-    
+
 }
