@@ -18,13 +18,13 @@ public class MainMenu : MonoBehaviour
         None, StartPanel, OptionsPanel
     }
     [Space] public CurrentPanel currentPanel;
-    
+
     public event EventHandler<MainMenu> OnPanelChanged;
-    [Space] [SerializeField] private CanvasGroup sidePanelsHolder;
+    [Space][SerializeField] private CanvasGroup sidePanelsHolder;
 
     [Header("Debug checking for the UI in the menu ")]
     [SerializeField] private bool hasGameData = true;
-    [SerializeField] private bool hasCompletedGame =true;
+    [SerializeField] private bool hasCompletedGame = true;
 
     private void Awake()
     {
@@ -66,13 +66,13 @@ public class MainMenu : MonoBehaviour
         });
         sidePanelsHolder.alpha = 1;
     }
-    
+
     public void SetCurrentPanel(CurrentPanel cp)
     {
         currentPanel = cp;
         OnPanelChanged?.Invoke(this, this);
     }
-    
+
     public CurrentPanel GetCurrentPanel()
     {
         return currentPanel;

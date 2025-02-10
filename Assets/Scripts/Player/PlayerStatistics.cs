@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class PlayerStatistics : MonoBehaviour, IDamagable
 {
-    Player player;
+    Player_v2 player;
 
     [Header("Max Parameters")]
     [SerializeField] private float maxHealth = 100f;
@@ -19,7 +19,7 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
 
     private void Awake()
     {
-        player = GetComponent<Player>();
+        player = GetComponent<Player_v2>();
     }
 
     public void ResetUI()

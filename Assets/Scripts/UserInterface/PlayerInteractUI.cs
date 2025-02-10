@@ -5,7 +5,7 @@ public class PlayerInteractUI : MonoBehaviour
 {
     [SerializeField] private GameObject interactUI;
     [SerializeField] private TextMeshProUGUI interactText;
-    
+
     void Start()
     {
         Player_v2.Instance.OnInteractObjectFind += Player_PlayerHasInteractableObject;
@@ -25,7 +25,7 @@ public class PlayerInteractUI : MonoBehaviour
             Hide();
         }
     }
-    
+
     void Hide()
     {
         interactUI.SetActive(false);
@@ -35,6 +35,6 @@ public class PlayerInteractUI : MonoBehaviour
     {
         interactUI.SetActive(true);
     }
-    
-    
+
+
 }

@@ -12,15 +12,15 @@ public class ComputerPanel_UI : MonoBehaviour
     [SerializeField] private Button spotSource_Btn;
     [Space]
     [SerializeField] private Button exitButton;
-    
-    [Header("Popup Panels")]
-    [SerializeField] private NoticePopup popupPanel;
 
     [Header("User Interface")]
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private BiasBingoPanel biasBingoPanel;
     [SerializeField] private MisinformationPanel infoMatchPanel;
     [SerializeField] public SpotTheSourcePanel spotTheSourcePanel;
+
+    [field: Header("Popup Panels")]
+    [field: SerializeField] public NoticePopup popupPanel { get; private set; }
 
     [Space]
     [SerializeField] private UnityEvent onExitComputer;

@@ -153,10 +153,12 @@ public class SpotTheSourcePanel : MonoBehaviour
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;
         }
         if(pickedAnswer != null ) { pickedAnswer.choiceButton.image.color = Color.red; }
         if(correctAnswer != null ) { correctAnswer.choiceButton.image.color = Color.green; }
+        computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
     }
 
     private SourcePostSO GetPostSO()
@@ -186,7 +188,7 @@ public class SpotTheSourcePanel : MonoBehaviour
         InitializePostContents(currentPost);
         dynamicContentList.Remove(currentPost);
     }
-
+    
     private void InitializePostContents(SourcePostSO postSO)
     {
         title.text = postSO.title;
@@ -202,7 +204,8 @@ public class SpotTheSourcePanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
-        if (isGameOver) return;
+        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
+        if (isGameOver || popUp) return;
 
         remainingTime -= delta;
         if (remainingTime <= 0.0f)

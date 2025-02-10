@@ -1,13 +1,16 @@
-using System;
-using System.Collections;
 using UnityEngine;
+using DG.Tweening;
+using System.Collections;
 
-public class PlayerAttackState : PlayerState
+public class PlayerAttackState : PlayerAbilityState
 {
-    private float _lastClickedTime;
-    private float _lastComboEnd;
-    private int _comboCounter;
-    
+    private bool isAttacking;
+    private int attackCounter;
+    private float attackCoolDown = 0.25f;
+
+    private Robot lockedTarget;
+    private Coroutine attackCoroutine;
+
     public PlayerAttackState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
     }
@@ -21,31 +24,12 @@ public class PlayerAttackState : PlayerState
     {
         base.Enter();
         Attack();
-        // isAbilityDone = true;
+        isAbilityDone = true;
     }
 
-    public void Attack()
+    private void Attack()
     {
-        if (Time.time - _lastComboEnd > playerData.timeBetweenCombos && _comboCounter <= playerData.combo.Count)
-        {
-            player.CancelInvoke("EndCombo");
-            if (Time.time - _lastClickedTime >= playerData.timeBetweenAttackUsage)
-            {
-                player.MoveState.FreezeInput();
-                playerData.combo[_comboCounter].PerformAttackAction(player.Anim);
-
-                CheckAndDamage(playerData.combo[_comboCounter].damage);
-                
-                _comboCounter++;
-                _lastClickedTime = Time.time;
-
-                if (_comboCounter >= playerData.combo.Count)
-                {
-                    _comboCounter = 0;
-                }
-            }
-        }
-        // player.MoveState.FreezeInput();
+        HandleAttack();
         
         if (player.InputHandler.attackPressed == false)
         {
@@ -59,12 +43,6 @@ public class PlayerAttackState : PlayerState
         {
             player.Invoke("EndCombo", 1);
         }
-    }
-
-    void EndCombo()
-    {
-        _comboCounter = 0;
-        _lastComboEnd = Time.time;
     }
     
     void CheckAndDamage(int damage)
@@ -89,6 +67,126 @@ public class PlayerAttackState : PlayerState
         }
     }
 
+    private void HandleAttack()
+    {
+        if(isAttacking)
+        {
+            return;
+        }
+
+        if(player.playerCombat.currentTarget == null)
+        {
+            lockedTarget = EnemyCombatControllerScript.Instance?.RandomRobot(null);
+        }
+
+        float magnitude = player.playerCombat.inputDirectionMagnitude;
+        if (magnitude > 0.2f)
+        {
+            lockedTarget = player.playerCombat.currentTarget;
+        }
+
+        if(lockedTarget == null)
+        {
+            lockedTarget = EnemyCombatControllerScript.Instance?.RandomRobot(null);
+        }
+
+        if(lockedTarget == null)
+        {
+            return;
+        }
+        float distance = Vector3.Distance(player.transform.position, lockedTarget.transform.position);
+        PickAttack(lockedTarget, distance);
+    }
+
+    private void PickAttack(Robot target, float distance)
+    {
+        if(target == null)
+        {
+            //Ground Punch
+            return;
+        }
+
+        if(distance < 15)
+        {
+            int attackCount = playerData.attackArray.Count;
+            attackCounter = (int)Mathf.Repeat((float)attackCounter + 1, attackCount);
+
+            int random = Random.Range(0, attackCount);
+            PunchSO currentAttack = /*(IsLastHit()) ? playerData.attackArray[random] :*/ playerData.attackArray[attackCounter];
+            HandleAttackAction(currentAttack, target, 0.65f);
+            return;
+        }
+        //Ground Punch
+    }
+
+    private void MoveTowardsTarget(Robot target, float duration)
+    {
+        Transform playerTransform = player.transform;
+
+        player.playerCombat.OnTrajectory.Invoke(target);
+        playerTransform.DOLookAt(target.transform.position, 0.2f);
+
+        Vector3 targetPos = TargetOffset(playerTransform, target.transform);
+
+        // Move using CharacterController.Move()
+        player.StartCoroutine(MoveCharacter(targetPos, duration));
+    }
+
+    private IEnumerator MoveCharacter(Vector3 targetPos, float duration)
+    {
+        float elapsed = 0f;
+        Vector3 startPos = player.transform.position;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            Vector3 newPos = Vector3.Lerp(startPos, targetPos, elapsed / duration);
+
+            // Apply movement using CharacterController
+            player.controller.Move(newPos - player.transform.position);
+
+            yield return null;
+        }
+    }
+
+    private Vector3 TargetOffset(Transform player, Transform target)
+    {
+        Vector3 direction = (player.position - target.position).normalized;
+        return target.position + (direction * 0.95f);
+    }
+
+    private void HandleAttackAction(PunchSO currentAttack, Robot target, float movementDuration)
+    { 
+        currentAttack.PerformAttackAction(player.Anim);
+        CheckAndDamage(currentAttack.damage);
+
+        if (attackCoroutine != null)
+        {
+            player.StopCoroutine(attackCoroutine);
+        }
+        attackCoroutine = player.StartCoroutine(AttackRoutine(attackCoolDown));
+
+        if(target == null)
+        {
+            return;
+        }
+
+        target.dontMove = false;
+        MoveTowardsTarget(target, movementDuration);
+
+
+        IEnumerator AttackRoutine(float duration)
+        {
+            isAttacking = true;
+            player.MoveState.FreezeInput();
+            yield return new WaitForSeconds(duration);
+
+            isAttacking = false;
+            yield return new WaitForSeconds(.2f);
+        }
+        //FinalBlowRoutine();
+    }
+
     public override void Exit()
     {
         base.Exit();
@@ -97,8 +195,7 @@ public class PlayerAttackState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        Attack();
-        ExitAttack();
+        player.Move(Vector3.zero);
     }
 
     public override void PhysicsUpdate()
@@ -119,8 +216,6 @@ public class PlayerAttackState : PlayerState
     public IEnumerator AbilityDone()
     {
         yield return new WaitForSeconds(playerData.timeBetweenAttacks);
-        // isAbilityDone = true;
+        isAbilityDone = true;
     }
-
-
 }

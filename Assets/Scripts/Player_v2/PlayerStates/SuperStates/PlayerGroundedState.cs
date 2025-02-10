@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PlayerGroundedState : PlayerState
@@ -10,8 +9,6 @@ public class PlayerGroundedState : PlayerState
     private bool attackInput;
 
     public bool isAttacking { get; private set; }
-    
-    //event
 
     public PlayerGroundedState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
@@ -59,7 +56,7 @@ public class PlayerGroundedState : PlayerState
             stateMachine.ChangeState(player.InteractState);
         }
 
-        if (attackInput)
+        if (attackInput == true)
         {
             // player.CombatSystem.Attack();
             isAttacking = true;
@@ -80,7 +77,4 @@ public class PlayerGroundedState : PlayerState
     {
         input = Vector2.zero;
     }
-
-
-
 }
