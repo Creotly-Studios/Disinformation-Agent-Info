@@ -1,126 +1,63 @@
-using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
 public class PlayerCombat : MonoBehaviour
 {
-    Player player;
+    private Transform cameraObject;
+    private RaycastHit[] rayCastHitArray;
+    public Robot currentTarget { get; private set; }
+    public float inputDirectionMagnitude { get; private set; }
 
-    public List<PunchSO> combo;
-    private float _lastClickedTime;
-    private float _lastComboEnd;
-    private int _comboCounter;
+    [Header("Parameter")]
+    public UnityEvent<Robot> OnTrajectory;
+    [SerializeField] private Transform debug1;
+    [SerializeField] private LayerMask enemyLayerMask;
 
-    public float timeBetweenCombos = 0.2f;
-    public float timeBetweenAttackUsage = 0.2f;
-    
-    public float attackRange = 2f; // Range of the spherecast
-    public float sphereRadius = 0.5f; // Radius of the sphere
-    public Transform attackPoint;
-
-    private void Awake()
+    private void Start()
     {
-        player = GetComponent<Player>();
+        rayCastHitArray = new RaycastHit[15];
+        cameraObject = Camera.main.transform;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetTarget(Robot robot)
     {
-        if (player.isDead)
-            return;
-        
-        if (InputManager.instance.attackPressed && CanFight())
-        {
-            Attack();
-        }
-        ExitAttack();
+        currentTarget = robot;
+        debug1.transform.position = robot.transform.position;
     }
 
-    private void Attack()
+    public void PlayerCombat_Updater(Player_v2 player)
     {
-        if (Time.time - _lastComboEnd > timeBetweenCombos && _comboCounter <= combo.Count)
+        DetectAttackTarget(player);
+    }
+
+    private void DetectAttackTarget(Player_v2 player)
+    {
+        Vector3 inputDirection;
+        PlayerInputHandler inputHandler = player.InputHandler;
+
+        inputDirection = cameraObject.forward * inputHandler.CameraInput.y;
+        inputDirection += cameraObject.right * inputHandler.CameraInput.x;
+
+        inputDirection.y = 0.0f;
+        inputDirection.Normalize();
+        inputDirectionMagnitude = inputDirection.magnitude;
+
+        int count = Physics.SphereCastNonAlloc(player.transform.position, 3f, inputDirection, rayCastHitArray, enemyLayerMask);
+        for(int i = 0; i < count; i++)
         {
-            CancelInvoke("EndCombo");
-            if (Time.time - _lastClickedTime >= timeBetweenAttackUsage)
+            RaycastHit hitInfo = rayCastHitArray[i];
+            if(hitInfo.collider == null)
             {
-                combo[_comboCounter].PerformAttackAction(player.animator);
+                continue;
+            }
 
-                player.PlayerMovement.SetCanMove(false);
-                PlayPunchSound();
-                CheckAndDamage(combo[_comboCounter].damage);
-                _comboCounter++;
-                _lastClickedTime = Time.time;
-
-                if (_comboCounter >= combo.Count)
-                {
-                    _comboCounter = 0;
-                }
+            Robot robot = hitInfo.collider.GetComponentInParent<Robot>();
+            if(robot != null) 
+            { 
+                SetTarget(robot);
+                break;
             }
         }
     }
-
-    private void ExitAttack()
-    {
-        if (player.animator.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && player.animator.GetCurrentAnimatorStateInfo(0).IsTag("Attack"))
-        {
-            Invoke("EndCombo", 1);
-            player.PlayerMovement.SetCanMove(true);
-        }
-    }
-
-    void EndCombo()
-    {
-        _comboCounter = 0;
-        _lastComboEnd = Time.time;
-    }
-    
-    public void PlayerAttackScreenShake()
-    {
-        player.cameraImpulseSource.GenerateImpulse(1);
-    }
-
-    void CheckAndDamage(int damage)
-    {
-            RaycastHit[] hits = Physics.SphereCastAll(attackPoint.position, sphereRadius, attackPoint.forward, attackRange);
-            foreach (RaycastHit hit in hits)
-            {
-                // Check if the object hit has an enemy tag or component
-                IDamagable damagable = hit.collider.GetComponent<IDamagable>();
-                if (damagable != null)
-                {
-                    // Check if the enemy is in front of the player
-                    Vector3 directionToEnemy = (hit.collider.transform.position - attackPoint.position).normalized;
-                    float dotProduct = Vector3.Dot(attackPoint.forward, directionToEnemy);
-    
-                    if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
-                    {
-                        Debug.Log($"Hit {hit.collider.name} in front!");
-                        damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
-                        PlayerAttackScreenShake();
-                    }
-                }
-            }
-    }
-    
-    private void OnDrawGizmos()
-    {
-        if (attackPoint != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(attackPoint.position, sphereRadius);
-            Gizmos.DrawLine(attackPoint.position, attackPoint.position + attackPoint.forward * attackRange);
-            Gizmos.DrawWireSphere(attackPoint.position + attackPoint.forward * attackRange, sphereRadius);
-        }
-    }
-
-    public bool CanFight()
-    {
-        return player.PlayerMovement.IsGrounded() && !DialogueManager.Instance.dialogueIsPlaying && !EventSystem.current.IsPointerOverGameObject();
-    }
-
-    public void PlayPunchSound()
-    {
-        SFXPlayer.Instance.PlaySFX(player.SFXPlayer.sfxList.playerPunch);
-    }
-    
 }

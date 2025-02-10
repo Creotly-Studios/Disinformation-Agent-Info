@@ -43,9 +43,9 @@ public class RobotMovement : MonoBehaviour
         robot.characterController.Move(verticalVelocity * delta);
     }
 
-    public void HandleRotationWhileAttacking(Robot robot)
+    public void HandleRotationWhileAttacking()
     {
-        if (robot.target.Target == null)
+        if (robot.target.Source == null)
         {
             return;
         }
@@ -55,12 +55,7 @@ public class RobotMovement : MonoBehaviour
             return;
         }
 
-        if (robot.performingAction != true)
-        {
-            return;
-        }
-
-        Vector3 targetDirection = robot.DirectionToTarget;
+        Vector3 targetDirection = robot.target.TargetPosition - transform.position;
         targetDirection.y = 0.0f;
         targetDirection.Normalize();
 

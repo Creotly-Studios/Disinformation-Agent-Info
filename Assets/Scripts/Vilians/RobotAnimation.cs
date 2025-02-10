@@ -77,7 +77,7 @@ public class RobotAnimation : MonoBehaviour
         robot.animator.CrossFade(targetAnimation, transitionDuration);
     }
 
-    public void PlayTargetAnimation(int targetAnimation, bool performingAction, float transitionDuration = 0.2f, bool canRotate = true)
+    public void PlayTargetAnimation(int targetAnimation, bool performingAction, float transitionDuration = 0.1f, bool canRotate = true)
     {
         robot.animator.applyRootMotion = performingAction;
         robot.canRotate = canRotate;

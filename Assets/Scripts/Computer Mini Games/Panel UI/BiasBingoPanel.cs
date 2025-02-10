@@ -194,11 +194,13 @@ public class BiasBingoPanel : MonoBehaviour
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
         }
         else
         {
             pickedAnswer.choiceButton.image.color = Color.red;
             correctAnswer.choiceButton.image.color = Color.green;
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
         }
     }
 
@@ -236,7 +238,8 @@ public class BiasBingoPanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
-        if (isGameOver) return;
+        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
+        if (isGameOver|| popUp) return;
 
         remainingTime -= delta;
         if (remainingTime <= 0.0f)

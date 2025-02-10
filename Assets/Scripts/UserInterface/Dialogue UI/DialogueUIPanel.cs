@@ -5,11 +5,11 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 
 public class DialogueUIPanel : MonoBehaviour
 {
     private bool skipFlag;
+    private bool isTyping;
 
     [Header("Panel")]
     public Transform dialoguePanel;
@@ -84,6 +84,10 @@ public class DialogueUIPanel : MonoBehaviour
 
     private void HandleSkip()
     {
+        if(isTyping == false)
+        {
+            return;
+        }
         skipFlag = true;
     }
 
@@ -130,13 +134,14 @@ public class DialogueUIPanel : MonoBehaviour
 
     private IEnumerator StartTypingText(string text)
     {
+        isTyping = true;
         DialogueManager.Instance.canContinue = false;
         if(DialogueManager.Instance.currentSpeakerType == SpeakerType.Player)
         {
             playerTextDialogue.text = "";
             foreach (char c in text)
             {
-                if (skipFlag == true)
+                if(skipFlag == true)
                 {
                     playerTextDialogue.text = text;
                     break;
@@ -159,7 +164,7 @@ public class DialogueUIPanel : MonoBehaviour
                 yield return typingSpeed;
             }
         }
-        print(0);
+        isTyping = false;
         skipFlag = false;
         DialogueManager.Instance.canContinue = true;
     }

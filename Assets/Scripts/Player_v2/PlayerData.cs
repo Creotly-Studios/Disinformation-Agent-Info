@@ -30,7 +30,7 @@ public class PlayerData : ScriptableObject
     public float attackSphereSize = 2f;
     public int attackDamage = 1;
     [Space]
-    public List<PunchSO> combo;
+    public List<PunchSO> attackArray;
     [Space]
     public float timeBetweenCombos = 0.2f;
     public float timeBetweenAttackUsage = 0.2f;

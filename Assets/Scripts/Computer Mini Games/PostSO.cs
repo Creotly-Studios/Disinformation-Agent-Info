@@ -18,5 +18,6 @@ public class PostSO : ScriptableObject
 
     [Header("Post Parameters")]
     [TextArea] public string funFact_Hint;
+    [TextArea] public string answerExplanation;
 
 }

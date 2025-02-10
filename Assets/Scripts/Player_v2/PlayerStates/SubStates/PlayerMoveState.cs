@@ -30,6 +30,7 @@ public class PlayerMoveState : PlayerGroundedState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
         Move();
         sprint = player.InputHandler.SprintInput;
         if (input.magnitude < 0.1f)
@@ -60,8 +61,8 @@ public class PlayerMoveState : PlayerGroundedState
         if (dir.magnitude >= 0.1f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
-            float smoothedAngle = Mathf.SmoothDampAngle(player.gameObject.transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, playerData.turnSmoothTime);
-            player.gameObject.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
+            float smoothedAngle = Mathf.SmoothDampAngle(player.transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, playerData.turnSmoothTime);
+            player.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             player.Move(moveDir * currentMoveSpeed * Time.deltaTime);

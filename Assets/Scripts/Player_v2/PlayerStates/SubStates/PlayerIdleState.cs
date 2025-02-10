@@ -28,14 +28,10 @@ public class PlayerIdleState : PlayerGroundedState
         {
             stateMachine.ChangeState(player.MoveState);
         }
-
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
     }
-
- 
-
 }

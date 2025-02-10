@@ -515,6 +515,7 @@ GameObject:
   - component: {fileID: 2930067396831767299}
   - component: {fileID: 3232892388418701378}
   - component: {fileID: 159074378196252970}
+  - component: {fileID: 6799143758169412306}
   m_Layer: 9
   m_Name: Player_v2
   m_TagString: Player
@@ -819,6 +820,25 @@ MonoBehaviour:
   enduranceTickTimer: 0
   enduranceMultiplier: 2.25
   enduranceRegenerateTimer: 0
+--- !u!114 &6799143758169412306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2362108364677766809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef0c7d9042177f140bb738f7a8cf721a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnTrajectory:
+    m_PersistentCalls:
+      m_Calls: []
+  debug: {fileID: 0}
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!1 &2570473244482725327
 GameObject:
   m_ObjectHideFlags: 0

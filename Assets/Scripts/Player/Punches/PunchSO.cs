@@ -16,11 +16,16 @@ public class PunchSO : ScriptableObject
     public BoundaryFloat attackAngle = new BoundaryFloat(-180f, 180f);
     public BoundaryFloat distanceToAttack = new BoundaryFloat(0f, 2.5f);
 
+    public void PerformAttackAction(Robot robot)
+    {
+        robot.animator.runtimeAnimatorController = animatorOV;
+        robot.robotAnimation.PlayTargetAnimation(AnimatorHashing.attackingHash, true);
+    }
+
     public void PerformAttackAction(Animator animator)
     {
         animator.runtimeAnimatorController = animatorOV;
         animator.Play("attack", 0, 0);
-        // AnimatorHashing.PlayTargetAnimation(animator, AnimatorHashing.attackingHash, true);
     }
 
     //vfx

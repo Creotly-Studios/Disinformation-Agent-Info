@@ -4,6 +4,7 @@ using UnityEngine;
 public class Player_v2 : MonoBehaviour
 {
     public static Player_v2 Instance { get; private set; }
+    public PlayerCombat playerCombat { get; private set; }
     public CharacterController controller { get; private set; }
 
     #region Components
@@ -74,6 +75,7 @@ public class Player_v2 : MonoBehaviour
         InputHandler = GetComponent<PlayerInputHandler>();
         CombatSystem = GetComponent<PlayerCombatSystem>();
 
+        playerCombat = GetComponent<PlayerCombat>();
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerAnimation = GetComponent<PlayerAnimation>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
@@ -107,11 +109,13 @@ public class Player_v2 : MonoBehaviour
             return;
         }
         float delta = Time.deltaTime;
-        Debug.Log(StateMachine.CurrentState);
+        playerCombat.PlayerCombat_Updater(this);
+
         StateMachine.CurrentState.LogicUpdate();
         
         InvokeIInteractableFoundEvent();
         OnInteractObjectFind?.Invoke(this, GetInteractableObject());
+
         PlayerStatistics.PlayerStatistic_Update(delta);
     }
 
