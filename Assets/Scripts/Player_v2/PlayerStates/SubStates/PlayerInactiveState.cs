@@ -25,6 +25,10 @@ public class PlayerInactiveState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        player.InputHandler.UseAttackInput();
+        player.InputHandler.UseJumpInput();
+        player.InputHandler.UseDashInput();
+        player.InputHandler.UseeInteractInput();
     }
 
     public override void PhysicsUpdate()

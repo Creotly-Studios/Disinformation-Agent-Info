@@ -54,7 +54,7 @@ public class DialogueUIPanel : MonoBehaviour
             playerObject.gameObject.SetActive(true);
 
             speakerName.text = speaker.characterName;
-            speakerImage.sprite = speaker.characterImage;
+            // speakerImage.sprite = speaker.characterImage;
         }
         else
         {
@@ -62,7 +62,7 @@ public class DialogueUIPanel : MonoBehaviour
             speakerObject.gameObject.SetActive(true);
 
             speakerName.text = speaker.characterName;
-            speakerImage.sprite = speaker.characterImage;
+            // speakerImage.sprite = speaker.characterImage;
 
             switch (speaker.currentEmotion)
             {

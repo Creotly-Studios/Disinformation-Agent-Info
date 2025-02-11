@@ -36,6 +36,7 @@ public class OptionsPanel : MonoBehaviour
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
         closePanelButton.onClick.AddListener(() =>
         {
+            Camera.main.GetComponent<MainMenuCamera>().ResetPosition();
             _mainMenu.SetCurrentPanelToNone();
         });
         SetCanvasOpacity(1);
@@ -62,6 +63,7 @@ public class OptionsPanel : MonoBehaviour
 
     void Show()
     {
+        Camera.main.GetComponent<MainMenuCamera>().MoveToOptionsMenu();
         UpdateText();
         gameObject.SetActive(true);
     }
