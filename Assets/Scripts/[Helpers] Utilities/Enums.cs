@@ -37,7 +37,7 @@ public enum NoticeType
     Wrong,
     Correct,
     Progress,
-    Congratulations
+    QuestCompleted
 }
 
 public enum PostFactType

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,14 +21,34 @@ public class NoticePopup : MonoBehaviour
         }
     }
 
-    public void DisplayPopUpWindow(string text, NoticeType noticeType)
+    public void DisplayPopUpWindow(string text, NoticeType noticeType, QuestSO quest = null)
     {
         gameObject.SetActive(true);
 
+        if(noticeType == NoticeType.QuestCompleted)
+        {
+            StartCoroutine(QuestCompletedNotice(quest));
+        }
         if (noticeType == NoticeType.Correct || noticeType == NoticeType.Wrong)
         {
             QuizNotice(text, noticeType);
         }
+    }
+
+    private IEnumerator QuestCompletedNotice(QuestSO questSO)
+    {
+        if(questSO.isComplete)
+        {
+            titleText.text = "Quest Completed";
+            contentText.text = questSO.questTitle;
+        }
+        else
+        {
+            titleText.text = "Completed";
+            contentText.text = questSO.currentObjective.description;
+        }
+        yield return new WaitForSeconds(2.0f);
+        gameObject.SetActive(false);
     }
 
     private void QuizNotice(string answer, NoticeType noticeType)

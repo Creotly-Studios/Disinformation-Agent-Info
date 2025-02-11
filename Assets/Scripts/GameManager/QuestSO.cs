@@ -6,6 +6,7 @@ public class QuestSO : ScriptableObject
 {
     [Header("Status")]
     public bool isComplete;
+    private bool hasNotified;
     public QuestObjectives currentObjective { get; private set; }
 
     [Header("Dialogue Texts")]
@@ -25,11 +26,19 @@ public class QuestSO : ScriptableObject
 
     private void AssignObjective()
     {
+        if (hasNotified != true)
+        {
+            hasNotified = true;
+            QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, this);
+        }
+
         if (currentObjective == null || currentObjective.isDone == true)
         {
             QuestObjectives objective = questObjectives.Find(x => x.isDone != true);
+
             if (objective != null)
             {
+                hasNotified = false;
                 currentObjective = objective;
                 return;
             }

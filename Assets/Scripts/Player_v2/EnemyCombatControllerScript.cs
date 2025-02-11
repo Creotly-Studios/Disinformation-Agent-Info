@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 public class EnemyCombatControllerScript : MonoBehaviour
 {
+    int index;
     public static EnemyCombatControllerScript Instance { get; private set; }
 
     private Coroutine enemyLoopRoutine;
@@ -98,6 +99,8 @@ public class EnemyCombatControllerScript : MonoBehaviour
         yield return new WaitForSeconds(random);
 
         attackingRobot = RandomRobot(robot);
+        index++;
+        
         if (attackingRobot == null)
         {
             enemyLoopRoutine = StartCoroutine(EnemyCombatLoop(null));
@@ -125,6 +128,7 @@ public class EnemyCombatControllerScript : MonoBehaviour
         if (robotList.Count > 0)
         {
             enemyLoopRoutine = StartCoroutine(EnemyCombatLoop(attackingRobot));
+            yield break;
         }
     }
 }

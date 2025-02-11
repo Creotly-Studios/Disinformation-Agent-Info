@@ -122,10 +122,7 @@ public class PlayerAttackState : PlayerAbilityState
     private void MoveTowardsTarget(Robot target, float duration)
     {
         Transform playerTransform = player.transform;
-
-        player.playerCombat.OnTrajectory.Invoke(target);
         playerTransform.DOLookAt(target.transform.position, 0.2f);
-
         Vector3 targetPos = TargetOffset(playerTransform, target.transform);
 
         // Move using CharacterController.Move()

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour
 {
+    private bool hasNotified;
     public static QuestManager Instance;
 
     //Parameters
@@ -12,6 +13,7 @@ public class QuestManager : MonoBehaviour
     [field: Header("Parameters")]
     public bool allQuestCompleted { get; private set; }
     [field: SerializeField] public QuestSO activeQuest;
+    [field: SerializeField] public NoticePopup popupPanel { get; private set; }
     [field: SerializeField] public List<QuestSO> availableQuests { get; private set; } = new List<QuestSO>();
 
     private void Awake()
@@ -70,6 +72,15 @@ public class QuestManager : MonoBehaviour
 
     public void AssignQuests()
     {
+        if(activeQuest.isComplete)
+        {
+            if (hasNotified != true)
+            {
+                hasNotified = true;
+                popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
+            }
+        }
+
         if(activeQuest == null || activeQuest.isComplete == true)
         {
             QuestSO questSO = availableQuests.Find(x => x.isComplete != true);
@@ -79,6 +90,7 @@ public class QuestManager : MonoBehaviour
                 return;
             }
 
+            hasNotified = false;
             dialogueTexts.Clear();
             activeQuest = questSO;
             dialogueTexts.AddRange(activeQuest.dialogueTexts);

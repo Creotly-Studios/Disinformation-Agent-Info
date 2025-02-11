@@ -1,17 +1,16 @@
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Events;
+using System.Collections.Generic;
 
 public class PlayerCombat : MonoBehaviour
 {
     private Transform cameraObject;
     private RaycastHit[] rayCastHitArray;
+
     public Robot currentTarget { get; private set; }
     public float inputDirectionMagnitude { get; private set; }
 
     [Header("Parameter")]
-    public UnityEvent<Robot> OnTrajectory;
-    [SerializeField] private Transform debug1;
+    [SerializeField] private Transform debug1, debug2;
     [SerializeField] private LayerMask enemyLayerMask;
 
     private void Start()
@@ -41,6 +40,8 @@ public class PlayerCombat : MonoBehaviour
 
         inputDirection.y = 0.0f;
         inputDirection.Normalize();
+
+        debug2.transform.position = inputDirection;
         inputDirectionMagnitude = inputDirection.magnitude;
 
         int count = Physics.SphereCastNonAlloc(player.transform.position, 3f, inputDirection, rayCastHitArray, enemyLayerMask);
@@ -54,9 +55,8 @@ public class PlayerCombat : MonoBehaviour
 
             Robot robot = hitInfo.collider.GetComponentInParent<Robot>();
             if(robot != null) 
-            { 
+            {
                 SetTarget(robot);
-                break;
             }
         }
     }

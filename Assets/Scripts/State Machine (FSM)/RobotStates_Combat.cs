@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
 [CreateAssetMenu(fileName = "Combat State", menuName = "Creotly Studio/RobotStates/CombatState")]
 public class RobotStates_Combat : RobotStates
 {
-    private bool hasAction;
+    //private bool hasAction;
     private List<PunchSO> possibleActions = new List<PunchSO>();
 
     private float verticalMovement;
@@ -51,7 +50,6 @@ public class RobotStates_Combat : RobotStates
     //Functionalities
     protected override void ResetStateParameters(Robot robot)
     {
-        hasAction = false;
         possibleActions.Clear();
         base.ResetStateParameters(robot);
     }
@@ -86,11 +84,6 @@ public class RobotStates_Combat : RobotStates
 
     public void GetOffensiveActions(Robot robot)
     {
-        if (hasAction == true)
-        {
-            return;
-        }
-
         RobotCombat robotCombat = robot.robotCombat;
         for (int i = 0; i < robotCombat.attackArray.Length; i++)
         {
@@ -125,7 +118,6 @@ public class RobotStates_Combat : RobotStates
             processedWeight += possibleActions[i].weight;
             if (randomWeight <= processedWeight)
             {
-                hasAction = true;
                 robotCombat.currentAttack = possibleActions[i];
                 possibleActions.Clear();
                 break;

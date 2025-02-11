@@ -1,4 +1,5 @@
 using UnityEngine;
+using DG.Tweening;
 
 public class RobotCombat : MonoBehaviour
 {
@@ -42,14 +43,14 @@ public class RobotCombat : MonoBehaviour
 
     public void RobotCombat_Updater(float delta, Robot robot)
     {
+        if (robot.dontMove)
+        {
+            return;
+        }
+
         if (robot.isRetreating == true)
         {
-            if(robot.dontMove)
-            {
-                return;
-            }
-
-            if(robot.DistanceToTarget <= 3.75f)
+            if(robot.DistanceToTarget <= 1.75f)
             {
                 robot.robotAnimation.SetBlendTreeParameter(0.0f, -1.0f, false, delta);
                 return;
@@ -100,8 +101,9 @@ public class RobotCombat : MonoBehaviour
         robot.agent.enabled = true;
         Vector3 targetPosition = robot.target.TargetPosition;
 
+        robot.transform.DOLookAt(targetPosition, 0.2f);
         robot.robotAnimation.SetBlendTreeParameter(0f, 2.0f, true, Time.deltaTime);
-        robot.robotMovement.HandleMovement(targetPosition, robot.robotMovement.movementSpeed);
+        robot.robotMovement.HandleMovement(targetPosition, 2.0f);
     }
 
     private void OnDrawGizmos()
