@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player_v2 : MonoBehaviour
@@ -37,8 +38,7 @@ public class Player_v2 : MonoBehaviour
     #endregion
 
     #region PlayerFunction Components
-    public PlayerMovement PlayerMovement { get; private set; }
-    public PlayerAnimation PlayerAnimation { get; private set; }
+
     public PlayerStatistics PlayerStatistics { get; private set; }
 
     [Header("Player Info")]
@@ -47,7 +47,6 @@ public class Player_v2 : MonoBehaviour
     [field: SerializeField] public PlayerData PlayerData { get; private set; }
 
     [Header("Player UI")]
-    [field: SerializeField] public BarSliderUI healthBarUI { get; private set; }
     [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
     #endregion
 
@@ -78,8 +77,6 @@ public class Player_v2 : MonoBehaviour
         CombatSystem = GetComponent<PlayerCombatSystem>();
 
         playerCombat = GetComponent<PlayerCombat>();
-        PlayerMovement = GetComponent<PlayerMovement>();
-        PlayerAnimation = GetComponent<PlayerAnimation>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
 
         IdleState = new PlayerIdleState(this, StateMachine, PlayerData, "idle");
@@ -91,6 +88,7 @@ public class Player_v2 : MonoBehaviour
         DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
         AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "isAttacking");
+        InactiveState = new PlayerInactiveState(this, StateMachine, PlayerData, "idle");
     }
 
     void Start()
@@ -137,6 +135,10 @@ public class Player_v2 : MonoBehaviour
     #region Check Functions
     public bool IsGrounded() => controller.isGrounded;
 
+    public bool CanUseMovementInput()
+    {
+        return StateMachine.CurrentState != InteractState && !GameManager.instance.IsGamePaused();
+    }
     public GameObject GetInteractableObject()
     {
         RaycastHit[] hits = Physics.SphereCastAll(checkTransform.position, PlayerData.detectRadius, checkTransform.forward, PlayerData.detectRange);
@@ -247,6 +249,10 @@ public class Player_v2 : MonoBehaviour
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         }
     }
+
+    public void SetInactiveState() => StateMachine.ChangeState(InactiveState);
+
+    public void SetActiveState() => StateMachine.ChangeState(IdleState);
 
 
 

@@ -33,7 +33,7 @@ public class PlayerMoveState : PlayerGroundedState
 
         Move();
         sprint = player.InputHandler.SprintInput;
-        if (input.magnitude < 0.1f)
+        if (input.magnitude < 0.1f && !isExitingState)
         {
             stateMachine.ChangeState(player.IdleState);
         }

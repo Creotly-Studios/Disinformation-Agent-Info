@@ -5,13 +5,13 @@ Ah, Mr. Wade Kim, welcome to the I.M.A. I'm Miss Maggie #speaker:Maggie
 -> Start
 
 === Start ===
-Agent: Hello, Good Day Miss Maggie, I was told to meet you? #speaker:Player
+Hello, Good Day Miss Maggie. #speaker:Player
 
-Yes, I'd be your handler at the I.M.A. I'd like to know if you have been briefed? #speaker:Maggie
+Welcome to the I.M.A. You're our latest recruit. You're very welcome. #speaker:Maggie
 
-    * Not Really #speaker:Player
+    * Thank you #speaker:Player
     -> Briefing
-    * Sort of... I guess? #speaker:Player
+    * When and how do I start #speaker:Player
     Alright then, you would need to get through the basic training program to test your levels. #speaker:Maggie
     -> Continue
 
@@ -22,5 +22,5 @@ Well then, let me fill in the blanks. You’ve been drafted into the Information
 -> Continue
 
 === Continue ===
-Good. Here we use phone booths as our transportaion system. Head over and interact with that phone booth and begin the simulation. Prove yourself, Agent. #speaker:Maggie
+Good. Head over and interact with that arcade machine and get the code for your training mission. interact with the console next to it and input that code and you'd be teleported to the training grounds. Prove yourself, Agent. #speaker:Maggie
 -> END

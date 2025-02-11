@@ -32,6 +32,9 @@ public class DialogueManager : MonoBehaviour
     public UnityEvent OnDialogueStart;
     public UnityEvent OnDialogueEnd;
 
+    //Player
+    Player_v2 player;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -47,6 +50,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
+        player = GameObject.Find("Player_v2").GetComponent<Player_v2>();
         dialogueIsPlaying = false;
         dialogueUIPanel.ExitPanel();
         exitPanelSeconds = new WaitForSeconds(0.2f);
@@ -85,6 +89,8 @@ public class DialogueManager : MonoBehaviour
 
         // Trigger the "On Dialogue Start" UnityEvent
         OnDialogueStart?.Invoke();
+        player.SetInactiveState();
+        
 
         ContinueDialogueStory();
     }
@@ -133,6 +139,7 @@ public class DialogueManager : MonoBehaviour
 
         // Trigger the "On Dialogue End" UnityEvent
         OnDialogueEnd?.Invoke();
+        player.SetActiveState();
     }
 
     private void CheckWhoIsSpeaking(List<string> currentTag)

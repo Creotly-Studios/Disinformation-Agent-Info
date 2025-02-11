@@ -7,6 +7,7 @@ public class PlayerInputHandler : MonoBehaviour
     public bool attackPressed {get; private set;}
 
     public InputSystem_Actions InputSystemActions { get; set; }
+    Player_v2 player;
 
     public Vector2 MovementInput {get; private set;}
     public Vector2 CameraInput { get; private set; }
@@ -19,6 +20,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     private void OnEnable()
     {
+        player = GetComponent<Player_v2>();
         if(InputSystemActions == null)
         {
             InputSystemActions = new InputSystem_Actions();
@@ -43,15 +45,19 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && player.CanUseMovementInput())
         {
             JumpInput = true;
         }
+        // if (context.canceled)
+        // {
+        //     JumpInput = false;
+        // }
     }
 
     public void OnDashInput(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && player.CanUseMovementInput())
         {
             DashInput = true;
         }
@@ -83,7 +89,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnAttackInput(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && player.CanUseMovementInput())
         {
             AttackInput = true;
         }
@@ -95,7 +101,10 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnAttack(InputAction.CallbackContext ctx)
     {
-        attackPressed = ctx.ReadValueAsButton();
+        if (player.CanUseMovementInput())
+        {
+            attackPressed = ctx.ReadValueAsButton();
+        }
     }
 
 

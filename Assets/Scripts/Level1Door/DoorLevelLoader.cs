@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class DoorLevelLoader : MonoBehaviour, IInteractable
 {
-  	[SerializeField] private string theInteractionText = "Exit Door";
-    public string interactText { get; set; }
+  	
+    public string interactText = "Exit Door";
     
     [Space]
 	[SerializeField] private int sceneLoadIndex = 0;
@@ -21,6 +21,6 @@ public class DoorLevelLoader : MonoBehaviour, IInteractable
 
     public void PlayDoorSound()
     {
-        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithDoor);
+        SFXPlayer.Instance?.PlaySFX(SFXPlayer.Instance.sfxList.interactWithDoor);
     }
 }

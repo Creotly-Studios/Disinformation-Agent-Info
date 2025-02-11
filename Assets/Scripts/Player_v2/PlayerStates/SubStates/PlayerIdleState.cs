@@ -24,7 +24,7 @@ public class PlayerIdleState : PlayerGroundedState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        if (input.magnitude >= 0.1f)
+        if (input.magnitude >= 0.1f && !isExitingState)
         {
             stateMachine.ChangeState(player.MoveState);
         }

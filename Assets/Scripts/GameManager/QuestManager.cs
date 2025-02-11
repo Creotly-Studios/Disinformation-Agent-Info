@@ -7,7 +7,7 @@ public class QuestManager : MonoBehaviour
 
     //Parameters
     private List<TextAsset> dialogueTexts = new();
-    public TextAsset instructionDialogue { get; private set; }
+    public TextAsset instructionDialogue;
 
     [field: Header("Parameters")]
     public bool allQuestCompleted { get; private set; }

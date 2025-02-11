@@ -56,7 +56,10 @@ public class InputManager : MonoBehaviour
 
     private void OnJump(InputAction.CallbackContext ctx)
     {
-        jumpPressed = ctx.ReadValueAsButton();
+        if (ctx.started)
+        {
+            jumpPressed = true;
+        }
     }
 
     private void OnMove(InputAction.CallbackContext ctx)

@@ -13,7 +13,7 @@ public class StartGamePanel : MonoBehaviour
     [Space] [SerializeField] private Button backToMainMenu;
     
     [Header("Debug for loading level")]
-    [SerializeField] private int firstLevelIndex; //level1 tutorial index lol
+    [SerializeField] private int agencyOfficeLevelIndex; //level1 tutorial index lol
     [SerializeField] private int currentLevelIndex; //store last level player played
     
     void Start()
@@ -21,17 +21,19 @@ public class StartGamePanel : MonoBehaviour
         startNewGame.onClick.AddListener(() =>
         {
             //ovvveride/clear save file and play
-            LevelLoader.LoadLevel(firstLevelIndex);
+            LevelLoader.LoadLevel(agencyOfficeLevelIndex);
         });
         
         continueGame.onClick.AddListener(() =>
         {
             //continue with save file and play
+            LevelLoader.LoadLevel(agencyOfficeLevelIndex);
         });
         
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
         backToMainMenu.onClick.AddListener(() =>
         {
+            Camera.main.GetComponent<MainMenuCamera>().ResetPosition();
             _mainMenu.SetCurrentPanelToNone();
         });
         
@@ -59,6 +61,7 @@ public class StartGamePanel : MonoBehaviour
 
     void Show()
     {
+        Camera.main.GetComponent<MainMenuCamera>().MoveToStartMenu();
         gameObject.SetActive(true);
     }
     

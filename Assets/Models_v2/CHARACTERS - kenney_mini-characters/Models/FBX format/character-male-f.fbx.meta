@@ -33,7 +33,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 1
+    globalScale: 2
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -103,32 +103,32 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: leg-left
       parentName: root
-      position: {x: -0.083570965, y: 0.17625, z: -0.028749999}
+      position: {x: -0.0016714192, y: 0.0035249998, z: -0.00057499995}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: leg-right
       parentName: root
-      position: {x: 0.083570965, y: 0.17625, z: -0.028749999}
+      position: {x: 0.0016714192, y: 0.0035249998, z: -0.00057499995}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: torso
       parentName: root
-      position: {x: 1.4438228e-15, y: 0.17625, z: -0.028749999}
+      position: {x: 2.8876455e-17, y: 0.0035249998, z: -0.00057499995}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: arm-left
       parentName: torso
-      position: {x: -0.09989677, y: 0.1115, z: 0.011499999}
+      position: {x: -0.0019979354, y: 0.00223, z: 0.00022999998}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: arm-right
       parentName: torso
-      position: {x: 0.09989677, y: 0.1115, z: 0.011499999}
+      position: {x: 0.0019979354, y: 0.00223, z: 0.00022999998}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: head
       parentName: torso
-      position: {x: -0.0000000018196893, y: 0.16699998, z: 0.026388776}
+      position: {x: -3.6393784e-11, y: 0.0033399996, z: 0.0005277755}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
@@ -138,7 +138,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 1
+    globalScale: 0.02
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
