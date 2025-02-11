@@ -770,19 +770,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isDead: 0
+  dontMove: 0
   isMoving: 0
   canRotate: 0
   isGrounded: 0
+  inAttackRange: 0
   performingAction: 0
   isRotatingWithRootMotion: 0
+  isStunned: 0
+  isRetreating: 0
   target:
-    <Target>k__BackingField: {fileID: 0}
+    <Source>k__BackingField: {fileID: 0}
+    targetScore: 0
     <TargetAngle>k__BackingField: 0
     <TargetDistance>k__BackingField: 0
-    targetScore: 0
-  angleLimit:
-    lowerBound: -180
-    upperBound: 180
+    <TargetPosition>k__BackingField: {x: 0, y: 0, z: 0}
   potentialTargets: []
   <healthBarUI>k__BackingField: {fileID: 3653059395958421374}
   currentState: {fileID: 0}
@@ -804,10 +806,11 @@ MonoBehaviour:
   memorySpan: 3
   playerList: []
   currentVisualTarget:
-    <Target>k__BackingField: {fileID: 0}
+    <Source>k__BackingField: {fileID: 0}
+    targetScore: 0
     <TargetAngle>k__BackingField: 0
     <TargetDistance>k__BackingField: 0
-    targetScore: 0
+    <TargetPosition>k__BackingField: {x: 0, y: 0, z: 0}
   ageWeight: 0.75
   angleWeight: 0.55
   distanceWeight: 0.6
@@ -850,7 +853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 0.5
-  rotationSpeed: 1.75
+  rotationSpeed: 10
   verticalVelocity: {x: 0, y: 0, z: 0}
   gravityForce: -9.81
 --- !u!114 &4102522036888057609
@@ -865,9 +868,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ac594f3def6a443833028ed897caf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  attackPoint: {fileID: 7764057053667712826}
   attackRange: 2
   sphereRadius: 0.5
-  attackPoint: {fileID: 7764057053667712826}
+  currentAttack: {fileID: 0}
+  attackArray:
+  - {fileID: 11400000, guid: 1dcad9a4458cca348bc8736ac8bbf113, type: 2}
+  - {fileID: 11400000, guid: 563715c6937b7e2468a6a94a01b366e6, type: 2}
+  - {fileID: 11400000, guid: c791582ce117e1c4499a4d08f1d6f8cd, type: 2}
 --- !u!114 &8837821354862587416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4646,7 +4654,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 5.75
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

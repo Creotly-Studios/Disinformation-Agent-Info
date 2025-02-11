@@ -1,0 +1,43 @@
+VAR playerScore = 0
+VAR npcEmotion = "Neutral"
+
+Agent: "Hey, Ms. Maggie. You called me in?" #speaker:Agent
+-> Start
+=== Start ===
+Ms. Maggie: "Yes, Agent. We’ve got a situation that needs your attention. A swarm of bots has infiltrated the system, and they’re spreading disinformation. It's time for you to step in." #speaker:Ms. Maggie
+-> SituationExplained
+
+=== SituationExplained ===
+Agent: "Bots? Can you explain what’s going on?" #speaker:Agent
+Ms. Maggie: "Bots are automated programs that mimic real users online. They’re used to post misleading or false information, often to manipulate people's opinions. In this case, they’ve been flooding platforms with disinformation—false information meant to deceive people—or misinformation, which is incorrect information that's spread unintentionally." #speaker:Ms. Maggie
+-> PurposeOfBots
+
+=== PurposeOfBots ===
+Agent: "So they’re tricking people on purpose?" #speaker:Agent
+Ms. Maggie: "Exactly. These bots are working together to spread lies that can confuse people. They spam social media, news outlets, and even comment sections with content designed to look legitimate, but it’s all misleading. The worst part is, when people see something repeatedly, they start to believe it’s true." #speaker:Ms. Maggie
+-> Consequences
+
+=== Consequences ===
+Agent: "That sounds dangerous. How do they get away with it?" #speaker:Agent
+Ms. Maggie: "Bots are effective because they operate quickly and anonymously. They can easily create fake posts, likes, shares, and comments, making it seem like their disinformation is coming from real people. Over time, this can sway opinions, create division, and cause panic." #speaker:Ms. Maggie
+-> MissionBriefing
+
+=== MissionBriefing ===
+Agent: "And that’s why I need to stop them?" #speaker:Agent
+Ms. Maggie: "Exactly. We’re going to teleport you to a room where the bots are currently active. Your job is to shut them down before their lies can spread any further. It’ll be a controlled environment, so you don’t have to track them down—just focus on eliminating them." #speaker:Ms. Maggie
+-> BotCount
+
+=== BotCount ===
+Agent: "How many are there?" #speaker:Agent
+Ms. Maggie: "Not too many, but enough to cause serious damage if left unchecked. The key is to move quickly. The more bots you shut down, the fewer people will be affected by their disinformation." #speaker:Ms. Maggie
+-> PlanOfAction
+
+=== PlanOfAction ===
+Agent: "Got it. So, I just need to clear the room and stop their spread." #speaker:Agent
+Ms. Maggie: "Exactly. You’ll need to be sharp and quick. It’s all about keeping the truth intact and making sure disinformation doesn’t win." #speaker:Ms. Maggie
+-> FinalWords
+
+=== FinalWords ===
+Agent: "I’m on it. Time to shut down these bots!" #speaker:Agent
+Ms. Maggie: "Good. The truth is in your hands, Agent. Make it count." #speaker:Ms. Maggie
+-> END

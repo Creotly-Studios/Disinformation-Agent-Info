@@ -25,16 +25,21 @@ public class Robot : MonoBehaviour
 
     //Status
     [HideInInspector] public bool isDead;
+    [HideInInspector] public bool dontMove;
     [HideInInspector] public bool isMoving;
     [HideInInspector] public bool canRotate;
-    public bool isGrounded;
+    [HideInInspector] public bool isGrounded;
+    [HideInInspector] public bool inAttackRange;
     [HideInInspector] public bool performingAction;
     [HideInInspector] public bool isRotatingWithRootMotion;
 
+    //Combat Status
+    public bool isStunned;
+    public bool isRetreating;
+
     [Header("Target Properties")]
     public VisualTarget target;
-    public BoundaryFloat angleLimit;
-    public Player currentVisualTarget { get; private set; }
+    public Player_v2 currentVisualTarget { get; private set; }
     public List<VisualTarget> potentialTargets = new List<VisualTarget>();
 
     [field: Header("Player UI")]
@@ -69,7 +74,7 @@ public class Robot : MonoBehaviour
         pursueState = Instantiate(pursueState);
         combatState = Instantiate(combatState);
 
-        combatState.InitializeState();
+        EnemyCombatControllerScript.Instance.AddEnemy(this);
         currentState = idleState.SwitchState(idleState, this);
     }
 
@@ -82,10 +87,12 @@ public class Robot : MonoBehaviour
 
         SetAnimatorBools();
         float delta = Time.deltaTime;
+
         robotMovement.RobotMovement_Update(delta);
 
         GetTarget();
         HandleStateChange();
+        robotCombat.RobotCombat_Updater(delta, this);
     }
 
     //Functionalities
@@ -93,9 +100,12 @@ public class Robot : MonoBehaviour
     private void GetTarget()
     {
         robotMemory.RobotMemory_Update();
-
         SetCurrentTargetDetails();
-        currentVisualTarget = (target.Target != null) ? target.Target : null;
+    }
+
+    public void SetCurrentTarget(Player_v2 target)
+    {
+        currentVisualTarget = target;
     }
 
     private void SetAnimatorBools()
@@ -109,9 +119,10 @@ public class Robot : MonoBehaviour
 
     private void HandleStateChange()
     {
-        if (DialogueManager.Instance.dialogueIsPlaying)
+        if (DialogueManager.Instance.dialogueIsPlaying || dontMove == true)
         {
             isMoving = false;
+            agent.enabled = false;
             return;
         }
 
@@ -165,8 +176,8 @@ public class Robot : MonoBehaviour
         {
             return;
         }
-
         target.UpdateTargetInformation(transform);
+
         AngleOfTarget = target.TargetAngle;
         DistanceToTarget = target.TargetDistance;
     }
@@ -180,7 +191,6 @@ public class Robot : MonoBehaviour
         DirectionToTarget = (transform.position - targetPosition);
 
         DistanceToTarget = DirectionToTarget.magnitude;
-        DirectionToTarget = DirectionToTarget.normalized;
         AngleOfTarget = Maths_PhysicsHelper.CalculateViewAngle(transform.forward, DirectionToTarget);
     }
 }

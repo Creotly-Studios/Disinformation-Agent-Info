@@ -34,8 +34,10 @@ public enum NoticeType
 {
     Hint,
     Exit,
+    Wrong,
+    Correct,
     Progress,
-    Congratulations
+    QuestCompleted
 }
 
 public enum PostFactType

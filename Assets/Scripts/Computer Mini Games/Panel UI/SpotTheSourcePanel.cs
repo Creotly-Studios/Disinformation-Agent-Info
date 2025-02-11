@@ -12,6 +12,7 @@ public class SpotTheSourcePanel : MonoBehaviour
     private int currentScore;
     private bool hasInitialized;
     private float remainingTime;
+    private bool isGameOver;
     private string selectedAnswer = "";
     private WaitForSeconds waitForSeconds;
 
@@ -32,11 +33,15 @@ public class SpotTheSourcePanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI authorName;
     [SerializeField] private TextMeshProUGUI postContent;
 
-    [Header("UI Prpoperties")]
+    [Header("UI Properties")]
     [SerializeField] private Button hintButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private TextMeshProUGUI scoreCount;
     [SerializeField] private TextMeshProUGUI countDownTimer;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private GameObject postPanel;
+    [SerializeField] private GameObject answersPanel;
 
     private void Awake()
     {
@@ -52,10 +57,16 @@ public class SpotTheSourcePanel : MonoBehaviour
         }
         currentScore = 0;
         remainingTime = maxTime;
+        isGameOver = false;
 
         InitalizePosts();
         SelectPostSO();
         scoreCount.text = currentScore.ToString();
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
 
         hintButton.onClick.AddListener(() => HintButton());
         exitButton.onClick.AddListener(() => SubmitButton());
@@ -66,6 +77,7 @@ public class SpotTheSourcePanel : MonoBehaviour
         uiButton[3].choiceButton.onClick.AddListener(() => InitializeButton(3));
 
         hasInitialized = true;
+        ShowPanel();
     }
 
     private void OnDisable()
@@ -88,7 +100,7 @@ public class SpotTheSourcePanel : MonoBehaviour
 
     public void SpotSource_Update()
     {
-        if (gameObject.activeSelf != true)
+        if (gameObject.activeSelf != true || isGameOver)
         {
             return;
         }
@@ -117,6 +129,8 @@ public class SpotTheSourcePanel : MonoBehaviour
 
     private void InitializeButton(int i)
     {
+        if (isGameOver) return;
+
         selectedAnswer = uiButton[i].choiceText.text;
         uiButton[i].choiceButton.interactable = false;
 
@@ -139,10 +153,12 @@ public class SpotTheSourcePanel : MonoBehaviour
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;
         }
         if(pickedAnswer != null ) { pickedAnswer.choiceButton.image.color = Color.red; }
         if(correctAnswer != null ) { correctAnswer.choiceButton.image.color = Color.green; }
+        computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
     }
 
     private SourcePostSO GetPostSO()
@@ -164,6 +180,7 @@ public class SpotTheSourcePanel : MonoBehaviour
     {
         if(dynamicContentList.Count <= 0)
         {
+            EndGame("Congratulations! You've completed all posts!");
             return;
         }
 
@@ -171,7 +188,7 @@ public class SpotTheSourcePanel : MonoBehaviour
         InitializePostContents(currentPost);
         dynamicContentList.Remove(currentPost);
     }
-
+    
     private void InitializePostContents(SourcePostSO postSO)
     {
         title.text = postSO.title;
@@ -187,10 +204,15 @@ public class SpotTheSourcePanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
+        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
+        if (isGameOver || popUp) return;
+
         remainingTime -= delta;
         if (remainingTime <= 0.0f)
         {
             remainingTime = 0.0f;
+            EndGame("Time's up!");
+            return;
         }
 
         int minutes = Mathf.FloorToInt(remainingTime / 60);
@@ -198,12 +220,30 @@ public class SpotTheSourcePanel : MonoBehaviour
         int milliSecond = Mathf.FloorToInt((remainingTime * 1000) % 1000);
 
         countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
-        countDownTimer.text = string.Format("{0:00} : {1:00} : {2: 000}", minutes, seconds, milliSecond);
+        countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
+    }
+
+    private void EndGame(string message)
+    {
+        isGameOver = true;
+        HidePanel();
+    }
+
+    private void HidePanel()
+    {
+        postPanel.SetActive(false);
+        answersPanel.SetActive(false);
+    }
+
+    private void ShowPanel()
+    {
+        postPanel.SetActive(true);
+        answersPanel.SetActive(true);
     }
 
     private void HintButton()
     {
-
+        // Your hint button implementation
     }
 
     private void SubmitButton()

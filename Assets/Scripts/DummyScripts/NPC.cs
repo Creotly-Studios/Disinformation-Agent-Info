@@ -65,8 +65,8 @@ public class NPC : MonoBehaviour
         currentState = npcState.RobotState_Update(this);
 
         warmingUpRadar = 55;
-        warmingUpRadarUI.SetMaxValue(100);
-        warmingUpRadarUI.SetCurrentValue(warmingUpRadar);
+        // warmingUpRadarUI.SetMaxValue(100);
+        // warmingUpRadarUI.SetCurrentValue(warmingUpRadar);
     }
 
     private void Update()

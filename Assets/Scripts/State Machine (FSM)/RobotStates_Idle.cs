@@ -25,12 +25,12 @@ public class RobotStates_Idle : RobotStates
             return this;
         }
 
-        if (robot.agent.enabled == false)
+        if(robot.dontMove != true && robot.agent.enabled == false)
         {
             robot.agent.enabled = true;
         }
 
-        if (robot.target.Target != null)
+        if (robot.target.Source != null)
         {
             return SwitchState(robot.pursueState, robot);
         }
@@ -39,11 +39,6 @@ public class RobotStates_Idle : RobotStates
 
     private RobotStates IdleState_Updater(Robot robot)
     {
-        if (robot.AngleOfTarget < robot.angleLimit.lowerBound || robot.AngleOfTarget > robot.angleLimit.upperBound)
-        {
-            robot.robotMovement.PivotTowardsTarget(robot);
-        }
-
         robot.robotMovement.RotateTowardsTarget();
         if (patrolMode == PatrolMode.Idle)
         {
@@ -75,10 +70,10 @@ public class RobotStates_Idle : RobotStates
             else
             {
                 destinationSet = false;
+		idleTime = idleTimeDefault;
                 robot.agent.enabled = true;
 
                 patrolMode = PatrolMode.Walk;
-                return Walk(robot);
             }
         }
         return this;
@@ -97,7 +92,6 @@ public class RobotStates_Idle : RobotStates
             robot.isMoving = false;
             robot.agent.enabled = false;
             patrolMode = PatrolMode.Idle;
-            return SwitchState(Idle(robot), robot);
         }
         return this;
     }

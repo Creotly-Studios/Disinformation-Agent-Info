@@ -43,9 +43,9 @@ public class RobotMovement : MonoBehaviour
         robot.characterController.Move(verticalVelocity * delta);
     }
 
-    public void HandleRotationWhileAttacking(Robot robot)
+    public void HandleRotationWhileAttacking()
     {
-        if (robot.target.Target == null)
+        if (robot.target.Source == null)
         {
             return;
         }
@@ -55,12 +55,7 @@ public class RobotMovement : MonoBehaviour
             return;
         }
 
-        if (robot.performingAction != true)
-        {
-            return;
-        }
-
-        Vector3 targetDirection = robot.DirectionToTarget;
+        Vector3 targetDirection = robot.target.TargetPosition - transform.position;
         targetDirection.y = 0.0f;
         targetDirection.Normalize();
 
@@ -70,31 +65,6 @@ public class RobotMovement : MonoBehaviour
         }
         Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
         robot.transform.rotation = Quaternion.Slerp(robot.transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-    }
-
-    public void PivotTowardsTarget(Robot robot)
-    {
-        if (robot.performingAction)
-        {
-            return;
-        }
-
-        if (robot.AngleOfTarget >= 20 && robot.AngleOfTarget <= 145)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_R_90, true);
-        }
-        else if (robot.AngleOfTarget >= -145 && robot.AngleOfTarget <= -20)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_L_90, true);
-        }
-        else if (robot.AngleOfTarget > 145 && robot.AngleOfTarget <= 180)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_R_180, true);
-        }
-        else if (robot.AngleOfTarget < -145 && robot.AngleOfTarget >= -180)
-        {
-            robot.robotAnimation.PlayRootTargetAnimation(AnimatorHashing.turn_L_180, true);
-        }
     }
 
     public void RotateTowardsTarget()

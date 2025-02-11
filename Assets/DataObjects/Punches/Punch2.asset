@@ -9,8 +9,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72027d5e48a9fcf419e0dd5c97fca126, type: 3}
+  m_Script: {fileID: 11500000, guid: 801c34ed1f98cb648b0668754ccb52ab, type: 3}
   m_Name: Punch2
   m_EditorClassIdentifier: 
   damage: 1
+  punchName: 
   animatorOV: {fileID: 22100000, guid: befd1b8606d65a141949cc28328c8a21, type: 2}
+  weight: 0
+  recoveryTime: 1.5
+  attackAngle:
+    lowerBound: -180
+    upperBound: 180
+  distanceToAttack:
+    lowerBound: 0
+    upperBound: 1.75

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour
 {
+    private bool hasNotified;
     public static QuestManager Instance;
 
     //Parameters
     private List<TextAsset> dialogueTexts = new();
-    public TextAsset instructionDialogue { get; private set; }
+    public TextAsset instructionDialogue;
 
     [field: Header("Parameters")]
     public bool allQuestCompleted { get; private set; }
     [field: SerializeField] public QuestSO activeQuest;
+    [field: SerializeField] public NoticePopup popupPanel { get; private set; }
     [field: SerializeField] public List<QuestSO> availableQuests { get; private set; } = new List<QuestSO>();
 
     private void Awake()
@@ -37,14 +39,14 @@ public class QuestManager : MonoBehaviour
         
     }
 
-    public void TriggerDialogue(DialogueCharacterInformation speaker, NPC npc = null)
+    public void TriggerDialogue(DialogueCharacterInformation speaker, NPC npc = null, TextAsset textAsset = null)
     {
         if(speaker.speakerType == TypeOfSpeaker.Instructor)
         {
             DialogueManager.Instance.HandleDialogue(speaker, instructionDialogue);
             return;
         }
-        TextAsset randomDialogue = PickRandomDialogue();
+        TextAsset randomDialogue = textAsset;
         DialogueManager.Instance.HandleDialogue(speaker, randomDialogue, npc);
     }
 
@@ -70,6 +72,15 @@ public class QuestManager : MonoBehaviour
 
     public void AssignQuests()
     {
+        if(activeQuest.isComplete)
+        {
+            if (hasNotified != true)
+            {
+                hasNotified = true;
+                popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
+            }
+        }
+
         if(activeQuest == null || activeQuest.isComplete == true)
         {
             QuestSO questSO = availableQuests.Find(x => x.isComplete != true);
@@ -79,6 +90,7 @@ public class QuestManager : MonoBehaviour
                 return;
             }
 
+            hasNotified = false;
             dialogueTexts.Clear();
             activeQuest = questSO;
             dialogueTexts.AddRange(activeQuest.dialogueTexts);

@@ -94,40 +94,38 @@ public class VisualTarget
     public float Age { get { return Time.time - lastDetected; } }
 
     [Header("Target")]
-    [field: SerializeField] public Player Target { get; private set; }
+    [field: SerializeField] public Player_v2 Source { get; private set; }
 
     [field: Header("Target Information")]
+    public float targetScore;
     [field: SerializeField] public float TargetAngle { get; private set; }
     [field: SerializeField] public float TargetDistance { get; private set; }
+    [field: SerializeField] public Vector3 TargetPosition { get; private set; }
 
-    [Header("Target Score")]
-    public float targetScore;
-
-    public VisualTarget(Player potentialTarget)
+    public VisualTarget(Player_v2 potentialTarget)
     {
         SetTarget(potentialTarget);
     }
 
-    public void SetTarget(Player potentialTarget)
+    public void SetTarget(Player_v2 potentialTarget)
     {
-        Target = potentialTarget;
+        Source = potentialTarget;
     }
 
-    public void UpdateTargetInformation(Transform source)
+    public void UpdateTargetInformation(Transform detectingSource)
     {
-        if(Target == null)
+        if(Source == null)
         {
             ClearDetails();
             return;
         }
-        Transform targetTransform = Target.transform;
+        TargetPosition = Source.transform.position;
 
         lastDetected = Time.time;
-        targetDirection = (source.position - targetTransform.position);
+        targetDirection = (detectingSource.position - TargetPosition);
 
         TargetDistance = targetDirection.magnitude;
-        targetDirection = targetDirection.normalized;
-        TargetAngle = Maths_PhysicsHelper.CalculateViewAngle(source.forward, targetDirection);
+        TargetAngle = Maths_PhysicsHelper.CalculateViewAngle(detectingSource.forward, targetDirection);
     }
 
     public void ClearDetails()
@@ -147,12 +145,12 @@ public class EnemyMemoryHandlerScript
     {
         for (int i = 0; i < robot.robotMemory.playerList.Count; i++)
         {
-            Player target = robot.robotMemory.playerList[i];
+            Player_v2 target = robot.robotMemory.playerList[i];
             RefreshVisualTarget(robot, target);
         }
     }
 
-    private void RefreshVisualTarget(Robot robot, Player target)
+    private void RefreshVisualTarget(Robot robot, Player_v2 target)
     {
         VisualTarget visualTarget = FetchVisualTarget(robot, target);
 
@@ -160,9 +158,9 @@ public class EnemyMemoryHandlerScript
         visualTarget.UpdateTargetInformation(robot.transform);
     }
 
-    private VisualTarget FetchVisualTarget(Robot robot, Player target)
+    private VisualTarget FetchVisualTarget(Robot robot, Player_v2 target)
     {
-        VisualTarget visualTarget = robot.potentialTargets.Find(x => x.Target == target);
+        VisualTarget visualTarget = robot.potentialTargets.Find(x => x.Source == target);
         if (visualTarget == null)
         {
             visualTarget = new VisualTarget(target);
@@ -174,7 +172,7 @@ public class EnemyMemoryHandlerScript
     public void ForgetVisualTarget(Robot robot, float olderThan)
     {
         robot.potentialTargets.RemoveAll(x => x.Age > olderThan);
-        robot.potentialTargets.RemoveAll(x => x.Target == null);
-        robot.potentialTargets.RemoveAll(x => x.Target?.isDead == true);
+        robot.potentialTargets.RemoveAll(x => x.Source == null);
+        robot.potentialTargets.RemoveAll(x => x.Source?.isDead == true);
     }
 }

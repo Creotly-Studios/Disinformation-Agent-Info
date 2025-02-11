@@ -17,7 +17,6 @@ public class SFXPlayer : MonoBehaviour
 
     private void Awake()
     {
-        sfxVolume = PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME);
         if (instance == null)
         {
             instance = this;
@@ -32,6 +31,7 @@ public class SFXPlayer : MonoBehaviour
 
     void Start()
     {
+        sfxVolume = PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME);
         _sfxSource = sfxPlayerObject.GetComponent<AudioSource>();
     }
 

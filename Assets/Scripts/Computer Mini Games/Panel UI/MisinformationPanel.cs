@@ -12,6 +12,7 @@ public class MisinformationPanel : MonoBehaviour
     private int currentScore;
     private float remainingTime;
     private bool hasInitialized;
+    private bool isGameOver;
 
     //Parameters
     private PostSO currentPost;
@@ -35,11 +36,15 @@ public class MisinformationPanel : MonoBehaviour
     [SerializeField] private TextMeshProUGUI authorName;
     [SerializeField] private TextMeshProUGUI postContent;
 
-    [Header("UI Prpoperties")]
+    [Header("UI Properties")]
     [SerializeField] private Button hintButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private TextMeshProUGUI scoreCount;
     [SerializeField] private TextMeshProUGUI countDownTimer;
+    [SerializeField] private GameObject gameOverPanel;
+    [SerializeField] private TextMeshProUGUI gameOverText;
+    [SerializeField] private GameObject postPanel;
+    [SerializeField] private GameObject answersPanel;
 
     private void Awake()
     {
@@ -49,14 +54,20 @@ public class MisinformationPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        if(hasInitialized)
+        if (hasInitialized)
         {
             return;
         }
 
         currentScore = 0;
         remainingTime = maxTime;
+        isGameOver = false;
         scoreCount.text = currentScore.ToString();
+
+        if (gameOverPanel != null)
+        {
+            gameOverPanel.SetActive(false);
+        }
 
         InitalizePosts();
         SetCurrentPost();
@@ -69,11 +80,12 @@ public class MisinformationPanel : MonoBehaviour
         disInfo_Btn.onClick.AddListener(() => InitalizeButton(disInfo_Btn, PostFactType.Disinformation));
 
         hasInitialized = true;
+        ShowPanel();
     }
 
     private void OnDisable()
     {
-        if(hasInitialized != true)
+        if (hasInitialized != true)
         {
             return;
         }
@@ -90,13 +102,13 @@ public class MisinformationPanel : MonoBehaviour
 
     public void Misinformation_Update()
     {
-        if(gameObject.activeSelf != true)
+        if (gameObject.activeSelf != true || isGameOver)
         {
             return;
         }
 
         TimerCountdown(Time.deltaTime);
-        if(selectedPostType == PostFactType.None)
+        if (selectedPostType == PostFactType.None)
         {
             return;
         }
@@ -118,9 +130,9 @@ public class MisinformationPanel : MonoBehaviour
 
     private void SetCurrentPost()
     {
-        if(dynamicContentList.Count == 0)
+        if (dynamicContentList.Count == 0)
         {
-            //Display Finished
+            EndGame("Congratulations! You've completed all posts!");
             return;
         }
 
@@ -158,10 +170,15 @@ public class MisinformationPanel : MonoBehaviour
 
     private void TimerCountdown(float delta)
     {
+        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
+        if (isGameOver || popUp) return;
+
         remainingTime -= delta;
         if (remainingTime <= 0.0f)
         {
             remainingTime = 0.0f;
+            EndGame("Time's up!");
+            return;
         }
 
         int minutes = Mathf.FloorToInt(remainingTime / 60);
@@ -169,12 +186,30 @@ public class MisinformationPanel : MonoBehaviour
         int milliSecond = Mathf.FloorToInt((remainingTime * 1000) % 1000);
 
         countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
-        countDownTimer.text = string.Format("{0:00} : {1:00} : {2: 000}", minutes, seconds, milliSecond);
+        countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
+    }
+
+    private void EndGame(string message)
+    {
+        isGameOver = true;
+        HidePanel();
+    }
+
+    private void HidePanel()
+    {
+        postPanel.SetActive(false);
+        answersPanel.SetActive(false);
+    }
+
+    private void ShowPanel()
+    {
+        postPanel.SetActive(true);
+        answersPanel.SetActive(true);
     }
 
     private void HintButton()
     {
-
+        // Your hint button implementation
     }
 
     private void SubmitButton()
@@ -184,6 +219,8 @@ public class MisinformationPanel : MonoBehaviour
 
     private void InitalizeButton(Button button, PostFactType factType)
     {
+        if (isGameOver) return;
+
         selectedPostType = factType;
         button.interactable = false;
 
@@ -203,8 +240,9 @@ public class MisinformationPanel : MonoBehaviour
             {
                 quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
             }
+            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;
         }
-        Debug.Log("False");
+        computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
     }
 }

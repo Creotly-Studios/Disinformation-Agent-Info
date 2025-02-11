@@ -11,7 +11,7 @@ public class RobotMemory : MonoBehaviour
     public float memorySpan = 3.0f;
 
     [Header("Target Parameters")]
-    public List<Player> playerList = new();
+    public List<Player_v2> playerList = new();
     public VisualTarget currentVisualTarget;
 
     [Header("Total Score Adjust Weight")]
@@ -79,7 +79,7 @@ public class RobotMemory : MonoBehaviour
                 continue;
             }
 
-            Player player = characterCollider.GetComponentInParent<Player>();
+            Player_v2 player = characterCollider.GetComponentInParent<Player_v2>();
             if (player != null)
             {
                 if (playerList.Contains(player) == true)
@@ -97,7 +97,6 @@ public class RobotMemory : MonoBehaviour
 
     void EvaluateVisualTargetScore()
     {
-        robot.target.ClearDetails();
         for (int i = 0; i < robot.potentialTargets.Count; i++)
         {
             VisualTarget target = robot.potentialTargets[i];
@@ -105,8 +104,9 @@ public class RobotMemory : MonoBehaviour
 
             if (robot.target == null || target.targetScore > currentVisualTarget.targetScore)
             {
-                currentVisualTarget = target;
                 robot.target = target;
+                currentVisualTarget = target;
+                robot.SetCurrentTarget(target.Source);
             }
         }
     }
