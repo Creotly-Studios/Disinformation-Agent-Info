@@ -16,7 +16,8 @@ public class Player_v2 : MonoBehaviour
     #endregion
 
     #region Events
-    public event EventHandler<GameObject> OnInteractObjectFind; 
+    public event EventHandler<GameObject> OnInteractObjectFind;
+    public event EventHandler OnCollectCoin; 
     
 
     #endregion
@@ -112,9 +113,6 @@ public class Player_v2 : MonoBehaviour
         playerCombat.PlayerCombat_Updater(this);
 
         StateMachine.CurrentState.LogicUpdate();
-        
-        InvokeIInteractableFoundEvent();
-        OnInteractObjectFind?.Invoke(this, GetInteractableObject());
 
         PlayerStatistics.PlayerStatistic_Update(delta);
     }
@@ -232,20 +230,20 @@ public class Player_v2 : MonoBehaviour
         }
     }
     
-    public bool hasInteractableObject { get; private set; }
-    void InvokeIInteractableFoundEvent()
+    public bool HasInteractableObject { get; private set; }
+    public void InvokeIInteractableFoundEvent()
     {
         if (GetInteractableObject() != null)
         {
             //event
-            hasInteractableObject = true;
+            HasInteractableObject = true;
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
             
         }
         else
         {
             //event
-            hasInteractableObject = false;
+            HasInteractableObject = false;
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
         }
     }

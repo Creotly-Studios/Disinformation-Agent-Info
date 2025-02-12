@@ -25,7 +25,7 @@ public class RadnomFactMachine : MonoBehaviour, IInteractable
     }
 
     public void DeactivatePlayer()
-    { 
+    {
         if (_player != null) _player.StateMachine.ChangeState(_player.InactiveState);
     }
 }
