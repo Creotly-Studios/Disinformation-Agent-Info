@@ -17,7 +17,9 @@ public class Player_v2 : MonoBehaviour
 
     #region Events
     public event EventHandler<GameObject> OnInteractObjectFind;
-    public event EventHandler OnCollectCoin; 
+    public event EventHandler OnCollectCoin;
+    public event EventHandler OnPlayerDie; 
+    public event EventHandler OnPlayerDamage;
     
 
     #endregion
@@ -35,6 +37,8 @@ public class Player_v2 : MonoBehaviour
     public PlayerDialogueState DialogueState { get; private set; }
     
     public PlayerInactiveState InactiveState { get; private set; }
+
+    public PlayerDeadState DeadState { get; private set; }
 
     #endregion
 
@@ -90,6 +94,7 @@ public class Player_v2 : MonoBehaviour
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
         AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "isAttacking");
         InactiveState = new PlayerInactiveState(this, StateMachine, PlayerData, "idle");
+        DeadState = new PlayerDeadState(this, StateMachine, PlayerData, "dead");
     }
 
     void Start()
@@ -156,6 +161,10 @@ public class Player_v2 : MonoBehaviour
             }
         }
         return null;
+    }
+
+    public bool IsPlayerDead(){
+        return StateMachine.CurrentState == DeadState;
     }
 
     #endregion
@@ -251,6 +260,23 @@ public class Player_v2 : MonoBehaviour
     public void SetInactiveState() => StateMachine.ChangeState(InactiveState);
 
     public void SetActiveState() => StateMachine.ChangeState(IdleState);
+
+
+
+    #endregion
+
+    #region PlayerEvents
+        
+    public void CallPlayerDeath()
+    {
+        StateMachine.ChangeState(DeadState);
+        OnPlayerDie?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void CallPlayerDamage()
+    {
+        OnPlayerDamage?.Invoke(this, EventArgs.Empty);
+    }
 
 
 

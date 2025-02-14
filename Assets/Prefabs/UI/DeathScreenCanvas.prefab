@@ -251,7 +251,7 @@ Canvas:
   serializedVersion: 3
   m_RenderMode: 0
   m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_PlaneDistance: 0.1
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -340,8 +340,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc999bb401d73dd4b958fa1b6d3aa888, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menuBtn: {fileID: 4922941821914628815}
-  replayBtn: {fileID: 3706668861598634793}
+  menuBtn: {fileID: 3706668861598634793}
+  replayBtn: {fileID: 4922941821914628815}
 --- !u!1 &5304524860324855238
 GameObject:
   m_ObjectHideFlags: 0
