@@ -23,18 +23,11 @@ public class PlayerAttackState : PlayerAbilityState
     public override void Enter()
     {
         base.Enter();
-        Attack();
-        isAbilityDone = true;
     }
 
     private void Attack()
     {
         HandleAttack();
-        
-        if (player.InputHandler.attackPressed == false)
-        {
-            stateMachine.ChangeState(player.IdleState);
-        }
     }
     
     private void ExitAttack()
@@ -192,6 +185,11 @@ public class PlayerAttackState : PlayerAbilityState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+        Attack();
+        if (player.InputHandler.attackPressed == false)
+        {
+            isAbilityDone = true;
+        }
         player.Move(Vector3.zero);
     }
 

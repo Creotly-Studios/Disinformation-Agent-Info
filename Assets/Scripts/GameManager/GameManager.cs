@@ -4,14 +4,20 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    
+    public GameState GameState { get; private set; }
+    public GameOverState GameOverState {get; private set;}
     public event EventHandler OnStateChange;
+
     public event EventHandler OnPlayerDie;
+    public event EventHandler OnMissionComplete;
     public event EventHandler OnGamePause;
-    
+
     private bool isGamePaused = false;
 
     DialogueManager dialogueManager;
+
+
+
 
     private void Awake()
     {
@@ -39,6 +45,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void SetGameState(GameState _)
+    {
+        GameState = _;
+        OnStateChange?.Invoke(this, EventArgs.Empty);
+    }
+
     private void OnDestroy()
     {
         OnGamePause = null;
@@ -60,15 +72,24 @@ public class GameManager : MonoBehaviour
     {
         return isGamePaused;
     }
-    
+
     public bool IsGameOver()
     {
-        return true;
+        return GameState == GameState.GameOver;
     }
 
     public void PlayerDie()
     {
         OnPlayerDie?.Invoke(this, EventArgs.Empty);
+        GameOverState = GameOverState.PlayerDie;
+        SetGameState(GameState.GameOver);
+    }
+
+    public void MissionComplete()
+    {
+        OnMissionComplete?.Invoke(this, EventArgs.Empty);
+        GameOverState = GameOverState.MissionComplete;
+        SetGameState(GameState.GameOver);
     }
 
     void Pause()
@@ -85,4 +106,10 @@ public class GameManager : MonoBehaviour
             OnGamePause?.Invoke(this, EventArgs.Empty);
         }
     }
+}
+
+public enum GameState { Playing, GameOver }
+public enum GameOverState
+{
+    PlayerDie, MissionComplete
 }

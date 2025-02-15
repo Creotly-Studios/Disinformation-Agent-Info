@@ -3,17 +3,15 @@ using UnityEngine;
 public class PlayerMoveState : PlayerGroundedState
 {
     private float _turnSmoothVel;
-    private bool sprint;
 
     private float currentMoveSpeed;
+    private float currentSprintTime;
+    private float lastSprintTime = -Mathf.Infinity;
+    public float SprintTimeNormalized {get; private set;}
 
     public PlayerMoveState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
-    }
-
-    public override void DoChecks()
-    {
-        base.DoChecks();
+        currentSprintTime = playerData.sprintDuration; // Initialize sprint duration
     }
 
     public override void Enter()
@@ -22,40 +20,57 @@ public class PlayerMoveState : PlayerGroundedState
         currentMoveSpeed = playerData.speed;
     }
 
-    public override void Exit()
-    {
-        base.Exit();
-    }
-
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
+        input = player.InputHandler.MovementInput; // Get player input
+
         Move();
-        sprint = player.InputHandler.SprintInput;
+
+        // Transition to idle if no input
         if (input.magnitude < 0.1f && !isExitingState)
         {
             stateMachine.ChangeState(player.IdleState);
         }
-        if (sprint)
-        {
-            currentMoveSpeed = playerData.sprintSpeed;
-            player.Anim.SetFloat("moveVel", 1);
-        } else {
-            currentMoveSpeed = playerData.speed;
-            player.Anim.SetFloat("moveVel", 0);
-        }
     }
+
+    // private void HandleSprint()
+    // {
+    //     bool sprint = player.InputHandler.SprintInput; // Check if sprint button is held
+
+    //     if (sprint && currentSprintTime > 0f && Time.time - lastSprintTime > playerData.sprintCooldown)
+    //     {
+    //         currentMoveSpeed = playerData.sprintSpeed;
+    //         currentSprintTime -= Time.deltaTime;
+    //         player.Anim.SetFloat("moveVel", 1f); 
+    //     }
+    //     else
+    //     {
+    //         currentMoveSpeed = playerData.speed;
+    //         player.Anim.SetFloat("moveVel", 0f);
+
+    //         // Recover sprint stamina when not sprinting
+    //         if (currentSprintTime < playerData.sprintDuration)
+    //         {
+    //             currentSprintTime += Time.deltaTime * playerData.sprintRechargeRate;
+    //         }
+    //     }
+
+    //     // Store last sprint time if player runs out of stamina
+    //     if (currentSprintTime <= 0f)
+    //     {
+    //         lastSprintTime = Time.time;
+    //     }
+    // }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
     }
 
-    public void Move()
+    private void Move()
     {
-        // Debug.Log($"Input: {input}, Camera.main: {Camera.main}, Player: {player}, Data: {playerData.speed}");
-
         Vector3 dir = new Vector3(input.x, 0, input.y);
 
         if (dir.magnitude >= 0.1f)
@@ -65,9 +80,7 @@ public class PlayerMoveState : PlayerGroundedState
             player.transform.rotation = Quaternion.Euler(0f, smoothedAngle, 0f);
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
-            player.Move(moveDir * currentMoveSpeed * Time.deltaTime);
+            player.Move(moveDir * player.PlayerStatistics.CurrentMoveSpeed * Time.deltaTime);
         }
     }
-
- 
 }

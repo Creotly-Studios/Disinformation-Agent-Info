@@ -15,16 +15,18 @@ MonoBehaviour:
   maxHealth: 3
   speed: 4.5
   sprintSpeed: 6.5
-  sprintDuration: 20
-  sprintCooldown: 5
+  sprintDuration: 10
+  sprintCooldown: 5.5
+  sprintRechargeRate: 1
   gravity: -30
   jumpHeight: 1.5
   jumpForwardForce: 8.01
   turnSmoothTime: 0.1
+  variableJumpHieghtMultiplier: 0.5
   dashForce: 2
   detectRadius: 1
   detectRange: 1
-  pushForce: 10
+  pushForce: 0.5
   attackRange: 0.35
   attackSphereSize: 1.75
   attackDamage: 1
