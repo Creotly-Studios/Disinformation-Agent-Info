@@ -37,11 +37,6 @@ public class NPCStates : ScriptableObject
 
     private NPCStates HandleAction(NPC npcManager)
     {
-        if (npcManager.targetAngle < npcManager.angleLimit.lowerBound || npcManager.targetAngle > npcManager.angleLimit.upperBound)
-        {
-            npcManager.npcFunctions.PivotTowardsTarget();
-        }
-
         npcManager.npcFunctions.RotateTowardsTarget();
         if (patrolMode == PatrolMode.Idle)
         {

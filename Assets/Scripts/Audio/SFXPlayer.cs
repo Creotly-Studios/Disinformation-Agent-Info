@@ -17,16 +17,12 @@ public class SFXPlayer : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else
+        if (instance != null)
         {
             Destroy(gameObject);
             return;
         }
+        instance = this;
     }
 
     void Start()

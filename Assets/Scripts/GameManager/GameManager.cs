@@ -16,9 +16,6 @@ public class GameManager : MonoBehaviour
 
     DialogueManager dialogueManager;
 
-
-
-
     private void Awake()
     {
         Time.timeScale = 1;

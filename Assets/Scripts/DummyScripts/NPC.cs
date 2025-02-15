@@ -43,7 +43,6 @@ public class NPC : MonoBehaviour
     [HideInInspector] public bool canRotate;
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool performingAction;
-    [HideInInspector] public bool isRotatingWithRootMotion;
 
     private void Awake()
     {
@@ -127,7 +126,6 @@ public class NPC : MonoBehaviour
 
         canRotate = animator.GetBool(AnimatorHashing.canRotateHash);
         performingAction = animator.GetBool(AnimatorHashing.isPerformingActionHash);
-        isRotatingWithRootMotion = animator.GetBool(AnimatorHashing.rootMotionRotateHash);
     }
 
     public void SetPersonalTargetDetails(Vector3 targetPosition)

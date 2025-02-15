@@ -87,31 +87,6 @@ public class NPCFunctions : MonoBehaviour
         npcManager.characterController.Move(verticalVelocity * delta);
     }
 
-    public void PivotTowardsTarget()
-    {
-        if (npcManager.performingAction)
-        {
-            return;
-        }
-
-        if (npcManager.targetAngle >= 20 && npcManager.targetAngle <= 145)
-        {
-            PlayRootTargetAnimation(AnimatorHashing.turn_R_90, true);
-        }
-        else if (npcManager.targetAngle >= -145 && npcManager.targetAngle <= -20)
-        {
-            PlayRootTargetAnimation(AnimatorHashing.turn_L_90, true);
-        }
-        else if (npcManager.targetAngle > 145 && npcManager.targetAngle <= 180)
-        {
-            PlayRootTargetAnimation(AnimatorHashing.turn_R_180, true);
-        }
-        else if (npcManager.targetAngle < -145 && npcManager.targetAngle >= -180)
-        {
-            PlayRootTargetAnimation(AnimatorHashing.turn_L_180, true);
-        }
-    }
-
     public void RotateTowardsTarget()
     {
         if (npcManager.isMoving == true)
@@ -155,14 +130,6 @@ public class NPCFunctions : MonoBehaviour
         }
         npcManager.animator.SetFloat(verticalMovementHash, snappedVertical, 0.1f, delta);
         npcManager.animator.SetFloat(horizontalMovementHash, snappedHorizontal, 0.1f, delta);
-    }
-
-    public void PlayRootTargetAnimation(int targetAnimation, bool performAction, float transitionDuration = 0.1f)
-    {
-        npcManager.animator.applyRootMotion = performAction;
-        npcManager.animator.SetBool(AnimatorHashing.rootMotionRotateHash, true);
-        npcManager.animator.SetBool(AnimatorHashing.isPerformingActionHash, performAction);
-        npcManager.animator.CrossFade(targetAnimation, transitionDuration);
     }
 
     public void PlayTargetAnimation(int targetAnimation, bool performingAction, float transitionDuration = 0.2f, bool canRotate = true)

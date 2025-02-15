@@ -22,7 +22,7 @@ public class PlayerCombat : MonoBehaviour
     public void SetTarget(Robot robot)
     {
         currentTarget = robot;
-        debug1.transform.position = robot.transform.position;
+        if (debug1 != null) { debug1.transform.position = robot.transform.position; }
     }
 
     public void PlayerCombat_Updater(Player_v2 player)
@@ -41,8 +41,8 @@ public class PlayerCombat : MonoBehaviour
         inputDirection.y = 0.0f;
         inputDirection.Normalize();
 
-        debug2.transform.position = inputDirection;
         inputDirectionMagnitude = inputDirection.magnitude;
+        if (debug2 != null) { debug2.transform.position = inputDirection; }
 
         int count = Physics.SphereCastNonAlloc(player.transform.position, 3f, inputDirection, rayCastHitArray, enemyLayerMask);
         for(int i = 0; i < count; i++)

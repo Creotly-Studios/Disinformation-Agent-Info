@@ -67,7 +67,6 @@ public static class AnimatorHashing
         isAttackingHash = Animator.StringToHash("isAttacking");
         isJumpingHash = Animator.StringToHash("isJumping");
         isPerformingActionHash = Animator.StringToHash("performingAction");
-        rootMotionRotateHash = Animator.StringToHash("rotateWithRootMotion");
     }
 
     public static void PlayTargetAnimation(Animator animator, int targetAnimation, bool performAction, float transitionDuration = 0.1f)
