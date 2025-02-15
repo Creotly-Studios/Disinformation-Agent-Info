@@ -12,11 +12,13 @@ public class PlayerData : ScriptableObject
     public float sprintSpeed = 8f;
     public float sprintDuration = 3f;
     public float sprintCooldown = 5f;
+    public float sprintRechargeRate = 1f;
     public float gravity = -9.81f;
     [Space]
     public float jumpHeight = 2f;
     public float jumpForwardForce = 2f;
     public float turnSmoothTime = 0.1f;
+    public float variableJumpHieghtMultiplier = 0.5f;
     [Space]
     public float dashForce = 5f;
 
@@ -36,6 +38,5 @@ public class PlayerData : ScriptableObject
     public float timeBetweenAttackUsage = 0.2f;
     [Space]
     public float timeBetweenAttacks = 1f;
-
-
+    
 }

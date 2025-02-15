@@ -4,21 +4,14 @@ using UnityEngine;
 public class PlayerStatistics : MonoBehaviour, IDamagable
 {
     Player_v2 player;
-
-    [Header("Max Parameters")]
-    [SerializeField] private float maxEndurance = 100f;
-
-    [Header("Endurance Regenerator")]
-    private bool canRegenerate;
-    [SerializeField] private float enduranceTickTimer = 0f;
-    [SerializeField] private float enduranceMultiplier = 2.0f;
-    [SerializeField] private float enduranceRegenerateTimer = 0f;
+    public float CurrentMoveSpeed {get; private set;}
+    public float CurrentSprintTime {get; private set;}
+    private float lastSprintTime = -Mathf.Infinity;
+    private float SprintTimeNormalized;
 
     public int CurrentHealth { get; private set; } = 0;
 
-    public float CurrentEndurance { get; private set; } = 0f;
-
-     public event EventHandler OnPlayerDamage; 
+    public event EventHandler OnPlayerDamage; 
 
     private void Awake()
     {
@@ -29,12 +22,9 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
     public void ResetUI()
     {
         CurrentHealth = player.PlayerData.maxHealth;
-        CurrentEndurance = maxEndurance;
-        
-        player.enduranceBarUI.SetMaxValue(maxEndurance);
-        
-        player.enduranceBarUI.SetCurrentValue(CurrentEndurance);
     }
+
+    
 
     public void TakeDamage(int healthDamage)
     {
@@ -57,50 +47,37 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
 
     public void PlayerStatistic_Update(float delta)
     {
-        RegenerateEndurance(delta);
-        player.enduranceBarUI.SetCurrentValue(CurrentEndurance);
+        HandleSprint();
+        SprintTimeNormalized = (float)CurrentSprintTime / player.PlayerData.sprintDuration;
+        player.sprintUIBar.fillAmount = SprintTimeNormalized;
     }
 
-    private void RegenerateEndurance(float delta)
+    private void HandleSprint()
     {
-        if(player.sprintFlag || player.performingAction)
+        bool sprint = player.InputHandler.SprintInput;
+        if (sprint && CurrentSprintTime > 0f && Time.time - lastSprintTime > player.PlayerData.sprintCooldown)
         {
-            return;
+            CurrentMoveSpeed = player.PlayerData.sprintSpeed;
+            CurrentSprintTime -= Time.deltaTime;
+            player.Anim.SetFloat("moveVel", 1f); 
         }
+        else
+        {
+            CurrentMoveSpeed = player.PlayerData.speed;
+            player.Anim.SetFloat("moveVel", 0f);
 
-        if (CurrentEndurance < maxEndurance)
-        {
-            canRegenerate = true;
-        }
-        else if (CurrentEndurance >= maxEndurance)
-        {
-            CurrentEndurance = maxEndurance;
-            canRegenerate = false;
-        }
-
-        if (canRegenerate == true)
-        {
-            enduranceRegenerateTimer += delta;
-            if (enduranceRegenerateTimer >= 2f)
+            // Recover sprint stamina when not sprinting
+            if (CurrentSprintTime < player.PlayerData.sprintDuration)
             {
-                enduranceTickTimer += delta;
-
-                if (enduranceTickTimer >= 0.1f)
-                {
-                    enduranceTickTimer = 0f;
-                    CurrentEndurance += Mathf.RoundToInt(enduranceMultiplier);
-                }
+                CurrentSprintTime += Time.deltaTime * player.PlayerData.sprintRechargeRate;
             }
-            canRegenerate = false;
         }
-        else if (canRegenerate != true)
+
+        // Store last sprint time if player runs out of stamina
+        if (CurrentSprintTime <= 0f)
         {
-            enduranceRegenerateTimer = 0f;
+            lastSprintTime = Time.time;
         }
     }
 
-    public void ReduceEndurancePeriodically(float floatToReduceBy, float delta)
-    {
-        CurrentEndurance -= floatToReduceBy * delta;
-    }
 }

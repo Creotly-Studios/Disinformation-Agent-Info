@@ -11,12 +11,13 @@ public class PlayerCoinUI : MonoBehaviour
 
     void Start()
     {
-        // Player_v2.Instance.OnCollectCoin += Player_OnCollectCoin;
+        Player_v2.Instance.OnCollectCoin += Player_OnCollectCoin;
         Show();
     }
 
     private void Player_OnCollectCoin(object sender, EventArgs e)
     {
+        coinUIPanel.SetActive(true);
         Show();
     }
 
@@ -27,7 +28,6 @@ public class PlayerCoinUI : MonoBehaviour
 
     private IEnumerator DisplayAndHide()
     {
-        coinUIPanel.SetActive(true);
         // coinAmountText.text = Player_v2.Instance.coinAmount;
 
         yield return new WaitForSeconds(displayTime);
