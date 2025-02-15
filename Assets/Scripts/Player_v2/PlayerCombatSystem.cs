@@ -76,7 +76,7 @@ public class PlayerCombatSystem : MonoBehaviour
                 if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
                 {
                     Debug.Log($"Hit {hit.collider.name} in front!");
-                    damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
+                    damagable.TakeDamage(damage);
                 }
             }
         }

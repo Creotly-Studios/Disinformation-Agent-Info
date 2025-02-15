@@ -5,9 +5,9 @@ public class RobotStatistics : MonoBehaviour, IDamagable
     Robot robot;
 
     [Header("Max Parameters")]
-    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private int maxHealth = 3;
 
-    public float CurrentHealth { get; private set; } = 0f;
+    public int CurrentHealth { get; private set; } = 0;
 
     private void Awake()
     {
@@ -21,7 +21,7 @@ public class RobotStatistics : MonoBehaviour, IDamagable
         robot.healthBarUI.SetCurrentValue(CurrentHealth);
     }
 
-    public void TakeDamage(float healthDamage, int damageAnimation)
+    public void TakeDamage(int healthDamage)
     {
         CurrentHealth -= healthDamage;
         if (CurrentHealth <= 0.0f)
@@ -31,12 +31,12 @@ public class RobotStatistics : MonoBehaviour, IDamagable
         }
 
         robot.healthBarUI.SetCurrentValue(CurrentHealth);
-        robot.robotAnimation.PlayTargetAnimation(damageAnimation, true);
+        // robot.robotAnimation.PlayTargetAnimation(damageAnimation, true);
     }
 
     private void HandleDeath()
     {
-        CurrentHealth = 0.0f;
+        CurrentHealth = 0;
         robot.isDead = true;
 
         robot.healthBarUI.SetCurrentValue(CurrentHealth);

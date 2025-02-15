@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class PlayerStatistics : MonoBehaviour, IDamagable
@@ -5,7 +6,6 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
     Player_v2 player;
 
     [Header("Max Parameters")]
-    [SerializeField] private float maxHealth = 100f;
     [SerializeField] private float maxEndurance = 100f;
 
     [Header("Endurance Regenerator")]
@@ -14,17 +14,21 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
     [SerializeField] private float enduranceMultiplier = 2.0f;
     [SerializeField] private float enduranceRegenerateTimer = 0f;
 
-    public float CurrentHealth { get; private set; } = 0f;
+    public int CurrentHealth { get; private set; } = 0;
+
     public float CurrentEndurance { get; private set; } = 0f;
+
+     public event EventHandler OnPlayerDamage; 
 
     private void Awake()
     {
         player = GetComponent<Player_v2>();
+        CurrentHealth = player.PlayerData.maxHealth;
     }
 
     public void ResetUI()
     {
-        CurrentHealth = maxHealth;
+        CurrentHealth = player.PlayerData.maxHealth;
         CurrentEndurance = maxEndurance;
         
         player.enduranceBarUI.SetMaxValue(maxEndurance);
@@ -32,8 +36,9 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
         player.enduranceBarUI.SetCurrentValue(CurrentEndurance);
     }
 
-    public void TakeDamage(float healthDamage, int damageAnimation)
+    public void TakeDamage(int healthDamage)
     {
+        player.CallPlayerDamage();
         CurrentHealth -= healthDamage;
         if (CurrentHealth <= 0.0f)
         {
@@ -44,8 +49,9 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
 
     private void HandleDeath()
     {
-        CurrentHealth = 0.0f;
-        player.isDead = true;
+        CurrentHealth = 0;
+        // player.isDead = true;
+        player.CallPlayerDeath();
         GameManager.instance.PlayerDie();
     }
 

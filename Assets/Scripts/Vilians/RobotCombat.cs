@@ -35,7 +35,7 @@ public class RobotCombat : MonoBehaviour
 
                 if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
                 {
-                    damagable.TakeDamage(damage, AnimatorHashing.damageAnimation);
+                    damagable.TakeDamage(damage);
                 }
             }
         }

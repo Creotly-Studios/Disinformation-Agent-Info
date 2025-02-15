@@ -77,6 +77,8 @@ public class PlayerGroundedState : PlayerState
             }
         }
 
+        player.InvokeIInteractableFoundEvent();
+
     }
 
     public override void PhysicsUpdate()
