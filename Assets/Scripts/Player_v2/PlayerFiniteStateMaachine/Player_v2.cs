@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player_v2 : MonoBehaviour
 {
@@ -18,9 +19,9 @@ public class Player_v2 : MonoBehaviour
     #region Events
     public event EventHandler<GameObject> OnInteractObjectFind;
     public event EventHandler OnCollectCoin;
-    public event EventHandler OnPlayerDie; 
+    public event EventHandler OnPlayerDie;
     public event EventHandler OnPlayerDamage;
-    
+
 
     #endregion
 
@@ -35,7 +36,7 @@ public class Player_v2 : MonoBehaviour
     public PlayerInteractState InteractState { get; private set; }
     public PlayerAttackState AttackState { get; private set; }
     public PlayerDialogueState DialogueState { get; private set; }
-    
+
     public PlayerInactiveState InactiveState { get; private set; }
 
     public PlayerDeadState DeadState { get; private set; }
@@ -52,7 +53,7 @@ public class Player_v2 : MonoBehaviour
     [field: SerializeField] public PlayerData PlayerData { get; private set; }
 
     [Header("Player UI")]
-    [field: SerializeField] public BarSliderUI enduranceBarUI { get; private set; }
+    [field: SerializeField] public Image sprintUIBar { get; private set; }
     #endregion
 
     #region Checks
@@ -105,7 +106,7 @@ public class Player_v2 : MonoBehaviour
         speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
 
         PlayerStatistics.ResetUI();
-        if(DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
+        if (DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
     }
 
     void Update()
@@ -140,7 +141,7 @@ public class Player_v2 : MonoBehaviour
 
     public bool CanUseMovementInput()
     {
-        return StateMachine.CurrentState != InteractState && !GameManager.instance.IsGamePaused();
+        return StateMachine.CurrentState != InactiveState && !GameManager.instance.IsGamePaused();
     }
     public GameObject GetInteractableObject()
     {
@@ -163,7 +164,8 @@ public class Player_v2 : MonoBehaviour
         return null;
     }
 
-    public bool IsPlayerDead(){
+    public bool IsPlayerDead()
+    {
         return StateMachine.CurrentState == DeadState;
     }
 
@@ -238,7 +240,7 @@ public class Player_v2 : MonoBehaviour
             Gizmos.DrawWireSphere(checkTransform.position + checkTransform.forward * PlayerData.attackRange, PlayerData.attackSphereSize);
         }
     }
-    
+
     public bool HasInteractableObject { get; private set; }
     public void InvokeIInteractableFoundEvent()
     {
@@ -247,7 +249,7 @@ public class Player_v2 : MonoBehaviour
             //event
             HasInteractableObject = true;
             OnInteractObjectFind?.Invoke(this, GetInteractableObject());
-            
+
         }
         else
         {
@@ -266,7 +268,7 @@ public class Player_v2 : MonoBehaviour
     #endregion
 
     #region PlayerEvents
-        
+
     public void CallPlayerDeath()
     {
         StateMachine.ChangeState(DeadState);
@@ -276,6 +278,11 @@ public class Player_v2 : MonoBehaviour
     public void CallPlayerDamage()
     {
         OnPlayerDamage?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void CallPlayerCoinPickup()
+    {
+        OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }
 
 
