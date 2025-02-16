@@ -14,6 +14,10 @@ public class GameManager : MonoBehaviour
 
     DialogueManager dialogueManager;
 
+    [Header("-- Variables")]
+    public int PlayerCoinAmout {get; private set;}
+    public int PlayerRank {get; private set;} //1 min - 5 max... 
+
     private void Awake()
     {
         Time.timeScale = 1;
