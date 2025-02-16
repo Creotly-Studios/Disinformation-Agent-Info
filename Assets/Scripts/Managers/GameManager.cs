@@ -8,8 +8,6 @@ public class GameManager : MonoBehaviour
     public GameOverState GameOverState {get; private set;}
     public event EventHandler OnStateChange;
 
-    public event EventHandler OnPlayerDie;
-    public event EventHandler OnMissionComplete;
     public event EventHandler OnGamePause;
 
     private bool isGamePaused = false;
@@ -61,7 +59,10 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
-        Pause();
+        if (!IsGameOver())
+        {
+            Pause();
+        }
     }
 
 
@@ -69,22 +70,28 @@ public class GameManager : MonoBehaviour
     {
         return isGamePaused;
     }
-
     public bool IsGameOver()
     {
         return GameState == GameState.GameOver;
     }
 
+    public bool IsMissionComplete()
+    {
+        return GameOverState == GameOverState.MissionComplete;
+    }
+    public bool IsPlayerDead()
+    {
+        return GameOverState == GameOverState.PlayerDie;
+    }
+
     public void PlayerDie()
     {
-        OnPlayerDie?.Invoke(this, EventArgs.Empty);
         GameOverState = GameOverState.PlayerDie;
         SetGameState(GameState.GameOver);
     }
 
     public void MissionComplete()
     {
-        OnMissionComplete?.Invoke(this, EventArgs.Empty);
         GameOverState = GameOverState.MissionComplete;
         SetGameState(GameState.GameOver);
     }
@@ -108,5 +115,5 @@ public class GameManager : MonoBehaviour
 public enum GameState { Playing, GameOver }
 public enum GameOverState
 {
-    PlayerDie, MissionComplete
+    None, PlayerDie, MissionComplete
 }

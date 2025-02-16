@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamagable
 {
-    public Transform Player {get; private set;}
+    public Transform Player { get; private set; }
     public LayerMask whatIsGround, whatIsPlayer;
     public int currentHealth;
 
@@ -30,10 +30,6 @@ public class Enemy : MonoBehaviour, IDamagable
         currentHealth = e_data.maxhealth;
     }
 
-    void Update()
-    {
-        
-    }
 
     public void TakeDamage(int healthDamage)
     {
@@ -46,6 +42,7 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void HandleDeath()
     {
+        KillTracker.Instance?.EnemyDied();
         Destroy(gameObject);
     }
 
@@ -59,10 +56,17 @@ public class Enemy : MonoBehaviour, IDamagable
         return Physics.CheckSphere(transform.position, e_data.attackRange, whatIsPlayer);
     }
 
+    // DRAW GIZMOS FOR DETECT AND ATTACK RANGE
+    private void OnDrawGizmosSelected()
+    {
+        if (e_data == null) return;
 
+        // Draw detection range in yellow
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, e_data.detectRange);
 
-
-
-
-
+        // Draw attack range in red
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, e_data.attackRange);
+    }
 }

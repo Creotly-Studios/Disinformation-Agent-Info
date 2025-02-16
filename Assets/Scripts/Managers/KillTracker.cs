@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -6,40 +7,50 @@ public class KillTracker : MonoBehaviour
     public static KillTracker Instance { get; private set; }
 
     [Header("Kill Settings")]
-    [SerializeField] private int maxKills = 10;
-    [SerializeField] private int currentKills = 0;
+    private int enemiesInScene = 0;
+    private int currentKills = 0;
 
     [Header("Events")]
-    public UnityEvent onMaxKillsReached;
-    public UnityEvent<int> onKillCountChanged;  // Passes current kill count
+    public UnityEvent OnKillAllEnemies;
 
-    private void Awake()
+    void Awake()
     {
-        Instance = this;
-    }
-
-    public void AddKill()
-    {
-        currentKills++;
-        
-        // Notify listeners of the new kill count
-        onKillCountChanged?.Invoke(currentKills);
-
-        // Check if max kills reached
-        if (currentKills >= maxKills)
+        if (Instance == null)
         {
-            onMaxKillsReached?.Invoke();
+            Instance = this;
+        }
+        else
+        {
+            Debug.LogWarning("Multiple KillTracker instances detected! Destroying duplicate.");
+            Destroy(gameObject);
         }
     }
 
-    public int GetCurrentKills()
+    void Start()
     {
-        return currentKills;
+        // Auto-count enemies at start (if enemies are tagged)
+        enemiesInScene = FindObjectsByType<Enemy>(FindObjectsSortMode.None).Length;
     }
 
-    public void ResetKills()
+    public void RegisterEnemy()
+    {
+        enemiesInScene++;
+    }
+
+    public void EnemyDied()
+    {
+        currentKills++;
+
+        if (currentKills >= enemiesInScene)
+        {
+            Debug.Log("All enemies defeated!");
+            OnKillAllEnemies?.Invoke();
+        }
+    }
+
+    public void ResetTracker()
     {
         currentKills = 0;
-        onKillCountChanged?.Invoke(currentKills);
+        enemiesInScene = GameObject.FindGameObjectsWithTag("Enemy").Length;
     }
 }

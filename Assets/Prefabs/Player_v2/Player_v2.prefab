@@ -510,10 +510,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef0c7d9042177f140bb738f7a8cf721a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnTrajectory:
-    m_PersistentCalls:
-      m_Calls: []
   debug1: {fileID: 0}
+  debug2: {fileID: 0}
   enemyLayerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -1351,7 +1349,7 @@ CanvasGroup:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7931989989815203982}
   m_Enabled: 1
-  m_Alpha: 1
+  m_Alpha: 0
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
@@ -1367,7 +1365,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afbb01b67ac606e46aae3c774c40a188, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  editorAlpha: 1
+  editorAlpha: 0
 --- !u!1001 &4694021984926468487
 PrefabInstance:
   m_ObjectHideFlags: 0

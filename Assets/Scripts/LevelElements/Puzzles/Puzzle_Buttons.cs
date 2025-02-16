@@ -3,7 +3,6 @@ using UnityEngine.Events;
 
 public class Puzzle_Buttons : MonoBehaviour
 {
-    [SerializeField] private string interactText = "Button";
     [SerializeField] private bool buttonActive;
 
     [Header("Events")]
@@ -21,9 +20,9 @@ public class Puzzle_Buttons : MonoBehaviour
         _buttonPressed?.Invoke();
     }
 
-    private void OnTriggerStay(Collider other) {
-        buttonActive = true;
-    }
+    // private void OnTriggerStay(Collider other) {
+    //     buttonActive = true;
+    // }
 
     private void OnTriggerExit(Collider other) {
         indicatorMesh.material = offMat;

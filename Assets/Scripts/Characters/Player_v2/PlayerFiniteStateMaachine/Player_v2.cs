@@ -272,6 +272,7 @@ public class Player_v2 : MonoBehaviour
     public void CallPlayerDeath()
     {
         StateMachine.ChangeState(DeadState);
+        GameManager.instance.PlayerDie();
         OnPlayerDie?.Invoke(this, EventArgs.Empty);
     }
 

@@ -17,6 +17,7 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
     {
         player = GetComponent<Player_v2>();
         CurrentHealth = player.PlayerData.maxHealth;
+        CurrentSprintTime = player.PlayerData.sprintDuration;
     }
 
     public void ResetUI()
@@ -42,7 +43,7 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
         CurrentHealth = 0;
         // player.isDead = true;
         player.CallPlayerDeath();
-        GameManager.instance.PlayerDie();
+
     }
 
     public void PlayerStatistic_Update(float delta)
