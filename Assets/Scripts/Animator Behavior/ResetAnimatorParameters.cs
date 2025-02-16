@@ -2,18 +2,10 @@ using UnityEngine;
 
 public class ResetAnimatorParameters : StateMachineBehaviour
 {
-    bool isEnemy;
-    bool hasChecked;
-    
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        if(hasChecked != true)
-        {
-            hasChecked = true;
-            isEnemy = (animator.GetComponent<Robot>() != null);
-        }
-        animator.SetBool(AnimatorHashing.canRotateHash, isEnemy);
+        animator.SetBool(AnimatorHashing.canRotateHash, true);
         animator.SetBool(AnimatorHashing.rootMotionRotateHash, true);
         animator.SetBool(AnimatorHashing.isPerformingActionHash, false);
     }
