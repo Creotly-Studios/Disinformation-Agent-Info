@@ -18,7 +18,7 @@ public class Enemy_Melee : MonoBehaviour
     {
         if (enemy.Player != null)
         {
-            if (Player_v2.Instance != null && !Player_v2.Instance.IsPlayerDead())
+            if (!Player_v2.Instance.IsPlayerDead())
             {
                 CheckForAndMeleePlayer();
             }

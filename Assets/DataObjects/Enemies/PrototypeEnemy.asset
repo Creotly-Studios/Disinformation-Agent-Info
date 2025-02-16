@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: PrototypeEnemy
   m_EditorClassIdentifier: 
   maxhealth: 3
-  detectRange: 3
-  attackRange: 1
+  detectRange: 12.26
+  attackRange: 10.1
   damage: 1
   deathEffect: {fileID: 0}
   moveSpeed: 3
   projectile: {fileID: 0}
   projectileSpeed: 5
   shootRate: 3
-  damageRange: 1
-  attackRate: 2
+  attackRate: 1

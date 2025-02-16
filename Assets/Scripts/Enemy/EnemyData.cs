@@ -23,6 +23,5 @@ public class EnemyData : ScriptableObject
     public float shootRate;
 
     [Header("Melle Enemies")]
-    public float damageRange;
     public float attackRate;
 }

@@ -3,28 +3,41 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
-    [SerializeField] private Puzzle_Switches[] switches;
+    [SerializeField] private Puzzle_Switches[] mainSwitches; // Must all be ON
+    [SerializeField] private Puzzle_Switches[] blockerSwitches; // If any is ON, disable reward
     [SerializeField] private GameObject puzzleCompleteReward;
-    private bool allUnlocked = false;
 
-    void Update()
+    private void Update()
     {
         CheckPuzzleCompletion();
     }
 
     private void CheckPuzzleCompletion()
     {
-        allUnlocked = true; // Assume all switches are ON
+        bool allMainSwitchesOn = true; // Assume all main switches are ON
 
-        foreach (var switchObj in switches)
+        // Check if all main switches are ON
+        foreach (var switchObj in mainSwitches)
         {
-            if (!switchObj.Switch) // If ANY switch is OFF
+            if (!switchObj.Switch) // If any main switch is OFF
             {
-                allUnlocked = false;
-                break; // No need to check further
+                allMainSwitchesOn = false;
+                break;
             }
         }
 
-        puzzleCompleteReward.SetActive(allUnlocked);
+        // Check if any blocker switch is ON
+        bool anyBlockerOn = false;
+        foreach (var switchObj in blockerSwitches)
+        {
+            if (switchObj.Switch) // If any blocker switch is ON
+            {
+                anyBlockerOn = true;
+                break;
+            }
+        }
+
+        // Reward is active only if all main switches are ON and no blocker switch is ON
+        puzzleCompleteReward.SetActive(allMainSwitchesOn && !anyBlockerOn);
     }
 }
