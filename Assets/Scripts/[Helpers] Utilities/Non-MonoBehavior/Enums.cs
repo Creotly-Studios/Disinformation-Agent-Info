@@ -44,8 +44,7 @@ public enum PostFactType
 {
     None,
     Information,
-    Misinformation,
-    Disinformation
+    MalignedInformation
 }
 
 public enum PatrolMode

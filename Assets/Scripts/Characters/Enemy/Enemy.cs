@@ -4,29 +4,28 @@ using UnityEngine.AI;
 
 public class Enemy : MonoBehaviour, IDamagable
 {
-    public Transform Player { get; private set; }
+    public Transform Player { get; protected set; }
     public LayerMask whatIsGround, whatIsPlayer;
     public int currentHealth;
 
     [Header("Enemy Settings")]
     public EnemyData e_data;
-    [SerializeField] NavMeshAgent agent;
-    [SerializeField] Animator animator;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected Animator animator;
 
     [Header("Checks")]
     public Transform attackPoint;
 
-    void Start()
+    protected void Awake()
+    {
+        e_data = Instantiate(e_data);
+        animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    protected void Start()
     {
         Player = Player_v2.Instance.gameObject.transform;
-        if (GetComponent<NavMeshAgent>() != null)
-        {
-            agent = GetComponent<NavMeshAgent>();
-        }
-        if (GetComponent<Animator>() != null)
-        {
-            animator = GetComponent<Animator>();
-        }
         currentHealth = e_data.maxhealth;
     }
 
@@ -57,7 +56,7 @@ public class Enemy : MonoBehaviour, IDamagable
     }
 
     // DRAW GIZMOS FOR DETECT AND ATTACK RANGE
-    private void OnDrawGizmosSelected()
+    protected void OnDrawGizmosSelected()
     {
         if (e_data == null) return;
 

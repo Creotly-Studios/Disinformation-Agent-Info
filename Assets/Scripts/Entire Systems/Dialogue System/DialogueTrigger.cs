@@ -1,15 +1,17 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class DialogueTrigger : MonoBehaviour, IInteractable
 {
     private NPC character;
+    public TextAsset currentDialogueText;
     [SerializeField] private string interactText = "Talk to Agency Cheif";
 
     [Header("Parameters")]
-    [SerializeField] private TextAsset inkText;
     [SerializeField] private Sprite characterImage;
     [SerializeField] private TypeOfSpeaker speakerType;
     public DialogueCharacterInformation characterInformation;
+    [SerializeField] private List<TextAsset> dialogueTexts = new();
 
     private void Awake()
     {
@@ -30,11 +32,25 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     public void Interact(Player_v2 player)
     {
         PlayInteractNPCSound();
-        QuestManager.Instance.TriggerDialogue(characterInformation, character, inkText);
+        TriggerDialogue(character, dialogueTexts[0]);
     }
 
     public void PlayInteractNPCSound()
     {
         SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithNpc);
+    }
+
+    private void TriggerDialogue(NPC npc = null, TextAsset textAsset = null)
+    {
+        if (characterInformation.speakerType == TypeOfSpeaker.Instructor)
+        {
+            QuestManager questManager = QuestManager.Instance;
+
+            int i = questManager.availableQuests.IndexOf(questManager.activeQuest);
+            DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i]);
+            return;
+        }
+        TextAsset randomDialogue = textAsset;
+        DialogueManager.Instance.HandleDialogue(characterInformation, randomDialogue, npc);
     }
 }
