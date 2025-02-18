@@ -25,44 +25,21 @@ public class PlayerMoveState : PlayerGroundedState
         base.LogicUpdate();
 
         input = player.InputHandler.MovementInput; // Get player input
-
+        jumpInput = player.InputHandler.JumpInput;
+        
         Move();
 
-        // Transition to idle if no input
+        if (jumpInput == true)
+        {
+            player.InputHandler.UseJumpInput();
+            stateMachine.ChangeState(player.JumpState);
+        }
+
         if (input.magnitude < 0.1f && !isExitingState)
         {
             stateMachine.ChangeState(player.IdleState);
         }
     }
-
-    // private void HandleSprint()
-    // {
-    //     bool sprint = player.InputHandler.SprintInput; // Check if sprint button is held
-
-    //     if (sprint && currentSprintTime > 0f && Time.time - lastSprintTime > playerData.sprintCooldown)
-    //     {
-    //         currentMoveSpeed = playerData.sprintSpeed;
-    //         currentSprintTime -= Time.deltaTime;
-    //         player.Anim.SetFloat("moveVel", 1f); 
-    //     }
-    //     else
-    //     {
-    //         currentMoveSpeed = playerData.speed;
-    //         player.Anim.SetFloat("moveVel", 0f);
-
-    //         // Recover sprint stamina when not sprinting
-    //         if (currentSprintTime < playerData.sprintDuration)
-    //         {
-    //             currentSprintTime += Time.deltaTime * playerData.sprintRechargeRate;
-    //         }
-    //     }
-
-    //     // Store last sprint time if player runs out of stamina
-    //     if (currentSprintTime <= 0f)
-    //     {
-    //         lastSprintTime = Time.time;
-    //     }
-    // }
 
     public override void PhysicsUpdate()
     {

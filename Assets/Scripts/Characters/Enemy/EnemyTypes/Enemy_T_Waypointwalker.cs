@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Enemy))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class Enemy_T_Waypointwalker : MonoBehaviour
 {
     public float speed = 3f;

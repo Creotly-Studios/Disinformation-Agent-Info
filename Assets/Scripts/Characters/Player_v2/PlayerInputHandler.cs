@@ -24,8 +24,8 @@ public class PlayerInputHandler : MonoBehaviour
         if(InputSystemActions == null)
         {
             InputSystemActions = new InputSystem_Actions();
-            InputSystemActions.Player.Jump.started += ctx => OnJumpInput(ctx);
-            InputSystemActions.Player.Jump.canceled += ctx => OnJumpInput(ctx);
+            // InputSystemActions.Player.Jump.started += ctx => OnJumpInput(ctx);
+            // InputSystemActions.Player.Jump.canceled += ctx => OnJumpInput(ctx);
 
             InputSystemActions.Player.Look.performed += i => CameraInput = i.ReadValue<Vector2>();
             InputSystemActions.Player.Interact.started += _ => { };
@@ -45,14 +45,10 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (context.started && player.CanUseMovementInput())
+        if (context.performed && player.CanUseMovementInput())
         {
             JumpInput = true;
         }
-        // if (context.canceled)
-        // {
-        //     JumpInput = false;
-        // }
     }
 
     public void OnDashInput(InputAction.CallbackContext context)

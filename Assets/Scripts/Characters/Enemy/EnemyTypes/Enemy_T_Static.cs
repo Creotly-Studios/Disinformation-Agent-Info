@@ -8,6 +8,7 @@ public class Enemy_T_Static : MonoBehaviour
     
     Enemy enemy;
     public float rotationSpeed = 50f;
+    [SerializeField] private Transform rotateTransform;
 
     void Start()
     {
@@ -36,7 +37,12 @@ public class Enemy_T_Static : MonoBehaviour
 
     void RotateContinuously()
     {
-        transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        if (rotateTransform == null)
+        {
+            transform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        } else {
+            rotateTransform.Rotate(0, rotationSpeed * Time.deltaTime, 0);
+        }
     }
 
     void TrackPlayer()
@@ -45,7 +51,14 @@ public class Enemy_T_Static : MonoBehaviour
         {
             Vector3 direction = (enemy.Player.position - transform.position).normalized;
             Quaternion lookRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            if (rotateTransform == null)
+            {
+                transform.LookAt(enemy.Player);
+                // transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            } else {
+                rotateTransform.LookAt(enemy.Player);
+                // rotateTransform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+            }
         }
     }
 }

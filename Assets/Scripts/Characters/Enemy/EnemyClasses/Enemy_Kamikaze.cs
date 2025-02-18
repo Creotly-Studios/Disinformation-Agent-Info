@@ -7,9 +7,10 @@ public class Enemy_Kamikaze : Enemy
     void Update()
     {
         if (_hasAttacked) return; // Prevent multiple explosions
+    }
 
-        // If player exists and is in attack range, explode
-        if (Player != null && PlayerInAttackRange())
+    private void OnCollisionEnter(Collision other) {
+        if(other.gameObject.CompareTag("Player") && !_hasAttacked)
         {
             Explode();
         }
