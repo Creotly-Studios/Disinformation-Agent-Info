@@ -9,10 +9,6 @@ public class QuestSO : ScriptableObject
     private bool hasNotified;
     public QuestObjectives currentObjective { get; private set; }
 
-    [Header("Dialogue Texts")]
-    public TextAsset instructionDialogue;
-    public List<TextAsset> dialogueTexts = new();
-
     [field: Header("Quest Information")]
     public string questTitle;
     [TextArea] public string description;

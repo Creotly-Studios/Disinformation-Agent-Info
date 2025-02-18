@@ -27,8 +27,7 @@ public class MisinformationPanel : MonoBehaviour
 
     [Header("Idenifer Buttons")]
     [SerializeField] private Button info_Btn;
-    [SerializeField] private Button misInfo_Btn;
-    [SerializeField] private Button disInfo_Btn;
+    [SerializeField] private Button malInfo_Btn;
 
     [Header("Post Properties")]
     [SerializeField] private Image authorImage;
@@ -76,8 +75,7 @@ public class MisinformationPanel : MonoBehaviour
         exitButton.onClick.AddListener(() => SubmitButton());
 
         info_Btn.onClick.AddListener(() => InitalizeButton(info_Btn, PostFactType.Information));
-        misInfo_Btn.onClick.AddListener(() => InitalizeButton(misInfo_Btn, PostFactType.Misinformation));
-        disInfo_Btn.onClick.AddListener(() => InitalizeButton(disInfo_Btn, PostFactType.Disinformation));
+        malInfo_Btn.onClick.AddListener(() => InitalizeButton(malInfo_Btn, PostFactType.MalignedInformation));
 
         hasInitialized = true;
         ShowPanel();
@@ -94,8 +92,7 @@ public class MisinformationPanel : MonoBehaviour
         exitButton.onClick.RemoveListener(() => SubmitButton());
 
         info_Btn.onClick.RemoveListener(() => InitalizeButton(info_Btn, PostFactType.Information));
-        misInfo_Btn.onClick.RemoveListener(() => InitalizeButton(misInfo_Btn, PostFactType.Misinformation));
-        disInfo_Btn.onClick.RemoveListener(() => InitalizeButton(disInfo_Btn, PostFactType.Disinformation));
+        malInfo_Btn.onClick.RemoveListener(() => InitalizeButton(malInfo_Btn, PostFactType.MalignedInformation));
 
         hasInitialized = false;
     }
@@ -137,8 +134,7 @@ public class MisinformationPanel : MonoBehaviour
         }
 
         info_Btn.interactable = true;
-        misInfo_Btn.interactable = true;
-        disInfo_Btn.interactable = true;
+        malInfo_Btn.interactable = true;
 
         currentPost = GetPost();
         InitializePostContents(currentPost);

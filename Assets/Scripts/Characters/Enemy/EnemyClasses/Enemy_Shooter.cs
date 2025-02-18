@@ -1,20 +1,13 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Enemy))]
-public class Enemy_Shooter : MonoBehaviour
+public class Enemy_Shooter : Enemy
 {
-    private Enemy enemy;
     private float lastFire;
     private Vector3 _aimDir;
 
-    void Start()
-    {
-        enemy = GetComponent<Enemy>();
-    }
-
     void Update()
     {
-        if (enemy.Player != null && !Player_v2.Instance.IsPlayerDead())
+        if (Player != null && !Player_v2.Instance.IsPlayerDead())
         {
             CheckForAndShootPlayer();
         }
@@ -22,10 +15,10 @@ public class Enemy_Shooter : MonoBehaviour
 
     void CheckForAndShootPlayer()
     {
-        if (enemy.PlayerInAttackRange() && Time.time > lastFire + enemy.e_data.shootRate)
+        if (PlayerInAttackRange() && Time.time > lastFire + e_data.shootRate)
         {
             // Set aim direction toward the player
-            _aimDir = (enemy.Player.position - enemy.attackPoint.position).normalized;
+            _aimDir = (Player.position - attackPoint.position).normalized;
 
             // Ensure there's a clear line of sight before shooting
             if (CanSeePlayer())
@@ -39,7 +32,7 @@ public class Enemy_Shooter : MonoBehaviour
     void CreateProjectile(Vector3 dir)
     {
         // Spawn projectile at the attack point
-        GameObject projectile = Instantiate(enemy.e_data.projectile, enemy.attackPoint.position, Quaternion.LookRotation(dir));
+        GameObject projectile = Instantiate(e_data.projectile, attackPoint.position, Quaternion.LookRotation(dir));
 
         // EnemyProjectile projectileScript = projectile.GetComponent<EnemyProjectile>();
         // if (projectileScript != null)
@@ -51,9 +44,9 @@ public class Enemy_Shooter : MonoBehaviour
     bool CanSeePlayer()
     {
         RaycastHit hit;
-        Vector3 direction = enemy.Player.position - transform.position;
+        Vector3 direction = Player.position - transform.position;
         
-        if (Physics.Raycast(transform.position, direction, out hit, enemy.e_data.attackRange))
+        if (Physics.Raycast(transform.position, direction, out hit, e_data.attackRange))
         {
             return hit.collider.CompareTag("Player"); // Ensure nothing blocks the shot
         }

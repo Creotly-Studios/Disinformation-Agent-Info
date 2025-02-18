@@ -1,21 +1,13 @@
-using System;
 using UnityEngine;
 
-[RequireComponent(typeof(Enemy))]
-public class Enemy_Melee : MonoBehaviour
+public class Enemy_Melee : Enemy
 {
-    private Enemy enemy;
     private float lastAttack;
-
-    void Start()
-    {
-        enemy = GetComponent<Enemy>();
-    }
 
     void Update()
     {
-        if (enemy.currentHealth <= 0) return; // Stop attacking if dead
-        if (enemy.Player != null && !Player_v2.Instance.IsPlayerDead())
+        if (currentHealth <= 0) return; // Stop attacking if dead
+        if (Player != null && !Player_v2.Instance.IsPlayerDead())
         {
             CheckForAndMeleePlayer();
         }
@@ -23,10 +15,10 @@ public class Enemy_Melee : MonoBehaviour
 
     private void CheckForAndMeleePlayer()
     {
-        if (Time.time > lastAttack + enemy.e_data.attackRate && enemy.PlayerInAttackRange())
+        if (Time.time > lastAttack + e_data.attackRate && PlayerInAttackRange())
         {
-            IDamagable damagable = enemy.Player.GetComponent<IDamagable>();
-            damagable?.TakeDamage(enemy.e_data.damage);
+            IDamagable damagable = Player.GetComponent<IDamagable>();
+            damagable?.TakeDamage(e_data.damage);
             lastAttack = Time.time; // Update attack timer
         }
     }
