@@ -6,10 +6,6 @@ public class QuestManager : MonoBehaviour
     private bool hasNotified;
     public static QuestManager Instance;
 
-    //Parameters
-    private List<TextAsset> dialogueTexts = new();
-    public TextAsset instructionDialogue;
-
     [field: Header("Parameters")]
     public bool allQuestCompleted { get; private set; }
     [field: SerializeField] public QuestSO activeQuest;
@@ -36,23 +32,6 @@ public class QuestManager : MonoBehaviour
     public void SetMiniGame(ComputerPanel_UI computerPanel)
     {
         
-    }
-
-    public void TriggerDialogue(DialogueCharacterInformation speaker, NPC npc = null, TextAsset textAsset = null)
-    {
-        if(speaker.speakerType == TypeOfSpeaker.Instructor)
-        {
-            DialogueManager.Instance.HandleDialogue(speaker, instructionDialogue);
-            return;
-        }
-        TextAsset randomDialogue = textAsset;
-        DialogueManager.Instance.HandleDialogue(speaker, randomDialogue, npc);
-    }
-
-    private TextAsset PickRandomDialogue()
-    {
-        int random = Random.Range(0, dialogueTexts.Count);
-        return dialogueTexts[random];
     }
 
     public void Quest_Update()
@@ -90,21 +69,9 @@ public class QuestManager : MonoBehaviour
             }
 
             hasNotified = false;
-            dialogueTexts.Clear();
             activeQuest = questSO;
-            dialogueTexts.AddRange(activeQuest.dialogueTexts);
-            instructionDialogue = activeQuest.instructionDialogue;
             return;
         }
         activeQuest.QuestSO_Update();
-    }
-
-    public TextAsset RandomDialogueText()
-    {
-        int random = Random.Range(0, dialogueTexts.Count);
-        TextAsset textAsset = dialogueTexts[random];
-
-        dialogueTexts.Remove(textAsset);
-        return textAsset;
     }
 }
