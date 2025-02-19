@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
+[RequireComponent(typeof(Animator))]
 public class Enemy : MonoBehaviour, IDamagable
 {
     public Transform Player { get; protected set; }
@@ -12,6 +14,8 @@ public class Enemy : MonoBehaviour, IDamagable
     public EnemyData e_data;
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
+
+    bool isDead;
 
     [Header("Checks")]
     public Transform attackPoint;
@@ -27,6 +31,7 @@ public class Enemy : MonoBehaviour, IDamagable
     {
         Player = Player_v2.Instance.gameObject.transform;
         currentHealth = e_data.maxhealth;
+        isDead = false;
     }
 
 
@@ -42,7 +47,14 @@ public class Enemy : MonoBehaviour, IDamagable
     private void HandleDeath()
     {
         KillTracker.Instance?.EnemyDied();
-        Destroy(gameObject);
+        PlayDeadAnim();
+        isDead = true;
+        Destroy(gameObject, e_data.destroyTime);
+    }
+
+    public bool IsDead()
+    {
+        return isDead;
     }
 
     public bool PlayerInSightRange()
@@ -67,5 +79,32 @@ public class Enemy : MonoBehaviour, IDamagable
         // Draw attack range in red
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, e_data.attackRange);
+    }
+
+    //handling animations
+    public void PlayIdleAnim()
+    {
+        if (animator)
+        {
+            animator.SetBool("idle", true);
+            animator.SetBool("isWalking", false);
+
+        }
+    }
+
+
+    public void PlayAttackAnim()
+    {
+        if (animator)
+        {
+            animator.SetBool("isWalking", false);
+            animator.SetTrigger("attack");
+
+        }
+    }
+
+    public void PlayDeadAnim()
+    {
+        animator.SetBool("dead", true);
     }
 }

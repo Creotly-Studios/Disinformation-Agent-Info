@@ -3,7 +3,7 @@ using UnityEngine;
 public class PlayerGroundedState : PlayerState
 {
     protected Vector2 input;
-    private bool jumpInput;
+    protected bool jumpInput;
     private bool dashInput;
     private bool interactInput;
     private bool attackInput;
@@ -32,22 +32,12 @@ public class PlayerGroundedState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        // if (player.CanUseMovementInput())
-        // {
-            input = player.InputHandler.MovementInput;
-            jumpInput = player.InputHandler.JumpInput;
-            dashInput = player.InputHandler.DashInput;
-            attackInput = player.InputHandler.attackPressed;
-            interactInput = player.InputHandler.InteractInput;
-        // }
-        // else
-        // {
-        //     input = Vector2.zero;
-        //     jumpInput = false;
-        //     dashInput = false;
-        //     attackInput = false;
-        //     interactInput = false;
-        // }
+
+        input = player.InputHandler.MovementInput;
+        jumpInput = player.InputHandler.JumpInput;
+        dashInput = player.InputHandler.DashInput;
+        attackInput = player.InputHandler.attackPressed;
+        interactInput = player.InputHandler.InteractInput;
 
         if (jumpInput == true)
         {

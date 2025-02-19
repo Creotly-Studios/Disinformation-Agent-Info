@@ -2263,8 +2263,8 @@ RectTransform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 837330852}
-  - {fileID: 636735601}
   - {fileID: 1314899099}
+  - {fileID: 636735601}
   - {fileID: 953038893}
   m_Father: {fileID: 437100279}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2494,9 +2494,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Learn More
-
-    (Disinformation)'
+  m_text: Learn More...
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 63dcc151f107ace47a42e7925af9e530, type: 2}
   m_sharedMaterial: {fileID: 3436058742068071823, guid: 63dcc151f107ace47a42e7925af9e530, type: 2}
@@ -2523,7 +2521,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 76.2
+  m_fontSize: 120
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1

@@ -12,11 +12,9 @@ public class KillZone_Trigger : MonoBehaviour
     public float slowKillRate = 1.0f; // How often health decreases (in seconds)
     public int slowKillDamage = 1; // How much health is removed per tick
 
-    private bool isPlayerInZone = false;
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !Player_v2.Instance.IsPlayerDead())
         {
             if (killType == KillZoneType.InstaKill)
             {
@@ -24,26 +22,22 @@ public class KillZone_Trigger : MonoBehaviour
             }
             else if (killType == KillZoneType.SlowKill)
             {
-                isPlayerInZone = true;
                 StartCoroutine(SlowKill());
             }
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            isPlayerInZone = false;
-        }
-    }
-
     private IEnumerator SlowKill()
     {
-        while (isPlayerInZone)
+        if (!Player_v2.Instance.IsPlayerDead())
         {
             Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
-            yield return new WaitForSeconds(slowKillRate); // Wait before dealing damage again
+            yield return new WaitForSeconds(slowKillRate);
+            Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
+            yield return new WaitForSeconds(slowKillRate);
+            Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
+            yield return new WaitForSeconds(slowKillRate);
         }
+
     }
 }

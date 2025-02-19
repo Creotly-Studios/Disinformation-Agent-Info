@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(Enemy))]
-[RequireComponent(typeof(NavMeshAgent))]
 public class Enemy_T_Chaser : MonoBehaviour
 {
     public enum ChaserType { Direct, Roaming }
@@ -17,6 +16,7 @@ public class Enemy_T_Chaser : MonoBehaviour
     {
         enemy = GetComponent<Enemy>();
         agent = GetComponent<NavMeshAgent>();
+        agent.stoppingDistance = enemy.e_data.stopDistance;
 
         if (chaserType == ChaserType.Roaming)
         {
@@ -26,11 +26,11 @@ public class Enemy_T_Chaser : MonoBehaviour
 
     void Update()
     {
-        if (enemy.Player == null || enemy.currentHealth <= 0) return;
-        if(Player_v2.Instance!=null && Player_v2.Instance.IsPlayerDead()) {
-            RoamingChase();
-            return;
-        }
+        if (enemy.Player == null || enemy.currentHealth <= 0 || enemy.IsDead()) return;
+        // if(Player_v2.Instance!=null && Player_v2.Instance.IsPlayerDead()) {
+        //     RoamingChase();
+        //     return;
+        // }
 
         switch (chaserType)
         {
