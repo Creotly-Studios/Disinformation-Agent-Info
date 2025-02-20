@@ -91,7 +91,7 @@ public class ComputerPanel_UI : MonoBehaviour
          
         QuestSO activeQuest = QuestManager.Instance.activeQuest;
 
-        if(activeQuest == null)
+        if (activeQuest == null || activeQuest.currentObjective == null)
         {
             return;
         }

@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
     
 
     public bool jumpPressed = false;
+    public bool skipPressed;
     public bool attackPressed = false;
     public bool sprintPressed;
 
@@ -23,25 +24,28 @@ public class InputManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
         instance = this;
-        InputSystemActions = new InputSystem_Actions();
     }
 
-    void Start()
+    void OnEnable()
     {
-        InputSystemActions.Player.Move.started += ctx => OnMove(ctx);
-        InputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
-        InputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
-        
-        InputSystemActions.Player.Jump.started += ctx => OnJump(ctx);
-        InputSystemActions.Player.Jump.canceled += ctx => OnJump(ctx);
-        
-        InputSystemActions.Player.Sprint.started += ctx => OnSprint(ctx);
-        InputSystemActions.Player.Sprint.canceled += ctx => OnSprint(ctx);
-        
-        InputSystemActions.Player.Attack.started += ctx => OnAttack(ctx);
-        InputSystemActions.Player.Attack.canceled += ctx => OnAttack(ctx);
+        if(InputSystemActions == null)
+        {
+            InputSystemActions = new InputSystem_Actions();
+            InputSystemActions.Player.Move.started += ctx => OnMove(ctx);
+            InputSystemActions.Player.Move.performed += ctx => OnMove(ctx);
+            InputSystemActions.Player.Move.canceled += ctx => OnMove(ctx);
+
+            InputSystemActions.Player.Jump.started += ctx => OnJump(ctx);
+            InputSystemActions.Player.Jump.canceled += ctx => OnJump(ctx);
+
+            InputSystemActions.Player.Sprint.started += ctx => OnSprint(ctx);
+            InputSystemActions.Player.Sprint.canceled += ctx => OnSprint(ctx);
+
+            InputSystemActions.Player.Attack.started += ctx => OnAttack(ctx);
+            InputSystemActions.Player.Attack.canceled += ctx => OnAttack(ctx);
+        }
+        InputSystemActions.Enable();
     }
 
     private void OnAttack(InputAction.CallbackContext ctx)
@@ -60,17 +64,16 @@ public class InputManager : MonoBehaviour
         {
             jumpPressed = true;
         }
+        else if(ctx.canceled)
+        {
+            jumpPressed = false;
+        }
     }
 
     private void OnMove(InputAction.CallbackContext ctx)
     {
         currentMovementInput = ctx.ReadValue<Vector2>();
         isMovementPressed = currentMovementInput.x != 0 || currentMovementInput.y != 0;
-    }
-
-    private void OnEnable()
-    {
-        InputSystemActions.Enable();
     }
 
     private void OnDisable()

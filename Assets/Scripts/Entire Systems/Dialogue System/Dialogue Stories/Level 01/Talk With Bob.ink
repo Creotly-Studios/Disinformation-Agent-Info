@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: Player
 You alright? You look like something’s eating at you.
 
@@ -12,7 +14,9 @@ Alright, fine. The Mayor hired me to post some things online. You know, get peop
 
 #speaker: Player
 What exactly did he ask you to post?
+-> BobConfession
 
+=== BobConfession ===
 #speaker: Bob
 “Facts” about his opponent. Except I did some digging. Some of it’s… twisted. And some of it? Just flat-out lies.
 
@@ -34,13 +38,19 @@ Smart call. A few clicks might seem small, but lies can do real harm.
 #speaker: Bob
 Guess I should return the money. Or… maybe donate it somewhere that actually helps people?
 
-Choose Response:
-➡ [History has shown us that these promises often come with strings attached. Why would this time be any different?] → logical_tone
-➡ [I hope so, but can we afford to take that risk when so many people are struggling?] → emotional_tone
-➡ [That’s exactly what they want you to think—to make you drop your guard.] → argumentative_tone
-➡ [It’s worth hoping, but let’s make sure we’re not being misled.] → reserved_tone
+* [History has shown us that these promises often come with strings attached. Why would this time be any different?] 
+    -> LogicalTone
 
-Logical Tone
+* [I hope so, but can we afford to take that risk when so many people are struggling?] 
+    -> EmotionalTone
+
+* [That’s exactly what they want you to think—to make you drop your guard.] 
+    -> ArgumentativeTone
+
+* [It’s worth hoping, but let’s make sure we’re not being misled.] 
+    -> ReservedTone
+
+=== LogicalTone ===
 #speaker: Player
 History has shown us that these promises often come with strings attached. Why would this time be any different?
 
@@ -53,9 +63,9 @@ It’s always worth questioning the motive behind these things.
 #speaker: Bob
 Good point. I’ll keep that in mind. Thanks.
 
-END
+-> END
 
-Emotional Tone
+=== EmotionalTone ===
 #speaker: Player
 I hope so, but can we afford to take that risk when so many people are struggling?
 
@@ -68,9 +78,9 @@ Exactly. It’s not just about words—it’s about real people being affected.
 #speaker: Bob
 Yeah… I need to do better. Thanks for the reality check.
 
-END
+-> END
 
-Argumentative Tone
+=== ArgumentativeTone ===
 #speaker: Player
 That’s exactly what they want you to think—to make you drop your guard.
 
@@ -89,9 +99,9 @@ That’s the only way to stay ahead of it.
 #speaker: Bob
 Alright. Lesson learned.
 
-END
+-> END
 
-Reserved Tone
+=== ReservedTone ===
 #speaker: Player
 It’s worth hoping, but let’s make sure we’re not being misled.
 
@@ -104,5 +114,4 @@ Not really. Hope is good, but facts matter more.
 #speaker: Bob
 I’ll keep that in mind. Thanks.
 
-END
-
+-> END
