@@ -26,14 +26,14 @@ MonoBehaviour:
   dashForce: 2
   detectRadius: 1
   detectRange: 1
-  pushForce: 0.5
+  pushForce: 1
   attackRange: 0.35
   attackSphereSize: 1.75
   attackDamage: 1
   attackArray:
-  - {fileID: 11400000, guid: 033a4436254055d45bdb95e7d0dcbb5a, type: 2}
-  - {fileID: 11400000, guid: 010ffaef771ec5641825cc600bb7f6ec, type: 2}
-  - {fileID: 11400000, guid: 2d81a853e1aca7c4398d2688d683fc8e, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   timeBetweenCombos: 0.375
   timeBetweenAttackUsage: 0.375
   timeBetweenAttacks: 0
