@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8255633380105063128}
   - component: {fileID: 141285904462218573}
   - component: {fileID: 7955413670504548939}
-  - component: {fileID: 4717545654674584648}
+  - component: {fileID: 6632124854054841032}
   m_Layer: 0
   m_Name: building_A
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915529821003586838}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 81.17, y: 60.1, z: 84.7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -87,7 +87,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4717545654674584648
+--- !u!64 &6632124854054841032
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
