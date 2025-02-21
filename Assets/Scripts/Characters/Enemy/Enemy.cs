@@ -37,8 +37,10 @@ public class Enemy : MonoBehaviour, IDamagable
 
     public void TakeDamage(int healthDamage)
     {
+        if(isDead) return;
+        
         currentHealth -= healthDamage;
-        if(currentHealth <= 0)
+        if (currentHealth <= 0)
         {
             HandleDeath();
         }
@@ -46,10 +48,13 @@ public class Enemy : MonoBehaviour, IDamagable
 
     private void HandleDeath()
     {
-        KillTracker.Instance?.EnemyDied();
-        PlayDeadAnim();
-        isDead = true;
-        Destroy(gameObject, e_data.destroyTime);
+        if (!isDead)
+        {
+            PlayDeadAnim();
+            isDead = true;
+            KillTracker.Instance?.EnemyDied();
+            Destroy(gameObject, e_data.destroyTime);
+        }
     }
 
     public bool IsDead()

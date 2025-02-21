@@ -219,20 +219,6 @@ public class Player_v2 : MonoBehaviour
         Move(transform.forward * PlayerData.dashForce);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Rigidbody rb = hit.collider.attachedRigidbody;
-
-        if (rb != null)
-        {
-            Vector3 forceDir = hit.gameObject.transform.position - transform.position;
-            forceDir.y = 0;
-            forceDir.Normalize();
-
-            rb.AddForceAtPosition(forceDir * PlayerData.pushForce, transform.position, ForceMode.Impulse);
-        }
-    }
-
     private void OnDrawGizmos()
     {
         if (checkTransform != null)
@@ -284,6 +270,7 @@ public class Player_v2 : MonoBehaviour
 
     public void CallPlayerCoinPickup()
     {
+        GameManager.instance.PlayerCoinAdd();
         OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }
 

@@ -15,7 +15,7 @@ public class GameManager : MonoBehaviour
     DialogueManager dialogueManager;
 
     [Header("-- Variables")]
-    public int PlayerCoinAmout {get; private set;}
+    public int PlayerCoinAmount {get; private set;}
     public int PlayerRank {get; private set;} //1 min - 5 max... 
 
     private void Awake()
@@ -113,6 +113,16 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
             OnGamePause?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    //stuff and data
+    public void PlayerCoinAdd()
+    {
+        PlayerCoinAmount++;
+    }
+    public int PlayerCoins()
+    {
+        return PlayerCoinAmount;
     }
 }
 
