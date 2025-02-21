@@ -1,3 +1,5 @@
+VAR npcEmotion = "Surprised"
+
 #speaker: Samantha
 [laughs] No way! Did you see this? The Mayor just exposed some crazy stuff!
 
@@ -51,13 +53,19 @@ It happens. The best thing you can do? Delete it and correct it. Let people know
 #speaker: Samantha
 Yeah… I should. No way I wanna be part of spreading lies. Thanks for calling me out.
 
-Choose Response:
-➡ [Jumping to conclusions just fuels the problem. We have to be careful with what we share.] → Logical Tone
-➡ [See? This is exactly how people get manipulated. They count on you not checking.] → Argumentative Tone
-➡ [I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.] → Emotional Tone
-➡ [Mistakes happen. What matters is what you do next.] → Reserved Tone
+* [Jumping to conclusions just fuels the problem. We have to be careful with what we share.]  
+    -> LogicalTone
 
-Logical Tone
+* [See? This is exactly how people get manipulated. They count on you not checking.]  
+    -> ArgumentativeTone
+
+* [I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.]  
+    -> EmotionalTone
+
+* [Mistakes happen. What matters is what you do next.]  
+    -> ReservedTone
+
+=== LogicalTone ===
 #speaker: Player
 Jumping to conclusions just fuels the problem. We have to be careful with what we share.
 
@@ -70,9 +78,9 @@ It’s not just about you. The more people believe false stories, the harder it 
 #speaker: Samantha
 Good point. I’ll be more careful next time.
 
-END
+-> END  
 
-Argumentative Tone
+=== ArgumentativeTone ===
 #speaker: Player
 See? This is exactly how people get manipulated. They count on you not checking.
 
@@ -85,9 +93,9 @@ It’s not just about you. Everyone who shared it is now part of the problem.
 #speaker: Samantha
 [sighs] Yeah… guess I better fix this.
 
-END
+-> END  
 
-Emotional Tone
+=== EmotionalTone ===
 #speaker: Player
 I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.
 
@@ -100,9 +108,9 @@ You’re not dumb. This happens to a lot of smart people. The trick is learning 
 #speaker: Samantha
 Yeah… I won’t make the same mistake again.
 
-END
+-> END  
 
-Reserved Tone
+=== ReservedTone ===
 #speaker: Player
 Mistakes happen. What matters is what you do next.
 
@@ -115,5 +123,4 @@ That’s the right call. Owning up to it helps fix the damage.
 #speaker: Samantha
 Alright. Lesson learned.
 
-END
-
+-> END  

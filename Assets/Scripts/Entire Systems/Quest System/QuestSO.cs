@@ -22,12 +22,6 @@ public class QuestSO : ScriptableObject
 
     private void AssignObjective()
     {
-        if (hasNotified != true)
-        {
-            hasNotified = true;
-            QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, this);
-        }
-
         if (currentObjective == null || currentObjective.isDone == true)
         {
             QuestObjectives objective = questObjectives.Find(x => x.isDone != true);
@@ -40,6 +34,15 @@ public class QuestSO : ScriptableObject
             }
             isComplete = true;
             return;
+        }
+
+        if (currentObjective.isDone == true)
+        {
+            if (hasNotified != true)
+            {
+                hasNotified = true;
+                QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, this);
+            }
         }
     }
 

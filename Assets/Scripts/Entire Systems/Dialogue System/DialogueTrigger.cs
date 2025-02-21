@@ -47,6 +47,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             QuestManager questManager = QuestManager.Instance;
 
             int i = questManager.availableQuests.IndexOf(questManager.activeQuest);
+            print(i + " character trigger is " + this);
             DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i]);
             return;
         }

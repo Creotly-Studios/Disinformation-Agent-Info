@@ -50,15 +50,6 @@ public class QuestManager : MonoBehaviour
 
     public void AssignQuests()
     {
-        if(activeQuest.isComplete)
-        {
-            if (hasNotified != true)
-            {
-                hasNotified = true;
-                popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
-            }
-        }
-
         if(activeQuest == null || activeQuest.isComplete == true)
         {
             QuestSO questSO = availableQuests.Find(x => x.isComplete != true);
@@ -72,6 +63,16 @@ public class QuestManager : MonoBehaviour
             activeQuest = questSO;
             return;
         }
+
         activeQuest.QuestSO_Update();
+        if (activeQuest.isComplete)
+        {
+            print(activeQuest + " complete status is " + activeQuest.isComplete);
+            if (hasNotified != true)
+            {
+                hasNotified = true;
+                popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
+            }
+        }
     }
 }

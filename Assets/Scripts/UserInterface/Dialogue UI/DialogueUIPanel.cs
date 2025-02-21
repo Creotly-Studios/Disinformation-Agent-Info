@@ -13,6 +13,7 @@ public class DialogueUIPanel : MonoBehaviour
 
     [Header("Panel")]
     public Transform dialoguePanel;
+    [SerializeField] private Button skipButton;
 
     [Header("Player Speaker Panel")]
     public Image playerImage;
@@ -32,10 +33,28 @@ public class DialogueUIPanel : MonoBehaviour
 
     private Coroutine typingCoroutine;
     private WaitForSeconds typingSpeed;
+    private static DialogueUIPanel Instance;
 
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Debug.LogWarning("A duplicate DialogueManager was found and destroyed.");
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         typingSpeed = new WaitForSeconds(0.05f);
+        if(skipButton != null) skipButton.onClick.AddListener(HandleSkip);
+    }
+
+    public void HandleSkip()
+    {
+        if (isTyping == false)
+        {
+            return;
+        }
+        skipFlag = true;
     }
 
     public void StopDisplayCoroutine()
@@ -78,15 +97,6 @@ public class DialogueUIPanel : MonoBehaviour
             }
         }
         typingCoroutine = StartCoroutine(StartTypingText(dialogueText));
-    }
-
-    private void HandleSkip()
-    {
-        if(isTyping == false)
-        {
-            return;
-        }
-        skipFlag = true;
     }
 
     public void DisableUIChoices()
@@ -153,6 +163,11 @@ public class DialogueUIPanel : MonoBehaviour
             speakerTextDialogue.text = "";
             foreach (char c in text)
             {
+                if (skipFlag == true)
+                {
+                    playerTextDialogue.text = text;
+                    break;
+                }
                 speakerTextDialogue.text += c;
                 yield return typingSpeed;
             }
