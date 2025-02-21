@@ -15,10 +15,12 @@ public class PlayerInactiveState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        player.dialogue_InactiveCamera.SetActive(true);
     }
 
     public override void Exit()
     {
+        player.dialogue_InactiveCamera.SetActive(false);
         base.Exit();
     }
 

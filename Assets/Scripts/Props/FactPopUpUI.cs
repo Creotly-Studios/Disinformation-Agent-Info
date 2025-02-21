@@ -34,6 +34,7 @@ public class FactPopUpUI : MonoBehaviour
 
     [Space]
     [SerializeField] private UnityEvent onClosePopup;
+    [SerializeField] private UnityEvent onShowPopup;
 
     private void Start()
     {
@@ -43,6 +44,7 @@ public class FactPopUpUI : MonoBehaviour
     public void ShowRandomFact()
     {
         randomFact = facts[Random.Range(0, facts.Length)];
+        onShowPopup?.Invoke();
         StartCoroutine(DisplayFact());
     }
 

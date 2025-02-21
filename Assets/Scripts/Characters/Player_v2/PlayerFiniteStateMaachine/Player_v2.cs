@@ -58,6 +58,7 @@ public class Player_v2 : MonoBehaviour
 
     #region Checks
     public Transform checkTransform;
+    public GameObject dialogue_InactiveCamera;
     #endregion
 
     [Header("Status")]
@@ -107,6 +108,8 @@ public class Player_v2 : MonoBehaviour
 
         PlayerStatistics.ResetUI();
         if (DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
+
+        dialogue_InactiveCamera.SetActive(false);
     }
 
     void Update()
@@ -262,8 +265,6 @@ public class Player_v2 : MonoBehaviour
     public void SetInactiveState() => StateMachine.ChangeState(InactiveState);
 
     public void SetActiveState() => StateMachine.ChangeState(IdleState);
-
-
 
     #endregion
 
