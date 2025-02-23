@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnGamePause;
 
     private bool isGamePaused = false;
+    [SerializeField] private bool canPause;
 
     DialogueManager dialogueManager;
 
@@ -63,9 +64,12 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
-        if (!IsGameOver())
+        if(canPause)
         {
-            Pause();
+            if (!IsGameOver())
+            {
+                Pause();
+            }
         }
     }
 
