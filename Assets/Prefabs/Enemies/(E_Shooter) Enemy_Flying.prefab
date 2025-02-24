@@ -153,10 +153,10 @@ SkinnedMeshRenderer:
   - {fileID: -3846018093981099296, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
   - {fileID: -6478536213147159724, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
   - {fileID: -6922793697723135513, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
-  - {fileID: 4874126678125670354, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
+  - {fileID: 2100000, guid: e9f95081aa55f414eaf87367b2d0fd33, type: 2}
   - {fileID: -876546973899608171, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
   - {fileID: -5243988174349660497, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
-  - {fileID: -1242230322862417841, guid: a25839bd433c55c4e8f5b6f43f3b0a04, type: 3}
+  - {fileID: 2100000, guid: e9f95081aa55f414eaf87367b2d0fd33, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -579,6 +579,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
+  customStoppingDistance: 2
+  minRoamDistance: 5
+  maxRoamDistance: 15
+  roamUpdateInterval: 3
 --- !u!136 &6304321378274080853
 CapsuleCollider:
   m_ObjectHideFlags: 0

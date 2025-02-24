@@ -62,7 +62,6 @@ public class Player_v2 : MonoBehaviour
     #endregion
 
     [Header("Status")]
-    public bool isDead;
     public bool sprintFlag;
     public bool isAttacking;
     public bool performingAction;
@@ -114,7 +113,7 @@ public class Player_v2 : MonoBehaviour
 
     void Update()
     {
-        if (isDead)
+        if (IsPlayerDead())
         {
             return;
         }
@@ -128,7 +127,7 @@ public class Player_v2 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDead)
+        if (IsPlayerDead())
         {
             return;
         }

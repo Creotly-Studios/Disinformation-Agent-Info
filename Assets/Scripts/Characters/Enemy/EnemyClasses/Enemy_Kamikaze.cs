@@ -4,12 +4,8 @@ public class Enemy_Kamikaze : Enemy
 {
     private bool _hasAttacked = false;
 
-    void Update()
+    private void OnCollisionEnter(Collision other)
     {
-        if (_hasAttacked) return; // Prevent multiple explosions
-    }
-
-    private void OnCollisionEnter(Collision other) {
         if(other.gameObject.CompareTag("Player") && !_hasAttacked)
         {
             Explode();
@@ -32,5 +28,10 @@ public class Enemy_Kamikaze : Enemy
 
         // Destroy the enemy (simulate explosion)
         TakeDamage(1000);
+    }
+
+    protected override void PerformAttack()
+    {
+        Explode();
     }
 }

@@ -251,7 +251,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.001
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.645, z: 0}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &3885954029485563114
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,7 +271,6 @@ MonoBehaviour:
   <sprintUIBar>k__BackingField: {fileID: 7407948081933229113}
   checkTransform: {fileID: 263262267080469177}
   dialogue_InactiveCamera: {fileID: 3762095184854989932}
-  isDead: 0
   sprintFlag: 0
   isAttacking: 0
   performingAction: 0
@@ -1480,7 +1479,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c116228b124b024428492345d7efd7f7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.125
+      value: -0.75
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: c116228b124b024428492345d7efd7f7, type: 3}
       propertyPath: m_LocalPosition.z

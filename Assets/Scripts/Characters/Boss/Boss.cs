@@ -1,17 +1,20 @@
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections.Generic;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
-public class Boss : MonoBehaviour
+public class Boss : MonoBehaviour, IDamagable
 {
     public Transform Player { get; protected set; }
     public LayerMask whatIsGround, whatIsPlayer;
-    public int maxhealth;
+    [SerializeField] public int maxhealth = 10;
+
     [SerializeField] private float detectRange;
     [SerializeField] private float attackRange;
 
-    [Header("Enemy Settings")]
+    [Header("Boss Settings")]
+    [SerializeField] public BossStage Stage;
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
 
@@ -19,10 +22,21 @@ public class Boss : MonoBehaviour
     bool isDead;
 
     [Header("Checks")]
-    public Transform attackPoint;
+    [SerializeField] Transform melleAttackPoint;
+    [SerializeField] Transform shootPoint;
+    [SerializeField] int stage_Two_Treshold = 6;
 
-    //boss fight
-    public BossState state;
+    [Header("---For Stage1_2---")]
+    [SerializeField] GameObject[] enemiesToSpawn;
+    [SerializeField] int totalEnemiesToSpawnCount = 10;
+    [SerializeField] float spawnEnemyRate;
+    [SerializeField] float melleRate;
+
+    [Space]
+    [SerializeField] private GameObject bossNPC;
+
+    private float nextSpawnTime;
+    private List<GameObject> spawnedEnemies = new List<GameObject>();
 
     protected void Awake()
     {
@@ -32,7 +46,7 @@ public class Boss : MonoBehaviour
 
     protected void Start()
     {
-        SetBossState(BossState.State_one);
+        SetBossStage(BossStage.Stage_one);
         Player = Player_v2.Instance.gameObject.transform;
         currentHealth = maxhealth;
         isDead = false;
@@ -40,14 +54,13 @@ public class Boss : MonoBehaviour
 
     void Update()
     {
-        HandleStateMachine();
+        UpdateStageState();
     }
-
 
     public void TakeDamage(int healthDamage)
     {
-        if(isDead) return;
-        
+        if (isDead) return;
+
         currentHealth -= healthDamage;
         if (currentHealth <= 0)
         {
@@ -81,26 +94,21 @@ public class Boss : MonoBehaviour
 
     protected void OnDrawGizmosSelected()
     {
-        // Draw detection range in yellow
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectRange);
 
-        // Draw attack range in red
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    //handling animations
     public void PlayIdleAnim()
     {
         if (animator)
         {
             animator.SetBool("idle", true);
             animator.SetBool("isWalking", false);
-
         }
     }
-
 
     public void PlayAttackAnim()
     {
@@ -108,7 +116,6 @@ public class Boss : MonoBehaviour
         {
             animator.SetBool("isWalking", false);
             animator.SetTrigger("attack");
-
         }
     }
 
@@ -117,28 +124,123 @@ public class Boss : MonoBehaviour
         animator.SetBool("dead", true);
     }
 
-    void HandleStateMachine()
+    void UpdateStageState()
     {
-        switch (state)
+        if (currentHealth <= stage_Two_Treshold && Stage == BossStage.Stage_one)
         {
-            case BossState.State_one:
-            //roaming and shooting smaller enemies at the player
-            break;
+            SetBossStage(BossStage.Stage_two);
+        }
+        else if (currentHealth <= 0 && Stage != BossStage.Dead)
+        {
+            SetBossStage(BossStage.Dead);
+        }
 
-            case BossState.State_two:
-            //actually attacking the player and shooting projectiles a them
-            break;
+        switch (Stage)
+        {
+            case BossStage.Stage_one:
+                HandleStageOne();
+                break;
 
-            case BossState.Dead:
-            //check if all smaller enemies are dead, if true, game manager mission complete
-            break;
+            case BossStage.Stage_two:
+                HandleStageTwo();
+                break;
+
+            case BossStage.Dead:
+                HandleDeathStage();
+                break;
         }
     }
 
-    void SetBossState(BossState _)
+    void HandleStageOne()
     {
-        state = _;
+        if (PlayerInSightRange())
+        {
+            agent.SetDestination(Player.position);
+            animator.SetBool("isWalking", true);
+
+            if (Time.time >= nextSpawnTime)
+            {
+                SpawnEnemies();
+                nextSpawnTime = Time.time + spawnEnemyRate;
+            }
+        }
+        else
+        {
+            PlayIdleAnim();
+        }
     }
 
+    void HandleStageTwo()
+    {
+        if (PlayerInAttackRange())
+        {
+            PerformMeleeAttack();
+        }
+        else if (PlayerInSightRange())
+        {
+            agent.isStopped = false;
+            agent.SetDestination(Player.position);
+            animator.SetBool("isWalking", true);
+        }
+        else
+        {
+            PlayIdleAnim();
+        }
+    }
+
+    void HandleDeathStage()
+    {
+        if (AreAllEnemiesDead())
+        {
+            Instantiate(bossNPC, transform.position, transform.rotation);
+            Destroy(gameObject);
+        }
+    }
+
+    void SpawnEnemies()
+    {
+        if (totalEnemiesToSpawnCount > 0)
+        {
+            int randomIndex = Random.Range(0, enemiesToSpawn.Length);
+            GameObject enemy = Instantiate(enemiesToSpawn[randomIndex], shootPoint.position, shootPoint.rotation);
+            spawnedEnemies.Add(enemy);
+            totalEnemiesToSpawnCount--;
+        }
+    }
+
+    bool AreAllEnemiesDead()
+    {
+        foreach (var enemy in spawnedEnemies)
+        {
+            if (enemy != null && !enemy.GetComponent<Enemy>().IsDead())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    void PerformMeleeAttack()
+    {
+        Collider[] hitPlayers = Physics.OverlapSphere(melleAttackPoint.position, attackRange, whatIsPlayer);
+        foreach (var player in hitPlayers)
+        {
+            if (player.CompareTag("Player"))
+            {
+                player.GetComponent<IDamagable>().TakeDamage(1);
+            }
+        }
+    }
+
+    public void OnAttackAnimationEvent()
+    {
+        PerformMeleeAttack();
+    }
+
+    void SetBossStage(BossStage _)
+    {
+        Stage = _;
+    }
 }
-public enum BossState {State_one, State_two, Dead}
+
+public enum BossStage { Stage_one, Stage_two, Dead }
