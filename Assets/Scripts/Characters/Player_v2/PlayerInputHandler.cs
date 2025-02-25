@@ -4,15 +4,15 @@ using UnityEngine.InputSystem;
 
 public class PlayerInputHandler : MonoBehaviour
 {
-    public bool attackPressed {get; private set;}
+    public bool attackPressed { get; private set; }
 
     public InputSystem_Actions InputSystemActions { get; set; }
     Player_v2 player;
 
-    public Vector2 MovementInput {get; private set;}
+    public Vector2 MovementInput { get; private set; }
     public Vector2 CameraInput { get; private set; }
 
-    public bool JumpInput {get; private set;}
+    public bool JumpInput { get; private set; }
     public bool DashInput { get; private set; }
     public bool SprintInput { get; private set; }
     public bool InteractInput { get; private set; }
@@ -21,14 +21,23 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnEnable()
     {
         player = GetComponent<Player_v2>();
-        if(InputSystemActions == null)
+        if (InputSystemActions == null)
         {
             InputSystemActions = new InputSystem_Actions();
-            // InputSystemActions.Player.Jump.started += ctx => OnJumpInput(ctx);
-            // InputSystemActions.Player.Jump.canceled += ctx => OnJumpInput(ctx);
 
+            // Movement and Camera Input
+            InputSystemActions.Player.Move.performed += OnMovementInput;
             InputSystemActions.Player.Look.performed += i => CameraInput = i.ReadValue<Vector2>();
-            InputSystemActions.Player.Interact.started += _ => { };
+
+            // Action Inputs
+            InputSystemActions.Player.Jump.started += OnJumpInput;
+            InputSystemActions.Player.Dash.started += OnDashInput;
+            InputSystemActions.Player.Sprint.started += OnSprintInput;
+            InputSystemActions.Player.Sprint.canceled += OnSprintInput;
+            InputSystemActions.Player.Interact.started += OnInteractInput;
+            InputSystemActions.Player.Interact.canceled += OnInteractInput;
+            InputSystemActions.Player.Attack.started += OnAttackInput;
+            InputSystemActions.Player.Attack.canceled += OnAttackInput;
         }
         InputSystemActions.Enable();
     }
@@ -37,7 +46,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         InputSystemActions.Disable();
     }
-    
+
     public void OnMovementInput(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();
@@ -45,7 +54,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {
-        if (context.performed && player.CanUseMovementInput())
+        if (context.started && player.CanUseMovementInput())
         {
             JumpInput = true;
         }
@@ -55,11 +64,19 @@ public class PlayerInputHandler : MonoBehaviour
     {
         if (context.started && player.CanUseMovementInput())
         {
-            DashInput = true;
+            // Check if the player has enough stamina to dash
+            if (player.PlayerStatistics.CanDash())
+            {
+                DashInput = true;
+            }
+            else
+            {
+                Debug.Log("Not enough stamina to dash!");
+            }
         }
     }
 
-    public void OnsprintInput(InputAction.CallbackContext context)
+    public void OnSprintInput(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -89,23 +106,14 @@ public class PlayerInputHandler : MonoBehaviour
         {
             AttackInput = true;
         }
-        // if (context.canceled)
-        // {
-        //     AttackInput = false;
-        // }
-    }
-
-    public void OnAttack(InputAction.CallbackContext ctx)
-    {
-        if (player.CanUseMovementInput())
+        if (context.canceled)
         {
-            attackPressed = ctx.ReadValueAsButton();
+            AttackInput = false;
         }
     }
 
-
     public void UseJumpInput() => JumpInput = false;
     public void UseDashInput() => DashInput = false;
-    public void UseeInteractInput() => InteractInput = false;
+    public void UseInteractInput() => InteractInput = false;
     public void UseAttackInput() => AttackInput = false;
 }

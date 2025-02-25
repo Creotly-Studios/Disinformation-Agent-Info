@@ -4,6 +4,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody))] // Add Rigidbody for knockback
 public abstract class Enemy : MonoBehaviour, IDamagable
 {
     public Transform Player { get; protected set; }
@@ -14,9 +15,11 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     public EnemyData e_data;
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
+    [SerializeField] protected Rigidbody rb; // Rigidbody for knockback
 
     protected bool isDead;
     protected bool isAttacking;
+    public bool isKnockedBack; // Track if the enemy is currently being knocked back
 
     [Header("Checks")]
     public Transform attackPoint;
@@ -26,6 +29,8 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         e_data = Instantiate(e_data);
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
+        rb.isKinematic = true; // Ensure Rigidbody doesn't interfere with NavMeshAgent by default
     }
 
     protected void Start()
@@ -34,6 +39,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         currentHealth = e_data.maxhealth;
         isDead = false;
         isAttacking = false;
+        isKnockedBack = false;
     }
 
     // New abstract method for attack implementation
@@ -42,7 +48,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     // New method to handle attack attempts
     protected bool TryAttack()
     {
-        if (isDead || isAttacking) return false;
+        if (isDead || isAttacking || isKnockedBack) return false; // Prevent attacking while knocked back
 
         if (PlayerInAttackRange() && EnemyAttackManager.Instance.RequestAttackPermission(this))
         {
@@ -63,13 +69,36 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
     public void TakeDamage(int healthDamage)
     {
-        if(isDead) return;
-        
+        if (isDead) return;
+
         currentHealth -= healthDamage;
+        Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
+        ApplyKnockback(knockbackDirection, e_data.knockbackForce); // Apply knockback when taking damage
+
         if (currentHealth <= 0)
         {
             HandleDeath();
         }
+    }
+
+    private void ApplyKnockback(Vector3 direction, float force)
+    {
+        if (isKnockedBack) return; // Prevent multiple knockbacks at once
+
+        isKnockedBack = true;
+        agent.enabled = false; // Disable NavMeshAgent to allow Rigidbody movement
+        rb.isKinematic = false; // Enable Rigidbody physics
+        rb.AddForce(direction.normalized * force, ForceMode.Impulse); // Apply knockback force
+
+        Invoke(nameof(ResetAfterKnockback), e_data.knockbackDuration); // Reset after knockback duration
+    }
+
+    private void ResetAfterKnockback()
+    {
+        isKnockedBack = false;
+        rb.isKinematic = true; // Disable Rigidbody physics
+        rb.linearVelocity = Vector3.zero; // Reset velocity
+        agent.enabled = true; // Re-enable NavMeshAgent
     }
 
     private void HandleDeath()

@@ -32,9 +32,11 @@ public class PlayerAbilityState : PlayerState
         {
             if (player.controller.isGrounded && player.controller.velocity.magnitude < 0.01f)
             {
-                stateMachine.ChangeState(player.IdleState);
-            } else {
-                stateMachine.ChangeState(player.InAirState);
+                stateMachine.ChangeState(player.IdleState); // Transition to IdleState
+            }
+            else
+            {
+                stateMachine.ChangeState(player.InAirState); // Transition to InAirState
             }
         }
     }

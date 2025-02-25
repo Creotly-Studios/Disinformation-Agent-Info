@@ -7,9 +7,6 @@ public class Enemy_T_Chaser : MonoBehaviour
     public enum ChaserType { Direct, Roaming }
     public ChaserType chaserType;
     
-    [Header("Chase Settings")]
-    [SerializeField] private float customStoppingDistance = 3f;
-    
     [Header("Roaming Settings")]
     [SerializeField] private float minRoamDistance = 5f;
     [SerializeField] private float maxRoamDistance = 15f;
@@ -38,6 +35,7 @@ public class Enemy_T_Chaser : MonoBehaviour
     void Update()
     {
         if (!IsValidGameState()) return;
+        if (enemy.isKnockedBack) return; 
 
         switch (chaserType)
         {
@@ -92,14 +90,14 @@ public class Enemy_T_Chaser : MonoBehaviour
     {
         float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
 
-        if (distanceToTarget > customStoppingDistance)
+        if (distanceToTarget > enemy.e_data.stopDistance)
         {
             // Calculate the position that maintains the minimum distance
             Vector3 directionToTarget = (targetPosition - transform.position).normalized;
-            Vector3 targetWithOffset = targetPosition - (directionToTarget * customStoppingDistance);
+            Vector3 targetWithOffset = targetPosition - (directionToTarget * enemy.e_data.stopDistance);
             
             // Only update if we're outside the stopping distance threshold
-            if (Vector3.Distance(transform.position, targetPosition) > customStoppingDistance + 0.1f)
+            if (Vector3.Distance(transform.position, targetPosition) > enemy.e_data.stopDistance + 0.1f)
             {
                 UpdateDestination(targetWithOffset);
             }

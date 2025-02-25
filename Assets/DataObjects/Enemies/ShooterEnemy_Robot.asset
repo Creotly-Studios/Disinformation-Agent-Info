@@ -14,14 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxhealth: 1
   detectRange: 10
-  attackRange: 7.5
+  attackRange: 5.1
   damage: 1
   deathEffect: {fileID: 0}
   destroyTime: 3
-  moveSpeed: 3
-  stopDistance: 3
+  knockbackDuration: 0.5
+  knockbackForce: 30
+  moveSpeed: 4
+  stopDistance: 5
   projectile: {fileID: 5391437132015431797, guid: 787a6f008d4c905469a75e0f735e0fed, type: 3}
   projectileShelfLife: 2.5
   projectileSpeed: 12.5
   shootRate: 3
-  attackRate: 10
+  attackRate: 15

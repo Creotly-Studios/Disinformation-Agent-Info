@@ -14,6 +14,8 @@ public class EnemyData : ScriptableObject
     public GameObject deathEffect;
     public float destroyTime = 1f;
     [Space]
+        public float knockbackDuration = 1.5f;
+            public float knockbackForce = 1f;
 
     [Header("Chaser Enemies")]
     public float moveSpeed = 3f;

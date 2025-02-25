@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 422871503609038605}
   - component: {fileID: 8193910235762504750}
   - component: {fileID: 5448688955459317549}
+  - component: {fileID: 1407982147082175960}
   m_Layer: 0
   m_Name: (E_Melle) Enemy_FlyingBot
   m_TagString: Untagged
@@ -429,6 +430,8 @@ MonoBehaviour:
   e_data: {fileID: 11400000, guid: d81a2ee305b5daf42a88642a2d367ee8, type: 2}
   agent: {fileID: 7885138099517992391}
   animator: {fileID: 8852582079291526057}
+  rb: {fileID: 0}
+  isKnockedBack: 0
   attackPoint: {fileID: 3092385771446669365}
 --- !u!114 &8193910235762504750
 MonoBehaviour:
@@ -443,6 +446,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
+  customStoppingDistance: 1.75
+  minRoamDistance: 5
+  maxRoamDistance: 15
+  roamUpdateInterval: 3
 --- !u!136 &5448688955459317549
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -466,6 +473,33 @@ CapsuleCollider:
   m_Height: 1.49
   m_Direction: 0
   m_Center: {x: 0, y: 0.4387777, z: 0}
+--- !u!54 &1407982147082175960
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4631771536103940739}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &4844573569046074037
 GameObject:
   m_ObjectHideFlags: 0

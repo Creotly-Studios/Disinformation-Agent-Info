@@ -31,7 +31,7 @@ public class PlayerInactiveState : PlayerState
         player.InputHandler.UseAttackInput();
         player.InputHandler.UseJumpInput();
         player.InputHandler.UseDashInput();
-        player.InputHandler.UseeInteractInput();
+        player.InputHandler.UseInteractInput();
     }
 
     public override void PhysicsUpdate()

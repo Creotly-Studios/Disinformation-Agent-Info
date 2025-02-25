@@ -1,75 +1,118 @@
 using UnityEngine;
-using DG.Tweening;
-using System.Collections;
 
 public class PlayerAttackState : PlayerAbilityState
 {
-    private bool isAttacking;
-    private int attackCounter;
-    private Coroutine attackCoroutine;
-    private float attackCoolDown = 0.25f;
+    private int comboCounter;
+    private float lastClickedTime;
+    private float lastComboEnd;
 
-    public PlayerAttackState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
+    public PlayerAttackState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) 
+        : base(player, stateMachine, playerData, animBoolName)
     {
-    }
-
-    public override void DoChecks()
-    {
-        base.DoChecks();
     }
 
     public override void Enter()
     {
         base.Enter();
+        isAbilityDone = false;
+
+        // Start the attack combo
+        if (Time.time - lastComboEnd > playerData.timeBetweenCombos && comboCounter < playerData.attackArray.Count)
+        {
+            if (Time.time - lastClickedTime >= playerData.timeBetweenAttackUsage)
+            {
+                PerformAttack();
+            }
+        }
+        else
+        {
+            // If the combo is not valid, transition back to the grounded state
+            isAbilityDone = true;
+        }
     }
 
-    private void Attack()
+    public override void LogicUpdate()
     {
-        player.playerCombat.HandleAttack(player);
-    }
-    
-    private void ExitAttack()
-    {
-        if (player.Anim.GetCurrentAnimatorStateInfo(0).normalizedTime >= 0.95f && player.Anim.GetCurrentAnimatorStateInfo(0).IsTag("attack"))
+        base.LogicUpdate();
+
+        // Check if the attack animation is complete
+        AnimatorStateInfo stateInfo = player.Anim.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.normalizedTime >= 0.95f && stateInfo.IsTag("attack"))
         {
-            player.Invoke("EndCombo", 1);
+            isAbilityDone = true; // Mark the ability as done
+        }
+
+        // If the attack is done, transition back to the grounded state
+        if (isAbilityDone)
+        {
+            if (player.controller.isGrounded)
+            {
+                stateMachine.ChangeState(player.IdleState);
+            }
+            else
+            {
+                stateMachine.ChangeState(player.InAirState);
+            }
         }
     }
 
     public override void Exit()
     {
         base.Exit();
-    }
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
-        Attack();
-        if (player.InputHandler.attackPressed == false)
+        // Reset combo if the player exits the attack state
+        if (isAbilityDone)
         {
-            isAbilityDone = true;
+            comboCounter = 0;
+            lastComboEnd = Time.time;
         }
-        player.Move(Vector3.zero);
     }
 
-    public override void PhysicsUpdate()
+    private void PerformAttack()
     {
-        base.PhysicsUpdate();
+        // Freeze input during the attack
+        player.MoveState.FreezeInput();
+
+        // Perform the attack action
+        playerData.attackArray[comboCounter].PerformAttackAction(player.Anim);
+        DealDamage(playerData.attackArray[comboCounter].damage);
+
+        // Increment combo counter
+        comboCounter++;
+        lastClickedTime = Time.time;
+
+        // Reset combo if it exceeds the number of attacks
+        if (comboCounter >= playerData.attackArray.Count)
+        {
+            comboCounter = 0;
+        }
     }
 
-    public override void AnimationFinishTrigger()
+    private void DealDamage(int damage)
     {
-        base.AnimationFinishTrigger();
-    }
+        // Check for enemies in front of the player and deal damage
+        RaycastHit[] hits = Physics.SphereCastAll(
+            player.checkTransform.position, 
+            playerData.attackSphereSize, 
+            player.checkTransform.forward, 
+            playerData.attackRange
+        );
 
-    public override void AnimationTrigger()
-    {
-        base.AnimationTrigger();
-    }
+        foreach (RaycastHit hit in hits)
+        {
+            IDamagable damagable = hit.collider.GetComponent<IDamagable>();
+            if (damagable != null)
+            {
+                // Check if the enemy is in front of the player
+                Vector3 directionToEnemy = (hit.collider.transform.position - player.checkTransform.position).normalized;
+                float dotProduct = Vector3.Dot(player.checkTransform.forward, directionToEnemy);
 
-    public IEnumerator AbilityDone()
-    {
-        yield return new WaitForSeconds(playerData.timeBetweenAttacks);
-        isAbilityDone = true;
+                if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
+                {
+                    Debug.Log($"Hit {hit.collider.name} in front!");
+                    damagable.TakeDamage(damage);
+                }
+            }
+        }
     }
 }

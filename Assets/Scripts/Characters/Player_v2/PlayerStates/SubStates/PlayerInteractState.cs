@@ -28,8 +28,8 @@ public class PlayerInteractState : PlayerAbilityState
         {
             GetInteractableObject().GetComponent<IInteractable>().Interact(player);
         }
-        player.InputHandler.UseeInteractInput();
-        isAbilityDone = true;
+        player.InputHandler.UseInteractInput();
+        // isAbilityDone = true;
     }
 
     public override void Exit()
@@ -41,6 +41,12 @@ public class PlayerInteractState : PlayerAbilityState
     {
         base.LogicUpdate();
         Debug.Log(GetInteractableObject());
+        
+        AnimatorStateInfo stateInfo = player.Anim.GetCurrentAnimatorStateInfo(0);
+        if (stateInfo.normalizedTime >= 0.95f && stateInfo.IsTag("interact"))
+        {
+            isAbilityDone = true; // Mark the ability as done
+        }
     }
 
     public override void PhysicsUpdate()

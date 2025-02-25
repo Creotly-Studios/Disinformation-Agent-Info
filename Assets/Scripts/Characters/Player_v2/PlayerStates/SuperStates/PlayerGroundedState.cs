@@ -39,39 +39,42 @@ public class PlayerGroundedState : PlayerState
         input = player.InputHandler.MovementInput;
         jumpInput = player.InputHandler.JumpInput;
         dashInput = player.InputHandler.DashInput;
-        attackInput = player.InputHandler.attackPressed;
+        attackInput = player.InputHandler.AttackInput;
         interactInput = player.InputHandler.InteractInput;
 
-        if (jumpInput == true)
+        if (jumpInput)
         {
             player.InputHandler.UseJumpInput();
             stateMachine.ChangeState(player.JumpState);
         }
 
-        if (dashInput == true)
+        if (dashInput)
         {
-            player.InputHandler.UseDashInput();
-            stateMachine.ChangeState(player.DashState);
-        }
-
-        if (interactInput == true)
-        {
-            player.InputHandler.UseeInteractInput();
-            stateMachine.ChangeState(player.InteractState);
-        }
-
-        if (attackInput == true)
-        {
-            // player.CombatSystem.Attack();
-            isAttacking = true;
-            if (isAttacking)
+            if (player.PlayerStatistics.CanDash())
             {
-                stateMachine.ChangeState(player.AttackState);
+                player.InputHandler.UseDashInput();
+                player.PlayerStatistics.UseDash();
+                stateMachine.ChangeState(player.DashState);
+            }
+            else
+            {
+                Debug.Log("Not enough stamina to dash!");
             }
         }
 
-        player.InvokeIInteractableFoundEvent();
+        if (interactInput)
+        {
+            player.InputHandler.UseInteractInput();
+            stateMachine.ChangeState(player.InteractState);
+        }
 
+        if (attackInput)
+        {
+            player.InputHandler.UseAttackInput();
+            stateMachine.ChangeState(player.AttackState); // Transition to AttackState
+        }
+
+        player.InvokeIInteractableFoundEvent();
     }
 
     public override void PhysicsUpdate()

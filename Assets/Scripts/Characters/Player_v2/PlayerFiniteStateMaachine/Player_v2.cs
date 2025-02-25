@@ -93,7 +93,7 @@ public class Player_v2 : MonoBehaviour
         InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
         DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
-        AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "isAttacking");
+        AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "attack");
         InactiveState = new PlayerInactiveState(this, StateMachine, PlayerData, "idle");
         DeadState = new PlayerDeadState(this, StateMachine, PlayerData, "dead");
     }
