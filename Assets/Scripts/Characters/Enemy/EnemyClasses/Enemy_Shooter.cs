@@ -7,6 +7,8 @@ public class Enemy_Shooter : Enemy
 
     void Update()
     {
+        if (currentHealth <= 0 || IsDead()) return;
+        
         if (Player != null && !Player_v2.Instance.IsPlayerDead())
         {
             CheckForAndShootPlayer();
@@ -20,13 +22,23 @@ public class Enemy_Shooter : Enemy
             // Set aim direction toward the player
             _aimDir = (Player.position - attackPoint.position).normalized;
 
-            // Ensure there's a clear line of sight before shooting
-            // if (CanSeePlayer())
-            // {
-                CreateProjectile(_aimDir);
-                lastFire = Time.time;
-            // }
+            // Request permission to attack from the manager
+            if (EnemyAttackManager.Instance.RequestAttackPermission(this))
+            {
+                PerformAttack();
+            }
         }
+    }
+
+    protected override void PerformAttack()
+    {
+        PlayAttackAnim();
+        CreateProjectile(_aimDir);
+        lastFire = Time.time;
+        
+        // Release attack permission after shooting
+        // You might want to adjust this timing based on your animation length
+        Invoke("FinishAttack", e_data.shootRate * 0.5f);
     }
 
     void CreateProjectile(Vector3 dir)
@@ -51,5 +63,14 @@ public class Enemy_Shooter : Enemy
             return hit.collider.CompareTag("Player"); // Ensure nothing blocks the shot
         }
         return false;
+    }
+
+    // Optional: You can add this to handle the actual shooting at the animation event
+    public void OnShootAnimationEvent()
+    {
+        if (PlayerInAttackRange())
+        {
+            CreateProjectile(_aimDir);
+        }
     }
 }

@@ -17,18 +17,18 @@ public class PlayerCoinUI : MonoBehaviour
 
     private void Player_OnCollectCoin(object sender, EventArgs e)
     {
-        coinUIPanel.SetActive(true);
         Show();
     }
 
     public void Show()
     {
+        coinAmountText.text = GameManager.instance.PlayerCoins().ToString();
+        coinUIPanel.SetActive(true);
         StartCoroutine(DisplayAndHide());
     }
 
     private IEnumerator DisplayAndHide()
     {
-        // coinAmountText.text = Player_v2.Instance.coinAmount;
 
         yield return new WaitForSeconds(displayTime);
         coinUIPanel.SetActive(false);

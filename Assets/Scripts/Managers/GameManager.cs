@@ -11,11 +11,12 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnGamePause;
 
     private bool isGamePaused = false;
+    [SerializeField] private bool canPause;
 
     DialogueManager dialogueManager;
 
     [Header("-- Variables")]
-    public int PlayerCoinAmout {get; private set;}
+    public int PlayerCoinAmount {get; private set;}
     public int PlayerRank {get; private set;} //1 min - 5 max... 
 
     private void Awake()
@@ -63,9 +64,12 @@ public class GameManager : MonoBehaviour
 
     public void TogglePause()
     {
-        if (!IsGameOver())
+        if(canPause)
         {
-            Pause();
+            if (!IsGameOver())
+            {
+                Pause();
+            }
         }
     }
 
@@ -113,6 +117,16 @@ public class GameManager : MonoBehaviour
             Time.timeScale = 1;
             OnGamePause?.Invoke(this, EventArgs.Empty);
         }
+    }
+
+    //stuff and data
+    public void PlayerCoinAdd()
+    {
+        PlayerCoinAmount++;
+    }
+    public int PlayerCoins()
+    {
+        return PlayerCoinAmount;
     }
 }
 

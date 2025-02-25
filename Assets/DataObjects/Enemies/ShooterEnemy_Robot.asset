@@ -16,12 +16,12 @@ MonoBehaviour:
   detectRange: 10
   attackRange: 7.5
   damage: 1
-  deathEffect: {fileID: 5391437132015431797, guid: 787a6f008d4c905469a75e0f735e0fed, type: 3}
+  deathEffect: {fileID: 0}
   destroyTime: 3
   moveSpeed: 3
   stopDistance: 3
-  projectile: {fileID: 919132149155446097, guid: 51f143c4a0997fc4297e7bd519a4a813, type: 3}
-  projectileShelfLife: 5
-  projectileSpeed: 5
+  projectile: {fileID: 5391437132015431797, guid: 787a6f008d4c905469a75e0f735e0fed, type: 3}
+  projectileShelfLife: 2.5
+  projectileSpeed: 12.5
   shootRate: 3
   attackRate: 10

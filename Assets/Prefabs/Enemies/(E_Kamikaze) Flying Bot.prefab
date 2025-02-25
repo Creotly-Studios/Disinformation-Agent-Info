@@ -57,7 +57,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 0.525
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!114 &1228112188821366660
@@ -118,6 +118,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 0
+  customStoppingDistance: 0
+  minRoamDistance: 5
+  maxRoamDistance: 15
+  roamUpdateInterval: 3
 --- !u!135 &52728466329479904
 SphereCollider:
   m_ObjectHideFlags: 0

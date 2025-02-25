@@ -58,10 +58,10 @@ public class Player_v2 : MonoBehaviour
 
     #region Checks
     public Transform checkTransform;
+    public GameObject dialogue_InactiveCamera;
     #endregion
 
     [Header("Status")]
-    public bool isDead;
     public bool sprintFlag;
     public bool isAttacking;
     public bool performingAction;
@@ -107,11 +107,13 @@ public class Player_v2 : MonoBehaviour
 
         PlayerStatistics.ResetUI();
         if (DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
+
+        dialogue_InactiveCamera.SetActive(false);
     }
 
     void Update()
     {
-        if (isDead)
+        if (IsPlayerDead())
         {
             return;
         }
@@ -125,7 +127,7 @@ public class Player_v2 : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (isDead)
+        if (IsPlayerDead())
         {
             return;
         }
@@ -216,20 +218,6 @@ public class Player_v2 : MonoBehaviour
         Move(transform.forward * PlayerData.dashForce);
     }
 
-    private void OnControllerColliderHit(ControllerColliderHit hit)
-    {
-        Rigidbody rb = hit.collider.attachedRigidbody;
-
-        if (rb != null)
-        {
-            Vector3 forceDir = hit.gameObject.transform.position - transform.position;
-            forceDir.y = 0;
-            forceDir.Normalize();
-
-            rb.AddForceAtPosition(forceDir * PlayerData.pushForce, transform.position, ForceMode.Impulse);
-        }
-    }
-
     private void OnDrawGizmos()
     {
         if (checkTransform != null)
@@ -263,8 +251,6 @@ public class Player_v2 : MonoBehaviour
 
     public void SetActiveState() => StateMachine.ChangeState(IdleState);
 
-
-
     #endregion
 
     #region PlayerEvents
@@ -283,6 +269,7 @@ public class Player_v2 : MonoBehaviour
 
     public void CallPlayerCoinPickup()
     {
+        GameManager.instance.PlayerCoinAdd();
         OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }
 

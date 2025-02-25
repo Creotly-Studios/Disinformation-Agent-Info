@@ -6,17 +6,28 @@ public class Enemy_T_Chaser : MonoBehaviour
 {
     public enum ChaserType { Direct, Roaming }
     public ChaserType chaserType;
+    
+    [Header("Chase Settings")]
+    [SerializeField] private float customStoppingDistance = 3f;
+    
+    [Header("Roaming Settings")]
+    [SerializeField] private float minRoamDistance = 5f;
+    [SerializeField] private float maxRoamDistance = 15f;
+    [SerializeField] private float roamUpdateInterval = 3f;
 
     private Enemy enemy;
     private NavMeshAgent agent;
     private Vector3 roamTarget;
     private bool isRoaming = false;
+    private float nextRoamUpdate;
 
     void Start()
     {
         enemy = GetComponent<Enemy>();
         agent = GetComponent<NavMeshAgent>();
-        agent.stoppingDistance = enemy.e_data.stopDistance;
+        // Set NavMeshAgent's stopping distance to 0 to prevent conflicts
+        agent.stoppingDistance = 0f;
+        nextRoamUpdate = Time.time + roamUpdateInterval;
 
         if (chaserType == ChaserType.Roaming)
         {
@@ -26,11 +37,7 @@ public class Enemy_T_Chaser : MonoBehaviour
 
     void Update()
     {
-        if (enemy.Player == null || enemy.currentHealth <= 0 || enemy.IsDead()) return;
-        // if(Player_v2.Instance!=null && Player_v2.Instance.IsPlayerDead()) {
-        //     RoamingChase();
-        //     return;
-        // }
+        if (!IsValidGameState()) return;
 
         switch (chaserType)
         {
@@ -44,11 +51,19 @@ public class Enemy_T_Chaser : MonoBehaviour
         }
     }
 
+    bool IsValidGameState()
+    {
+        return enemy != null 
+            && enemy.Player != null 
+            && enemy.currentHealth > 0 
+            && !enemy.IsDead();
+    }
+
     void DirectChase()
     {
         if (enemy.PlayerInSightRange())
         {
-            agent.SetDestination(enemy.Player.position);
+            MoveTowardsTargetWithOffset(enemy.Player.position);
         }
         else
         {
@@ -58,31 +73,86 @@ public class Enemy_T_Chaser : MonoBehaviour
 
     void RoamingChase()
     {
-        if (enemy.PlayerInSightRange() && Player_v2.Instance != null && !Player_v2.Instance.IsPlayerDead())
+        bool playerVisible = enemy.PlayerInSightRange() && 
+                           Player_v2.Instance != null && 
+                           !Player_v2.Instance.IsPlayerDead();
+
+        if (playerVisible)
         {
-            agent.SetDestination(enemy.Player.position);
+            MoveTowardsTargetWithOffset(enemy.Player.position);
             isRoaming = false;
         }
         else
         {
-            if (!isRoaming || agent.remainingDistance < 0.5f)
+            HandleRoaming();
+        }
+    }
+
+    void MoveTowardsTargetWithOffset(Vector3 targetPosition)
+    {
+        float distanceToTarget = Vector3.Distance(transform.position, targetPosition);
+
+        if (distanceToTarget > customStoppingDistance)
+        {
+            // Calculate the position that maintains the minimum distance
+            Vector3 directionToTarget = (targetPosition - transform.position).normalized;
+            Vector3 targetWithOffset = targetPosition - (directionToTarget * customStoppingDistance);
+            
+            // Only update if we're outside the stopping distance threshold
+            if (Vector3.Distance(transform.position, targetPosition) > customStoppingDistance + 0.1f)
             {
-                SetNewRoamTarget();
+                UpdateDestination(targetWithOffset);
             }
+            else
+            {
+                agent.ResetPath();
+            }
+        }
+        else
+        {
+            // If we're already closer than the stopping distance, stop moving
+            agent.ResetPath();
+        }
+    }
+
+    void HandleRoaming()
+    {
+        if (!isRoaming || agent.remainingDistance < 0.5f || Time.time >= nextRoamUpdate)
+        {
+            SetNewRoamTarget();
+            nextRoamUpdate = Time.time + roamUpdateInterval;
+        }
+    }
+
+    void UpdateDestination(Vector3 target)
+    {
+        if (agent.isActiveAndEnabled)
+        {
+            agent.SetDestination(target);
         }
     }
 
     void SetNewRoamTarget()
     {
-        Vector3 randomDirection = Random.insideUnitSphere * enemy.e_data.detectRange;
+        float randomDistance = Random.Range(minRoamDistance, maxRoamDistance);
+        Vector3 randomDirection = Random.insideUnitSphere * randomDistance;
         randomDirection += transform.position;
         NavMeshHit hit;
 
-        if (NavMesh.SamplePosition(randomDirection, out hit, enemy.e_data.detectRange, NavMesh.AllAreas))
+        int maxAttempts = 5;
+        int attempts = 0;
+
+        while (attempts < maxAttempts)
         {
-            roamTarget = hit.position;
-            agent.SetDestination(roamTarget);
-            isRoaming = true;
+            if (NavMesh.SamplePosition(randomDirection, out hit, randomDistance, NavMesh.AllAreas))
+            {
+                roamTarget = hit.position;
+                UpdateDestination(roamTarget);
+                isRoaming = true;
+                break;
+            }
+            randomDirection = Random.insideUnitSphere * randomDistance + transform.position;
+            attempts++;
         }
     }
 }

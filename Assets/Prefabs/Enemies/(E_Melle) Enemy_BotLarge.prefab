@@ -202,6 +202,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
+  customStoppingDistance: 2
+  minRoamDistance: 5
+  maxRoamDistance: 15
+  roamUpdateInterval: 3
 --- !u!195 &6048425981524238253
 NavMeshAgent:
   m_ObjectHideFlags: 0

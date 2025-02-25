@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 569677018504133185}
   - component: {fileID: 6000484663111711327}
   - component: {fileID: 8161976627972726749}
+  - component: {fileID: 6189664115715286741}
   m_Layer: 0
   m_Name: Coin_gold
   m_TagString: Coin
@@ -107,7 +108,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.39999998
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0.39999998, z: 0}
 --- !u!114 &8161976627972726749
 MonoBehaviour:
@@ -124,3 +125,25 @@ MonoBehaviour:
   pickUpEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!95 &6189664115715286741
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6328546440200199865}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 81c8d31b53d7e884e9c17ec8aee5012f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
