@@ -15,6 +15,7 @@ public class PlayerAttackState : PlayerAbilityState
     {
         base.Enter();
         isAbilityDone = false;
+        AudioManager.Instance.PlaySFX(playerData.attack[0]);
 
         // Start the attack combo
         if (Time.time - lastComboEnd > playerData.timeBetweenCombos && comboCounter < playerData.attackArray.Count)
@@ -110,6 +111,7 @@ public class PlayerAttackState : PlayerAbilityState
                 if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
                 {
                     Debug.Log($"Hit {hit.collider.name} in front!");
+                    AudioManager.Instance.PlaySFX(playerData.attackHit);
                     damagable.TakeDamage(damage);
                 }
             }

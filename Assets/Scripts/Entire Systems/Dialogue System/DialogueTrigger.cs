@@ -37,7 +37,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
 
     public void PlayInteractNPCSound()
     {
-        SFXPlayer.Instance.PlaySFX(SFXPlayer.Instance.sfxList.interactWithNpc);
+
     }
 
     private void TriggerDialogue(NPC npc = null, TextAsset textAsset = null)

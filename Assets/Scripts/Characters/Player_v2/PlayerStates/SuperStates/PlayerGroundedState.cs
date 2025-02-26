@@ -44,11 +44,8 @@ public class PlayerGroundedState : PlayerState
 
         if (jumpInput)
         {
-            player.InputHandler.UseJumpInput();
             stateMachine.ChangeState(player.JumpState);
-        }
-
-        if (dashInput)
+        } else if (dashInput)
         {
             if (player.PlayerStatistics.CanDash())
             {
@@ -60,15 +57,11 @@ public class PlayerGroundedState : PlayerState
             {
                 Debug.Log("Not enough stamina to dash!");
             }
-        }
-
-        if (interactInput)
+        } else if (interactInput)
         {
             player.InputHandler.UseInteractInput();
             stateMachine.ChangeState(player.InteractState);
-        }
-
-        if (attackInput)
+        } else if (attackInput)
         {
             player.InputHandler.UseAttackInput();
             stateMachine.ChangeState(player.AttackState); // Transition to AttackState

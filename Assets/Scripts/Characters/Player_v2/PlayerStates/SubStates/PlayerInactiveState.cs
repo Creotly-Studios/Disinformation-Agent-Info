@@ -15,6 +15,7 @@ public class PlayerInactiveState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        AudioManager.Instance.PlaySFX(playerData.inactiveStateCamSound);
         player.dialogue_InactiveCamera.SetActive(true);
     }
 

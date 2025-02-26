@@ -9,20 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df837265ee7e4e440828ee75f6e6ad8c, type: 3}
+  m_Script: {fileID: 11500000, guid: d551a201c41140245884677c4a595827, type: 3}
   m_Name: SoundEffects
   m_EditorClassIdentifier: 
-  playerFootStep:
-  - {fileID: 8300000, guid: e2ea5c7996fa1c249b0e7c800aa86f1a, type: 3}
-  - {fileID: 8300000, guid: d9d3d738834902d4da8c2e029df0df08, type: 3}
-  - {fileID: 8300000, guid: baa5b6e7b1a045a46a623364867395c5, type: 3}
-  - {fileID: 8300000, guid: 8b2a3e572b7fa9c47ba81d142c669471, type: 3}
-  - {fileID: 8300000, guid: 730dd78dfebc75845b02eb75f0506b1a, type: 3}
-  playerPunch: {fileID: 8300000, guid: f1e98f248172e50449accf8250024db6, type: 3}
-  playerJump: {fileID: 8300000, guid: f2ab68febfeb27647840c5486ab2096e, type: 3}
-  interactWithDoor: {fileID: 8300000, guid: dc62a2070db667842b873f346722d971, type: 3}
-  interactWithPhoneBooth: {fileID: 8300000, guid: cdc931c9d52d3194f8ac6937af72d421, type: 3}
-  interactWithNpc: {fileID: 8300000, guid: e847fd82c67d89c4fbc267c8cd96a684, type: 3}
-  enemyDieEffect: {fileID: 8300000, guid: 8120053f456112641b34f35f111a4240, type: 3}
-  enemyHitEffect: {fileID: 8300000, guid: 8120053f456112641b34f35f111a4240, type: 3}
-  buttonClick: {fileID: 8300000, guid: 3214b3cf7144ab94cad4c53bbb2d1cb9, type: 3}
+  botDie: {fileID: 0}
+  botHit: {fileID: 0}
+  trollDie: {fileID: 0}
+  trollHit: {fileID: 0}
+  buttonClick: {fileID: 8300000, guid: 241839639bd282448b487ad1efc61150, type: 3}
+  panelClose: {fileID: 8300000, guid: e847fd82c67d89c4fbc267c8cd96a684, type: 3}

@@ -14,16 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxhealth: 3
   detectRange: 10
-  attackRange: 1.1
+  attackRange: 1.25
   damage: 1
   deathEffect: {fileID: 0}
   destroyTime: 3
   knockbackDuration: 0.5
-  knockbackForce: 30
+  knockbackForce: 15
   moveSpeed: 5
   stopDistance: 1
   projectile: {fileID: 0}
   projectileShelfLife: 5
   projectileSpeed: 0
   shootRate: 0
-  attackRate: 3.5
+  attackRate: 10
+  botDie: {fileID: 8300000, guid: e1d9a853fa2c80d4e9c904d6df1cffcd, type: 3}
+  botHit: {fileID: 8300000, guid: edafc289e47cb7c4e9f7644efc82548a, type: 3}
+  trollDie: {fileID: 8300000, guid: 3cca6d725bd50dc4e823dd48c02c69df, type: 3}
+  trollHit: {fileID: 8300000, guid: d332e23f49c41114691e6165c6b0ef9a, type: 3}
+  melleSfx: {fileID: 8300000, guid: d332e23f49c41114691e6165c6b0ef9a, type: 3}
+  projectileSfx: {fileID: 8300000, guid: b6093d6b468186541ad1a5f74a4a8882, type: 3}
+  dissolveMaterial: {fileID: 2100000, guid: 39483dab73e39b34b8c42a9eabb1ca94, type: 2}

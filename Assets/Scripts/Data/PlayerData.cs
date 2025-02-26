@@ -39,5 +39,20 @@ public class PlayerData : ScriptableObject
     public float timeBetweenAttackUsage = 0.2f;
     [Space]
     public float timeBetweenAttacks = 1f;
+
+    [Header("SFX")]
+    public AudioClip jump;
+    public AudioClip dash;
+    public AudioClip land;
+    public AudioClip interact;
+    public AudioClip dead_GameOver;
+    public AudioClip inactiveStateCamSound;
+    [Space]
+    public AudioClip[] attack;
+    public AudioClip attackHit;
+    public AudioClip[] footsteps;
+    public float footstepInterval = 0.35f;
+    public AudioClip[] coinPickup;
+    public AudioClip[] hurt;
     
 }

@@ -14,7 +14,13 @@ public class PlayerJumpState : PlayerAbilityState
     public override void Enter()
     {
         base.Enter();
-        player.Jump();
+        player.InputHandler.UseJumpInput();
+        if (player.controller.isGrounded)
+        {
+            player._verticalVelocity = Mathf.Sqrt(playerData.jumpHeight * -2f * playerData.gravity);
+        }
+        player.Move(new Vector3(0, player._verticalVelocity, 0) * Time.deltaTime);
+        AudioManager.Instance.PlaySFX(playerData.jump);
         isAbilityDone = true;
     }
 

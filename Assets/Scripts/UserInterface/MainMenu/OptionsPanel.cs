@@ -28,18 +28,19 @@ public class OptionsPanel : MonoBehaviour
     [Space][SerializeField] private Button closePanelButton;
     void Start()
     {
+        
+        
+        
         UpdateText();
         sfxButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.ChangeVolume();
-            SFXPlayer.Instance.PlayClickSound();
+            AudioManager.Instance.ChangeSFXVolume();
             UpdateText();
         });
-
+        
         musicButton.onClick.AddListener(() =>
         {
-            MusicManager.Instance.ChangeVolume();
-            SFXPlayer.Instance.PlayClickSound();
+            AudioManager.Instance.ChangeMusicVolume();
             UpdateText();
         });
 
@@ -92,8 +93,8 @@ public class OptionsPanel : MonoBehaviour
 
     void UpdateText()
     {
-        sfxText.text = $"SFX: {Mathf.Ceil(SFXPlayer.Instance.GetVolume() * 10)}";
-        musicText.text = $"Music: {Mathf.Ceil(MusicManager.Instance.GetVolume() * 10)}";
+        sfxText.text = $"SFX: {Mathf.Ceil(AudioManager.Instance.GetSFXVolume() * 10)}";
+        musicText.text = $"Music: {Mathf.Ceil(AudioManager.Instance.GetMusicVolume() * 10)}";
     }
 
     void SetCanvasOpacity(int value)

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +21,8 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     protected bool isDead;
     protected bool isAttacking;
     public bool isKnockedBack; // Track if the enemy is currently being knocked back
+
+    [SerializeField] bool isBotEnemy;
 
     [Header("Checks")]
     public Transform attackPoint;
@@ -72,6 +75,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         if (isDead) return;
 
         currentHealth -= healthDamage;
+        PlayHurtSound();
         Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
         ApplyKnockback(knockbackDirection, e_data.knockbackForce); // Apply knockback when taking damage
 
@@ -118,6 +122,8 @@ public abstract class Enemy : MonoBehaviour, IDamagable
                 QuestSO quest = QuestManager.Instance.activeQuest;
                 quest.IncreaseQuestObjectiveProgressLevels(objective);
             }
+            PlayDeathSound();
+            PlayDeathDissolve();
             Destroy(gameObject, e_data.destroyTime);
         }
     }
@@ -175,4 +181,68 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     {
         animator.SetBool("dead", true);
     }
+
+    public void PlayDeathSound()
+    {
+        if (isBotEnemy)
+        {
+            AudioManager.Instance.PlaySFX(e_data.botDie);
+        } else AudioManager.Instance.PlaySFX(e_data.trollDie);
+    }
+    public void PlayHurtSound()
+    {
+        if (isBotEnemy)
+        {
+            AudioManager.Instance.PlaySFX(e_data.botHit);
+        } else AudioManager.Instance.PlaySFX(e_data.trollHit);
+    }
+
+    void PlayDeathDissolve()
+    {
+        StartCoroutine(DissolveEffect());
+    }
+
+    private IEnumerator DissolveEffect()
+    {
+        // Get all renderers in the enemy and its children
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+
+        // Replace all materials with the dissolve material
+        foreach (var renderer in renderers)
+        {
+            // Create an array of dissolve materials with the same length as the renderer's materials
+            Material[] dissolveMaterials = new Material[renderer.materials.Length];
+            for (int i = 0; i < dissolveMaterials.Length; i++)
+            {
+                dissolveMaterials[i] = e_data.dissolveMaterial; // Use the dissolve material from EnemyData
+            }
+            renderer.materials = dissolveMaterials; // Apply the dissolve materials
+        }
+
+        // Animate the dissolve effect
+        float dissolveTime = e_data.destroyTime; // Use the destroy time from EnemyData
+        float elapsedTime = 0f;
+
+        while (elapsedTime < dissolveTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float cutoff = Mathf.Lerp(4f, -5f, elapsedTime / dissolveTime); // Adjust cutoff from 0 to 1
+
+            // Update the _Cutoff property in all dissolve materials
+            foreach (var renderer in renderers)
+            {
+                foreach (var material in renderer.materials)
+                {
+                    material.SetFloat("Vector1_CFBBCBA", cutoff); // Update the _Cutoff property
+                }
+            }
+
+            yield return null;
+        }
+
+        // Destroy the GameObject after the dissolve effect is complete
+        Destroy(gameObject);
+    }
+
+
 }

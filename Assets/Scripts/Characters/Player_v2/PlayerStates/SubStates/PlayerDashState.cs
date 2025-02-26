@@ -14,6 +14,7 @@ public class PlayerDashState : PlayerAbilityState
     public override void Enter()
     {
         base.Enter();
+        AudioManager.Instance.PlaySFX(playerData.dash);
         player.DashForward();
         isAbilityDone = true;
     }
