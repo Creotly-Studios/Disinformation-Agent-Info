@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxhealth: 3
   detectRange: 10
-  attackRange: 2
+  attackRange: 2.1
   damage: 0
   deathEffect: {fileID: 0}
   destroyTime: 2.5
+  knockbackDuration: 0.5
+  knockbackForce: 30
   moveSpeed: 3
   stopDistance: 2
   projectile: {fileID: 0}

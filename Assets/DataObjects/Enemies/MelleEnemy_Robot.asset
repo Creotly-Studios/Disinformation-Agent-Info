@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxhealth: 1
   detectRange: 10
-  attackRange: 2
+  attackRange: 1.1
   damage: 1
   deathEffect: {fileID: 0}
   destroyTime: 3
-  moveSpeed: 3
-  stopDistance: 2
+  knockbackDuration: 0.5
+  knockbackForce: 30
+  moveSpeed: 3.5
+  stopDistance: 1
   projectile: {fileID: 0}
   projectileShelfLife: 5
   projectileSpeed: 0

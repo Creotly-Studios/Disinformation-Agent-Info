@@ -81,4 +81,21 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
         }
     }
 
+
+    public bool CanDash()
+    {
+        // Check if the player has enough stamina to dash
+        return CurrentSprintTime >= player.PlayerData.dashStaminaCost;
+    }
+
+    public void UseDash()
+    {
+        // Reduce stamina when dashing
+        CurrentSprintTime -= player.PlayerData.dashStaminaCost;
+        if (CurrentSprintTime < 0)
+        {
+            CurrentSprintTime = 0;
+        }
+    }
+
 }

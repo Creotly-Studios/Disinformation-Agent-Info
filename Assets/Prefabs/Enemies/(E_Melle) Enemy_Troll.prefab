@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 831797527234661299}
   - component: {fileID: 7639305842318910959}
   - component: {fileID: 557905990376019101}
+  - component: {fileID: 582318094723685943}
   m_Layer: 0
   m_Name: (E_Melle) Enemy_Troll
   m_TagString: Untagged
@@ -392,6 +393,8 @@ MonoBehaviour:
   e_data: {fileID: 11400000, guid: d9e42262cfdf2f544a30d4b0abc543bf, type: 2}
   agent: {fileID: 8318976336311359539}
   animator: {fileID: 7562859290350459812}
+  rb: {fileID: 0}
+  isKnockedBack: 0
   attackPoint: {fileID: 1081261045503568781}
 --- !u!136 &7639305842318910959
 CapsuleCollider:
@@ -429,6 +432,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
+  customStoppingDistance: 1.75
+  minRoamDistance: 5
+  maxRoamDistance: 15
+  roamUpdateInterval: 3
+--- !u!54 &582318094723685943
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3602190282081039112}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &4442938426879189914
 GameObject:
   m_ObjectHideFlags: 0

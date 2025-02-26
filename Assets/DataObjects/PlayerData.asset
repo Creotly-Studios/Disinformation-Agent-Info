@@ -24,16 +24,18 @@ MonoBehaviour:
   turnSmoothTime: 0.1
   variableJumpHieghtMultiplier: 0.5
   dashForce: 3
+  dashStaminaCost: 7.5
   detectRadius: 1
   detectRange: 1
   pushForce: 1
-  attackRange: 0.35
-  attackSphereSize: 1.75
+  attackRange: 0.59
+  attackSphereSize: 2
   attackDamage: 1
   attackArray:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: cfd66faf0eaf3b54db2db3c23d75d84f, type: 2}
+  - {fileID: 11400000, guid: 796e8947c774819479117eb34e6f62ee, type: 2}
+  - {fileID: 11400000, guid: bb3e416d4d4b5bf418b18eb02afea802, type: 2}
+  - {fileID: 11400000, guid: 21b51aa81a88b484bb8940ec50f4e179, type: 2}
   timeBetweenCombos: 0.375
   timeBetweenAttackUsage: 0.375
   timeBetweenAttacks: 0

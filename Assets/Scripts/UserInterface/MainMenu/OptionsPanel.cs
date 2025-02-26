@@ -13,6 +13,16 @@ public class OptionsPanel : MonoBehaviour
     [SerializeField] private Button musicButton;
     [SerializeField] private TextMeshProUGUI musicText;
 
+    [Header("Reset Progress UI")]
+    [SerializeField] private Button resetButton;
+
+    [Header("Credits UI")]
+    [SerializeField] private Button creditsButton;
+    [SerializeField] private int creditsSceneIndex = 8;
+
+    [Header("Quality Settings UI")]
+    [SerializeField] private TMP_Dropdown qualitySettingsDropDown;
+
     private MainMenu _mainMenu;
 
     [Space][SerializeField] private Button closePanelButton;
@@ -32,6 +42,18 @@ public class OptionsPanel : MonoBehaviour
             SFXPlayer.Instance.PlayClickSound();
             UpdateText();
         });
+
+        resetButton.onClick.AddListener(() =>
+        {
+            Debug.Log("Reseting all progress");
+        });
+
+        creditsButton.onClick.AddListener(() =>
+        {
+            LevelLoader.LoadLevel(creditsSceneIndex);
+        });
+
+        qualitySettingsDropDown.onValueChanged.AddListener(SetQualityTo);
 
         MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
         closePanelButton.onClick.AddListener(() =>
@@ -80,6 +102,11 @@ public class OptionsPanel : MonoBehaviour
         {
             GetComponent<CanvasGroup>().alpha = value;
         }
+    }
+
+    void SetQualityTo(int _)
+    {
+        QualitySettings.SetQualityLevel(_);
     }
 
 }

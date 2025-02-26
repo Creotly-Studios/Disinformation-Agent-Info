@@ -21,6 +21,7 @@ public class PlayerData : ScriptableObject
     public float variableJumpHieghtMultiplier = 0.5f;
     [Space]
     public float dashForce = 5f;
+    public float dashStaminaCost; // Add this field
 
     [Header("INTERACTION")] 
     public float detectRadius = 2;

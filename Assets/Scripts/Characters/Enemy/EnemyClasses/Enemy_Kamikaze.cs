@@ -1,12 +1,15 @@
 using UnityEngine;
 
-public class Enemy_Kamikaze : Enemy
+public class Enemy_Kamikaze : MonoBehaviour, IDamagable
 {
     private bool _hasAttacked = false;
+    public EnemyData e_data;
+    public int currentHealth;
+
 
     private void OnCollisionEnter(Collision other)
     {
-        if(other.gameObject.CompareTag("Player") && !_hasAttacked)
+        if (other.gameObject.CompareTag("Player") && !_hasAttacked)
         {
             Explode();
         }
@@ -17,7 +20,7 @@ public class Enemy_Kamikaze : Enemy
         _hasAttacked = true; // Mark as exploded to prevent multiple attacks
 
         // Damage player
-        IDamagable damagable = Player.GetComponent<IDamagable>();
+        IDamagable damagable = Player_v2.Instance.GetComponent<IDamagable>();
         damagable?.TakeDamage(e_data.damage);
 
         // Play explosion effect if assigned
@@ -30,8 +33,22 @@ public class Enemy_Kamikaze : Enemy
         TakeDamage(1000);
     }
 
-    protected override void PerformAttack()
+    public void TakeDamage(int healthDamage)
     {
-        Explode();
+        currentHealth -= healthDamage;
+        Vector3 knockbackDirection = (transform.position - Player_v2.Instance.transform.position).normalized;// Apply knockback when taking damage
+
+        if (currentHealth <= 0)
+        {
+            HandleDeath();
+        }
+    }
+
+    private void HandleDeath()
+    {
+
+        KillTracker.Instance?.EnemyDied();
+        Destroy(gameObject, e_data.destroyTime);
+
     }
 }
