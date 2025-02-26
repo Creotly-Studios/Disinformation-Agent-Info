@@ -75,8 +75,6 @@ public class Player_v2 : MonoBehaviour
         }
         Instance = this;
 
-        PlayerData = Instantiate(PlayerData);
-
         StateMachine = new PlayerStateMachine();
         controller = GetComponent<CharacterController>();
         InputHandler = GetComponent<PlayerInputHandler>();
@@ -170,6 +168,10 @@ public class Player_v2 : MonoBehaviour
     {
         return StateMachine.CurrentState == DeadState;
     }
+    public bool IsPlayerAttacking()
+    {
+        return StateMachine.CurrentState == AttackState;
+    }
 
     #endregion
 
@@ -180,7 +182,7 @@ public class Player_v2 : MonoBehaviour
         controller.Move(velocity);
     }
 
-    private float _verticalVelocity;
+    public float _verticalVelocity;
     public void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
     public void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
 
@@ -270,6 +272,7 @@ public class Player_v2 : MonoBehaviour
     public void CallPlayerCoinPickup()
     {
         GameManager.instance.PlayerCoinAdd();
+        AudioManager.Instance.PlaySFX(PlayerData.coinPickup[0]);
         OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }
 

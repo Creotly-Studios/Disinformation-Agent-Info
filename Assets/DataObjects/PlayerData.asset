@@ -17,7 +17,7 @@ MonoBehaviour:
   sprintSpeed: 6.5
   sprintDuration: 10
   sprintCooldown: 5.5
-  sprintRechargeRate: 1
+  sprintRechargeRate: 2
   gravity: -30
   jumpHeight: 1.75
   jumpForwardForce: 8.01
@@ -28,8 +28,8 @@ MonoBehaviour:
   detectRadius: 1
   detectRange: 1
   pushForce: 1
-  attackRange: 0.59
-  attackSphereSize: 2
+  attackRange: 0
+  attackSphereSize: 2.5
   attackDamage: 1
   attackArray:
   - {fileID: 11400000, guid: cfd66faf0eaf3b54db2db3c23d75d84f, type: 2}
@@ -39,3 +39,23 @@ MonoBehaviour:
   timeBetweenCombos: 0.375
   timeBetweenAttackUsage: 0.375
   timeBetweenAttacks: 0
+  jump: {fileID: 8300000, guid: f2ab68febfeb27647840c5486ab2096e, type: 3}
+  dash: {fileID: 8300000, guid: a8d3674984a991c48b45d0346d0640b8, type: 3}
+  land: {fileID: 8300000, guid: 27cab8dfece32fb43a9936b788b87517, type: 3}
+  interact: {fileID: 8300000, guid: 59f68579b0c27674a983bdf2798948c8, type: 3}
+  dead_GameOver: {fileID: 8300000, guid: 32248103b18ece64795f964eed5d12fc, type: 3}
+  inactiveStateCamSound: {fileID: 8300000, guid: 1b409c45eb92dff439c2dc4220062148, type: 3}
+  attack:
+  - {fileID: 8300000, guid: 56446fb21fb031a48bc0caba783865d1, type: 3}
+  - {fileID: 8300000, guid: 5fdd59025deabdd44b70985a54fe06c6, type: 3}
+  attackHit: {fileID: 8300000, guid: 459a118ce66bcfe4c90ccdfe07688731, type: 3}
+  footsteps:
+  - {fileID: 8300000, guid: 23630cc70167cab459e980f317b43abd, type: 3}
+  - {fileID: 8300000, guid: 4833eb0123cb85148b40ad086f012135, type: 3}
+  footstepInterval: 0.35
+  coinPickup:
+  - {fileID: 8300000, guid: cf8a787725a32524ba42838ef6a2a659, type: 3}
+  hurt:
+  - {fileID: 8300000, guid: 76131f3745835784eb6660eabf4fe83f, type: 3}
+  - {fileID: 8300000, guid: 136d42ebafee51a4fa2ffe373c1e9a81, type: 3}
+  - {fileID: 8300000, guid: 4742e52c304f61644a1938bb76791b62, type: 3}

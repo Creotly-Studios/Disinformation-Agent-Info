@@ -30,6 +30,7 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
     public void TakeDamage(int healthDamage)
     {
         player.CallPlayerDamage();
+        PlayHurtSound();
         CurrentHealth -= healthDamage;
         if (CurrentHealth <= 0.0f)
         {
@@ -96,6 +97,14 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
         {
             CurrentSprintTime = 0;
         }
+    }
+
+
+    private void PlayHurtSound()
+    {
+        // Alternate between footstep sounds for variety
+        int index = UnityEngine.Random.Range(0, player.PlayerData.hurt.Length);
+        AudioManager.Instance.PlaySFX(player.PlayerData.hurt[index]);
     }
 
 }

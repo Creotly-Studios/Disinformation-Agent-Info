@@ -21,6 +21,6 @@ public class DoorLevelLoader : MonoBehaviour, IInteractable
 
     public void PlayDoorSound()
     {
-        SFXPlayer.Instance?.PlaySFX(SFXPlayer.Instance.sfxList.interactWithDoor);
+
     }
 }

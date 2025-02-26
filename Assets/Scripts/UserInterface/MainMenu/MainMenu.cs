@@ -26,6 +26,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private bool hasGameData = true;
     [SerializeField] private bool hasCompletedGame = true;
 
+    [SerializeField] AudioClip mainMenuMusic;
+
     private void Awake()
     {
         instance = this;
@@ -36,32 +38,37 @@ public class MainMenu : MonoBehaviour
 
     void Start()
     {
+        AudioManager.Instance.PlayMusicWithXFade(mainMenuMusic);
         SetCurrentPanel(CurrentPanel.None);
+        Button[] allButtons = FindObjectsOfType<Button>(true);
+        foreach (var btn in allButtons)
+        {
+            btn.onClick.AddListener(() =>
+            {
+                AudioManager.Instance.PlaySFX(AudioManager.Instance.soundEffects.buttonClick);
+            });
+        }
+
         startButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.PlayClickSound();
             SetCurrentPanel(CurrentPanel.StartPanel);
             Debug.Log("start game");
         });
         playEndlessButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.PlayClickSound();
             Debug.Log("Play Endless mode!");
         });
         optionsButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.PlayClickSound();
             SetCurrentPanel(CurrentPanel.OptionsPanel);
             Debug.Log("open options menu");
         });
         redirectButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.PlayClickSound();
             OpenDisinformationURL();
         });
         quitButton.onClick.AddListener(() =>
         {
-            SFXPlayer.Instance.PlayClickSound();
             Application.Quit();
         });
         sidePanelsHolder.alpha = 1;

@@ -24,6 +24,9 @@ public class AudioManager : MonoBehaviour
     public static bool musicOn = true, audioOn = true;
     private bool firstMusicSourceActive;
 
+    [Header("DATA OBJECTS")]
+    public SoundEffects soundEffects;
+
     private void Awake()
     {
         if (instance != null && instance != this)
@@ -61,6 +64,8 @@ public class AudioManager : MonoBehaviour
     {
         music.SetFloat("Volume", musicOn ? Mathf.Log10(musicVolume) * 20 : -80);
         sound.SetFloat("Volume", audioOn ? Mathf.Log10(sfxVolume) * 20 : -80);
+        
+        if (currentMusicAudioSource != null) { currentMusicAudioSource.volume = musicVolume; }
     }
 
     public void ChangeMusicVolume()
@@ -72,6 +77,7 @@ public class AudioManager : MonoBehaviour
         }
         PlayerPrefs.SetFloat("Music", musicVolume);
         PlayerPrefs.Save();
+        currentMusicAudioSource.volume = musicVolume;
         UpdateMixerVolumes();
     }
 
@@ -87,25 +93,12 @@ public class AudioManager : MonoBehaviour
         UpdateMixerVolumes();
     }
 
-    public void ToggleMusic()
+    public void PlaySFX(AudioClip clip)
     {
-        musicOn = !musicOn;
-        PlayerPrefs.SetInt("MusicOn", musicOn ? 1 : 0);
-        PlayerPrefs.Save();
-        UpdateMixerVolumes();
-    }
-
-    public void ToggleSFX()
-    {
-        audioOn = !audioOn;
-        PlayerPrefs.SetInt("SFXOn", audioOn ? 1 : 0);
-        PlayerPrefs.Save();
-        UpdateMixerVolumes();
-    }
-
-    public void PlaySFX(AudioClip clip, float volume = 1f)
-    {
-        sfxSource.PlayOneShot(clip, volume * sfxVolume);
+        if (clip != null)
+        {
+            sfxSource.PlayOneShot(clip, sfxVolume);
+        }
     }
 
     public void PlayMusicWithXFade(AudioClip newClip, float transitionTime = 1.0f)
@@ -137,4 +130,19 @@ public class AudioManager : MonoBehaviour
         firstMusicSourceActive = !firstMusicSourceActive;
         currentMusicAudioSource = newSource;
     }
+
+    public float GetMusicVolume()
+    {
+        return musicVolume;
+    }
+    public float GetSFXVolume()
+    {
+        return sfxVolume;
+    }
+
+
+
+
+
+
 }

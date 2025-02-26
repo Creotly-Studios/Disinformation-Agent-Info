@@ -100,6 +100,7 @@ GameObject:
   - component: {fileID: 8412645495690442793}
   - component: {fileID: 6483852775848605991}
   - component: {fileID: 2382464791713442145}
+  - component: {fileID: 1634649939384623276}
   m_Layer: 0
   m_Name: (E_Shooter) StaticEMPTurret
   m_TagString: Untagged
@@ -190,6 +191,9 @@ MonoBehaviour:
   e_data: {fileID: 11400000, guid: 89f0022c93b3bf7459157bc3c47b74f9, type: 2}
   agent: {fileID: 7631929512577145238}
   animator: {fileID: 5607089128447909880}
+  rb: {fileID: 0}
+  isKnockedBack: 0
+  isBotEnemy: 0
   attackPoint: {fileID: 7688062557752731832}
 --- !u!114 &6483852775848605991
 MonoBehaviour:
@@ -227,6 +231,33 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.1411881, z: 1}
   m_Center: {x: 0, y: 0.57017636, z: 0}
+--- !u!54 &1634649939384623276
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2445423535615893511}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
 --- !u!1 &3637011725671713259
 GameObject:
   m_ObjectHideFlags: 0

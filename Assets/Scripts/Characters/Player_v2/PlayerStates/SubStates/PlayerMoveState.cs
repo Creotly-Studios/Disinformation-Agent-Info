@@ -9,6 +9,9 @@ public class PlayerMoveState : PlayerGroundedState
     private float lastSprintTime = -Mathf.Infinity;
     public float SprintTimeNormalized {get; private set;}
 
+    // Footstep sound variables
+    private float footstepTimer;
+
     public PlayerMoveState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
     {
         currentSprintTime = playerData.sprintDuration; // Initialize sprint duration
@@ -18,26 +21,21 @@ public class PlayerMoveState : PlayerGroundedState
     {
         base.Enter();
         currentMoveSpeed = playerData.speed;
+        footstepTimer = 0f; // Reset the footstep timer when entering the move state
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-
         input = player.InputHandler.MovementInput; // Get player input
-        jumpInput = player.InputHandler.JumpInput;
-        
         Move();
 
-        if (jumpInput == true)
+        if (!isExitingState)
         {
-            player.InputHandler.UseJumpInput();
-            stateMachine.ChangeState(player.JumpState);
-        }
-
-        if (input.magnitude < 0.1f && !isExitingState)
-        {
-            stateMachine.ChangeState(player.IdleState);
+            if (input.magnitude < 0.1f && !isExitingState)
+            {
+                stateMachine.ChangeState(player.IdleState);
+            }
         }
     }
 
@@ -58,6 +56,21 @@ public class PlayerMoveState : PlayerGroundedState
 
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             player.Move(moveDir * player.PlayerStatistics.CurrentMoveSpeed * Time.deltaTime);
+
+            // Update footstep timer
+            footstepTimer -= Time.deltaTime;
+            if (footstepTimer <= 0f)
+            {
+                PlayFootstepSounds();
+                footstepTimer = playerData.footstepInterval; // Reset the timer
+            }
         }
+    }
+
+    private void PlayFootstepSounds()
+    {
+        // Alternate between footstep sounds for variety
+        int index = Random.Range(0, playerData.footsteps.Length);
+        AudioManager.Instance.PlaySFX(playerData.footsteps[index]);
     }
 }

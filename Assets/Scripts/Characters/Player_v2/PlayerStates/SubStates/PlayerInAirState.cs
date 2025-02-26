@@ -22,6 +22,7 @@ public class PlayerInAirState : PlayerState
     public override void Exit()
     {
         base.Exit();
+        AudioManager.Instance.PlaySFX(playerData.land);
     }
 
     public override void LogicUpdate()

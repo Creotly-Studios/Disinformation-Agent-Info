@@ -24,6 +24,7 @@ public class PlayerDeadState : PlayerState
     public override void Enter()
     {
         base.Enter();
+        AudioManager.Instance.PlaySFX(playerData.dead_GameOver);
     }
 
     public override void Exit()

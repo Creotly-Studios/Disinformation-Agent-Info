@@ -29,4 +29,17 @@ public class EnemyData : ScriptableObject
 
     [Header("Melle Enemies")]
     public float attackRate = 3f;
+
+    [Header("SFX")]
+    public AudioClip botDie;
+    public AudioClip botHit;
+    [Space]
+    public AudioClip trollDie;
+    public AudioClip trollHit;
+    [Space]
+    public AudioClip melleSfx;
+    public AudioClip projectileSfx;
+
+    [Header("VFX")]
+    public Material dissolveMaterial;
 }

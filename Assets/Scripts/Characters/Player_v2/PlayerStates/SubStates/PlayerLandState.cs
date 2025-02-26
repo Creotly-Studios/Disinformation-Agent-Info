@@ -14,6 +14,7 @@ public class PlayerLandState : PlayerGroundedState
     public override void Enter()
     {
         base.Enter();
+        AudioManager.Instance.PlaySFX(playerData.attack[0]);
     }
 
     public override void Exit()
