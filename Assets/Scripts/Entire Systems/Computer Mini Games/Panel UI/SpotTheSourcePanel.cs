@@ -105,12 +105,28 @@ public class SpotTheSourcePanel : MonoBehaviour
             return;
         }
 
+        bool popupActive = (computerPanelUI.popupPanel.gameObject.activeSelf == true);
+
+        EnableButtons(popupActive != true);
+        if (popupActive)
+        {
+            return;
+        }
+
         TimerCountdown(Time.deltaTime);
         if(selectedAnswer.Equals(""))
         {
             return;
         }
         StartCoroutine(ResetCurrentPost());
+    }
+
+    private void EnableButtons(bool status)
+    {
+        foreach (DialogueUIChoice btn in uiButton)
+        {
+            btn.choiceButton.interactable = status;
+        }
     }
 
     private IEnumerator ResetCurrentPost()
@@ -148,10 +164,11 @@ public class SpotTheSourcePanel : MonoBehaviour
             scoreCount.text = currentScore.ToString();
             correctAnswer.choiceButton.image.color = Color.green;
 
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.SpotTheSource)
+            QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.SpotTheSource);
+            if(objective != null && objective.isDone != true)
             {
-                quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+                QuestSO quest = QuestManager.Instance.activeQuest;
+                quest.IncreaseQuestObjectiveProgressLevels(objective);
             }
             computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;

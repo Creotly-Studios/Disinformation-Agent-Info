@@ -1,10 +1,4 @@
 
-public enum PostType
-{
-    TextOnly,
-    TextWithImage
-}
-
 public enum ResponseType
 {
     Logical,
@@ -13,8 +7,15 @@ public enum ResponseType
     Argumentative
 }
 
+public enum Switch_Type
+{
+    Main,
+    Blockers
+}
+
 public enum ObjectiveType
 {
+    Puzzle,
     BiasBingo,
     FightBots,
     ConvinceNPC,
@@ -37,7 +38,8 @@ public enum NoticeType
     Wrong,
     Correct,
     Progress,
-    QuestCompleted
+    QuestCompleted,
+    ObjectiveCompleted
 }
 
 public enum PostFactType

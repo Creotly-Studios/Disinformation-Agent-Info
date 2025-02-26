@@ -59,7 +59,10 @@ public struct Response
 [System.Serializable]
 public class QuestObjectives
 {
+    [Header("Status")]
     public bool isDone;
+
+    [Header("Objective Information")]
     public int targetValue;
     public int progressValue;
     public ObjectiveType objectiveType;

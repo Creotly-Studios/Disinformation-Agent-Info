@@ -243,6 +243,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412800344}
     m_Modifications:
+    - target: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
+      propertyPath: switchType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4924658028631829196, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
       propertyPath: m_Name
       value: Puzzle-Switch (7)
@@ -580,65 +584,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0.0000004478721, y: 1, z: 0.00000045603042}
---- !u!1 &95338234
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 95338235}
-  - component: {fileID: 95338236}
-  m_Layer: 0
-  m_Name: KillTracker
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &95338235
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 95338234}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.23196611, y: 1.6761602, z: -4.0278096}
-  m_LocalScale: {x: 0.06666667, y: 0.33333334, z: 0.0653719}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 96648410}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &95338236
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 95338234}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67a2aaf4fdf96d24590df1275eb3a4e7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OnKillAllEnemies:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1818223624}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!1 &96648409
 GameObject:
   m_ObjectHideFlags: 0
@@ -671,7 +616,6 @@ Transform:
   m_LocalScale: {x: 15, y: 3, z: 15.297093}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 95338235}
   - {fileID: 1589136607}
   m_Father: {fileID: 1148488213}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1321,6 +1265,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412800344}
     m_Modifications:
+    - target: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
+      propertyPath: switchType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4924658028631829196, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
       propertyPath: m_Name
       value: Puzzle-Switch (3)
@@ -1545,17 +1493,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 421864251}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &421864254 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 421864251}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &451548026
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3780,17 +3717,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 979688257}
   m_Mesh: {fileID: 5305674560292920236, guid: e94209f85cb88f945820b24261f8614f, type: 3}
---- !u!114 &983037219 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 29309395}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &995998283
 GameObject:
   m_ObjectHideFlags: 0
@@ -3849,21 +3775,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a2aaf4fdf96d24590df1275eb3a4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnKillAllEnemies:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1818223624}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!1001 &1098652830
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4249,17 +4160,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 1229957260}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1229957263 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1229957260}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1232988813
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4608,17 +4508,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d56f53ba2ce3f024095e4ed7123722d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainSwitches:
-  - {fileID: 2061736308}
-  - {fileID: 1870730245}
-  - {fileID: 1229957263}
-  - {fileID: 421864254}
-  blockerSwitches:
-  - {fileID: 1959498571}
-  - {fileID: 1539230772}
-  - {fileID: 1798440602}
-  - {fileID: 983037219}
-  - {fileID: 1592168510}
+  combatCompleteReward: {fileID: 1818223624}
   puzzleCompleteReward: {fileID: 471883013}
 --- !u!1 &1436738674
 GameObject:
@@ -4917,6 +4807,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412800344}
     m_Modifications:
+    - target: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
+      propertyPath: switchType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4924658028631829196, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
       propertyPath: m_Name
       value: Puzzle-Switch (2)
@@ -4971,17 +4865,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 1539230769}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1539230772 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1539230769}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1552858865
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5198,6 +5081,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412800344}
     m_Modifications:
+    - target: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
+      propertyPath: switchType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4924658028631829196, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
       propertyPath: m_Name
       value: Puzzle-Switch (8)
@@ -5252,17 +5139,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 1592168507}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1592168510 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1592168507}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &1596514698
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -5356,6 +5232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1652933572}
+  - component: {fileID: 1652933573}
   m_Layer: 0
   m_Name: ----MANAGERS----
   m_TagString: Untagged
@@ -5384,6 +5261,18 @@ Transform:
   - {fileID: 995998284}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1652933573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1652933571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fec75db5a793af4aaffef99b8e1cb66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1676537114
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5973,6 +5862,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1412800344}
     m_Modifications:
+    - target: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
+      propertyPath: switchType
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4924658028631829196, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
       propertyPath: m_Name
       value: Puzzle-Switch (4)
@@ -6027,17 +5920,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 1798440599}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1798440602 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1798440599}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1812220694
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6381,17 +6263,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5615634874383138945, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
   m_PrefabInstance: {fileID: 1870730242}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1870730245 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1870730242}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1888655233
 GameObject:
   m_ObjectHideFlags: 0
@@ -6638,17 +6509,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1959498571 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 394844544}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1994446043
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7142,17 +7002,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2061363262}
   m_CullTransparentMesh: 1
---- !u!114 &2061736308 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 154119433463377819, guid: f7146d599c9fb0744a04b8fd10474e56, type: 3}
-  m_PrefabInstance: {fileID: 1819636568}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ca6ed9674d59294eac32d666592f1bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!64 &2061834804
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -8805,7 +8654,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
-  customStoppingDistance: 1.25
   minRoamDistance: 5
   maxRoamDistance: 15
   roamUpdateInterval: 3

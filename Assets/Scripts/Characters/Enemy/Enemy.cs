@@ -111,7 +111,13 @@ public abstract class Enemy : MonoBehaviour, IDamagable
             {
                 FinishAttack(); // Release attack lock if dead while attacking
             }
-            KillTracker.Instance?.EnemyDied();
+
+            QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.FightBots);
+            if (objective != null && objective.isDone != true)
+            {
+                QuestSO quest = QuestManager.Instance.activeQuest;
+                quest.IncreaseQuestObjectiveProgressLevels(objective);
+            }
             Destroy(gameObject, e_data.destroyTime);
         }
     }

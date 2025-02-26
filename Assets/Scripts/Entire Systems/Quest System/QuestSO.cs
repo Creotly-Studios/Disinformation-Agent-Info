@@ -6,8 +6,6 @@ public class QuestSO : ScriptableObject
 {
     [Header("Status")]
     public bool isComplete;
-    private bool hasNotified;
-    public QuestObjectives currentObjective { get; private set; }
 
     [field: Header("Quest Information")]
     public string questTitle;
@@ -17,33 +15,20 @@ public class QuestSO : ScriptableObject
 
     public void QuestSO_Update()
     {
-        AssignObjective();
+        CheckIfQuestIsComplete();
     }
 
-    private void AssignObjective()
+    private void CheckIfQuestIsComplete()
     {
-        if (currentObjective == null || currentObjective.isDone == true)
-        {
-            QuestObjectives objective = questObjectives.Find(x => x.isDone != true);
+        QuestObjectives objective = questObjectives.Find(x => x.isDone != true);
+        isComplete = (objective == null);
+    }
 
-            if (objective != null)
-            {
-                hasNotified = false;
-                currentObjective = objective;
-                return;
-            }
-            isComplete = true;
-            return;
-        }
-
-        if (currentObjective.isDone == true)
-        {
-            if (hasNotified != true)
-            {
-                hasNotified = true;
-                QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, this);
-            }
-        }
+    public void DecreaseQuestObjectiveProgressLevels(QuestObjectives questObjective)
+    {
+        questObjective.progressValue--;
+        questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
+        if (questObjective.isDone) { QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective); }
     }
 
     public void IncreaseQuestObjectiveProgressLevels(QuestObjectives questObjective)
@@ -54,5 +39,6 @@ public class QuestSO : ScriptableObject
         }
         questObjective.progressValue++;
         questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
+        if(questObjective.isDone) { QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective); }
     }
 }

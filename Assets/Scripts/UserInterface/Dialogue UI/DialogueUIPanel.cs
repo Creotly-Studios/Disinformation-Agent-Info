@@ -69,19 +69,17 @@ public class DialogueUIPanel : MonoBehaviour
     {
         if(DialogueManager.Instance.currentSpeakerType == SpeakerType.Player)
         {
-            speakerObject.gameObject.SetActive(false);
-            playerObject.gameObject.SetActive(true);
+            speakerObject.SetActive(false);
+            playerObject.SetActive(true);
 
             speakerName.text = speaker.characterName;
-            // speakerImage.sprite = speaker.characterImage;
         }
         else
         {
-            playerObject.gameObject.SetActive(false);
-            speakerObject.gameObject.SetActive(true);
+            playerObject.SetActive(false);
+            speakerObject.SetActive(true);
 
             speakerName.text = speaker.characterName;
-            // speakerImage.sprite = speaker.characterImage;
 
             switch (speaker.currentEmotion)
             {
@@ -96,7 +94,7 @@ public class DialogueUIPanel : MonoBehaviour
                     break;
             }
         }
-        typingCoroutine = StartCoroutine(StartTypingText(dialogueText));
+        HandleTextTyping(dialogueText);
     }
 
     public void DisableUIChoices()
@@ -140,38 +138,30 @@ public class DialogueUIPanel : MonoBehaviour
         EventSystem.current.SetSelectedGameObject(choicesUIList[0].gameObject);
     }
 
-    private IEnumerator StartTypingText(string text)
+    private void HandleTextTyping(string text)
     {
         isTyping = true;
-        DialogueManager.Instance.canContinue = false;
-        if(DialogueManager.Instance.currentSpeakerType == SpeakerType.Player)
+        DialogueManager dialogue = DialogueManager.Instance;
+
+        dialogue.canContinue = false;
+        typingCoroutine = (dialogue.currentSpeakerType == SpeakerType.Player) ? 
+            StartCoroutine(TypeText(text, playerTextDialogue)) : StartCoroutine(TypeText(text, speakerTextDialogue));
+    }
+
+    private IEnumerator TypeText(string text, TextMeshProUGUI textBox)
+    {
+        textBox.text = "";
+        foreach (char c in text)
         {
-            playerTextDialogue.text = "";
-            foreach (char c in text)
+            if (skipFlag == true)
             {
-                if(skipFlag == true)
-                {
-                    playerTextDialogue.text = text;
-                    break;
-                }
-                playerTextDialogue.text += c;
-                yield return typingSpeed;
+                textBox.text = text;
+                break;
             }
+            textBox.text += c;
+            yield return typingSpeed;
         }
-        else
-        {
-            speakerTextDialogue.text = "";
-            foreach (char c in text)
-            {
-                if (skipFlag == true)
-                {
-                    playerTextDialogue.text = text;
-                    break;
-                }
-                speakerTextDialogue.text += c;
-                yield return typingSpeed;
-            }
-        }
+
         isTyping = false;
         skipFlag = false;
         DialogueManager.Instance.canContinue = true;

@@ -29,9 +29,28 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    public void SetMiniGame(ComputerPanel_UI computerPanel)
+    public QuestObjectives GetObjective()
     {
-        
+        for(int i = 0; i < activeQuest.questObjectives.Count; i++)
+        {
+            QuestObjectives potObjective = activeQuest.questObjectives[i];
+
+            ObjectiveType type = potObjective.objectiveType;
+            if (type == ObjectiveType.MisInfoGames || type == ObjectiveType.SpotTheSource || type == ObjectiveType.BiasBingo )
+            {
+                return potObjective;
+            }
+        }
+        return null;
+    }
+
+    public QuestObjectives FindQuestObjective(ObjectiveType type)
+    {
+        if(activeQuest == null)
+        {
+            return null;
+        }
+        return activeQuest.questObjectives.Find(x => x.objectiveType == type);
     }
 
     public void Quest_Update()

@@ -90,28 +90,32 @@ public class ComputerPanel_UI : MonoBehaviour
         if (QuestManager.Instance == null) return;
          
         QuestSO activeQuest = QuestManager.Instance.activeQuest;
-
-        if (activeQuest == null || activeQuest.currentObjective == null)
+        if (activeQuest == null)
         {
+            SetMiniGame();
             return;
         }
 
-        if(activeQuest.currentObjective.objectiveType == ObjectiveType.BiasBingo)
+        QuestObjectives objective = QuestManager.Instance.GetObjective();
+        if(objective == null)
         {
-            biasBingo_Btn.interactable = true;
-            infoMatch_Btn.interactable = false;
-            spotSource_Btn.interactable = false;
+            SetMiniGame();
             return;
         }
-        else if(activeQuest.currentObjective.objectiveType == ObjectiveType.SpotTheSource)
-        {
-            spotSource_Btn.interactable = true;
-            biasBingo_Btn.interactable = false;
-            infoMatch_Btn.interactable = false;
-            return;
-        }
+        SetMiniGame(objective.objectiveType);
+    }
+
+    private void SetMiniGame()
+    {
+        biasBingo_Btn.interactable = true;
         infoMatch_Btn.interactable = true;
-        biasBingo_Btn.interactable = false;
-        spotSource_Btn.interactable = false;
+        spotSource_Btn.interactable = true;
+    }
+
+    private void SetMiniGame(ObjectiveType type)
+    {
+        biasBingo_Btn.interactable = (type == ObjectiveType.BiasBingo);
+        infoMatch_Btn.interactable = (type == ObjectiveType.MisInfoGames);
+        spotSource_Btn.interactable = (type == ObjectiveType.SpotTheSource);
     }
 }

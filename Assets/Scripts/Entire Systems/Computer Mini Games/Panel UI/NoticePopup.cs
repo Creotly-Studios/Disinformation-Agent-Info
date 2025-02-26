@@ -1,7 +1,7 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class NoticePopup : MonoBehaviour
 {
@@ -21,13 +21,17 @@ public class NoticePopup : MonoBehaviour
         }
     }
 
-    public void DisplayPopUpWindow(string text, NoticeType noticeType, QuestSO quest = null)
+    public void DisplayPopUpWindow(string text, NoticeType noticeType, QuestSO quest = null, QuestObjectives objective = null)
     {
         gameObject.SetActive(true);
 
         if(noticeType == NoticeType.QuestCompleted)
         {
             StartCoroutine(QuestCompletedNotice(quest));
+        }
+        if(noticeType == NoticeType.ObjectiveCompleted)
+        {
+            StartCoroutine(ObjectiveCompletedNotice(objective));
         }
         if (noticeType == NoticeType.Correct || noticeType == NoticeType.Wrong)
         {
@@ -42,10 +46,16 @@ public class NoticePopup : MonoBehaviour
             titleText.text = "Quest Completed";
             contentText.text = questSO.questTitle;
         }
-        else
+        yield return new WaitForSeconds(2.0f);
+        gameObject.SetActive(false);
+    }
+
+    private IEnumerator ObjectiveCompletedNotice(QuestObjectives objective)
+    {
+        if(objective.isDone)
         {
-            titleText.text = "Completed";
-            contentText.text = questSO.currentObjective.description;
+            titleText.text = "Objective Completed";
+            contentText.text = objective.description;
         }
         yield return new WaitForSeconds(2.0f);
         gameObject.SetActive(false);

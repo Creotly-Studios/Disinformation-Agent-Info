@@ -81,10 +81,11 @@ public class NPC : MonoBehaviour
     {
         warmingUpRadar += response.Evaluate(profile);
 
-        QuestSO quest = QuestManager.Instance.activeQuest;
-        if(warmingUpRadar >= 75.0f && quest.currentObjective.objectiveType == ObjectiveType.ConvinceNPC)
+        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
+        if (warmingUpRadar >= 75.0f && objective != null)
         {
-            quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+            QuestSO quest = QuestManager.Instance.activeQuest;
+            quest.IncreaseQuestObjectiveProgressLevels(objective);
         }
         ChangeEmotion();
     }

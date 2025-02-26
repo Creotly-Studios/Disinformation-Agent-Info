@@ -121,6 +121,14 @@ public class BiasBingoPanel : MonoBehaviour
             return;
         }
 
+        bool popupActive = (computerPanelUI.popupPanel.gameObject.activeSelf == true);
+
+        EnableButtons(popupActive != true);
+        if(popupActive)
+        {
+            return;
+        }
+
         TimerCountdown(Time.deltaTime);
         if (selectedAnswer.Equals(""))
         {
@@ -189,10 +197,11 @@ public class BiasBingoPanel : MonoBehaviour
             scoreCount.text = currentScore.ToString();
             correctAnswer.choiceButton.image.color = Color.green;
 
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.BiasBingo)
+            QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.BiasBingo);
+            if (objective != null && objective.isDone != true)
             {
-                quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+                QuestSO quest = QuestManager.Instance.activeQuest;
+                quest.IncreaseQuestObjectiveProgressLevels(objective);
             }
             computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
         }
@@ -255,6 +264,14 @@ public class BiasBingoPanel : MonoBehaviour
 
         countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
         countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
+    }
+
+    private void EnableButtons(bool status)
+    {
+        foreach(DialogueUIChoice btn in uiButton)
+        {
+            btn.choiceButton.interactable = status;
+        }
     }
 
     private void HintButton()

@@ -104,12 +104,25 @@ public class MisinformationPanel : MonoBehaviour
             return;
         }
 
+        bool popupActive = (computerPanelUI.popupPanel.gameObject.activeSelf == true);
+        EnableButtons(popupActive != true);
+        if (popupActive)
+        {
+            return;
+        }
+
         TimerCountdown(Time.deltaTime);
         if (selectedPostType == PostFactType.None)
         {
             return;
         }
         StartCoroutine(ResetCurrentPost());
+    }
+
+    private void EnableButtons(bool status)
+    {
+        info_Btn.interactable = status;
+        malInfo_Btn.interactable = status;
     }
 
     private IEnumerator ResetCurrentPost()
@@ -231,10 +244,11 @@ public class MisinformationPanel : MonoBehaviour
             currentScore++;
             scoreCount.text = currentScore.ToString();
 
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            if (quest != null && quest.currentObjective.objectiveType == ObjectiveType.MisInfoGames)
+            QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.MisInfoGames);
+            if (objective != null && objective.isDone != true)
             {
-                quest.IncreaseQuestObjectiveProgressLevels(quest.currentObjective);
+                QuestSO quest = QuestManager.Instance.activeQuest;
+                quest.IncreaseQuestObjectiveProgressLevels(objective);
             }
             computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
             return;

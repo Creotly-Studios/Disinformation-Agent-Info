@@ -32,7 +32,6 @@ public class AudioManager : MonoBehaviour
             return;
         }
         instance = this;
-        DontDestroyOnLoad(gameObject);
 
         music = musicMixer.audioMixer;
         sound = soundMixer.audioMixer;

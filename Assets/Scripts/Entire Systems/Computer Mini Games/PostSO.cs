@@ -5,7 +5,6 @@ public class PostSO : ScriptableObject
 {
     [Header("Status")]
     public bool hasChecked;
-    public PostType postType;
 
     [field: SerializeField] public PostFactType postFactType { get; private set; }
 
