@@ -23,7 +23,7 @@ public class LevelCompleteButton : MonoBehaviour
     private IEnumerator CompleteLevel()
     {
         _buttonPressed?.Invoke();
-        GameManager.instance.MissionComplete();
+        GameManager.Instance.MissionComplete();
         
         yield return new WaitForSeconds(loadDelay);
         

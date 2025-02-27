@@ -7,6 +7,12 @@ public enum ResponseType
     Argumentative
 }
 
+public enum NPCType
+{ 
+    Special,
+    Generic
+}
+
 public enum Switch_Type
 {
     Main,

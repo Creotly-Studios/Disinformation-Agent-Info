@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 Ugh. You again? What do you want?  
 

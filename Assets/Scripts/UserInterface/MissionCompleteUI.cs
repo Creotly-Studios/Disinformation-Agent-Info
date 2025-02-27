@@ -5,14 +5,14 @@ public class MissionCompleteUI : MonoBehaviour
 {
     void Start()
     {
-        GameManager.instance.OnStateChange += GameManager_OnStateChange;
+        GameManager.Instance.OnStateChange += GameManager_OnStateChange;
 
         Hide();
     }
 
     void GameManager_OnStateChange(object sender, System.EventArgs e)
     {
-        if (GameManager.instance.IsGameOver() && GameManager.instance.IsMissionComplete())
+        if (GameManager.Instance.IsGameOver() && GameManager.Instance.IsMissionComplete())
         {
             Show();
         }

@@ -22,10 +22,7 @@ public class DialogueUIChoice : MonoBehaviour
         DialogueManager.Instance.OnChoiceSelected(choiceIndex);
 
         NPC npc = DialogueManager.Instance.NPCharacter;
-        if(npc != null)
-        {
-            npc.warmingUpRadar += response.Evaluate(npc.profile);
-        }
+        if(npc != null) { npc.UpdateWarmRadar(response); }
         uiPanel.DisableUIChoices();
     }
 }

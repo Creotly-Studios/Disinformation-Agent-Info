@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [CreateAssetMenu(fileName = "NPCStates", menuName = "Creotly Studio/NPCStates")]
-public class NPCStates : ScriptableObject
+public class PatrolState : ScriptableObject
 {
     private float idleTime = 7.5f;
 
@@ -18,7 +18,7 @@ public class NPCStates : ScriptableObject
     private Vector3 enemyDestination;
     public PatrolMode patrolMode = PatrolMode.Idle;
 
-    public NPCStates RobotState_Update(NPC npcManager)
+    public PatrolState RobotState_Update(NPC npcManager)
     {
         if (npcManager.performingAction)
         {
@@ -35,7 +35,7 @@ public class NPCStates : ScriptableObject
         return HandleAction(npcManager);
     }
 
-    private NPCStates HandleAction(NPC npcManager)
+    private PatrolState HandleAction(NPC npcManager)
     {
         npcManager.npcFunctions.RotateTowardsTarget();
         if (patrolMode == PatrolMode.Idle)
@@ -47,7 +47,7 @@ public class NPCStates : ScriptableObject
 
     #region Actions
 
-    private NPCStates Idle(NPC robot)
+    private PatrolState Idle(NPC robot)
     {
         idleTime -= Time.deltaTime;
         robot.navMeshAgent.enabled = false;
@@ -63,35 +63,40 @@ public class NPCStates : ScriptableObject
             if (destinationSet)
             {
                 destinationSet = false;
+                patrolMode = PatrolMode.Walk;
                 robot.navMeshAgent.enabled = true;
 
-                patrolMode = PatrolMode.Walk;
+                idleTime = 6.0f;
                 return Walk(robot);
             }
         }
         return this;
     }
 
-    private NPCStates Walk(NPC robot)
+    private PatrolState Walk(NPC robot)
     {
+        idleTime -= Time.deltaTime;
         robot.SetPersonalTargetDetails(enemyDestination);
-        if (robot.targetDistance >= robot.navMeshAgent.stoppingDistance)
+        bool isClose = robot.targetDistance < robot.navMeshAgent.stoppingDistance;
+
+        if (isClose == true || idleTime <= 0.0f)
         {
-            robot.npcFunctions.SetBlendTreeParameter(0f, 0.55f, false, Time.deltaTime);
-            robot.npcFunctions.HandleMovement(enemyDestination, robot.npcFunctions.movementSpeed);
-        }
-        else
-        {
+            idleTime = 5.0f;
             patrolMode = PatrolMode.Idle;
             robot.navMeshAgent.enabled = false;
             return SwitchState(Idle(robot));
+        }
+        else
+        {
+            robot.npcFunctions.SetBlendTreeParameter(0f, 0.55f, false, Time.deltaTime);
+            robot.npcFunctions.HandleMovement(enemyDestination, robot.npcFunctions.movementSpeed);
         }
         return this;
     }
 
     #endregion
 
-    public NPCStates SwitchState(NPCStates nextState)
+    public PatrolState SwitchState(PatrolState nextState)
     {
         ResetStateFlags();
         return nextState;
@@ -105,14 +110,16 @@ public class NPCStates : ScriptableObject
 
     private void SetDestination(NPC npcManager)
     {
-        Vector3 randomPoint = Random.insideUnitSphere * sphereRadius + npcManager.transform.position;
+        Vector3 offsetDirection = Random.insideUnitSphere.normalized * 5.0f;
+        Vector3 offsetPosition = npcManager.transform.position + offsetDirection;
+        Vector3 randomPoint = Random.insideUnitSphere * sphereRadius + offsetPosition;
         
         NavMeshHit navMeshHit;
         if (NavMesh.SamplePosition(randomPoint, out navMeshHit, sphereRadius, NavMesh.AllAreas))
         {
+            destinationSet = true;
             enemyDestination = navMeshHit.position;
             npcManager.SetPersonalTargetDetails(enemyDestination);
-            destinationSet = true;
             return;
         }
         destinationSet = false;

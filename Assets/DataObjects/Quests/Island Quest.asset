@@ -13,7 +13,19 @@ MonoBehaviour:
   m_Name: Island Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  questTitle: 
-  description: 
+  <questCode>k__BackingField: 177
+  <questLevelIndex>k__BackingField: 4
+  questTitle: Malign Education
+  description: Educate the masses on the threat of spreading fake news
   <QuestReward>k__BackingField: 0
-  <questObjectives>k__BackingField: []
+  <questObjectives>k__BackingField:
+  - isDone: 0
+    targetValue: 5
+    progressValue: 0
+    objectiveType: 1
+    description: Get A Score Of 5 in Bias Bingo
+  - isDone: 0
+    targetValue: 3
+    progressValue: 0
+    objectiveType: 3
+    description: Discuss with The 3 Special NPCs in regards to fake news

@@ -9,7 +9,7 @@ public class GameOverUI : MonoBehaviour
         // Start is called before the first frame update
         void Start()
         {
-            GameManager.instance.OnStateChange += GameManager_OnStateChange;
+            GameManager.Instance.OnStateChange += GameManager_OnStateChange;
             menuBtn.onClick.AddListener(() =>
             {
                 LevelLoader.LoadLevel(0);
@@ -23,7 +23,7 @@ public class GameOverUI : MonoBehaviour
     
         void GameManager_OnStateChange(object sender, System.EventArgs e)
         {
-            if (GameManager.instance.IsGameOver() && GameManager.instance.IsPlayerDead())
+            if (GameManager.Instance.IsGameOver() && GameManager.Instance.IsPlayerDead())
             {
                 Show();
             } else Hide();

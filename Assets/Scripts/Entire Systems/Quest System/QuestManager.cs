@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 public class QuestManager : MonoBehaviour
 {
-    private bool hasNotified;
     public static QuestManager Instance;
 
     [field: Header("Parameters")]
@@ -77,21 +76,13 @@ public class QuestManager : MonoBehaviour
                 allQuestCompleted = true;
                 return;
             }
-
-            hasNotified = false;
             activeQuest = questSO;
-            return;
         }
-
         activeQuest.QuestSO_Update();
-        if (activeQuest.isComplete)
+        if (activeQuest.isComplete) 
         {
-            print(activeQuest + " complete status is " + activeQuest.isComplete);
-            if (hasNotified != true)
-            {
-                hasNotified = true;
-                popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
-            }
+            GameManager.Instance.MissionComplete();
+            popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
         }
     }
 }

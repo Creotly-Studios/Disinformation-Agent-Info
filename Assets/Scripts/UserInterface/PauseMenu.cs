@@ -10,14 +10,14 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameManager.instance.OnGamePause += GameManager_OnGamePaused;
+        GameManager.Instance.OnGamePause += GameManager_OnGamePaused;
         menuBtn.onClick.AddListener(() =>
             {
                 LevelLoader.LoadLevel(0);
             });
         resumeBtn.onClick.AddListener(() =>
         {
-            GameManager.instance.TogglePause();
+            GameManager.Instance.TogglePause();
         });
         replayBtn.onClick.AddListener(() =>
         {
@@ -39,7 +39,7 @@ public class PauseMenu : MonoBehaviour
     
     void GameManager_OnGamePaused(object sender, System.EventArgs e)
     {
-        if (GameManager.instance.IsGamePaused())
+        if (GameManager.Instance.IsGamePaused())
         {
             Show();
         }

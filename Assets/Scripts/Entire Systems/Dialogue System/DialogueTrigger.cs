@@ -32,7 +32,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     public void Interact(Player_v2 player)
     {
         PlayInteractNPCSound();
-        TriggerDialogue(character, dialogueTexts[0]);
+        TriggerDialogue(character);
     }
 
     public void PlayInteractNPCSound()
@@ -40,18 +40,18 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
 
     }
 
-    private void TriggerDialogue(NPC npc = null, TextAsset textAsset = null)
+    private void TriggerDialogue(NPC npc = null)
     {
         if (characterInformation.speakerType == TypeOfSpeaker.Instructor)
         {
             QuestManager questManager = QuestManager.Instance;
 
             int i = questManager.availableQuests.IndexOf(questManager.activeQuest);
-            print(i + " character trigger is " + this);
             DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i]);
             return;
         }
-        TextAsset randomDialogue = textAsset;
+        int random = Random.Range(0, dialogueTexts.Count);
+        TextAsset randomDialogue = dialogueTexts[random];
         DialogueManager.Instance.HandleDialogue(characterInformation, randomDialogue, npc);
     }
 }

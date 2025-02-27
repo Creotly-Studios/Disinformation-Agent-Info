@@ -141,7 +141,7 @@ public class Player_v2 : MonoBehaviour
 
     public bool CanUseMovementInput()
     {
-        return StateMachine.CurrentState != InactiveState && !GameManager.instance.IsGamePaused();
+        return StateMachine.CurrentState != InactiveState && !GameManager.Instance.IsGamePaused();
     }
     public GameObject GetInteractableObject()
     {
@@ -260,7 +260,7 @@ public class Player_v2 : MonoBehaviour
     public void CallPlayerDeath()
     {
         StateMachine.ChangeState(DeadState);
-        GameManager.instance.PlayerDie();
+        GameManager.Instance.PlayerDie();
         OnPlayerDie?.Invoke(this, EventArgs.Empty);
     }
 
@@ -271,7 +271,7 @@ public class Player_v2 : MonoBehaviour
 
     public void CallPlayerCoinPickup()
     {
-        GameManager.instance.PlayerCoinAdd();
+        GameManager.Instance.PlayerCoinAdd();
         AudioManager.Instance.PlaySFX(PlayerData.coinPickup[0]);
         OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }

@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 Whoa! Did you see that leaked video? It’s all over the internet!  
 

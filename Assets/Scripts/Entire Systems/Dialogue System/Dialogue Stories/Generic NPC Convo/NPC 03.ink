@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 The news says a huge protest broke out downtown!  
 

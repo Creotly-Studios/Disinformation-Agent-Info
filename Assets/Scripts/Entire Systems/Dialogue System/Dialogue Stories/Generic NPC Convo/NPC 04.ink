@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 Hey, nice jacket! Where’d you get it?  
 

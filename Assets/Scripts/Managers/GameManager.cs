@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager Instance;
     public GameState GameState { get; private set; }
     public GameOverState GameOverState {get; private set;}
     public event EventHandler OnStateChange;
@@ -23,11 +23,11 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         isGamePaused = false;
-        if (instance != null)
+        if (Instance != null)
         {
             return;
         }
-        instance = this;
+        Instance = this;
 
         dialogueManager = DialogueManager.Instance;
     }

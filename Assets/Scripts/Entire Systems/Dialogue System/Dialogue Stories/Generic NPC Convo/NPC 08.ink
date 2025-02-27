@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 Saw a wild article this morning. Said tap water lowers your IQ.  
 

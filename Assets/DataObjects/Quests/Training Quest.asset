@@ -13,24 +13,23 @@ MonoBehaviour:
   m_Name: Training Quest
   m_EditorClassIdentifier: 
   isComplete: 0
+  <questCode>k__BackingField: 210
+  <questLevelIndex>k__BackingField: 3
   questTitle: Introduction
   description: Introduction To The Level
   <QuestReward>k__BackingField: 30
   <questObjectives>k__BackingField:
   - isDone: 0
-    hasNotified: 0
-    targetValue: 10
+    targetValue: 5
     progressValue: 0
     objectiveType: 4
-    description: Complete 10 Spot The Source Games
+    description: Complete 5 MisInfo Games
   - isDone: 0
-    hasNotified: 0
     targetValue: 4
     progressValue: 0
     objectiveType: 0
     description: Turn The Main Switches On
   - isDone: 0
-    hasNotified: 0
     targetValue: 1
     progressValue: 0
     objectiveType: 2

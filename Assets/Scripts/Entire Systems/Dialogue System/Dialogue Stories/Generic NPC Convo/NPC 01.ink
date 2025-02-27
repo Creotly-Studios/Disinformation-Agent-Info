@@ -1,3 +1,5 @@
+VAR npcEmotion = "Angry"
+
 #speaker: NPC  
 Hey, you seen these flyers around town? Someone’s spreading rumors about the Mayor.  
 

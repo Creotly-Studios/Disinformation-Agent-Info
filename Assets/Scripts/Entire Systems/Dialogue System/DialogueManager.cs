@@ -109,13 +109,6 @@ public class DialogueManager : MonoBehaviour
 
             if (currentSpeaker != null)
             {
-                if (currentDialogueStory.currentTags.Contains("stage:Gameplay"))
-                {
-                    StartCoroutine(ExitDialogueMode());
-                    // TriggerGameplay();
-                    return;
-                }
-
                 currentDialogueStory.variablesState["npcEmotion"] = currentSpeaker.currentEmotion.ToString();
                 dialogueUIPanel.DisplayChoicesUI(currentDialogueStory);
                 dialogueUIPanel.DisplayText(currentSpeaker, text);
@@ -134,10 +127,32 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogueStory = null;
         dialogueUIPanel.ExitPanel();
+        UpdateObective();
 
         // Trigger the "On Dialogue End" UnityEvent
         OnDialogueEnd?.Invoke();
         player.SetActiveState();
+    }
+
+    private void UpdateObective()
+    {
+        if(NPCharacter == null)
+        {
+            return;
+        }
+
+        if(NPCharacter.hasCompletedDialogue || NPCharacter.npcType != NPCType.Special)
+        {
+            return;
+        }
+
+        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
+        if (objective != null)
+        {
+            NPCharacter.hasCompletedDialogue = true;
+            QuestSO quest = QuestManager.Instance.activeQuest;
+            quest.IncreaseQuestObjectiveProgressLevels(objective);
+        }
     }
 
     private void CheckWhoIsSpeaking(List<string> currentTag)

@@ -1,10 +1,11 @@
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ComputerPanel_UI : MonoBehaviour
 {
     private bool hasInitalized;
+    private QuestObjectives objective;
 
     [Header("User Buttons")]
     [SerializeField] private Button biasBingo_Btn;
@@ -15,6 +16,7 @@ public class ComputerPanel_UI : MonoBehaviour
 
     [Header("User Interface")]
     [SerializeField] private GameObject mainMenuPanel;
+    [SerializeField] private MissionCodeUI missionCodeUI;
     [SerializeField] private BiasBingoPanel biasBingoPanel;
     [SerializeField] private MisinformationPanel infoMatchPanel;
     [SerializeField] public SpotTheSourcePanel spotTheSourcePanel;
@@ -83,20 +85,36 @@ public class ComputerPanel_UI : MonoBehaviour
         biasBingoPanel.BiasBingPanel_Update();
         spotTheSourcePanel.SpotSource_Update();
         infoMatchPanel.Misinformation_Update();
+
+        UpdateMissionQuestLevel();
+    }
+
+    private void UpdateMissionQuestLevel()
+    {
+        QuestManager questManager = QuestManager.Instance;
+
+        if(objective != null)
+        {
+            missionCodeUI.SetParameters(objective.isDone, questManager.activeQuest);
+        }
     }
 
     private void UnlockGames()
     {
-        if (QuestManager.Instance == null) return;
-         
-        QuestSO activeQuest = QuestManager.Instance.activeQuest;
+        QuestManager questManager = QuestManager.Instance;
+        if (questManager == null)
+        {
+            return;
+        }
+        
+        QuestSO activeQuest = questManager.activeQuest;
         if (activeQuest == null)
         {
             SetMiniGame();
             return;
         }
 
-        QuestObjectives objective = QuestManager.Instance.GetObjective();
+        objective = questManager.GetObjective();
         if(objective == null)
         {
             SetMiniGame();
