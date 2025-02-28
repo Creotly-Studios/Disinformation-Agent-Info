@@ -1,16 +1,16 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Throphy : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private UnityEvent pickUpEvent;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player"))
+        {
+            pickUpEvent?.Invoke();
+            GameManager.Instance.MissionComplete();
+            Destroy(gameObject);
+        }
     }
 }
