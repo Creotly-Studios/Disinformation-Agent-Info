@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
         isGamePaused = false;
         if (Instance != null)
         {
+            Destroy(gameObject);
             return;
         }
         Instance = this;
