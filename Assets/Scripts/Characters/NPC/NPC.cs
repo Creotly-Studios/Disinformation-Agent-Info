@@ -42,6 +42,10 @@ public class NPC : MonoBehaviour
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool performingAction;
 
+    [Header("For NPC Emote")]
+    [SerializeField] public Emotions emotion;
+    [SerializeField] public NPC_Emote emote;
+
     private void Awake()
     {
         profile.Initialize(this);
@@ -81,6 +85,7 @@ public class NPC : MonoBehaviour
         
         HandleStateChange();
         npcFunctions.NPCFunctions_Update(delta);
+        if (emote != null) emote.SetCurrentEmotion(emotion); //move to start during production build
     }
 
     public void UpdateWarmRadar(Response response)

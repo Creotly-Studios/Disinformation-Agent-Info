@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         isGamePaused = false;
+        GameState = GameState.Playing;
         if (Instance != null)
         {
             Destroy(gameObject);

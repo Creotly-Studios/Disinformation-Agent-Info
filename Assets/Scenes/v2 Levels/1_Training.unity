@@ -4757,17 +4757,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1698230568432658103, guid: 1b59b12b407bf5b47adce0ab601d8bef, type: 3}
   m_PrefabInstance: {fileID: 1503659068}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1503659070 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 738420184152325136, guid: 1b59b12b407bf5b47adce0ab601d8bef, type: 3}
-  m_PrefabInstance: {fileID: 1503659068}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 547d134487e00a84888221216e190f45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1510021091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -8010,8 +7999,8 @@ GameObject:
   - component: {fileID: 3469287838125621402}
   - component: {fileID: 1711813855138509904}
   - component: {fileID: 3469287838125621403}
-  - component: {fileID: 3469287838125621404}
   - component: {fileID: 3469287838125621405}
+  - component: {fileID: 3469287838125621406}
   m_Layer: 0
   m_Name: Trophy
   m_TagString: Untagged
@@ -10828,21 +10817,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.28466028
   m_Center: {x: 0, y: 0.23869999, z: 0}
---- !u!114 &3469287838125621404
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 919132147538777477}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b4c9a7cb5a07f6747aeb05ae0cd78577, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickUpEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!95 &3469287838125621405
 Animator:
   serializedVersion: 7
@@ -10865,6 +10839,21 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &3469287838125621406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132147538777477}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb1c4723eee82ba409773804d043c1dd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pickUpEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!33 &3469287838268950984
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -12666,19 +12655,7 @@ MonoBehaviour:
   loadDelay: 2
   _buttonPressed:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1503659070}
-        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
-        m_MethodName: MissionComplete
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
