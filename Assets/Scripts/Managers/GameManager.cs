@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnGamePause;
 
     private bool isGamePaused = false;
-    [SerializeField] private bool canPause;
+    private bool canPause = true;
 
     DialogueManager dialogueManager;
 
@@ -129,6 +129,12 @@ public class GameManager : MonoBehaviour
     {
         return PlayerCoinAmount;
     }
+
+    public void SetCanPause(bool _)
+    {
+        canPause = _;
+    }
+    public bool CheckIfCanPause() {return canPause;}
 }
 
 public enum GameState { Playing, GameOver }
