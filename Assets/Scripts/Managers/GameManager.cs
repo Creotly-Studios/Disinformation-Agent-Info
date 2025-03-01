@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -104,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         GameOverState = GameOverState.MissionComplete;
         SetGameState(GameState.GameOver);
+        LoadAgencyScene();
     }
 
     void Pause()
@@ -136,6 +138,17 @@ public class GameManager : MonoBehaviour
         canPause = _;
     }
     public bool CheckIfCanPause() {return canPause;}
+
+    void LoadAgencyScene()
+    {
+        StartCoroutine(ToAgencyScene());
+    }
+
+    IEnumerator ToAgencyScene()
+    {
+        yield return new WaitForSeconds(5);
+        LevelLoader.LoadLevel(1);
+    }
 }
 
 public enum GameState { Playing, GameOver }
