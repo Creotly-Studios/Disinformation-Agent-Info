@@ -66,6 +66,11 @@ public class Player_v2 : MonoBehaviour
     public bool isAttacking;
     public bool performingAction;
 
+
+    //testing new shit
+    public Vector3 WorkSpace {get; set;}
+    public Vector3 CurrentVelocity {get; private set;}
+
     #region UnityCallbackFunctions
     private void Awake()
     {
@@ -116,11 +121,13 @@ public class Player_v2 : MonoBehaviour
             return;
         }
         float delta = Time.deltaTime;
+
         playerCombat.PlayerCombat_Updater(this);
-
         StateMachine.CurrentState.LogicUpdate();
-
         PlayerStatistics.PlayerStatistic_Update(delta);
+
+        CurrentVelocity = controller.velocity;
+        ApplyGravity();
     }
 
     private void FixedUpdate()
@@ -131,7 +138,6 @@ public class Player_v2 : MonoBehaviour
         }
 
         StateMachine.CurrentState.PhysicsUpdate();
-        ApplyGravity();
     }
 
     #endregion
@@ -182,10 +188,10 @@ public class Player_v2 : MonoBehaviour
         controller.Move(velocity);
     }
 
-    public float _verticalVelocity;
     public void AnimationTrigger() => StateMachine.CurrentState.AnimationTrigger();
     public void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
 
+    public float _verticalVelocity;
     void ApplyGravity()
     {
         if (controller.isGrounded)
@@ -276,7 +282,8 @@ public class Player_v2 : MonoBehaviour
         OnCollectCoin?.Invoke(this, EventArgs.Empty);
     }
 
-
-
     #endregion
+
+
+
 }
