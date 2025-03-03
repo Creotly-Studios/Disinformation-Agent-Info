@@ -26,7 +26,8 @@ public enum ObjectiveType
     FightBots,
     ConvinceNPC,
     MisInfoGames,
-    SpotTheSource
+    SpotTheSource,
+    Trophy
 }
 
 public enum TypeOfSpeaker

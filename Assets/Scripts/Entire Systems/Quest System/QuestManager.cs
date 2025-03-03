@@ -82,6 +82,7 @@ public class QuestManager : MonoBehaviour
         activeQuest.QuestSO_Update();
         if (activeQuest.isComplete) 
         {
+            print (activeQuest + "complete");
             GameManager.Instance.MissionComplete();
             popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
         }
