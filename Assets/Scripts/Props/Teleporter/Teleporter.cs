@@ -32,12 +32,12 @@ public class Teleporter : MonoBehaviour, IInteractable
 
     public void ActivatePlayer()
     { 
-        if (_player != null) _player.StateMachine.ChangeState(_player.IdleState);
+        if (_player != null) _player.SetActiveState();
     }
 
     public void DeactivatePlayer()
     { 
-        if (_player != null) _player.StateMachine.ChangeState(_player.InactiveState);
+        if (_player != null) _player.SetInactiveState();
     }
     
 }

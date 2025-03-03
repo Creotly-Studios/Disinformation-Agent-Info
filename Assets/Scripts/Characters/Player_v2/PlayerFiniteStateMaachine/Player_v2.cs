@@ -35,8 +35,7 @@ public class Player_v2 : MonoBehaviour
     public PlayerDashState DashState { get; private set; }
     public PlayerInteractState InteractState { get; private set; }
     public PlayerAttackState AttackState { get; private set; }
-    public PlayerDialogueState DialogueState { get; private set; }
-
+    
     public PlayerInactiveState InactiveState { get; private set; }
 
     public PlayerDeadState DeadState { get; private set; }
@@ -79,6 +78,7 @@ public class Player_v2 : MonoBehaviour
             Debug.LogError("There is more than one Player (Instance) in the scene");
         }
         Instance = this;
+        Anim = GetComponentInChildren<Animator>();
 
         StateMachine = new PlayerStateMachine();
         controller = GetComponent<CharacterController>();
@@ -94,7 +94,7 @@ public class Player_v2 : MonoBehaviour
         LandState = new PlayerLandState(this, StateMachine, PlayerData, "move");
         DashState = new PlayerDashState(this, StateMachine, PlayerData, "dash");
         InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
-        DialogueState = new PlayerDialogueState(this, StateMachine, PlayerData, "idle");
+      
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
         AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "attack");
         InactiveState = new PlayerInactiveState(this, StateMachine, PlayerData, "idle");
@@ -284,6 +284,9 @@ public class Player_v2 : MonoBehaviour
 
     #endregion
 
-
+    void OnDestroy()
+    {
+        Anim = null;
+    }
 
 }

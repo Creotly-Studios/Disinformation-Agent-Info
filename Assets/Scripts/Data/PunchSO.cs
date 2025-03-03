@@ -9,6 +9,7 @@ public class PunchSO : ScriptableObject
     [Header("Parameters")]
     public int damage = 1;
     public string punchName;
+    public AnimatorOverrideController animation;
 
     [Header("AI Attack Status")]
     public int weight;

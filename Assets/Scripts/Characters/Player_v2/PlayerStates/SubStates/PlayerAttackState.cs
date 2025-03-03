@@ -38,7 +38,7 @@ public class PlayerAttackState : PlayerAbilityState
 
         // Check if the attack animation is complete
         AnimatorStateInfo stateInfo = player.Anim.GetCurrentAnimatorStateInfo(0);
-        if (stateInfo.normalizedTime >= 0.95f && stateInfo.IsTag("attack"))
+        if (stateInfo.normalizedTime >= 0.9f && stateInfo.IsTag("attack"))
         {
             isAbilityDone = true; // Mark the ability as done
         }
@@ -64,7 +64,7 @@ public class PlayerAttackState : PlayerAbilityState
         // Reset combo if the player exits the attack state
         if (isAbilityDone)
         {
-            comboCounter = 0;
+            // comboCounter = 0;
             lastComboEnd = Time.time;
         }
     }
@@ -75,9 +75,9 @@ public class PlayerAttackState : PlayerAbilityState
         player.MoveState.FreezeInput();
 
         // Perform the attack action
-        playerData.attackArray[comboCounter].PerformAttackAction(player.Anim);
+        // playerData.attackArray[comboCounter].PerformAttackAction(player.Anim);
+        player.Anim.runtimeAnimatorController = playerData.attackArray[comboCounter].animation;
         DealDamage(playerData.attackArray[comboCounter].damage);
-
         // Increment combo counter
         comboCounter++;
         lastClickedTime = Time.time;
@@ -108,7 +108,7 @@ public class PlayerAttackState : PlayerAbilityState
                 Vector3 directionToEnemy = (hit.collider.transform.position - player.checkTransform.position).normalized;
                 float dotProduct = Vector3.Dot(player.checkTransform.forward, directionToEnemy);
 
-                if (dotProduct > 0.5f) // Adjust threshold to control front-facing precision
+                if (dotProduct > 0.2f) // Adjust threshold to control front-facing precision
                 {
                     Debug.Log($"Hit {hit.collider.name} in front!");
                     AudioManager.Instance.PlaySFX(playerData.attackHit);
