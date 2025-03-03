@@ -61,10 +61,10 @@ public class AudioManager : MonoBehaviour
 
     private void UpdateMixerVolumes()
     {
-        music.SetFloat("Volume", musicOn ? Mathf.Log10(musicVolume) * 20 : -80);
-        sound.SetFloat("Volume", audioOn ? Mathf.Log10(sfxVolume) * 20 : -80);
+        music.SetFloat("Volume", true ? Mathf.Log10(musicVolume) * 20 : -80);
+        sound.SetFloat("Volume", true ? Mathf.Log10(sfxVolume) * 20 : -80);
         
-        if (currentMusicAudioSource != null) { currentMusicAudioSource.volume = musicVolume; }
+        // if (currentMusicAudioSource != null) { currentMusicAudioSource.volume = musicVolume; }
     }
 
     public void ChangeMusicVolume()

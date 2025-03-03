@@ -4,7 +4,7 @@ using UnityEngine.AI;
 public class NPC : MonoBehaviour
 {
     //States
-    private NPCStates currentState;
+    private PatrolState currentState;
     private DialogueCharacterInformation charInfo;
 
     //InBuilt Components
@@ -21,15 +21,13 @@ public class NPC : MonoBehaviour
     public CharacterProfile profile;
 
     [Header("NPC Details")]
-    public bool canInteract;
-    public bool haveDialogue;
+    public bool hasCompletedDialogue;
+    [field: SerializeField] public NPCType npcType { get; private set; } = NPCType.Generic;
 
     [Header("NPC Parameters")]
     public bool canMove = true;
     public float warmingUpRadar;
-    public BoundaryFloat angleLimit;
-    [field: SerializeField] public NPCStates npcState { get; private set; }
-    public CharacterType characterType { get; private set; } = CharacterType.NPC;
+    [field: SerializeField] public PatrolState npcState { get; private set; }
 
     [Header("Target Private Parameters")]
     public float targetAngle;
@@ -43,6 +41,10 @@ public class NPC : MonoBehaviour
     [HideInInspector] public bool canRotate;
     [HideInInspector] public bool isGrounded;
     [HideInInspector] public bool performingAction;
+
+    [Header("For NPC Emote")]
+    [SerializeField] public Emotions emotion;
+    [SerializeField] public NPC_Emote emote;
 
     private void Awake()
     {
@@ -60,10 +62,18 @@ public class NPC : MonoBehaviour
         npcState = Instantiate(npcState);
         charInfo = GetComponent<DialogueTrigger>().characterInformation;
 
+        if (navMeshAgent == null)
+        {
+            GameObject aiObject = new GameObject();
+            aiObject.transform.SetParent(transform);
+
+            navMeshAgent = aiObject.AddComponent<NavMeshAgent>();
+            navMeshAgent.stoppingDistance = 1.0f;
+        }
+        warmingUpRadar = 55;
         navMeshAgent.enabled = false;
         currentState = npcState.RobotState_Update(this);
 
-        warmingUpRadar = 55;
         // warmingUpRadarUI.SetMaxValue(100);
         // warmingUpRadarUI.SetCurrentValue(warmingUpRadar);
     }
@@ -75,18 +85,12 @@ public class NPC : MonoBehaviour
         
         HandleStateChange();
         npcFunctions.NPCFunctions_Update(delta);
+        if (emote != null) emote.SetCurrentEmotion(emotion); //move to start during production build
     }
 
     public void UpdateWarmRadar(Response response)
     {
         warmingUpRadar += response.Evaluate(profile);
-
-        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
-        if (warmingUpRadar >= 75.0f && objective != null)
-        {
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            quest.IncreaseQuestObjectiveProgressLevels(objective);
-        }
         ChangeEmotion();
     }
 

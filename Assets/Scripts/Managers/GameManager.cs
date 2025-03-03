@@ -1,9 +1,10 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager Instance;
     public GameState GameState { get; private set; }
     public GameOverState GameOverState {get; private set;}
     public event EventHandler OnStateChange;
@@ -11,7 +12,7 @@ public class GameManager : MonoBehaviour
     public event EventHandler OnGamePause;
 
     private bool isGamePaused = false;
-    [SerializeField] private bool canPause;
+    private bool canPause = true;
 
     DialogueManager dialogueManager;
 
@@ -23,11 +24,13 @@ public class GameManager : MonoBehaviour
     {
         Time.timeScale = 1;
         isGamePaused = false;
-        if (instance != null)
+        GameState = GameState.Playing;
+        if (Instance != null)
         {
+            Destroy(gameObject);
             return;
         }
-        instance = this;
+        Instance = this;
 
         dialogueManager = DialogueManager.Instance;
     }
@@ -102,6 +105,7 @@ public class GameManager : MonoBehaviour
     {
         GameOverState = GameOverState.MissionComplete;
         SetGameState(GameState.GameOver);
+        LoadAgencyScene();
     }
 
     void Pause()
@@ -127,6 +131,23 @@ public class GameManager : MonoBehaviour
     public int PlayerCoins()
     {
         return PlayerCoinAmount;
+    }
+
+    public void SetCanPause(bool _)
+    {
+        canPause = _;
+    }
+    public bool CheckIfCanPause() {return canPause;}
+
+    void LoadAgencyScene()
+    {
+        StartCoroutine(ToAgencyScene());
+    }
+
+    IEnumerator ToAgencyScene()
+    {
+        yield return new WaitForSeconds(5);
+        LevelLoader.LoadLevel(1);
     }
 }
 

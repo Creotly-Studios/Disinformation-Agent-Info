@@ -103,32 +103,32 @@ ModelImporter:
       scale: {x: 1, y: 1, z: 1}
     - name: leg-left
       parentName: root
-      position: {x: -0.0016714192, y: 0.0035249998, z: -0.00057499995}
+      position: {x: -0.16714193, y: 0.3525, z: -0.057499997}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: leg-right
       parentName: root
-      position: {x: 0.0016714192, y: 0.0035249998, z: -0.00057499995}
+      position: {x: 0.16714193, y: 0.3525, z: -0.057499997}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: torso
       parentName: root
-      position: {x: 2.8876455e-17, y: 0.0035249998, z: -0.00057499995}
+      position: {x: 2.8876456e-15, y: 0.3525, z: -0.057499997}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: arm-left
       parentName: torso
-      position: {x: -0.0019979354, y: 0.00223, z: 0.00022999998}
+      position: {x: -0.19979355, y: 0.223, z: 0.022999998}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: arm-right
       parentName: torso
-      position: {x: 0.0019979354, y: 0.00223, z: 0.00022999998}
+      position: {x: 0.19979355, y: 0.223, z: 0.022999998}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: head
       parentName: torso
-      position: {x: -3.6393784e-11, y: 0.0033399996, z: 0.0005277755}
+      position: {x: -0.0000000036393786, y: 0.33399996, z: 0.05277755}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
@@ -138,7 +138,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.02
+    globalScale: 2
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0

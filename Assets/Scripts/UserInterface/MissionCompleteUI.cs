@@ -5,14 +5,14 @@ public class MissionCompleteUI : MonoBehaviour
 {
     void Start()
     {
-        GameManager.instance.OnStateChange += GameManager_OnStateChange;
-
+        GameManager.Instance.OnStateChange += GameManager_OnStateChange;
         Hide();
     }
 
+
     void GameManager_OnStateChange(object sender, System.EventArgs e)
     {
-        if (GameManager.instance.IsGameOver() && GameManager.instance.IsMissionComplete())
+        if (GameManager.Instance.IsGameOver() && GameManager.Instance.IsMissionComplete())
         {
             Show();
         }
@@ -21,11 +21,18 @@ public class MissionCompleteUI : MonoBehaviour
 
     private void Show()
     {
-        gameObject.SetActive(true);
+        gameObject?.SetActive(true);
     }
 
-    private void Hide()
+    public void Hide()
     {
-        gameObject.SetActive(false);
+        gameObject?.SetActive(false);
+    }
+
+    private void OnDestroy()
+    {
+        // Unsubscribe from events
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnStateChange -= GameManager_OnStateChange;
     }
 }

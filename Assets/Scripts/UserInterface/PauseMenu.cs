@@ -10,36 +10,33 @@ public class PauseMenu : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        GameManager.instance.OnGamePause += GameManager_OnGamePaused;
+        GameManager.Instance.OnGamePause += GameManager_OnGamePaused;
+
         menuBtn.onClick.AddListener(() =>
-            {
+        {
                 LevelLoader.LoadLevel(0);
-            });
+        });
         resumeBtn.onClick.AddListener(() =>
         {
-            GameManager.instance.TogglePause();
+            GameManager.Instance.TogglePause();
         });
         replayBtn.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         });
+
         Hide();
     }
 
-    // private void OnEnable()
-    // {
-    //     GameManager.instance.OnGamePause += GameManager_OnGamePaused;
-    // }
+    private void OnDestroy()
+    {
+        if (GameManager.Instance != null)
+            GameManager.Instance.OnGamePause -= GameManager_OnGamePaused;
+    }
 
-    // private void OnDisable()
-    // {
-    //     if (GameManager.instance != null)
-    //         GameManager.instance.OnGamePause -= GameManager_OnGamePaused;
-    // }
-    
     void GameManager_OnGamePaused(object sender, System.EventArgs e)
     {
-        if (GameManager.instance.IsGamePaused())
+        if (GameManager.Instance.IsGamePaused())
         {
             Show();
         }
@@ -48,11 +45,11 @@ public class PauseMenu : MonoBehaviour
 
     private void Show()
     {
-        gameObject.SetActive(true);
+        gameObject?.SetActive(true);
     }
 
-    private void Hide()
+    public void Hide()
     {
-        gameObject.SetActive(false);
+        gameObject?.SetActive(false);
     }
 }

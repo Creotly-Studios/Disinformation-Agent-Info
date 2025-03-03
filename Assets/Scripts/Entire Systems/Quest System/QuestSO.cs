@@ -6,6 +6,8 @@ public class QuestSO : ScriptableObject
 {
     [Header("Status")]
     public bool isComplete;
+    [field: SerializeField] public int questCode { get; private set; }
+    [field: SerializeField] public int questLevelIndex { get; private set; }
 
     [field: Header("Quest Information")]
     public string questTitle;
@@ -16,6 +18,19 @@ public class QuestSO : ScriptableObject
     public void QuestSO_Update()
     {
         CheckIfQuestIsComplete();
+    }
+
+    private bool HasMiniGameObjective(QuestObjectives objective)
+    {
+        objective = questObjectives.Find(x => x.objectiveType == ObjectiveType.BiasBingo);
+        if (objective != null) { return true; }
+
+        objective = questObjectives.Find(x => x.objectiveType == ObjectiveType.MisInfoGames);
+        if (objective != null) { return true; }
+
+        objective = questObjectives.Find(x => x.objectiveType == ObjectiveType.SpotTheSource);
+        if (objective != null) { return true; }
+        return false;
     }
 
     private void CheckIfQuestIsComplete()

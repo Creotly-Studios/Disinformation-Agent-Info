@@ -18,7 +18,7 @@ MonoBehaviour:
   sprintDuration: 10
   sprintCooldown: 5.5
   sprintRechargeRate: 2
-  gravity: -30
+  gravity: -19.62
   jumpHeight: 1.75
   jumpForwardForce: 8.01
   turnSmoothTime: 0.1
@@ -28,8 +28,8 @@ MonoBehaviour:
   detectRadius: 1
   detectRange: 1
   pushForce: 1
-  attackRange: 0
-  attackSphereSize: 2.5
+  attackRange: 0.06
+  attackSphereSize: 3.45
   attackDamage: 1
   attackArray:
   - {fileID: 11400000, guid: cfd66faf0eaf3b54db2db3c23d75d84f, type: 2}

@@ -6,14 +6,11 @@ using UnityEngine.UI;
 public class TeleporterUI_Panel : MonoBehaviour
 {
     [Header("UI")] 
-    [SerializeField] private TMP_InputField codeInputField;
     [SerializeField] private Button submitButton;
     [SerializeField] private Button closePanelButton;
+    [SerializeField] private TMP_InputField codeInputField;
     [Space] [SerializeField] private GameObject teleporterUiPanel;
 
-    [Header("Teleporter Logic")] public LevelData levelData;
-    
-    
     [Space]
     [SerializeField] private UnityEvent onCancelTeleport;
     
@@ -34,18 +31,25 @@ public class TeleporterUI_Panel : MonoBehaviour
     
     private void OnSubmitButtonClick()
     {
-        foreach (var ld in levelData.levelsData)
+        QuestManager questManager = QuestManager.Instance;
+        QuestSO quest = questManager.activeQuest;
+
+        if (quest == null)
         {
-            if (codeInputField.text == ld.levelLoadCode.ToString())
-            {
-                teleporterUiPanel.SetActive(false);
-                LevelLoader.LoadLevel(ld.levelIndex);
-            }
-            else
-            {
-                Debug.Log("Wrong Code, Try Again!");
-            }
+            return;
         }
+        
+        QuestSO teleportQuest = questManager.availableQuests.Find(x => x.questCode.ToString() == codeInputField.text);
+
+        if(teleportQuest != null)
+        {
+            codeInputField.text = "";
+            teleporterUiPanel.SetActive(false);
+            LevelLoader.LoadLevel(teleportQuest.questLevelIndex);
+            return;
+        }
+        //Show Wrong Prompt
         codeInputField.text = "";
+        Debug.Log("Wrong Code, Try Again!");
     }
 }

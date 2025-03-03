@@ -29,10 +29,10 @@ public class PlayerMoveState : PlayerGroundedState
         base.LogicUpdate();
         input = player.InputHandler.MovementInput; // Get player input
         Move();
-
+        
         if (!isExitingState)
         {
-            if (input.magnitude < 0.1f && !isExitingState)
+            if (input.magnitude < 0.1f)
             {
                 stateMachine.ChangeState(player.IdleState);
             }

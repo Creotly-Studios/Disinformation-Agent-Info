@@ -22,7 +22,7 @@ public class PlayerCoinUI : MonoBehaviour
 
     public void Show()
     {
-        coinAmountText.text = GameManager.instance.PlayerCoins().ToString();
+        coinAmountText.text = GameManager.Instance.PlayerCoins().ToString();
         coinUIPanel.SetActive(true);
         StartCoroutine(DisplayAndHide());
     }
