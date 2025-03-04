@@ -11471,7 +11471,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -12630,7 +12630,6 @@ GameObject:
   - component: {fileID: 6688138446989472976}
   - component: {fileID: 4954970665100379146}
   - component: {fileID: 5136391502323661331}
-  - component: {fileID: 8973742492475505406}
   m_Layer: 0
   m_Name: LevelEndButton/Trigger
   m_TagString: Untagged
@@ -12638,24 +12637,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &8973742492475505406
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8973742492475505405}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc5fab30442f73e488c6510ccb65b7b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  buttonActive: 0
-  agencySceneIndex: 2
-  loadDelay: 2
-  _buttonPressed:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

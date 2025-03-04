@@ -336,7 +336,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 3602190282081039112}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -395,6 +395,7 @@ MonoBehaviour:
   animator: {fileID: 7562859290350459812}
   rb: {fileID: 0}
   isKnockedBack: 0
+  isBotEnemy: 0
   attackPoint: {fileID: 1081261045503568781}
 --- !u!136 &7639305842318910959
 CapsuleCollider:
@@ -432,7 +433,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
-  customStoppingDistance: 1.75
   minRoamDistance: 5
   maxRoamDistance: 15
   roamUpdateInterval: 3

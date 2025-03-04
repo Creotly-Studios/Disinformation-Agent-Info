@@ -2649,7 +2649,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 0}
+    m_TransformParent: {fileID: 1148488213}
     m_Modifications:
     - target: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2669,15 +2669,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3272,21 +3272,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a2aaf4fdf96d24590df1275eb3a4e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OnKillAllEnemies:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &814723136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4091,6 +4076,7 @@ Transform:
   - {fileID: 1745028878}
   - {fileID: 1366677780}
   - {fileID: 317100735}
+  - {fileID: 1525782700}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!64 &1164735173
@@ -4945,6 +4931,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 26e4883dc4e77c14eaf12bbf58721d3d, type: 3}
   m_PrefabInstance: {fileID: 1521958309}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &1525782700 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6264456220033776558, guid: ce996cc14069e3143a4e6565ab83af81, type: 3}
+  m_PrefabInstance: {fileID: 591126382}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1557867116
 GameObject:
   m_ObjectHideFlags: 0
@@ -5538,7 +5529,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4938937181384965, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.14
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4938937181384965, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -5546,7 +5537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4938937181384965, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.627349
+      value: 7.83
       objectReference: {fileID: 0}
     - target: {fileID: 4938937181384965, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -5576,14 +5567,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 97114354520780666, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
+      propertyPath: m_Mass
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6988930685907349942, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: m_Name
       value: Boss_Mech
+      objectReference: {fileID: 0}
+    - target: {fileID: 7980389712001563362, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
+      propertyPath: m_Carve
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8641509040561123791, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
       propertyPath: shootPoint
       value: 
       objectReference: {fileID: 5242148542123037151}
+    - target: {fileID: 8641509040561123791, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
+      propertyPath: knockbackForce
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8641509040561123791, guid: b93e5ff12ac2dab4d8e73c4f704c7e4f, type: 3}
+      propertyPath: totalEnemiesToSpawnCount
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -7405,4 +7412,3 @@ SceneRoots:
   - {fileID: 1583882991}
   - {fileID: 1791602078}
   - {fileID: 11501408}
-  - {fileID: 591126382}

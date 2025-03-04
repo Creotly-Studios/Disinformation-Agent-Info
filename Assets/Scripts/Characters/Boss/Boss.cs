@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(Rigidbody))]
 public class Boss : MonoBehaviour, IDamagable
 {
     public Transform Player { get; protected set; }
@@ -38,6 +39,12 @@ public class Boss : MonoBehaviour, IDamagable
     private float nextSpawnTime;
     private List<GameObject> spawnedEnemies = new List<GameObject>();
 
+    private Rigidbody rb;
+
+    [Header("Attack Settings")]
+    [SerializeField] private float attackCooldown = 2f; // Cooldown between attacks
+    private float lastAttackTime;
+
     protected void Awake()
     {
         animator = GetComponent<Animator>();
@@ -50,6 +57,9 @@ public class Boss : MonoBehaviour, IDamagable
         Player = Player_v2.Instance.gameObject.transform;
         currentHealth = maxhealth;
         isDead = false;
+        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
+        rb.isKinematic = true;
+        lastAttackTime = -attackCooldown; // Initialize last attack time to allow immediate first attack
     }
 
     void Update()
@@ -62,6 +72,8 @@ public class Boss : MonoBehaviour, IDamagable
         if (isDead) return;
 
         currentHealth -= healthDamage;
+        Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
+        ApplyKnockback(knockbackDirection);
         if (currentHealth <= 0)
         {
             HandleDeath();
@@ -153,9 +165,12 @@ public class Boss : MonoBehaviour, IDamagable
 
     void HandleStageOne()
     {
+        if (isKnockedBack) return;
         if (PlayerInSightRange())
         {
-            agent.SetDestination(Player.position);
+            Vector3 directionToPlayer = (Player.position - transform.position).normalized;
+            Vector3 destination = Player.position - directionToPlayer * chaseOffset;
+            agent.SetDestination(destination); 
             animator.SetBool("isWalking", true);
 
             if (Time.time >= nextSpawnTime)
@@ -170,16 +185,24 @@ public class Boss : MonoBehaviour, IDamagable
         }
     }
 
+    [SerializeField] private float chaseOffset = 3f;
     void HandleStageTwo()
     {
+        if (isKnockedBack) return;
         if (PlayerInAttackRange())
         {
-            PerformMeleeAttack();
+            if (Time.time >= lastAttackTime + attackCooldown)
+            {
+                PerformMeleeAttack();
+                lastAttackTime = Time.time; // Update the last attack time
+            }
         }
         else if (PlayerInSightRange())
         {
             agent.isStopped = false;
-            agent.SetDestination(Player.position);
+            Vector3 directionToPlayer = (Player.position - transform.position).normalized;
+            Vector3 destination = Player.position - directionToPlayer * chaseOffset;
+            agent.SetDestination(destination); 
             animator.SetBool("isWalking", true);
         }
         else
@@ -222,6 +245,7 @@ public class Boss : MonoBehaviour, IDamagable
 
     void PerformMeleeAttack()
     {
+        PlayAttackAnim(); 
         Collider[] hitPlayers = Physics.OverlapSphere(melleAttackPoint.position, attackRange, whatIsPlayer);
         foreach (var player in hitPlayers)
         {
@@ -240,6 +264,29 @@ public class Boss : MonoBehaviour, IDamagable
     void SetBossStage(BossStage _)
     {
         Stage = _;
+    }
+    
+    bool isKnockedBack;
+    [SerializeField] private float knockbackDuration;
+    [SerializeField] private float knockbackForce;
+    private void ApplyKnockback(Vector3 direction)
+    {
+        if (isKnockedBack) return; // Prevent multiple knockbacks at once
+
+        isKnockedBack = true;
+        agent.enabled = false; // Disable NavMeshAgent to allow Rigidbody movement
+        rb.isKinematic = false; // Enable Rigidbody physics
+        rb.AddForce(direction.normalized * knockbackForce, ForceMode.Impulse); // Apply knockback force
+
+        Invoke(nameof(ResetAfterKnockback), knockbackDuration); // Reset after knockback duration
+    }
+
+    private void ResetAfterKnockback()
+    {
+        isKnockedBack = false;
+        rb.isKinematic = true; // Disable Rigidbody physics
+        rb.linearVelocity = Vector3.zero; // Reset velocity
+        agent.enabled = true; // Re-enable NavMeshAgent
     }
 }
 

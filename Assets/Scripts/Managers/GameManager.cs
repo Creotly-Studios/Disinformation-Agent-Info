@@ -146,8 +146,16 @@ public class GameManager : MonoBehaviour
 
     IEnumerator ToAgencyScene()
     {
+        ResetGame();
         yield return new WaitForSeconds(5);
-        LevelLoader.LoadLevel(1);
+        LevelLoader.LoadLevel(2);
+    }
+
+    void ResetGame()
+    {
+        GameOverState = GameOverState.None;
+        GameState = GameState.Playing;
+        Time.timeScale = 1;
     }
 }
 

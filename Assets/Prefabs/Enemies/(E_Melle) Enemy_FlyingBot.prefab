@@ -373,7 +373,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 4631771536103940739}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 1
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -432,6 +432,7 @@ MonoBehaviour:
   animator: {fileID: 8852582079291526057}
   rb: {fileID: 0}
   isKnockedBack: 0
+  isBotEnemy: 0
   attackPoint: {fileID: 3092385771446669365}
 --- !u!114 &8193910235762504750
 MonoBehaviour:
@@ -446,7 +447,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   chaserType: 1
-  customStoppingDistance: 1.75
   minRoamDistance: 5
   maxRoamDistance: 15
   roamUpdateInterval: 3
