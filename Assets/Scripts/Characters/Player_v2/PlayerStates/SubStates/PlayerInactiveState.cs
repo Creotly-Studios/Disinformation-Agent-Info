@@ -16,12 +16,24 @@ public class PlayerInactiveState : PlayerState
     {
         base.Enter();
         AudioManager.Instance.PlaySFX(playerData.inactiveStateCamSound);
-        player.dialogue_InactiveCamera.SetActive(true);
+        if (player.dialogue_InactiveCamera != null)
+        {
+            player.dialogue_InactiveCamera.SetActive(true);
+        }
     }
 
     public override void Exit()
     {
-        player.dialogue_InactiveCamera.SetActive(false);
+        // Check if the GameObject reference is still valid
+        if (player.dialogue_InactiveCamera != null)
+        {
+            player.dialogue_InactiveCamera.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("dialogue_InactiveCamera has been destroyed and cannot be accessed.");
+        }
+
         base.Exit();
     }
 
