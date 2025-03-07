@@ -861,6 +861,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 474071469}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.734829
       objectReference: {fileID: 0}
@@ -900,6 +912,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
       propertyPath: m_Name
       value: block-grass-large-tall
@@ -936,8 +952,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.16425, y: 4, z: 4.16425}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Size: {x: 8.3285, y: 8, z: 8.3285}
+  m_Center: {x: 0, y: 4, z: 0}
 --- !u!4 &79848351 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: e1eff9c1984551f47a41c3bebc481dc2, type: 3}
@@ -4080,6 +4096,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 1828582428}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
       propertyPath: m_LocalPosition.x
       value: 59.534885
       objectReference: {fileID: 0}
@@ -4118,6 +4146,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: d6479da0d5e2cbf48b59ce1f3f2b23e5, type: 3}
       propertyPath: m_Name
@@ -7486,6 +7518,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 1828582428}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
       propertyPath: m_LocalPosition.x
       value: 60.74658
       objectReference: {fileID: 0}
@@ -7525,6 +7569,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 6975f979b56d46348a90f1f0972bac69, type: 3}
       propertyPath: m_Name
       value: block-grass-overhang-large-tall
@@ -7561,8 +7609,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.16425, y: 4, z: 4.16425}
-  m_Center: {x: 0, y: 2, z: 0}
+  m_Size: {x: 8.3285, y: 8, z: 8.3285}
+  m_Center: {x: 0, y: 4, z: 0}
 --- !u!1001 &1108687180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7571,6 +7619,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 474071469}
     m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
       propertyPath: m_LocalPosition.x
       value: -2.22604
@@ -7611,6 +7671,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: cd59eedff63db134394d1ac11721a370, type: 3}
       propertyPath: m_Name
       value: block-grass-large
@@ -7647,8 +7711,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.16425, y: 2, z: 4.16425}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Size: {x: 8.3285, y: 4, z: 8.3285}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!4 &1108687183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cd59eedff63db134394d1ac11721a370, type: 3}
@@ -8013,6 +8077,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 474071469}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
       propertyPath: m_LocalPosition.x
       value: -1.2376442
       objectReference: {fileID: 0}
@@ -8052,6 +8128,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
       propertyPath: m_Name
       value: block-grass-low
@@ -8088,8 +8168,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2.16425, y: 1, z: 2.16425}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 4.3285, y: 2, z: 4.3285}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &1153768023 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: bdd3a486039a4c34c9fdefa0896791bb, type: 3}
@@ -9225,6 +9305,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 1828582428}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
       propertyPath: m_LocalPosition.x
       value: 60.282593
       objectReference: {fileID: 0}
@@ -9263,6 +9355,10 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 4392974522f800949a3ae5fb8b08b82a, type: 3}
       propertyPath: m_Name
@@ -10197,8 +10293,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.56425, y: 2, z: 1.56425}
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Size: {x: 3.1285, y: 4, z: 3.1285}
+  m_Center: {x: 0, y: 2, z: 0}
 --- !u!1 &1539242606
 GameObject:
   m_ObjectHideFlags: 0
@@ -11551,6 +11647,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 474071469}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
       propertyPath: m_LocalPosition.x
       value: -6.103077
       objectReference: {fileID: 0}
@@ -11590,6 +11698,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
       propertyPath: m_Name
       value: block-grass-low-large
@@ -11626,8 +11738,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 4.16425, y: 1, z: 4.16425}
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Size: {x: 8.3285, y: 2, z: 8.3285}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &1696419530 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 9f445b96da7572c4ca4bfcef27ff4d04, type: 3}
