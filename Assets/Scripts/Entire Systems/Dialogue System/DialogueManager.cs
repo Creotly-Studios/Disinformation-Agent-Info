@@ -87,8 +87,6 @@ public class DialogueManager : MonoBehaviour
 
         // Trigger the "On Dialogue Start" UnityEvent
         OnDialogueStart?.Invoke();
-        player.SetInactiveState();
-        
 
         ContinueDialogueStory();
     }
@@ -131,7 +129,11 @@ public class DialogueManager : MonoBehaviour
 
         // Trigger the "On Dialogue End" UnityEvent
         OnDialogueEnd?.Invoke();
-        player.SetActiveState();
+        
+        if (Player_v2.Instance != null)
+        {
+            Player_v2.Instance.SetActiveState();
+        }
     }
 
     private void UpdateObective()

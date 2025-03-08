@@ -18,4 +18,14 @@ MonoBehaviour:
   questTitle: Finale
   description: Defeat the Boss
   <QuestReward>k__BackingField: 0
-  <questObjectives>k__BackingField: []
+  <questObjectives>k__BackingField:
+  - isDone: 0
+    targetValue: 3
+    progressValue: 0
+    objectiveType: 5
+    description: 
+  - isDone: 0
+    targetValue: 3
+    progressValue: 0
+    objectiveType: 2
+    description: 

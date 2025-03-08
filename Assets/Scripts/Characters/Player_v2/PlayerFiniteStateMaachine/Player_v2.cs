@@ -128,6 +128,7 @@ public class Player_v2 : MonoBehaviour
 
         CurrentVelocity = controller.velocity;
         ApplyGravity();
+        Debug.Log(controller.isGrounded);
     }
 
     private void FixedUpdate()

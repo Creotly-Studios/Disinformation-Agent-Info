@@ -15,10 +15,7 @@ public class PlayerJumpState : PlayerAbilityState
     {
         base.Enter();
         player.InputHandler.UseJumpInput();
-        if (player.controller.isGrounded)
-        {
-            player._verticalVelocity = Mathf.Sqrt(playerData.jumpHeight * -2f * playerData.gravity);
-        }
+        player._verticalVelocity = Mathf.Sqrt(playerData.jumpHeight * -2f * playerData.gravity);
         player.Move(new Vector3(0, player._verticalVelocity, 0) * Time.deltaTime);
         AudioManager.Instance.PlaySFX(playerData.jump);
         isAbilityDone = true;

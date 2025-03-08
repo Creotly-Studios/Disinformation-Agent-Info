@@ -8,6 +8,7 @@ public class PunchSO : ScriptableObject
 
     [Header("Parameters")]
     public int damage = 1;
+    public float hitFrameDelay = 0.2f;
     public string punchName;
     public AnimatorOverrideController animation;
 

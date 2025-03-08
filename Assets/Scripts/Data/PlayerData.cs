@@ -19,6 +19,7 @@ public class PlayerData : ScriptableObject
     public float jumpForwardForce = 2f;
     public float turnSmoothTime = 0.1f;
     public float variableJumpHieghtMultiplier = 0.5f;
+    public float coyoteTime = 0.5f;
     [Space]
     public float dashForce = 5f;
     public float dashStaminaCost; // Add this field
