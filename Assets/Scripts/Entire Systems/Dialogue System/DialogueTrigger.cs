@@ -33,6 +33,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     {
         PlayInteractNPCSound();
         TriggerDialogue(character);
+        player.SetInactiveState();
     }
 
     public void PlayInteractNPCSound()

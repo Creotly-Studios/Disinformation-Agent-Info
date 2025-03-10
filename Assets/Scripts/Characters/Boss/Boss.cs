@@ -7,103 +7,83 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody))]
 public class Boss : MonoBehaviour, IDamagable
 {
+    [Header("References")]
     public Transform Player { get; protected set; }
-    public LayerMask whatIsGround, whatIsPlayer;
-    [SerializeField] public int maxhealth = 10;
-
-    [SerializeField] private float detectRange;
-    [SerializeField] private float attackRange;
-
-    [Header("Boss Settings")]
-    [SerializeField] public BossStage Stage;
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected Animator animator;
-
-    private int currentHealth;
-    bool isDead;
-
-    [Header("Checks")]
-    [SerializeField] Transform melleAttackPoint;
+    [SerializeField] private UnityEngine.UI.Image healthBarFill;
+    [SerializeField] private GameObject bossNPC;
+    
+    [Header("Detection Settings")]
+    [SerializeField] private LayerMask whatIsGround;
+    [SerializeField] private LayerMask whatIsPlayer;
+    [SerializeField] private float detectRange = 10f;
+    [SerializeField] private float attackRange = 2f;
+    [SerializeField] private float chaseOffset = 3f;
+    
+    [Header("Health Settings")]
+    [SerializeField] public int maxHealth = 10;
+    [SerializeField] private int stageTransitionThreshold = 6;
+    
+    [Header("Attack Settings")]
+    [SerializeField] private float attackCooldown = 2f;
+    [SerializeField] Transform meleeAttackPoint;
+    [SerializeField] private int attackDamage = 1;
+    
+    [Header("Knockback Settings")]
+    [SerializeField] private float knockbackDuration = 0.5f;
+    [SerializeField] private float knockbackForce = 10f;
+    
+    [Header("Enemy Spawn Settings")]
     [SerializeField] Transform shootPoint;
-    [SerializeField] int stage_Two_Treshold = 6;
-
-    [Header("---For Stage1_2---")]
     [SerializeField] GameObject[] enemiesToSpawn;
     [SerializeField] int totalEnemiesToSpawnCount = 10;
-    [SerializeField] float spawnEnemyRate;
-    [SerializeField] float melleRate;
-
-    [Space]
-    [SerializeField] private GameObject bossNPC;
-
+    [SerializeField] float spawnEnemyRate = 3f;
+    
+    // State tracking
+    [SerializeField] public BossStage Stage { get; private set; }
+    private int currentHealth;
+    private bool isDead;
+    private bool isKnockedBack;
     private float nextSpawnTime;
+    private float lastAttackTime;
+    private Rigidbody rb;
     private List<GameObject> spawnedEnemies = new List<GameObject>();
 
-    private Rigidbody rb;
-
-    [Header("Attack Settings")]
-    [SerializeField] private float attackCooldown = 2f; // Cooldown between attacks
-    private float lastAttackTime;
-
+    #region Unity Lifecycle Methods
+    
     protected void Awake()
     {
-        animator = GetComponent<Animator>();
-        agent = GetComponent<NavMeshAgent>();
+        // Get components
+        animator = GetComponent<Animator>() ?? animator;
+        agent = GetComponent<NavMeshAgent>() ?? agent;
+        rb = GetComponent<Rigidbody>();
     }
-
+    
     protected void Start()
     {
+        // Initialize
         SetBossStage(BossStage.Stage_one);
-        Player = Player_v2.Instance.gameObject.transform;
-        currentHealth = maxhealth;
+        
+        if (Player_v2.Instance != null)
+            Player = Player_v2.Instance.transform;
+            
+        currentHealth = maxHealth;
         isDead = false;
-        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
-        rb.isKinematic = true;
-        lastAttackTime = -attackCooldown; // Initialize last attack time to allow immediate first attack
+        
+        if (rb != null)
+            rb.isKinematic = true;
+            
+        lastAttackTime = -attackCooldown; // Allow immediate first attack
+        UpdateHealthBar();
     }
-
-    void Update()
-    {
-        UpdateStageState();
-    }
-
-    public void TakeDamage(int healthDamage)
+    
+    protected void Update()
     {
         if (isDead) return;
-
-        currentHealth -= healthDamage;
-        Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
-        ApplyKnockback(knockbackDirection);
-        if (currentHealth <= 0)
-        {
-            HandleDeath();
-        }
+        UpdateStageState();
     }
-
-    private void HandleDeath()
-    {
-        if (!isDead)
-        {
-            PlayDeadAnim();
-            isDead = true;
-        }
-    }
-
-    public bool IsDead()
-    {
-        return isDead;
-    }
-
-    public bool PlayerInSightRange()
-    {
-        return Physics.CheckSphere(transform.position, detectRange, whatIsPlayer);
-    }
-
-    public bool PlayerInAttackRange()
-    {
-        return Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-    }
-
+    
     protected void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
@@ -112,41 +92,74 @@ public class Boss : MonoBehaviour, IDamagable
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
-    public void PlayIdleAnim()
+    
+    #endregion
+    
+    #region Health Management
+    
+    public void TakeDamage(int healthDamage)
     {
-        if (animator)
+        if (isDead) return;
+
+        currentHealth = Mathf.Max(0, currentHealth - healthDamage);
+        UpdateHealthBar();
+        
+        if (currentHealth <= 0)
         {
-            animator.SetBool("idle", true);
-            animator.SetBool("isWalking", false);
+            HandleDeath();
+        }
+        else
+        {
+            // Only apply knockback if not dead
+            Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
+            ApplyKnockback(knockbackDirection);
         }
     }
-
-    public void PlayAttackAnim()
+    
+    private void HandleDeath()
     {
-        if (animator)
+        if (!isDead)
         {
-            animator.SetBool("isWalking", false);
-            animator.SetTrigger("attack");
+            isDead = true;
+            PlayDeadAnim();
+            agent.isStopped = true;
+            agent.enabled = false;
+            
+            // Cancel any pending knockback reset
+            CancelInvoke(nameof(ResetAfterKnockback));
+            
+            // Set stage to dead
+            SetBossStage(BossStage.Dead);
         }
     }
-
-    public void PlayDeadAnim()
+    
+    public bool IsDead()
     {
-        animator.SetBool("dead", true);
+        return isDead;
     }
-
-    void UpdateStageState()
+    
+    private void UpdateHealthBar()
     {
-        if (currentHealth <= stage_Two_Treshold && Stage == BossStage.Stage_one)
+        if (healthBarFill != null)
+        {
+            float healthNormalized = (float)currentHealth / maxHealth;
+            healthBarFill.fillAmount = healthNormalized;
+        }
+    }
+    
+    #endregion
+    
+    #region Stage Management
+    
+    private void UpdateStageState()
+    {
+        // Check for stage transitions
+        if (currentHealth <= stageTransitionThreshold && Stage == BossStage.Stage_one)
         {
             SetBossStage(BossStage.Stage_two);
         }
-        else if (currentHealth <= 0 && Stage != BossStage.Dead)
-        {
-            SetBossStage(BossStage.Dead);
-        }
 
+        // Handle current stage behavior
         switch (Stage)
         {
             case BossStage.Stage_one:
@@ -162,17 +175,41 @@ public class Boss : MonoBehaviour, IDamagable
                 break;
         }
     }
-
-    void HandleStageOne()
+    
+    private void SetBossStage(BossStage newStage)
     {
-        if (isKnockedBack) return;
+        Stage = newStage;
+        
+        // Handle stage-specific initialization
+        switch (newStage)
+        {
+            case BossStage.Stage_one:
+                // Stage one initialization
+                break;
+                
+            case BossStage.Stage_two:
+                // Stage two initialization
+                break;
+                
+            case BossStage.Dead:
+                // Death initialization
+                break;
+        }
+    }
+    
+    #endregion
+    
+    #region Stage Behaviors
+    
+    private void HandleStageOne()
+    {
+        if (isKnockedBack || Player == null) return;
+        
         if (PlayerInSightRange())
         {
-            Vector3 directionToPlayer = (Player.position - transform.position).normalized;
-            Vector3 destination = Player.position - directionToPlayer * chaseOffset;
-            agent.SetDestination(destination); 
-            animator.SetBool("isWalking", true);
-
+            ChasePlayer();
+            
+            // Spawn enemies at the defined rate
             if (Time.time >= nextSpawnTime)
             {
                 SpawnEnemies();
@@ -184,110 +221,196 @@ public class Boss : MonoBehaviour, IDamagable
             PlayIdleAnim();
         }
     }
-
-    [SerializeField] private float chaseOffset = 3f;
-    void HandleStageTwo()
+    
+    private void HandleStageTwo()
     {
-        if (isKnockedBack) return;
+        if (isKnockedBack || Player == null) return;
+        
         if (PlayerInAttackRange())
         {
             if (Time.time >= lastAttackTime + attackCooldown)
             {
+                // Stop moving when attacking
+                agent.isStopped = true;
                 PerformMeleeAttack();
-                lastAttackTime = Time.time; // Update the last attack time
+                lastAttackTime = Time.time;
             }
         }
         else if (PlayerInSightRange())
         {
-            agent.isStopped = false;
-            Vector3 directionToPlayer = (Player.position - transform.position).normalized;
-            Vector3 destination = Player.position - directionToPlayer * chaseOffset;
-            agent.SetDestination(destination); 
-            animator.SetBool("isWalking", true);
+            ChasePlayer();
         }
         else
         {
             PlayIdleAnim();
         }
     }
-
-    void HandleDeathStage()
+    
+    private void HandleDeathStage()
     {
-        if (AreAllEnemiesDead())
-        {
-            Instantiate(bossNPC, transform.position, transform.rotation);
+        // if (AreAllEnemiesDead())
+        // {
+            if (bossNPC != null)
+            {
+                Instantiate(bossNPC, transform.position, transform.rotation);
+            }
             Destroy(gameObject);
-        }
-    }
-
-    void SpawnEnemies()
-    {
-        if (totalEnemiesToSpawnCount > 0)
-        {
-            int randomIndex = Random.Range(0, enemiesToSpawn.Length);
-            GameObject enemy = Instantiate(enemiesToSpawn[randomIndex], shootPoint.position, shootPoint.rotation);
-            spawnedEnemies.Add(enemy);
-            totalEnemiesToSpawnCount--;
-        }
-    }
-
-    bool AreAllEnemiesDead()
-    {
-        foreach (var enemy in spawnedEnemies)
-        {
-            if (enemy != null && !enemy.GetComponent<Enemy>().IsDead())
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    void PerformMeleeAttack()
-    {
-        PlayAttackAnim(); 
-        Collider[] hitPlayers = Physics.OverlapSphere(melleAttackPoint.position, attackRange, whatIsPlayer);
-        foreach (var player in hitPlayers)
-        {
-            if (player.CompareTag("Player"))
-            {
-                player.GetComponent<IDamagable>().TakeDamage(1);
-            }
-        }
-    }
-
-    public void OnAttackAnimationEvent()
-    {
-        PerformMeleeAttack();
-    }
-
-    void SetBossStage(BossStage _)
-    {
-        Stage = _;
+        // }
     }
     
-    bool isKnockedBack;
-    [SerializeField] private float knockbackDuration;
-    [SerializeField] private float knockbackForce;
+    private void ChasePlayer()
+    {
+        if (agent == null || !agent.isActiveAndEnabled) return;
+        
+        agent.isStopped = false;
+        Vector3 directionToPlayer = (Player.position - transform.position).normalized;
+        Vector3 destination = Player.position - directionToPlayer * chaseOffset;
+        agent.SetDestination(destination);
+        
+        if (animator != null && !PlayerInAttackRange())
+        {
+            animator.SetBool("isWalking", true);
+        } else {
+            PlayIdleAnim();
+        }
+    }
+    
+    #endregion
+    
+    #region Enemy Spawning
+    
+    private void SpawnEnemies()
+    {
+        if (totalEnemiesToSpawnCount <= 0 || shootPoint == null || enemiesToSpawn.Length == 0) return;
+        
+        int randomIndex = Random.Range(0, enemiesToSpawn.Length);
+        GameObject enemyPrefab = enemiesToSpawn[randomIndex];
+        
+        if (enemyPrefab != null)
+        {
+            GameObject enemy = Instantiate(enemyPrefab, shootPoint.position, shootPoint.rotation);
+            if (enemy != null)
+            {
+                spawnedEnemies.Add(enemy);
+                totalEnemiesToSpawnCount--;
+            }
+        }
+    }
+    
+    private bool AreAllEnemiesDead()
+    {
+        return false;
+        //will add back logi for checking if all enemies are dead later on
+    }
+    
+    #endregion
+    
+    #region Combat
+    
+    public bool PlayerInSightRange()
+    {
+        return Player != null && Physics.CheckSphere(transform.position, detectRange, whatIsPlayer);
+    }
+
+    public bool PlayerInAttackRange()
+    {
+        return Player != null && Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
+    }
+    
+    // Used by animation event
+    public void OnAttackAnimationEvent()
+    {
+        // Don't play animation again, just apply damage
+        ApplyMeleeDamage();
+    }
+    
+    private void PerformMeleeAttack()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("isWalking", false);
+            animator.SetTrigger("attack");
+        }
+        
+        // Actual damage will be applied via animation event
+    }
+    
+    private void ApplyMeleeDamage()
+    {
+        if (meleeAttackPoint == null) return;
+        
+        Collider[] hitPlayers = Physics.OverlapSphere(meleeAttackPoint.position, attackRange, whatIsPlayer);
+        foreach (var player in hitPlayers)
+        {
+            if (player != null && player.CompareTag("Player"))
+            {
+                IDamagable damagable = player.GetComponent<IDamagable>();
+                if (damagable != null)
+                {
+                    damagable.TakeDamage(attackDamage);
+                }
+            }
+        }
+    }
+    
+    #endregion
+    
+    #region Animation
+    
+    public void PlayIdleAnim()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("idle", true);
+            animator.SetBool("isWalking", false);
+        }
+    }
+    
+    public void PlayDeadAnim()
+    {
+        if (animator != null)
+        {
+            animator.SetBool("dead", true);
+        }
+    }
+    
+    #endregion
+    
+    #region Knockback
+    
     private void ApplyKnockback(Vector3 direction)
     {
-        if (isKnockedBack) return; // Prevent multiple knockbacks at once
+        if (isKnockedBack || rb == null) return;
 
         isKnockedBack = true;
-        agent.enabled = false; // Disable NavMeshAgent to allow Rigidbody movement
-        rb.isKinematic = false; // Enable Rigidbody physics
-        rb.AddForce(direction.normalized * knockbackForce, ForceMode.Impulse); // Apply knockback force
+        
+        if (agent != null && agent.isActiveAndEnabled)
+            agent.enabled = false;
+            
+        if (rb != null)
+        {
+            rb.isKinematic = false;
+            rb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+        }
 
-        Invoke(nameof(ResetAfterKnockback), knockbackDuration); // Reset after knockback duration
+        Invoke(nameof(ResetAfterKnockback), knockbackDuration);
     }
 
     private void ResetAfterKnockback()
     {
         isKnockedBack = false;
-        rb.isKinematic = true; // Disable Rigidbody physics
-        rb.linearVelocity = Vector3.zero; // Reset velocity
-        agent.enabled = true; // Re-enable NavMeshAgent
+        
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+            rb.linearVelocity = Vector3.zero;
+        }
+        
+        if (agent != null && !isDead)
+            agent.enabled = true;
     }
+    
+    #endregion
 }
 
 public enum BossStage { Stage_one, Stage_two, Dead }

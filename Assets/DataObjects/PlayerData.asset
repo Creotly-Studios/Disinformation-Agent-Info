@@ -19,17 +19,18 @@ MonoBehaviour:
   sprintCooldown: 5.5
   sprintRechargeRate: 2
   gravity: -19.62
-  jumpHeight: 1.75
+  jumpHeight: 2.5
   jumpForwardForce: 8.01
   turnSmoothTime: 0.1
   variableJumpHieghtMultiplier: 0.5
+  coyoteTime: 1
   dashForce: 3
   dashStaminaCost: 7.5
   detectRadius: 1
   detectRange: 1
   pushForce: 1
-  attackRange: 1.15
-  attackSphereSize: 2.54
+  attackRange: 0.5
+  attackSphereSize: 1.25
   attackDamage: 1
   attackArray:
   - {fileID: 11400000, guid: cfd66faf0eaf3b54db2db3c23d75d84f, type: 2}
