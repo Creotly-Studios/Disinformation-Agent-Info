@@ -193,6 +193,7 @@ MonoBehaviour:
   isKnockedBack: 0
   isBotEnemy: 0
   attackPoint: {fileID: 4903758677321439877}
+  delayAmount: 1.25
 --- !u!114 &8483367545664059926
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -816,7 +817,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 3511325375820423461, guid: a79d4ec6ffc43e64280a0083c7fbd771, type: 3}
+  - {fileID: 2100000, guid: e9f95081aa55f414eaf87367b2d0fd33, type: 2}
   - {fileID: 7046814953253937625, guid: a79d4ec6ffc43e64280a0083c7fbd771, type: 3}
   - {fileID: 2781410738928257789, guid: a79d4ec6ffc43e64280a0083c7fbd771, type: 3}
   - {fileID: 6524843967714326363, guid: a79d4ec6ffc43e64280a0083c7fbd771, type: 3}

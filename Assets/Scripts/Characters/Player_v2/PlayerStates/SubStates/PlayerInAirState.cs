@@ -3,6 +3,7 @@ using UnityEngine;
 public class PlayerInAirState : PlayerState
 {
     Vector2 input;
+    private bool jumpInput;
     private float _turnSmoothVel;
 
     public PlayerInAirState(Player_v2 player, PlayerStateMachine stateMachine, PlayerData playerData, string animBoolName) : base(player, stateMachine, playerData, animBoolName)
@@ -28,8 +29,17 @@ public class PlayerInAirState : PlayerState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
+
+        CheckCoyoteTime();
+
         input = player.InputHandler.MovementInput;
-        if (player.controller.isGrounded && player.controller.velocity.y < 0.01f)
+        jumpInput = player.InputHandler.JumpInput;
+
+        if (jumpInput && coyoteTime)
+        {
+            stateMachine.ChangeState(player.JumpState);
+        }
+        else if (player.controller.isGrounded && player.controller.velocity.y < 0.01f)
         {
             stateMachine.ChangeState(player.IdleState);
         } else {
@@ -57,6 +67,15 @@ public class PlayerInAirState : PlayerState
             float currentSpeed = playerData.speed;
             Vector3 moveDir = Quaternion.Euler(0f, targetAngle, 0f) * Vector3.forward;
             player.Move(moveDir * currentSpeed * Time.deltaTime);
+        }
+    }
+
+    private bool coyoteTime;
+    private void CheckCoyoteTime()
+    {
+        if (coyoteTime && Time.time > startTime + playerData.coyoteTime)
+        {
+            coyoteTime = false;
         }
     }
 
