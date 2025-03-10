@@ -1,5 +1,8 @@
 VAR npcEmotion = "Angry"
 
+Ah Mr Kim, You are finished, let me review your results. #speaker:Maggie
+-> MissionBriefing
+
 === MissionBriefing ===  
 Well done, Agent! You passed the test. Not bad at all. #speaker:Maggie  
 
