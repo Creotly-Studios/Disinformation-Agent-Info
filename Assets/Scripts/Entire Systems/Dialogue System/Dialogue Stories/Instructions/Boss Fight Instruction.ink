@@ -1,7 +1,12 @@
 VAR npcEmotion = "Angry"
 
+Agent Kim, congratulations on another completed Mission, you are getting a good heck of this. #speaker: Maggie
+
+Phone Rings ...... #speaker: Phone
+-> MastermindBriefing
+
 === MastermindBriefing ===  
-Agent, this is it. **We’ve tracked down Mastermind.** #speaker:Maggie  
+Agent, this is it. We’ve tracked down Mastermind. #speaker:Maggie  
 
 His network is collapsing, but he’s not going down without a fight. He’s deployed **automated bots** to flood every channel with his fake stories, and his strongest supporters are guarding his hideout. **This is our last chance to shut him down for good.** #speaker:Maggie  
 

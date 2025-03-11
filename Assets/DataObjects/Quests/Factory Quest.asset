@@ -10,22 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aadfdebdedcce7c4992a4db770c9ea97, type: 3}
-  m_Name: Boss Quest
+  m_Name: Factory Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  <questCode>k__BackingField: 451
-  <questLevelIndex>k__BackingField: 7
-  questTitle: Finale
-  description: Defeat the Boss
+  <questCode>k__BackingField: 888
+  <questLevelIndex>k__BackingField: 5
+  questTitle: Factory Quest
+  description: Factory Quest, Destory Fctory Generator
   <QuestReward>k__BackingField: 0
   <questObjectives>k__BackingField:
   - isDone: 0
     targetValue: 5
     progressValue: 0
     objectiveType: 5
-    description: Match 5 Articles or Headlines to its mostt credible Source
+    description: Complete 5 spot the source games
   - isDone: 0
     targetValue: 1
     progressValue: 0
-    objectiveType: 2
-    description: Defeat Boss
+    objectiveType: 0
+    description: Destory factory generator
+  - isDone: 0
+    targetValue: 1
+    progressValue: 0
+    objectiveType: 6
+    description: Collect trophy
