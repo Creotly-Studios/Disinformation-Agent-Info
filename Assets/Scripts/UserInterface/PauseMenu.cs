@@ -3,9 +3,11 @@ using UnityEngine.UI;
 
 public class PauseMenu : MonoBehaviour
 {
+    [SerializeField] private Button menuBtn;
+    
     [SerializeField] private Button replayBtn;
     [SerializeField] private Button resumeBtn;
-    [SerializeField] private Button menuBtn;
+    [SerializeField] private Button loadSaveBtn;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -23,6 +25,10 @@ public class PauseMenu : MonoBehaviour
         replayBtn.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        });
+        loadSaveBtn.onClick.AddListener(() =>
+        {
+            SaveManagerSystem.Instance.DisplayMenuPanel();
         });
 
         Hide();
@@ -46,10 +52,12 @@ public class PauseMenu : MonoBehaviour
     private void Show()
     {
         gameObject?.SetActive(true);
+        Player_v2.Instance.DisplayPauseButton(false);
     }
 
     public void Hide()
     {
         gameObject?.SetActive(false);
+        Player_v2.Instance.DisplayPauseButton(true);
     }
 }

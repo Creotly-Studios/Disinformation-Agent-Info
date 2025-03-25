@@ -19,6 +19,7 @@ public class NPC : MonoBehaviour
 
     [Header("Profile")]
     public CharacterProfile profile;
+    public QuestObjectiveNavIdentifier identifier { get; private set; }
 
     [Header("NPC Details")]
     public bool hasCompletedDialogue;
@@ -54,6 +55,7 @@ public class NPC : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         npcFunctions = GetComponent<NPCFunctions>();
+        identifier = GetComponent<QuestObjectiveNavIdentifier>();
         warmingUpRadarUI = GetComponentInChildren<BarSliderUI>();
     }
 

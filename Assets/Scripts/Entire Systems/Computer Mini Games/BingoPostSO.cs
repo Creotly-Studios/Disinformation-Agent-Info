@@ -9,7 +9,7 @@ public class BingoPostSO : ScriptableObject
     [TextArea] public string answerExplanation;
 
     [Header("Options")]
-    public string answer;
+    public string correctAnswer;
     public bool hasChecked;
     public string[] options;
 }

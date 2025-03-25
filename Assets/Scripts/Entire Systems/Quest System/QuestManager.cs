@@ -87,4 +87,19 @@ public class QuestManager : MonoBehaviour
             popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
         }
     }
+
+    public void RestoreQuestProgress(List<SerializableQuestData> questDataList)
+    {
+        for(int i = 0; i < availableQuests.Count; i++)
+        {
+            QuestSO quest = availableQuests[i];
+            SerializableQuestData questData = questDataList[i];
+
+            if (quest.questTitle.Equals(questData.questName) != true)
+            {
+                continue;
+            }
+            questData.RestoreQuestValues(quest);
+        }
+    }
 }

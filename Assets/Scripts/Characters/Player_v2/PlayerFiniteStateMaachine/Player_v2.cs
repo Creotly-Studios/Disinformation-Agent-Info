@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +7,7 @@ public class Player_v2 : MonoBehaviour
     public static Player_v2 Instance { get; private set; }
     public PlayerCombat playerCombat { get; private set; }
     public CharacterController controller { get; private set; }
+    public PlayerNavigationSystem PlayerNav { get; private set; }
 
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
@@ -15,6 +15,8 @@ public class Player_v2 : MonoBehaviour
     public PlayerCombatSystem CombatSystem { get; private set; }
     public Animator Anim;
     #endregion
+
+    [field: SerializeField] public Button PauseButton { get; private set; }
 
     #region Events
     public event EventHandler<GameObject> OnInteractObjectFind;
@@ -35,7 +37,7 @@ public class Player_v2 : MonoBehaviour
     public PlayerDashState DashState { get; private set; }
     public PlayerInteractState InteractState { get; private set; }
     public PlayerAttackState AttackState { get; private set; }
-    
+
     public PlayerInactiveState InactiveState { get; private set; }
 
     public PlayerDeadState DeadState { get; private set; }
@@ -67,8 +69,8 @@ public class Player_v2 : MonoBehaviour
 
 
     //testing new shit
-    public Vector3 WorkSpace {get; set;}
-    public Vector3 CurrentVelocity {get; private set;}
+    public Vector3 WorkSpace { get; set; }
+    public Vector3 CurrentVelocity { get; private set; }
 
     #region UnityCallbackFunctions
     private void Awake()
@@ -86,6 +88,7 @@ public class Player_v2 : MonoBehaviour
         CombatSystem = GetComponent<PlayerCombatSystem>();
 
         playerCombat = GetComponent<PlayerCombat>();
+        PlayerNav = GetComponent<PlayerNavigationSystem>();
         PlayerStatistics = GetComponent<PlayerStatistics>();
 
         IdleState = new PlayerIdleState(this, StateMachine, PlayerData, "idle");
@@ -94,7 +97,7 @@ public class Player_v2 : MonoBehaviour
         LandState = new PlayerLandState(this, StateMachine, PlayerData, "move");
         DashState = new PlayerDashState(this, StateMachine, PlayerData, "dash");
         InAirState = new PlayerInAirState(this, StateMachine, PlayerData, "inAir");
-      
+
         InteractState = new PlayerInteractState(this, StateMachine, PlayerData, "interact");
         AttackState = new PlayerAttackState(this, StateMachine, PlayerData, "attack");
         InactiveState = new PlayerInactiveState(this, StateMachine, PlayerData, "idle");
@@ -128,7 +131,6 @@ public class Player_v2 : MonoBehaviour
 
         CurrentVelocity = controller.velocity;
         ApplyGravity();
-        Debug.Log(controller.isGrounded);
     }
 
     private void FixedUpdate()
@@ -284,6 +286,11 @@ public class Player_v2 : MonoBehaviour
     }
 
     #endregion
+
+    public void DisplayPauseButton(bool status)
+    {
+        PauseButton.gameObject.SetActive(status);
+    }
 
     void OnDestroy()
     {

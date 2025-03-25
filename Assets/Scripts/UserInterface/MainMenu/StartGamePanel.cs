@@ -5,8 +5,8 @@ public class StartGamePanel : MonoBehaviour
 {
     
     [Header("Buttons")]
+    [SerializeField] private Button loadGame;
     [SerializeField] private Button startNewGame;
-    [SerializeField] private Button continueGame;
 
     private MainMenu _mainMenu;
 
@@ -18,13 +18,12 @@ public class StartGamePanel : MonoBehaviour
     
     void Start()
     {
-        startNewGame.onClick.AddListener(() =>
+        loadGame.onClick.AddListener(() =>
         {
-            //ovvveride/clear save file and play
-            LevelLoader.LoadLevel(agencyOfficeLevelIndex);
+            SaveManagerSystem.Instance.DisplayMenuPanel();
         });
         
-        continueGame.onClick.AddListener(() =>
+        startNewGame.onClick.AddListener(() =>
         {
             //continue with save file and play
             LevelLoader.LoadLevel(agencyOfficeLevelIndex);

@@ -1,34 +1,16 @@
 VAR npcEmotion = "Surprised"
 
-#speaker: Samantha
-[laughs] No way! Did you see this? The Mayor just exposed some crazy stuff!
+The Mayor just exposed some crazy stuff!, Look! [holds up phone] Apparently, the other guy running for office is secretly working with some foreign group. It’s all over the place! #speaker: Samantha
 
-#speaker: Player
-What stuff?
+Where did this come from? #speaker: Player
 
-#speaker: Samantha
-Look! [holds up phone] Apparently, the other guy running for office is secretly working with some foreign group. It’s all over the place!
+Social media! Everyone’s talking about it. #speaker: Samantha
 
-#speaker: Player
-Where did this come from?
+That doesn’t make it true. Did you check the source?, Because unverified information—false or misleading details can spread quickly when people never seem to fact-check. #speaker: Player
 
-#speaker: Samantha
-Social media! Everyone’s talking about it.
+But it sounds real! #speaker: Samantha
 
-#speaker: Player
-That doesn’t make it true. Did you check the source?
-
-#speaker: Samantha
-Well… no, but I mean, why would people share it if it wasn’t real?
-
-#speaker: Player
-Because it’s unverified information—false or misleading details that spread because people don’t fact-check.
-
-#speaker: Samantha
-But it sounds real!
-
-#speaker: Player
-That’s how unverified information works. It plays on what you want to believe. If it confirms your opinions, you’re more likely to share it without questioning it.
+That’s how unverified information works. It plays on what you want to believe. If it confirms your opinions, you’re more likely to share it without questioning it. #speaker: Player
 
 #speaker: Samantha
 …Wait, so this might not be true?
@@ -36,19 +18,12 @@ That’s how unverified information works. It plays on what you want to believe.
 #speaker: Player
 Let’s check. Look at the website that posted it—does it have any sources? Do other trusted sites report the same thing?
 
-Samantha quickly scrolls and frowns.
+Samantha quickly scrolls and frowns..... #speaker: Samantha
 
-#speaker: Samantha
-Ugh. This article just links to other sketchy sites.
-
-#speaker: Player
-Classic unverified information trap—fake stories linking to other fake stories to seem legit.
-
-#speaker: Samantha
-[groans] Great. And I already shared it.
+Ugh. This article just links to other sketchy sites. [groans] Great. And I already shared it. #speaker: Samantha
 
 #speaker: Player
-It happens. The best thing you can do? Delete it and correct it. Let people know it’s false.
+Classic unverified information trap—fake stories linking to other fake stories to seem legit, happens to the best of us, just delete it and correct it. Let people know it’s false.
 
 #speaker: Samantha
 Yeah… I should. No way I wanna be part of spreading lies. Thanks for calling me out.
@@ -56,7 +31,7 @@ Yeah… I should. No way I wanna be part of spreading lies. Thanks for calling m
 * [Jumping to conclusions just fuels the problem. We have to be careful with what we share.]  
     -> LogicalTone
 
-* [See? This is exactly how people get manipulated. They count on you not checking.]  
+* [See? This is exactly how people get manipulated. They count on you not checking.] 
     -> ArgumentativeTone
 
 * [I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.]  

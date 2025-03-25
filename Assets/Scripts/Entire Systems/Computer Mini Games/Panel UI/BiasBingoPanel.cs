@@ -1,89 +1,27 @@
 using TMPro;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
-public class BiasBingoPanel : MonoBehaviour
+public class BiasBingoPanel : GamePanels
 {
-    // Status
-    private bool hasSet;
-    private int currentScore;
-    private bool hasInitialized;
-    private float remainingTime;
-    private bool isGameOver;
-    private string selectedAnswer = "";
-    private WaitForSeconds waitForSeconds;
-
     // Current Data
     private BingoPostSO currentPost;
-    private ComputerPanel_UI computerPanelUI;
     private List<BingoPostSO> dynamicContentList = new();
 
     [Header("Properties")]
-    [SerializeField] private float maxTime;
     [SerializeField] private BingoPostSO[] contentArray;
-
-    [Header("Identifier Buttons")]
-    [SerializeField] private List<DialogueUIChoice> uiButton = new();
 
     [Header("Post Properties")]
     [SerializeField] private TextMeshProUGUI authorName;
     [SerializeField] private TextMeshProUGUI postContent;
 
-    [Header("UI Properties")]
-    [SerializeField] private Button hintButton;
-    [SerializeField] private Button exitButton;
-    [SerializeField] private TextMeshProUGUI scoreCount;
-    [SerializeField] private TextMeshProUGUI countDownTimer;
-    [SerializeField] private GameObject gameOverPanel;
-    [SerializeField] private TextMeshProUGUI gameOverText;
-
-    [Space]
-    [SerializeField] private GameObject postPanel;
-    [SerializeField] private GameObject answersPanel;
-
-    [Header("Hint System")]
-    [SerializeField] private int maxHints = 3;
-    private int remainingHints;
-
-    private void Awake()
-    {
-        waitForSeconds = new WaitForSeconds(1.5f);
-        computerPanelUI = GetComponentInParent<ComputerPanel_UI>();
-    }
-
     private void OnEnable()
     {
-        if (hasInitialized)
-        {
-            return;
-        }
-
-        currentScore = 0;
-        remainingTime = maxTime;
-        remainingHints = maxHints;
-        isGameOver = false;
-        scoreCount.text = currentScore.ToString();
-
-        if (gameOverPanel != null)
-        {
-            gameOverPanel.SetActive(false);
-        }
-
-        InitalizePosts();
-        SelectPostSO();
-
-        // hintButton.onClick.AddListener(() => HintButton());
-        exitButton.onClick.AddListener(() => SubmitButton());
-
-        uiButton[0].choiceButton.onClick.AddListener(() => InitializeButton(0));
-        uiButton[1].choiceButton.onClick.AddListener(() => InitializeButton(1));
-        uiButton[2].choiceButton.onClick.AddListener(() => InitializeButton(2));
-        uiButton[3].choiceButton.onClick.AddListener(() => InitializeButton(3));
-
-        hasInitialized = true;
+        if (hasInitialized) { return; }
+        InitalizePanel();
+        HandleButtonInitialization(true, ObjectiveType.BiasBingo);
         ShowPanel();
     }
 
@@ -94,124 +32,10 @@ public class BiasBingoPanel : MonoBehaviour
             return;
         }
         dynamicContentList.Clear();
-        // hintButton.onClick.RemoveListener(() => HintButton());
-        exitButton.onClick.RemoveListener(() => SubmitButton());
-
-        uiButton[0].choiceButton.onClick.RemoveListener(() => InitializeButton(0));
-        uiButton[1].choiceButton.onClick.RemoveListener(() => InitializeButton(1));
-        uiButton[2].choiceButton.onClick.RemoveListener(() => InitializeButton(2));
-        uiButton[3].choiceButton.onClick.RemoveListener(() => InitializeButton(3));
-
-        hasInitialized = false;
+        UnInitializePanel(ObjectiveType.BiasBingo);
     }
 
-    private void InitalizePosts()
-    {
-        dynamicContentList = contentArray.ToList();
-        for (int i = 0; i < dynamicContentList.Count; i++)
-        {
-            dynamicContentList[i] = Instantiate(dynamicContentList[i]);
-        }
-    }
-
-    public void BiasBingPanel_Update()
-    {
-        if (gameObject.activeSelf != true || isGameOver)
-        {
-            return;
-        }
-
-        bool popupActive = (computerPanelUI.popupPanel.gameObject.activeSelf == true);
-
-        EnableButtons(popupActive != true);
-        if(popupActive)
-        {
-            return;
-        }
-
-        TimerCountdown(Time.deltaTime);
-        if (selectedAnswer.Equals(""))
-        {
-            return;
-        }
-        StartCoroutine(ResetCurrentPost());
-    }
-
-    private IEnumerator ResetCurrentPost()
-    {
-        hasSet = false;
-        selectedAnswer = "";
-
-        yield return waitForSeconds;
-
-        currentPost.hasChecked = true;
-        if (currentPost == null || currentPost.hasChecked)
-        {
-            SelectPostSO();
-            uiButton.ForEach(x => x.choiceButton.interactable = true);
-        }
-    }
-
-    private void InitializeButton(int i)
-    {
-        if (isGameOver) return;
-
-        // Validate index
-        if (i < 0 || i >= uiButton.Count)
-        {
-            Debug.LogError($"Invalid button index: {i}. List count: {uiButton.Count}");
-            return;
-        }
-
-        // Validate UI Button and choiceText
-        var button = uiButton[i];
-        if (button == null)
-        {
-            Debug.LogError($"uiButton[{i}] is null");
-            return;
-        }
-
-        if (button.choiceText == null)
-        {
-            Debug.LogError($"choiceText is null for button at index {i}");
-            return;
-        }
-
-        // Store selected answer and disable button
-        selectedAnswer = button.choiceText.text;
-        button.choiceButton.interactable = false;
-
-        // Find answers and evaluate
-        DialogueUIChoice pickedAnswer = uiButton.Find(x => x.choiceText.text == selectedAnswer);
-        DialogueUIChoice correctAnswer = uiButton.Find(x => x.choiceText.text == currentPost.answer);
-        
-        if (hasSet)
-        {
-            return;
-        }
-
-        hasSet = true;
-        if (selectedAnswer.Equals(currentPost.answer))
-        {
-            currentScore++;
-            scoreCount.text = currentScore.ToString();
-            correctAnswer.choiceButton.image.color = Color.green;
-
-            QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.BiasBingo);
-            if (objective != null && objective.isDone != true)
-            {
-                QuestSO quest = QuestManager.Instance.activeQuest;
-                quest.IncreaseQuestObjectiveProgressLevels(objective);
-            }
-            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Correct);
-        }
-        else
-        {
-            pickedAnswer.choiceButton.image.color = Color.red;
-            correctAnswer.choiceButton.image.color = Color.green;
-            computerPanelUI.popupPanel.DisplayPopUpWindow(currentPost.answerExplanation, NoticeType.Wrong);
-        }
-    }
+    #region SO Functions
 
     private BingoPostSO GetPostSO()
     {
@@ -219,9 +43,9 @@ public class BiasBingoPanel : MonoBehaviour
         return dynamicContentList[random];
     }
 
-    private void SelectPostSO()
+    protected override void SelectPostSO()
     {
-        if (dynamicContentList == null || dynamicContentList.Count <= 0)
+        if(dynamicContentList.Count <= 0)
         {
             Debug.Log("All posts have been answered.");
             EndGame("Congratulations! You've completed all posts!");
@@ -231,6 +55,18 @@ public class BiasBingoPanel : MonoBehaviour
         currentPost = GetPostSO();
         InitializePostContents(currentPost);
         dynamicContentList.Remove(currentPost);
+
+        correctAnswer = currentPost.correctAnswer;
+        reasonForAnswer = currentPost.answerExplanation;
+    }
+
+    protected override void InitalizePosts()
+    {
+        dynamicContentList = contentArray.ToList();
+        for (int i = 0; i < dynamicContentList.Count; i++)
+        {
+            dynamicContentList[i] = Instantiate(dynamicContentList[i]);
+        }
     }
 
     private void InitializePostContents(BingoPostSO postSO)
@@ -245,85 +81,20 @@ public class BiasBingoPanel : MonoBehaviour
         }
     }
 
-    private void TimerCountdown(float delta)
-    {
-        bool popUp = computerPanelUI.popupPanel.gameObject.activeSelf;
-        if (isGameOver|| popUp) return;
+    #endregion
 
-        remainingTime -= delta;
-        if (remainingTime <= 0.0f)
+    protected override IEnumerator ResetCurrentPost()
+    {
+        hasSet = false;
+        selectedAnswer = "";
+
+        yield return waitForSeconds;
+
+        currentPost.hasChecked = true;
+        if (currentPost == null || currentPost.hasChecked)
         {
-            remainingTime = 0.0f;
-            EndGame("Time's up!");
-            return;
+            SelectPostSO();
+            uiButton.ForEach(x => x.choiceButton.interactable = true);
         }
-
-        int minutes = Mathf.FloorToInt(remainingTime / 60);
-        int seconds = Mathf.FloorToInt(remainingTime % 60);
-        int milliSecond = Mathf.FloorToInt((remainingTime * 1000) % 1000);
-
-        countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
-        countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
-    }
-
-    private void EnableButtons(bool status)
-    {
-        foreach(DialogueUIChoice btn in uiButton)
-        {
-            btn.choiceButton.interactable = status;
-        }
-    }
-
-    private void HintButton()
-    {
-        if (isGameOver || remainingHints <= 0 || currentPost == null) return;
-
-        remainingHints--;
-        hintButton.GetComponentInChildren<TextMeshProUGUI>().text = $"Hint ({remainingHints})";
-
-        // Disable two wrong answers randomly
-        var wrongAnswers = uiButton
-            .Where(x => x.choiceText.text != currentPost.answer && x.choiceButton.interactable)
-            .ToList();
-
-        if (wrongAnswers.Count >= 2)
-        {
-            // Randomly select 2 wrong answers to disable
-            for (int i = 0; i < 2; i++)
-            {
-                int randomIndex = Random.Range(0, wrongAnswers.Count);
-                wrongAnswers[randomIndex].choiceButton.interactable = false;
-                wrongAnswers[randomIndex].choiceButton.image.color = Color.gray;
-                wrongAnswers.RemoveAt(randomIndex);
-            }
-        }
-
-        if (remainingHints <= 0)
-        {
-            hintButton.interactable = false;
-        }
-    }
-
-    private void EndGame(string message)
-    {
-        isGameOver = true;
-        HidePanel();
-    }
-
-    private void SubmitButton()
-    {
-        computerPanelUI.DisablePanels();
-    }
-
-    void HidePanel()
-    {
-        postPanel.SetActive(false);
-        answersPanel.SetActive(false);
-    }
-
-    void ShowPanel()
-    {
-        postPanel.SetActive(true);
-        answersPanel.SetActive(true);
     }
 }

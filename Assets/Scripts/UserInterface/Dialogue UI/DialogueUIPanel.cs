@@ -8,9 +8,6 @@ using System.Collections.Generic;
 
 public class DialogueUIPanel : MonoBehaviour
 {
-    private bool skipFlag;
-    private bool isTyping;
-
     [Header("Panel")]
     public Transform dialoguePanel;
     [SerializeField] private Button skipButton;
@@ -50,11 +47,7 @@ public class DialogueUIPanel : MonoBehaviour
 
     public void HandleSkip()
     {
-        if (isTyping == false)
-        {
-            return;
-        }
-        skipFlag = true;
+        DialogueManager.Instance.skipDialogue = true;
     }
 
     public void StopDisplayCoroutine()
@@ -140,7 +133,6 @@ public class DialogueUIPanel : MonoBehaviour
 
     private void HandleTextTyping(string text)
     {
-        isTyping = true;
         DialogueManager dialogue = DialogueManager.Instance;
 
         dialogue.canContinue = false;
@@ -151,19 +143,23 @@ public class DialogueUIPanel : MonoBehaviour
     private IEnumerator TypeText(string text, TextMeshProUGUI textBox)
     {
         textBox.text = "";
+        bool textFullyRevealed = false;
+        InputManager inputManager = InputManager.instance;
+        DialogueManager dialogueManager = DialogueManager.Instance;
+
+        inputManager.jumpPressed = false;
         foreach (char c in text)
         {
-            if (skipFlag == true)
+            if (inputManager.jumpPressed && textFullyRevealed != true)
             {
                 textBox.text = text;
+                textFullyRevealed = true;
                 break;
             }
             textBox.text += c;
             yield return typingSpeed;
         }
-
-        isTyping = false;
-        skipFlag = false;
-        DialogueManager.Instance.canContinue = true;
+        yield return new WaitUntil(() => inputManager.jumpPressed != true);
+        dialogueManager.canContinue = true;
     }
 }

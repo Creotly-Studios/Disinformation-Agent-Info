@@ -14,8 +14,6 @@ public class GameManager : MonoBehaviour
     private bool isGamePaused = false;
     private bool canPause = true;
 
-    DialogueManager dialogueManager;
-
     [Header("-- Variables")]
     public int PlayerCoinAmount {get; private set;}
     public int PlayerRank {get; private set;} //1 min - 5 max... 
@@ -31,13 +29,12 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-
-        dialogueManager = DialogueManager.Instance;
     }
 
     void Start()
     {
         InputManager.instance.InputSystemActions.Player.Pause.performed += ctx => TogglePause();
+        if (Player_v2.Instance != null) Player_v2.Instance.PauseButton.onClick.AddListener(TogglePause);
     }
 
     void Update()
@@ -128,6 +125,12 @@ public class GameManager : MonoBehaviour
     {
         PlayerCoinAmount++;
     }
+
+    public void SetCoinAmount(int value)
+    {
+        PlayerCoinAmount = value;
+    }
+
     public int PlayerCoins()
     {
         return PlayerCoinAmount;

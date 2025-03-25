@@ -67,6 +67,12 @@ public class QuestObjectives
     public int progressValue;
     public ObjectiveType objectiveType;
     [TextArea] public string description;
+
+    public void LoadProgressValue(int newValue)
+    {
+        progressValue = newValue;
+        isDone = progressValue >= targetValue;
+    }
 }
 
 [System.Serializable]

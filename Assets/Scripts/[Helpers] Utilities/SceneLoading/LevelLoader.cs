@@ -9,19 +9,21 @@ public static class LevelLoader
     private static Action onLoaderCallback;
     private class LoadingMonobehavior : MonoBehaviour { }
 
-    public static void LoadLevel(int levelIndex)
+    public static void LoadLevel(int levelIndex, Action action = null)
     {
         onLoaderCallback = () => {
             GameObject loadingGameobject = new GameObject("Loading Game Object");
-            loadingGameobject.AddComponent<LoadingMonobehavior>().StartCoroutine(LoadAsync(levelIndex));
+            loadingGameobject.AddComponent<LoadingMonobehavior>().StartCoroutine(LoadAsync(levelIndex, action));
         };
 
         SceneManager.LoadScene("Loading");
     }
 
-    static IEnumerator LoadAsync(int sceneIndex)
+    static IEnumerator LoadAsync(int sceneIndex, Action action)
     {
         asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
+        asyncOperation.completed += operation => { action?.Invoke(); };
+
         while (!asyncOperation.isDone)
         {
             // Debug.Log(asyncOperation.progress);

@@ -3,6 +3,7 @@ using UnityEngine.Events;
 
 public class Puzzle_Switches : MonoBehaviour, IInteractable
 {
+    private PuzzleManager puzzleManager;
     public bool Switch { get; private set; }
 
     [Header("Events")]
@@ -71,29 +72,30 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
         QuestManager questManager = QuestManager.Instance;
         QuestObjectives objective = questManager.FindQuestObjective(ObjectiveType.Puzzle);
 
-        if (objective == null)
+        if(puzzleManager == null || objective == null)
         {
             return;
         }
         QuestSO quest = questManager.activeQuest;
+        QuestObjectiveNavIdentifier identifier = puzzleManager.identifier;
 
         if (switchType == Switch_Type.Main)
         {
             if (status != true)
             {
-                quest.DecreaseQuestObjectiveProgressLevels(objective);
+                quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
                 return;
             }
-            quest.IncreaseQuestObjectiveProgressLevels(objective);
+            quest.IncreaseQuestObjectiveProgressLevels(objective, identifier);
         }
         else if (switchType == Switch_Type.Blockers)
         {
             if(status)
             {
-                quest.DecreaseQuestObjectiveProgressLevels(objective);
+                quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
                 return;
             }
-            quest.IncreaseQuestObjectiveProgressLevels(objective);
+            quest.IncreaseQuestObjectiveProgressLevels(objective, identifier);
         }
     }
 }

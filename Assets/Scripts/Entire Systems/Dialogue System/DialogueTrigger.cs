@@ -48,7 +48,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             QuestManager questManager = QuestManager.Instance;
 
             int i = questManager.availableQuests.IndexOf(questManager.activeQuest);
-            DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i]);
+            DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i], npc);
             return;
         }
         int random = Random.Range(0, dialogueTexts.Count);

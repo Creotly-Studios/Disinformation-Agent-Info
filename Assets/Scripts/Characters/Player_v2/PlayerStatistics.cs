@@ -47,6 +47,11 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
 
     }
 
+    public void SetCurrentHealth(int value)
+    {
+        CurrentHealth = value;
+    }
+
     public void PlayerStatistic_Update(float delta)
     {
         HandleSprint();

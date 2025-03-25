@@ -120,7 +120,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
             if (objective != null && objective.isDone != true)
             {
                 QuestSO quest = QuestManager.Instance.activeQuest;
-                quest.IncreaseQuestObjectiveProgressLevels(objective);
+                quest.IncreaseQuestObjectiveProgressLevels(objective, null);
             }
             PlayDeathSound();
             PlayDeathDissolve();

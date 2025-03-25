@@ -22,9 +22,6 @@ public class PlayerGroundedState : PlayerState
     public override void Enter()
     {
         base.Enter();
-        player.InputHandler.InputSystemActions.Player.Interact.started += _ => { 
-            Debug.Log("Interact Presed");
-        };
     }
 
     public override void Exit()

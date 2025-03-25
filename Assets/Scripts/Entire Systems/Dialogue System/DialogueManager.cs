@@ -13,6 +13,7 @@ public class DialogueManager : MonoBehaviour
     
     // Status
     public bool canContinue;
+    public bool skipDialogue;
     public bool dialogueIsPlaying { get; private set; }
     public Story currentDialogueStory { get; private set; }
     public SpeakerType currentSpeakerType { get; private set; }
@@ -59,6 +60,11 @@ public class DialogueManager : MonoBehaviour
         if (!dialogueIsPlaying)
         {
             return;
+        }
+
+        if(skipDialogue)
+        {
+            StartCoroutine(ExitDialogueMode());
         }
 
         if (InputManager.instance.jumpPressed && canContinue && currentDialogueStory.currentChoices.Count == 0)
@@ -125,7 +131,7 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogueStory = null;
         dialogueUIPanel.ExitPanel();
-        UpdateObective();
+        if (skipDialogue != true) { UpdateObective(); }
 
         // Trigger the "On Dialogue End" UnityEvent
         OnDialogueEnd?.Invoke();
@@ -134,6 +140,9 @@ public class DialogueManager : MonoBehaviour
         {
             Player_v2.Instance.SetActiveState();
         }
+
+        yield return null;
+        skipDialogue = false;
     }
 
     private void UpdateObective()
@@ -149,11 +158,11 @@ public class DialogueManager : MonoBehaviour
         }
 
         QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
-        if (objective != null)
+        if (objective != null && objective.isDone != true)
         {
             NPCharacter.hasCompletedDialogue = true;
             QuestSO quest = QuestManager.Instance.activeQuest;
-            quest.IncreaseQuestObjectiveProgressLevels(objective);
+            quest.IncreaseQuestObjectiveProgressLevels(objective, NPCharacter.identifier);
         }
     }
 

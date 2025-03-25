@@ -16,7 +16,7 @@ public class Throphy : MonoBehaviour
 
             if (objective != null)
             {
-                questManager.activeQuest.IncreaseQuestObjectiveProgressLevels(objective);
+                questManager.activeQuest.IncreaseQuestObjectiveProgressLevels(objective, null);
             }
             //GameManager.Instance.MissionComplete();
             //Destroy(gameObject);

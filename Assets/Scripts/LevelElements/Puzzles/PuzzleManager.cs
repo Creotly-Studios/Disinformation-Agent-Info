@@ -4,10 +4,16 @@ public class PuzzleManager : MonoBehaviour
 {
     QuestObjectives puzzle_Objective;
     QuestObjectives combat_Objective;
+    public QuestObjectiveNavIdentifier identifier { get; private set; }
 
     [Header("Rewards")]
     [SerializeField] private GameObject combatCompleteReward;
     [SerializeField] private GameObject puzzleCompleteReward;
+
+    private void Awake()
+    {
+        identifier = GetComponent<QuestObjectiveNavIdentifier>();
+    }
 
     private void Update()
     {

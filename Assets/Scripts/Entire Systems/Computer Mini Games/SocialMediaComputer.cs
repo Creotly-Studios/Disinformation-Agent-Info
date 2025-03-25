@@ -6,18 +6,25 @@ public class SocialMediaComputer : MonoBehaviour, IInteractable
     private Player_v2 _player;
     
     ComputerPanel_UI sM_Manager;
-    
-    [SerializeField] private string interactText;
 
-    [SerializeField] private GameObject socialM_Canvas;
     public bool isShowingSocial;
+
+    [SerializeField] private string interactText;
+    [SerializeField] private GameObject socialM_Canvas;
+    public QuestObjectiveNavIdentifier identifier { get; private set; }
+    
 
     public UnityEvent OnInterated;
 
+    private void Awake()
+    {
+        sM_Manager = GetComponent<ComputerPanel_UI>();
+        socialM_Canvas.GetComponent<CanvasGroup>().alpha = 1;
+        identifier = GetComponent<QuestObjectiveNavIdentifier>();
+    }
+
     void Start()
     {
-        socialM_Canvas.GetComponent<CanvasGroup>().alpha = 1;
-        sM_Manager = GetComponent<ComputerPanel_UI>();
         HideSocial();
     }
 
