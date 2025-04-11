@@ -80,9 +80,11 @@ public class QuestManager : MonoBehaviour
             activeQuest = questSO;
         }
         activeQuest.QuestSO_Update();
-        if (activeQuest.isComplete) 
+
+        if(activeQuest.isComplete) 
         {
-            print (activeQuest + "complete");
+            SaveManagerSystem.Instance.AutoSave();
+
             GameManager.Instance.MissionComplete();
             popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
         }

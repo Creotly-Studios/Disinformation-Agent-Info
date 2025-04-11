@@ -28,6 +28,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
         Switch = false;
         indicatorMesh.material = offMat;
         SetSwitchHandleRotation(false);
+        puzzleManager = GetComponentInParent<PuzzleManager>();
     }
 
     public string GetInteractText()
@@ -71,11 +72,11 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
     {
         QuestManager questManager = QuestManager.Instance;
         QuestObjectives objective = questManager.FindQuestObjective(ObjectiveType.Puzzle);
-
         if(puzzleManager == null || objective == null)
         {
             return;
         }
+
         QuestSO quest = questManager.activeQuest;
         QuestObjectiveNavIdentifier identifier = puzzleManager.identifier;
 
@@ -83,6 +84,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
         {
             if (status != true)
             {
+                print(2);
                 quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
                 return;
             }

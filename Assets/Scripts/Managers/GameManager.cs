@@ -34,7 +34,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         InputManager.instance.InputSystemActions.Player.Pause.performed += ctx => TogglePause();
-        if (Player_v2.Instance != null) Player_v2.Instance.PauseButton.onClick.AddListener(TogglePause);
     }
 
     void Update()

@@ -87,7 +87,7 @@ public class PlayerNavigationSystem : MonoBehaviour
 
     private void DirectPlayerTo(QuestObjectiveNavIdentifier identifier)
     {
-        Vector3 directionToPlayer = (identifier.GetPosition() - player.transform.position);
+        Vector3 directionToPlayer = (player.transform.position - identifier.GetPosition());
         int distance = Mathf.RoundToInt(directionToPlayer.magnitude);
 
         distanceToObject.text = $"{distance}M";
@@ -96,8 +96,20 @@ public class PlayerNavigationSystem : MonoBehaviour
         //Rotate image UI to target direction;
         directionToPlayer.Normalize();
         Vector2 direction2D = new Vector2(directionToPlayer.x, directionToPlayer.z);
-        float angle = Mathf.Atan2(direction2D.y, direction2D.x) * Mathf.Rad2Deg;
-        directionImage.rotation = Quaternion.Euler(0,0,angle);
+        float angle = Mathf.Atan2(direction2D.x, direction2D.y) * Mathf.Rad2Deg;
+
+        Quaternion rotationAxis = Quaternion.Euler(0, 0, angle);
+        directionImage.rotation = HandleRotation(rotationAxis,directionToPlayer);
+    }
+
+    private Quaternion HandleRotation(Quaternion rotationAxis, Vector3 direction)
+    {
+        float dotProduct = Vector3.Dot(player.transform.forward, direction);
+        if(dotProduct < 0)
+        {
+            return Quaternion.Euler(0, 0, 180f) * rotationAxis;
+        }
+        return rotationAxis;
     }
 
     public void RegisterIdentifier(QuestObjectiveNavIdentifier identifier)

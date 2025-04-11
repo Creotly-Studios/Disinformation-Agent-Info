@@ -12,13 +12,7 @@ public class DialogueUIPanel : MonoBehaviour
     public Transform dialoguePanel;
     [SerializeField] private Button skipButton;
 
-    [Header("Player Speaker Panel")]
-    public Image playerImage;
-    public GameObject playerObject;
-    public TextMeshProUGUI playerName;
-    public TextMeshProUGUI playerTextDialogue;
-
-    [Header("Player Speaker Panel")]
+    [Header("Speaker Panel")]
     public Image speakerImage;
     public GameObject speakerObject;
     public TextMeshProUGUI speakerName;
@@ -60,20 +54,15 @@ public class DialogueUIPanel : MonoBehaviour
 
     public void DisplayText(DialogueCharacterInformation speaker, string dialogueText)
     {
-        if(DialogueManager.Instance.currentSpeakerType == SpeakerType.Player)
+        DialogueManager dialogueManager = DialogueManager.Instance;
+        SpeakerType currentSpeakerType = dialogueManager.currentSpeakerType;
+
+        speakerObject.SetActive(true);
+        speakerTextDialogue.color = Color.white;
+        speakerName.text = speaker.characterName;
+
+        if(currentSpeakerType != SpeakerType.Player)
         {
-            speakerObject.SetActive(false);
-            playerObject.SetActive(true);
-
-            speakerName.text = speaker.characterName;
-        }
-        else
-        {
-            playerObject.SetActive(false);
-            speakerObject.SetActive(true);
-
-            speakerName.text = speaker.characterName;
-
             switch (speaker.currentEmotion)
             {
                 case EmotionState.Angry:
@@ -86,6 +75,11 @@ public class DialogueUIPanel : MonoBehaviour
                     speakerTextDialogue.color = Color.white;
                     break;
             }
+        }
+
+        if(dialogueManager.currentSpeaker.speakerType == TypeOfSpeaker.Instructor)
+        {
+            speakerTextDialogue.color = Color.green;
         }
         HandleTextTyping(dialogueText);
     }
@@ -119,7 +113,6 @@ public class DialogueUIPanel : MonoBehaviour
 
     public void ExitPanel()
     {
-        playerTextDialogue.text = "";
         speakerTextDialogue.text = "";
         gameObject.SetActive(false);
     }
@@ -136,13 +129,12 @@ public class DialogueUIPanel : MonoBehaviour
         DialogueManager dialogue = DialogueManager.Instance;
 
         dialogue.canContinue = false;
-        typingCoroutine = (dialogue.currentSpeakerType == SpeakerType.Player) ? 
-            StartCoroutine(TypeText(text, playerTextDialogue)) : StartCoroutine(TypeText(text, speakerTextDialogue));
+        typingCoroutine = StartCoroutine(TypeText(text));
     }
 
-    private IEnumerator TypeText(string text, TextMeshProUGUI textBox)
+    private IEnumerator TypeText(string text)
     {
-        textBox.text = "";
+        speakerTextDialogue.text = "";
         bool textFullyRevealed = false;
         InputManager inputManager = InputManager.instance;
         DialogueManager dialogueManager = DialogueManager.Instance;
@@ -152,11 +144,11 @@ public class DialogueUIPanel : MonoBehaviour
         {
             if (inputManager.jumpPressed && textFullyRevealed != true)
             {
-                textBox.text = text;
+                speakerTextDialogue.text = text;
                 textFullyRevealed = true;
                 break;
             }
-            textBox.text += c;
+            speakerTextDialogue.text += c;
             yield return typingSpeed;
         }
         yield return new WaitUntil(() => inputManager.jumpPressed != true);

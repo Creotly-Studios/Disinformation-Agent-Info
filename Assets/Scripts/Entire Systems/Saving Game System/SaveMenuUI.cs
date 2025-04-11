@@ -47,11 +47,12 @@ public class SaveMenuUI : MonoBehaviour
             return;
         }
 
+        print(01);
+        InitializeButtons(true);
+
         InitializeSlotUI();
         hasInitialized = true;
-        
-        InitializeButtons(true);
-        savePanel.gameObject.SetActive(false);
+        savePanel.SetActive(false);
     }
 
     private void OnDisable()
@@ -61,6 +62,7 @@ public class SaveMenuUI : MonoBehaviour
             return;
         }
 
+        print(-1);
         hasInitialized = false;
         InitializeButtons(false);
     }
@@ -94,11 +96,13 @@ public class SaveMenuUI : MonoBehaviour
 
     private void HandleQuit()
     {
+        print(5);
         gameObject.SetActive(false);
     }
 
     public void InitializeButtons(bool status)
     {
+        print(6);
         if(status)
         {
             loadButton.onClick.AddListener(HandleLoad);

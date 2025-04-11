@@ -5,7 +5,6 @@ public class NPC : MonoBehaviour
 {
     //States
     private PatrolState currentState;
-    private DialogueCharacterInformation charInfo;
 
     //InBuilt Components
     public NavMeshPath navMeshPath;
@@ -15,10 +14,8 @@ public class NPC : MonoBehaviour
 
     //Added Components
     public NPCFunctions npcFunctions { get; private set; }
-    public BarSliderUI warmingUpRadarUI { get; private set; }
 
     [Header("Profile")]
-    public CharacterProfile profile;
     public QuestObjectiveNavIdentifier identifier { get; private set; }
 
     [Header("NPC Details")]
@@ -49,20 +46,17 @@ public class NPC : MonoBehaviour
 
     private void Awake()
     {
-        profile.Initialize(this);
         animator = GetComponent<Animator>();
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
 
         npcFunctions = GetComponent<NPCFunctions>();
         identifier = GetComponent<QuestObjectiveNavIdentifier>();
-        warmingUpRadarUI = GetComponentInChildren<BarSliderUI>();
     }
 
     private void Start()
     {
         npcState = Instantiate(npcState);
-        charInfo = GetComponent<DialogueTrigger>().characterInformation;
 
         if (navMeshAgent == null)
         {
@@ -75,9 +69,6 @@ public class NPC : MonoBehaviour
         warmingUpRadar = 55;
         navMeshAgent.enabled = false;
         currentState = npcState.RobotState_Update(this);
-
-        // warmingUpRadarUI.SetMaxValue(100);
-        // warmingUpRadarUI.SetCurrentValue(warmingUpRadar);
     }
 
     private void Update()
@@ -88,12 +79,6 @@ public class NPC : MonoBehaviour
         HandleStateChange();
         npcFunctions.NPCFunctions_Update(delta);
         if (emote != null) emote.SetCurrentEmotion(emotion); //move to start during production build
-    }
-
-    public void UpdateWarmRadar(Response response)
-    {
-        warmingUpRadar += response.Evaluate(profile);
-        ChangeEmotion();
     }
 
     private void HandleStateChange()
@@ -156,20 +141,5 @@ public class NPC : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    private void ChangeEmotion()
-    {
-        if(warmingUpRadar < 36)
-        {
-            charInfo.SetEmotionState(EmotionState.Angry);
-            return;
-        }
-        else if(warmingUpRadar >= 36 && warmingUpRadar < 66)
-        {
-            charInfo.SetEmotionState(EmotionState.Neutral);
-            return;
-        }
-        charInfo.SetEmotionState(EmotionState.Calm);
     }
 }

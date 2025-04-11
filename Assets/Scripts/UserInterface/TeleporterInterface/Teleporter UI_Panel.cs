@@ -1,15 +1,23 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Collections;
+using UnityEngine.Events;
 
 public class TeleporterUI_Panel : MonoBehaviour
 {
+    private WaitForSeconds waitForSeconds;
+
     [Header("UI")] 
     [SerializeField] private Button submitButton;
     [SerializeField] private Button closePanelButton;
     [SerializeField] private TMP_InputField codeInputField;
     [Space] [SerializeField] private GameObject teleporterUiPanel;
+
+    [Header("Notice Panel")]
+    [SerializeField] private GameObject noticePanel;
+    [SerializeField] private float panelDisableSecond;
+    [SerializeField] private TextMeshProUGUI noticeTextUI;
 
     [Space]
     [SerializeField] private UnityEvent onCancelTeleport;
@@ -27,6 +35,8 @@ public class TeleporterUI_Panel : MonoBehaviour
             teleporterUiPanel.SetActive(false);
             onCancelTeleport?.Invoke();
         });
+
+        waitForSeconds = new WaitForSeconds(panelDisableSecond);
     }
     
     private void OnSubmitButtonClick()
@@ -34,22 +44,47 @@ public class TeleporterUI_Panel : MonoBehaviour
         QuestManager questManager = QuestManager.Instance;
         QuestSO quest = questManager.activeQuest;
 
+        //If Completed All Quests Player Can Teleport To Any Scene
         if (quest == null)
         {
+            QuestSO teleportQuest = questManager.availableQuests.Find(x => x.questCode.ToString() == codeInputField.text);
+            if (teleportQuest == null)
+            {
+                InCorrectCode(true);
+                return;
+            }
+            Teleport(teleportQuest);
             return;
         }
-        
-        QuestSO teleportQuest = questManager.availableQuests.Find(x => x.questCode.ToString() == codeInputField.text);
 
-        if(teleportQuest != null)
+        if (quest.questCode.ToString() != codeInputField.text)
         {
-            codeInputField.text = "";
-            teleporterUiPanel.SetActive(false);
-            LevelLoader.LoadLevel(teleportQuest.questLevelIndex);
+            InCorrectCode(false);
             return;
         }
-        //Show Wrong Prompt
+        Teleport(quest);
+    }
+
+    private void Teleport(QuestSO quest)
+    {
         codeInputField.text = "";
-        Debug.Log("Wrong Code, Try Again!");
+        teleporterUiPanel.SetActive(false);
+        LevelLoader.LoadLevel(quest.questLevelIndex);
+    }
+
+    private void InCorrectCode(bool completedQuest)
+    {
+        codeInputField.text = "";
+        string noticeText = (completedQuest) ? "In-Correct Code, Please Try Again" : "Cannot Play Level At The Time";
+        StartCoroutine(DisableNoticePanel(noticeText));
+    }
+
+    private IEnumerator DisableNoticePanel(string text)
+    {
+        noticeTextUI.text = text;
+        noticePanel.SetActive(true);
+
+        yield return waitForSeconds;
+        noticePanel.SetActive(false);
     }
 }

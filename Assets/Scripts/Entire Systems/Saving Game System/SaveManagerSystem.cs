@@ -43,7 +43,9 @@ public class SaveManagerSystem : MonoBehaviour
         {
             autoSavedFile = CreateNewSaveData("Auto Save", true);
             SaveGame(autoSavedFile);
+            return;
         }
+        autoSavedFile = FindSaveData(autoSavePath);
     }
 
     public void DisplayMenuPanel()
@@ -100,12 +102,18 @@ public class SaveManagerSystem : MonoBehaviour
         return Path.Combine(saveDirectory, fileName);
     }
 
+    public SavedData FindSaveData(string file)
+    {
+        byte[] rawData = SecureSaveUtility.LoadFromFile(file);
+        SavedData loadedData = SaveSerializer.Deserialize(rawData);
+        return loadedData;
+    }
+
     public SavedData CreateNewSaveData(string filename, bool isAutoSave = false)
     {
         SavedData newData = new(filename, isAutoSave);
 
         UpdateSavedFile(newData);
-        newData.SetPlayerTransformValues();
         return newData;
     }
 
@@ -123,6 +131,7 @@ public class SaveManagerSystem : MonoBehaviour
             return;
         }
 
+        print(player.transform.position);
         newData.playerPosition = player.transform.position;
         newData.playerRotation = player.transform.rotation;
         newData.coinAmount = GameManager.Instance.PlayerCoinAmount;
@@ -139,10 +148,16 @@ public class SaveManagerSystem : MonoBehaviour
             QuestSO quest = questManager.availableQuests[i];
             newData.questDataList.Add(new SerializableQuestData(quest));
         }
+        newData.SetPlayerTransformValues();
+    }
+
+    public void AutoSave()
+    {
+        SaveGame(autoSavedFile);
     }
 
     private void OnApplicationQuit()
     {
-        SaveGame(autoSavedFile);
+        AutoSave();
     }
 }

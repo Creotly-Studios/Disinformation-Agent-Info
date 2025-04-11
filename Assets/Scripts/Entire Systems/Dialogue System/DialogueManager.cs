@@ -26,8 +26,8 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Active Speakers")]
     private DialogueCharacterInformation activeSpeakers;
-    private DialogueCharacterInformation currentSpeaker;
     private DialogueCharacterInformation playableCharacterSpeaker;
+    public DialogueCharacterInformation currentSpeaker {get; private set;}
 
     [Header("Events")]
     public UnityEvent OnDialogueStart;

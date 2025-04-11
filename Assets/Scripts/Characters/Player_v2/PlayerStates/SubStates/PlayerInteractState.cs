@@ -41,8 +41,7 @@ public class PlayerInteractState : PlayerAbilityState
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        Debug.Log(GetInteractableObject());
-        
+
         AnimatorStateInfo stateInfo = player.Anim.GetCurrentAnimatorStateInfo(0);
         if (stateInfo.normalizedTime >= 0.95f && stateInfo.IsTag("interact"))
         {

@@ -112,7 +112,8 @@ public class Player_v2 : MonoBehaviour
         speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
 
         PlayerStatistics.ResetUI();
-        if (DialogueManager.Instance != null) DialogueManager.Instance.SetPlayerSpeaker(speakerInfo);
+        if (DialogueManager.Instance != null) { DialogueManager.Instance.SetPlayerSpeaker(speakerInfo); }
+        if (GameManager.Instance != null) { PauseButton.onClick.AddListener(GameManager.Instance.TogglePause); }
 
         dialogue_InactiveCamera.SetActive(false);
     }

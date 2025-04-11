@@ -25,17 +25,12 @@ public static class SecureSaveUtility
 
     public static byte[] DecompressData(byte[] data)
     {
-        using (MemoryStream ms = new MemoryStream(data))
-        {
-            using(GZipStream gzip = new GZipStream(ms, CompressionMode.Decompress))
-            {
-                using(MemoryStream output = new MemoryStream())
-                {
-                    gzip.CopyTo(output);
-                    return output.ToArray();
-                }
-            }
-        }
+        using MemoryStream ms = new(data);
+        using GZipStream gzip = new(ms, CompressionMode.Decompress);
+        using MemoryStream output = new();
+
+        gzip.CopyTo(output);
+        return output.ToArray();
     }
 
     public static byte[] EncryptData(byte[] data)
@@ -45,9 +40,9 @@ public static class SecureSaveUtility
             aes.Key = SecretKey32;
             aes.IV = SecretKey16;
 
-            using(MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new();
             {
-                using(CryptoStream cryptoStream = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
+                using(CryptoStream cryptoStream = new(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     cryptoStream.Write(data, 0, data.Length);
                     cryptoStream.FlushFinalBlock();
@@ -128,11 +123,13 @@ public static class SaveSerializer
                 //Player Position
                 foreach(float value in data.playerPos)
                 {
+                    Debug.Log(value + " pos");
                     writer.Write(value);
                 }
                 //Player Rotation
                 foreach (float value in data.playerRot)
                 {
+                    Debug.Log(value + " rot");
                     writer.Write(value);
                 }
                 #endregion
@@ -153,7 +150,6 @@ public static class SaveSerializer
                 }
 
                 #endregion
-
                 return ms.ToArray();
             }
         }
@@ -219,7 +215,6 @@ public static class SaveSerializer
                     playerRotation = rotation
                 };
                 newData.questDataList.Clear();
-                newData.SetPlayerTransformValues();
                 newData.questDataList.AddRange(questList);
                 return newData;
             }
