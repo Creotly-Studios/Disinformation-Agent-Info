@@ -1169,8 +1169,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 8186148954873899205}
   choiceText: {fileID: 8043904650700717354}
 --- !u!1 &826507302753142527
@@ -2130,8 +2128,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 6838673606515885024}
   choiceText: {fileID: 7965414546443917436}
 --- !u!1 &1386289186489388061
@@ -3176,8 +3172,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 2138557718286806565}
   choiceText: {fileID: 5013603748016790586}
 --- !u!1 &2437327930635340240
@@ -4188,8 +4182,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 803153793327221947}
   choiceText: {fileID: 8884350813306155164}
 --- !u!1 &2821993702602790862
@@ -4361,10 +4353,10 @@ RectTransform:
   - {fileID: 6330433443711828318}
   m_Father: {fileID: 3888900574973317795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1533.21, y: -600}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3102696990487334048
 GameObject:
@@ -5614,10 +5606,10 @@ RectTransform:
   - {fileID: 4648352024123570687}
   m_Father: {fileID: 3888900574973317795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 386.78998, y: -600}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &4356589904580349361
 GameObject:
@@ -5789,8 +5781,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 2985313840232247024}
   choiceText: {fileID: 1654622746740684099}
 --- !u!1 &4501562964176568240
@@ -6329,7 +6319,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5806376106375616496
 RectTransform:
   m_ObjectHideFlags: 0
@@ -6395,7 +6385,7 @@ MonoBehaviour:
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
-  m_MatchWidthOrHeight: 0
+  m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
@@ -6446,7 +6436,7 @@ MonoBehaviour:
   biasBingo_Btn: {fileID: 6650226175526129784}
   infoMatch_Btn: {fileID: 6707525644666521730}
   spotSource_Btn: {fileID: 7691129378086486382}
-  exitButton: {fileID: 0}
+  exitButton: {fileID: 972298836599736258}
   mainMenuPanel: {fileID: 3944024564699682839}
   missionCodeUI: {fileID: 0}
   biasBingoPanel: {fileID: 797888781287470890}
@@ -6776,10 +6766,10 @@ RectTransform:
   - {fileID: 8940726279771732969}
   m_Father: {fileID: 3888900574973317795}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 960, y: -600}
+  m_SizeDelta: {x: 500, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5276005196452407435
 GameObject:
@@ -7087,8 +7077,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 1179306240472165106}
   choiceText: {fileID: 4474701105043429836}
 --- !u!1 &5368453593038771181
@@ -8085,8 +8073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 8262350649716792280}
   choiceText: {fileID: 2453886370096125338}
 --- !u!1 &5881477485264164003
@@ -13882,8 +13868,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1451b3d34905194e8033f1372fa7289, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  response:
-    responseType: 0
   choiceButton: {fileID: 4929790016139238423}
   choiceText: {fileID: 1401093558716706241}
 --- !u!1 &9028587468002304315

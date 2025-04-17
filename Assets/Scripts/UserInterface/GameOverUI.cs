@@ -12,10 +12,12 @@ public class GameOverUI : MonoBehaviour
         GameManager.Instance.OnStateChange += GameManager_OnStateChange;
         menuBtn.onClick.AddListener(() =>
         {
+            GameManager.Instance.ResetGame();
             LevelLoader.LoadLevel(0);
         });
         replayBtn.onClick.AddListener(() =>
         {
+            GameManager.Instance.ResetGame();
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
         });
         Hide();

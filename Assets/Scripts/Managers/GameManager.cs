@@ -71,7 +71,14 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
+    public void Unpause()
+    {
+        if (isGamePaused)
+        {
+            Time.timeScale = 1;
+            isGamePaused = false;
+        }
+    }
 
     public bool IsGamePaused()
     {
@@ -153,11 +160,12 @@ public class GameManager : MonoBehaviour
         LevelLoader.LoadLevel(2);
     }
 
-    void ResetGame()
+    public void ResetGame()
     {
         GameOverState = GameOverState.None;
         GameState = GameState.Playing;
         Time.timeScale = 1;
+        isGamePaused = false;
     }
 }
 
