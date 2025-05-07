@@ -51,10 +51,6 @@ public class NPC_Emote : MonoBehaviour
         {
             displayImg.sprite = emotionSprites[CurrentEmotion];
         }
-        else
-        {
-            Debug.LogWarning("Display image or emotion sprite is not set!");
-        }
     }
 
     // Public method to set the current emotion

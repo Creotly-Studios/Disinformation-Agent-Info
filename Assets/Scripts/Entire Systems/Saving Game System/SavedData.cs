@@ -28,6 +28,7 @@ public class SavedData
     {
         fileName = name;
         isAutoSaveFile = isAutoSave;
+        InitializeFields();
     }
 
     public SavedData(int scene, string name, string date, bool isAutoSave)
@@ -37,6 +38,14 @@ public class SavedData
 
         sceneIndex = scene;
         isAutoSaveFile = isAutoSave;
+        InitializeFields();
+    }
+
+    private void InitializeFields()
+    {
+        playerPos = new float[3];
+        playerRot = new float[4];
+        questDataList = new List<SerializableQuestData>();
     }
 
     public void SetPlayerTransformValues()
