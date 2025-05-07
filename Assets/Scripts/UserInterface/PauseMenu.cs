@@ -17,6 +17,7 @@ public class PauseMenu : MonoBehaviour
         menuBtn.onClick.AddListener(() =>
         {
                 LevelLoader.LoadLevel(0);
+                GameManager.Instance.ResetGame();
         });
         resumeBtn.onClick.AddListener(() =>
         {
@@ -25,6 +26,7 @@ public class PauseMenu : MonoBehaviour
         replayBtn.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            GameManager.Instance.ResetGame();
         });
         loadSaveBtn.onClick.AddListener(() =>
         {

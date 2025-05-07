@@ -48,7 +48,7 @@ public class PlayerMoveState : PlayerGroundedState
     {
         Vector3 dir = new Vector3(input.x, 0, input.y);
 
-        if (dir.magnitude >= 0.1f)
+        if (dir.magnitude >= 0.01f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;
             float smoothedAngle = Mathf.SmoothDampAngle(player.transform.eulerAngles.y, targetAngle, ref _turnSmoothVel, playerData.turnSmoothTime);

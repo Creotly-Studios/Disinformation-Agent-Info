@@ -45,7 +45,10 @@ public class MainMenu : MonoBehaviour
         {
             btn.onClick.AddListener(() =>
             {
-                AudioManager.Instance.PlaySFX(AudioManager.Instance.soundEffects.buttonClick);
+                if (AudioManager.Instance != null)
+                {
+                    AudioManager.Instance.PlaySFX(AudioManager.Instance.soundEffects.buttonClick);
+                }
             });
         }
 

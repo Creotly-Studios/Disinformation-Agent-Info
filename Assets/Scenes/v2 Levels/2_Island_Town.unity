@@ -4524,7 +4524,7 @@ MonoBehaviour:
   musicMixer: {fileID: 24300002, guid: 2b1771e0cf638b44bb66269cd1eb32ce, type: 2}
   soundMixer: {fileID: 24300001, guid: 4220e2ed04dac404eb35d79a7a12ead9, type: 2}
   currentMusicAudioSource: {fileID: 0}
-  soundEffects: {fileID: 0}
+  soundEffects: {fileID: 11400000, guid: 05d3f8335219aac48bbe04f190b7e2e6, type: 2}
 --- !u!1001 &723944450
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10201,81 +10201,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1037986484}
     m_Modifications:
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 583058878043249792, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1137495121387742087, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
       propertyPath: m_Name
       value: DialogueManager
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3454188392517023292, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4561764921067540429, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5969385916643299080, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -10315,30 +10243,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5969385916643299080, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9063191205314932312, guid: 1f6dcff3e6a0bde4b815206e3d5725c5, type: 3}
-      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -16042,12 +15946,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile:
-    ignorant: 5
-    factLover: 1
-    echoChamber: 3
-    loyaltyToSource: 4
-    susceptibleToAnger: 8
   hasCompletedDialogue: 0
   <npcType>k__BackingField: 0
   canMove: 1
@@ -16547,12 +16445,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile:
-    ignorant: 1
-    factLover: 5
-    echoChamber: 5
-    loyaltyToSource: 1
-    susceptibleToAnger: 1
   hasCompletedDialogue: 0
   <npcType>k__BackingField: 0
   canMove: 1
@@ -21098,12 +20990,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile:
-    ignorant: 4
-    factLover: 1
-    echoChamber: 1
-    loyaltyToSource: 4
-    susceptibleToAnger: 6
   hasCompletedDialogue: 0
   <npcType>k__BackingField: 0
   canMove: 1
