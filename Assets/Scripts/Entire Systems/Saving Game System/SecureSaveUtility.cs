@@ -123,13 +123,11 @@ public static class SaveSerializer
                 //Player Position
                 foreach(float value in data.playerPos)
                 {
-                    Debug.Log(value + " pos");
                     writer.Write(value);
                 }
                 //Player Rotation
                 foreach (float value in data.playerRot)
                 {
-                    Debug.Log(value + " rot");
                     writer.Write(value);
                 }
                 #endregion
