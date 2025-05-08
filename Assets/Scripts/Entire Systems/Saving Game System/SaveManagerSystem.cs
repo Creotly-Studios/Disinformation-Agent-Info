@@ -130,8 +130,6 @@ public class SaveManagerSystem : MonoBehaviour
         {
             return;
         }
-
-        print(player.transform.position);
         newData.playerPosition = player.transform.position;
         newData.playerRotation = player.transform.rotation;
         newData.coinAmount = GameManager.Instance.PlayerCoinAmount;

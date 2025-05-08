@@ -15,7 +15,6 @@ public static class LevelLoader
             GameObject loadingGameobject = new GameObject("Loading Game Object");
             loadingGameobject.AddComponent<LoadingMonobehavior>().StartCoroutine(LoadAsync(levelIndex, action));
         };
-
         SceneManager.LoadScene("Loading");
     }
 
@@ -23,6 +22,9 @@ public static class LevelLoader
     {
         asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
         asyncOperation.completed += operation => { action?.Invoke(); };
+
+        DialogueManager dialogueManager = DialogueManager.Instance;
+        if (dialogueManager != null) { dialogueManager.EnableDialoguePanel(false); }
 
         while (!asyncOperation.isDone)
         {

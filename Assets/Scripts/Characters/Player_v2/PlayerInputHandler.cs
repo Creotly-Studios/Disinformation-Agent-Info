@@ -34,10 +34,11 @@ public class PlayerInputHandler : MonoBehaviour
             InputSystemActions.Player.Dash.started += OnDashInput;
             InputSystemActions.Player.Sprint.started += OnSprintInput;
             InputSystemActions.Player.Sprint.canceled += OnSprintInput;
-            InputSystemActions.Player.Interact.started += OnInteractInput;
-            InputSystemActions.Player.Interact.canceled += OnInteractInput;
+
             InputSystemActions.Player.Attack.started += OnAttackInput;
             InputSystemActions.Player.Attack.canceled += OnAttackInput;
+            InputSystemActions.Player.Interact.performed += ctx => OnInteractInput(ctx, true);
+            InputSystemActions.Player.Interact.canceled += ctx => OnInteractInput(ctx, false);
         }
         InputSystemActions.Enable();
     }
@@ -50,6 +51,15 @@ public class PlayerInputHandler : MonoBehaviour
     public void OnMovementInput(InputAction.CallbackContext context)
     {
         MovementInput = context.ReadValue<Vector2>();
+    }
+
+    private void OnInteractInput(InputAction.CallbackContext ctx, bool status)
+    {
+        if(status == true)
+        {
+            print("true");
+        }
+        InteractInput = status;
     }
 
     public void OnJumpInput(InputAction.CallbackContext context)
@@ -85,18 +95,6 @@ public class PlayerInputHandler : MonoBehaviour
         if (context.canceled)
         {
             SprintInput = false;
-        }
-    }
-
-    public void OnInteractInput(InputAction.CallbackContext context)
-    {
-        if (context.started)
-        {
-            InteractInput = true;
-        }
-        if (context.canceled)
-        {
-            InteractInput = false;
         }
     }
 

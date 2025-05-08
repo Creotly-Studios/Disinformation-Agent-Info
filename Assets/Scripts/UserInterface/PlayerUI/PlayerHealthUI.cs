@@ -37,26 +37,20 @@ public class PlayerHealthUI : MonoBehaviour
     {
         if (icons == null)
         {
-            Debug.LogError("Icons array is null!");
             return;
         }
 
         if (currentHealth < 0 || currentHealth > Player_v2.Instance.PlayerData.maxHealth)
         {
-            Debug.LogError("Invalid health value: " + currentHealth);
             return;
         }
-
-        Debug.Log("Updating Health UI to " + currentHealth);
 
         for (int i = 0; i < icons.Length; i++)
         {
             if (icons[i] == null)
             {
-                Debug.LogError("Icon at index " + i + " is null!");
                 continue;
             }
-
             icons[i].SetActive(i < currentHealth); // Show/Hide icons based on health
         }
     }
