@@ -11,6 +11,7 @@ public class DialogueUIPanel : MonoBehaviour
     [Header("Panel")]
     public Transform dialoguePanel;
     [SerializeField] private Button skipButton;
+    [SerializeField] private Button continueButton;
 
     [Header("Speaker Panel")]
     public Image speakerImage;
@@ -36,6 +37,7 @@ public class DialogueUIPanel : MonoBehaviour
         }
         Instance = this;
         typingSpeed = new WaitForSeconds(0.05f);
+
         if(skipButton != null) skipButton.onClick.AddListener(HandleSkip);
     }
 

@@ -28,6 +28,7 @@ public class PlayerMoveState : PlayerGroundedState
     {
         base.LogicUpdate();
         input = player.InputHandler.MovementInput; // Get player input
+
         Move();
         
         if (!isExitingState)

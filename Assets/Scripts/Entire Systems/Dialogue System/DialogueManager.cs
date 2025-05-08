@@ -73,6 +73,11 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
+    public void EnableDialoguePanel(bool status)
+    {
+        dialogueUIPanel.gameObject.SetActive(status);
+    }
+
     public void SetPlayerSpeaker(DialogueCharacterInformation speaker)
     {
         playableCharacterSpeaker = speaker;
