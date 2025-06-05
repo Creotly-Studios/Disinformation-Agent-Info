@@ -21,18 +21,23 @@ public static class LevelLoader
     static IEnumerator LoadAsync(int sceneIndex, Action action)
     {
         asyncOperation = SceneManager.LoadSceneAsync(sceneIndex);
-        asyncOperation.completed += operation => { action?.Invoke(); };
+        asyncOperation.allowSceneActivation = true;
 
         DialogueManager dialogueManager = DialogueManager.Instance;
-        if (dialogueManager != null) { dialogueManager.EnableDialoguePanel(false); }
-
+        if (dialogueManager != null) dialogueManager.EnableDialoguePanel(false);
         while (!asyncOperation.isDone)
         {
-            // Debug.Log(asyncOperation.progress);
+            
             GC.Collect();
             yield return null;
         }
+        Debug.Log("towe");
+        yield return null;
+
+        action?.Invoke();
+        if (action == null) SaveManagerSystem.Instance.AutoSave();
     }
+
 
     public static float GetLoadingProgress()
     {

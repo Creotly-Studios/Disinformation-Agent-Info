@@ -67,7 +67,7 @@ public class DialogueManager : MonoBehaviour
             StartCoroutine(ExitDialogueMode());
         }
 
-        if (InputManager.instance.jumpPressed && canContinue && currentDialogueStory.currentChoices.Count == 0)
+        if (Player_v2.Instance.InputHandler.jumpPressed && canContinue && currentDialogueStory.currentChoices.Count == 0)
         {
             ContinueDialogueStory();
         }

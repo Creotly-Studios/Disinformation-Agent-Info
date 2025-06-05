@@ -17,14 +17,10 @@ public static class LoadingSaveManager
 
     private static IEnumerator ResetListeners()
     {
-        Player_v2.Instance.PauseButton.onClick.RemoveAllListeners();
         SaveManagerSystem.Instance.SaveMenuUI.InitializeButtons(false);
 
         yield return new WaitForSeconds(0.5f);
-
         SaveManagerSystem.Instance.SaveMenuUI.InitializeButtons(true);
-        Player_v2.Instance.PauseButton.onClick.AddListener(GameManager.Instance.TogglePause);
-        Debug.Log("Buttons Reseted");
     }
 
     private static void ApplyLoadedData(SavedData dataToLoad)

@@ -138,7 +138,7 @@ public class DialogueUIPanel : MonoBehaviour
     {
         speakerTextDialogue.text = "";
         bool textFullyRevealed = false;
-        InputManager inputManager = InputManager.instance;
+        PlayerInputHandler inputManager = Player_v2.Instance.InputHandler;
         DialogueManager dialogueManager = DialogueManager.Instance;
 
         inputManager.jumpPressed = false;

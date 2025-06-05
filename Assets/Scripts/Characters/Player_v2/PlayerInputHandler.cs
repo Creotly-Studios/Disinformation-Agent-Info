@@ -1,6 +1,6 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+
 
 public class PlayerInputHandler : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MovementInput { get; private set; }
     public Vector2 CameraInput { get; private set; }
 
+    public bool jumpPressed = false;
     public bool JumpInput { get; private set; }
     public bool DashInput { get; private set; }
     public bool SprintInput { get; private set; }
@@ -26,19 +27,25 @@ public class PlayerInputHandler : MonoBehaviour
             InputSystemActions = new InputSystem_Actions();
 
             // Movement and Camera Input
-            InputSystemActions.Player.Move.performed += OnMovementInput;
+            InputSystemActions.Player.Move.performed += i => MovementInput = i.ReadValue<Vector2>();
+            InputSystemActions.Player.Move.canceled += i => MovementInput = Vector2.zero;
+
             InputSystemActions.Player.Look.performed += i => CameraInput = i.ReadValue<Vector2>();
 
             // Action Inputs
             InputSystemActions.Player.Jump.started += OnJumpInput;
             InputSystemActions.Player.Dash.started += OnDashInput;
+
+            InputSystemActions.Player.Jump.started += ctx => jumpPressed = ctx.ReadValueAsButton();
+            InputSystemActions.Player.Jump.canceled += ctx => jumpPressed = ctx.ReadValueAsButton();
+
             InputSystemActions.Player.Sprint.started += OnSprintInput;
             InputSystemActions.Player.Sprint.canceled += OnSprintInput;
 
             InputSystemActions.Player.Attack.started += OnAttackInput;
             InputSystemActions.Player.Attack.canceled += OnAttackInput;
-            InputSystemActions.Player.Interact.performed += ctx => OnInteractInput(ctx, true);
-            InputSystemActions.Player.Interact.canceled += ctx => OnInteractInput(ctx, false);
+            InputSystemActions.Player.Interact.started += OnInteractInput;
+            InputSystemActions.Player.Interact.canceled += OnInteractInput;
         }
         InputSystemActions.Enable();
     }
@@ -48,19 +55,18 @@ public class PlayerInputHandler : MonoBehaviour
         InputSystemActions.Disable();
     }
 
-    public void OnMovementInput(InputAction.CallbackContext context)
+    private void OnInteractInput(InputAction.CallbackContext ctx)
     {
-        MovementInput = context.ReadValue<Vector2>();
+        if (ctx.started)
+        {
+            InteractInput = true;
+        }
+        else if (ctx.canceled)
+        {
+            InteractInput = false;
+        }
     }
 
-    private void OnInteractInput(InputAction.CallbackContext ctx, bool status)
-    {
-        if(status == true)
-        {
-            print("true");
-        }
-        InteractInput = status;
-    }
 
     public void OnJumpInput(InputAction.CallbackContext context)
     {

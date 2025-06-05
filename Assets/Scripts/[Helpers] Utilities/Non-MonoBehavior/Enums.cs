@@ -27,6 +27,7 @@ public enum ObjectiveType
     ConvinceNPC,
     MisInfoGames,
     SpotTheSource,
+    Generator,
     Trophy
 }
 

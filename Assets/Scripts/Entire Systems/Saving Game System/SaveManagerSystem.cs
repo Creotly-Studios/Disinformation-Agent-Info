@@ -121,6 +121,8 @@ public class SaveManagerSystem : MonoBehaviour
     {
         Player_v2 player = Player_v2.Instance;
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
+
+        print(sceneIndex);
         string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         newData.sceneIndex = sceneIndex;
@@ -156,6 +158,28 @@ public class SaveManagerSystem : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        AutoSave();
+        if(File.Exists(AUTO_SAVE_SLOT) != true)
+        {
+            return;
+        }
+        QuestManager questManager = QuestManager.Instance;
+
+        QuestSO currentQuest = questManager.activeQuest;
+        int index = questManager.availableQuests.IndexOf(currentQuest);
+        SerializableQuestData comparedQuest = autoSavedFile.questDataList[index];
+        
+        if(currentQuest != null)
+        {
+            for(int i = 0; i < currentQuest.questObjectives.Count; i++)
+            {
+                QuestObjectives obj = currentQuest.questObjectives[i];
+                if(obj.progressValue <= comparedQuest.objectiveProgressvalue[i])
+                {
+                    continue;
+                }
+                AutoSave();
+                break;
+            }
+        }
     }
 }

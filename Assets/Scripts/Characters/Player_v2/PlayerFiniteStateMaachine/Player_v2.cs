@@ -9,14 +9,14 @@ public class Player_v2 : MonoBehaviour
     public CharacterController controller { get; private set; }
     public PlayerNavigationSystem PlayerNav { get; private set; }
 
+    [SerializeField] private Button pauseButton;
+
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
     public PlayerCombatSystem CombatSystem { get; private set; }
     public Animator Anim;
     #endregion
-
-    [field: SerializeField] public Button PauseButton { get; private set; }
 
     #region Events
     public event EventHandler<GameObject> OnInteractObjectFind;
@@ -113,8 +113,6 @@ public class Player_v2 : MonoBehaviour
 
         PlayerStatistics.ResetUI();
         if (DialogueManager.Instance != null) { DialogueManager.Instance.SetPlayerSpeaker(speakerInfo); }
-        if (GameManager.Instance != null) { PauseButton.onClick.AddListener(GameManager.Instance.TogglePause); }
-
         dialogue_InactiveCamera.SetActive(false);
     }
 
@@ -290,7 +288,7 @@ public class Player_v2 : MonoBehaviour
 
     public void DisplayPauseButton(bool status)
     {
-        PauseButton.gameObject.SetActive(status);
+        pauseButton.gameObject.SetActive(status);
     }
 
     void OnDestroy()

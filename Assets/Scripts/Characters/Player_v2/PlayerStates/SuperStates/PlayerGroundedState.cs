@@ -21,7 +21,6 @@ public class PlayerGroundedState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("here");
         base.Enter();
     }
 
@@ -32,7 +31,6 @@ public class PlayerGroundedState : PlayerState
 
     public override void LogicUpdate()
     {
-        Debug.Log(0);
         base.LogicUpdate();
 
         input = player.InputHandler.MovementInput;
@@ -41,30 +39,21 @@ public class PlayerGroundedState : PlayerState
         attackInput = player.InputHandler.AttackInput;
         interactInput = player.InputHandler.InteractInput;
 
-        Debug.Log(interactInput);
-
         if (jumpInput)
         {
-            Debug.Log(1);
             stateMachine.ChangeState(player.JumpState);
         } 
         else if (dashInput)
         {
-            Debug.Log(2);
             if (player.PlayerStatistics.CanDash())
             {
                 player.InputHandler.UseDashInput();
                 player.PlayerStatistics.UseDash();
                 stateMachine.ChangeState(player.DashState);
             }
-            else
-            {
-                Debug.Log("Not enough stamina to dash!");
-            }
         }
         else if (interactInput)
         {
-            Debug.Log("Change To Interact");
             player.InputHandler.UseInteractInput();
             stateMachine.ChangeState(player.InteractState);
         } 
@@ -73,7 +62,6 @@ public class PlayerGroundedState : PlayerState
             player.InputHandler.UseAttackInput();
             stateMachine.ChangeState(player.AttackState); // Transition to AttackState
         }
-
         player.InvokeIInteractableFoundEvent();
     }
 

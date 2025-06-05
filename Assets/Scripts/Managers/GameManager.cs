@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    private InputSystem_Actions InputSystemActions;
     public GameState GameState { get; private set; }
     public GameOverState GameOverState {get; private set;}
     public event EventHandler OnStateChange;
@@ -31,9 +32,14 @@ public class GameManager : MonoBehaviour
         Instance = this;
     }
 
-    void Start()
+    void OnEnable()
     {
-        InputManager.instance.InputSystemActions.Player.Pause.performed += ctx => TogglePause();
+        if(InputSystemActions == null)
+        {
+            InputSystemActions = new InputSystem_Actions();
+            InputSystemActions.Player.Pause.performed += ctx => TogglePause();
+        }
+        InputSystemActions.Enable();
     }
 
     void Update()
@@ -57,8 +63,11 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (InputManager.instance != null)
-            InputManager.instance.InputSystemActions.Player.Pause.performed -= ctx => TogglePause();
+        if (InputSystemActions != null)
+        {
+            InputSystemActions.Player.Pause.performed -= ctx => TogglePause();
+            InputSystemActions.Dispose();
+        }
     }
 
     public void TogglePause()

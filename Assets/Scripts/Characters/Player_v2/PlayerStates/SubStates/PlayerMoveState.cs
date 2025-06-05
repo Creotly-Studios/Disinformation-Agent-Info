@@ -48,7 +48,6 @@ public class PlayerMoveState : PlayerGroundedState
     private void Move()
     {
         Vector3 dir = new Vector3(input.x, 0, input.y);
-
         if (input.magnitude >= 0.01f)
         {
             float targetAngle = Mathf.Atan2(dir.x, dir.z) * Mathf.Rad2Deg + Camera.main.transform.eulerAngles.y;

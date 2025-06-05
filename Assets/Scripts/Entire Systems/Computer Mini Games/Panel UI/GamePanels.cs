@@ -23,6 +23,7 @@ public class GamePanels : MonoBehaviour
 
     [Header("Properties")]
     [SerializeField] protected float maxTime;
+    [SerializeField] protected ObjectiveType objectiveType;
     [SerializeField] protected List<DialogueUIChoice> uiButton = new();
 
     [Header("UI Properties")]
@@ -53,13 +54,13 @@ public class GamePanels : MonoBehaviour
 
         InitalizePosts();
         SelectPostSO();
-        exitButton.onClick.AddListener(() => SubmitButton());
+        exitButton.onClick.AddListener(() => SubmitButton(objectiveType));
     }
 
     protected void UnInitializePanel(ObjectiveType objType)
     {
         hasInitialized = false;
-        exitButton.onClick.RemoveListener(() => SubmitButton());
+        exitButton.onClick.RemoveListener(() => SubmitButton(objectiveType));
         HandleButtonInitialization(false, objType);
     }
 
@@ -71,8 +72,13 @@ public class GamePanels : MonoBehaviour
         HidePanel();
     }
 
-    protected void SubmitButton()
+    protected void SubmitButton(ObjectiveType objType)
     {
+        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(objType);
+        if (objective != null && objective.isDone != true)
+        {
+            objective.progressValue = 0;
+        }
         computerPanelUI.DisablePanels();
     }
 

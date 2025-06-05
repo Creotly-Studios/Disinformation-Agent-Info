@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1677464913077725589}
-  - component: {fileID: 7081254713278246496}
   - component: {fileID: 5670082271953751330}
   m_Layer: 0
   m_Name: AudioHolder
@@ -35,21 +34,6 @@ Transform:
   - {fileID: 5879552707255761464}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7081254713278246496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1251356041484956603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d308faaa3babdf848ad0392224c1c688, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sfxVolume: 1
-  sfxPlayerObject: {fileID: 1666650127741794817}
-  sfxList: {fileID: 11400000, guid: 05d3f8335219aac48bbe04f190b7e2e6, type: 2}
 --- !u!114 &5670082271953751330
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +219,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 8300000, guid: 45aa4bbf9aba1c84789899e33125d067, type: 3}
+  m_audioClip: {fileID: 0}
   m_Resource: {fileID: 8300000, guid: 45aa4bbf9aba1c84789899e33125d067, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
