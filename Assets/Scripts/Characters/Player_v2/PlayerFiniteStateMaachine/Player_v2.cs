@@ -66,7 +66,9 @@ public class Player_v2 : MonoBehaviour
     public bool sprintFlag;
     public bool isAttacking;
     public bool performingAction;
-
+    
+    [Header("VFX")]
+    [SerializeField] private ParticleSystem dashEffect;
 
     //testing new shit
     public Vector3 WorkSpace { get; set; }
@@ -260,6 +262,14 @@ public class Player_v2 : MonoBehaviour
     public void SetInactiveState() => StateMachine.ChangeState(InactiveState);
 
     public void SetActiveState() => StateMachine.ChangeState(IdleState);
+
+    public void PlayDashEffect()
+    {
+        if (dashEffect != null)
+        {
+            dashEffect.Play();
+        }
+    }
 
     #endregion
 

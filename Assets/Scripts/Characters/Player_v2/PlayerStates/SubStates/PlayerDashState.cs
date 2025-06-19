@@ -15,6 +15,7 @@ public class PlayerDashState : PlayerAbilityState
     {
         base.Enter();
         AudioManager.Instance.PlaySFX(playerData.dash);
+        player.PlayDashEffect();
         player.DashForward();
         isAbilityDone = true;
     }
