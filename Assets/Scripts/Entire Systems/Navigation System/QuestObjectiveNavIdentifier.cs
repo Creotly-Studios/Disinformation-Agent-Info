@@ -9,7 +9,6 @@ public class QuestObjectiveNavIdentifier : MonoBehaviour
 
     private void Start()
     {
-        IsCompleted = false;
         Player_v2.Instance.PlayerNav.RegisterIdentifier(this);
     }
 

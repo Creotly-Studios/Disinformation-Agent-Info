@@ -41,9 +41,6 @@ Yeah… I should. No way I wanna be part of spreading lies. Thanks for calling m
     -> ReservedTone
 
 === LogicalTone ===
-#speaker: Player
-Jumping to conclusions just fuels the problem. We have to be careful with what we share.
-
 #speaker: Samantha
 Yeah… I guess I should’ve checked before spreading it.
 
@@ -56,9 +53,6 @@ Good point. I’ll be more careful next time.
 -> END  
 
 === ArgumentativeTone ===
-#speaker: Player
-See? This is exactly how people get manipulated. They count on you not checking.
-
 #speaker: Samantha
 Okay, okay, I get it! I won’t do it again.
 
@@ -71,9 +65,6 @@ It’s not just about you. Everyone who shared it is now part of the problem.
 -> END  
 
 === EmotionalTone ===
-#speaker: Player
-I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.
-
 #speaker: Samantha
 Ugh. I feel so dumb.
 
@@ -86,9 +77,6 @@ Yeah… I won’t make the same mistake again.
 -> END  
 
 === ReservedTone ===
-#speaker: Player
-Mistakes happen. What matters is what you do next.
-
 #speaker: Samantha
 Yeah. I should probably delete it and let people know it’s fake.
 

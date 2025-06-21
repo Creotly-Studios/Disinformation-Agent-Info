@@ -33,8 +33,6 @@ The Mayor? He’s protected. You? You’re disposable. #speaker:Player
     -> ReservedTone
 
 === LogicalTone ===
-People will turn on you faster than you think. You’re just a pawn in their game. #speaker:Player
-
 …Guess I never thought about it like that. #speaker: Vince
 
 Think about it now. Before it’s too late. #speaker:Player
@@ -44,16 +42,11 @@ Yeah… maybe I should. #speaker: Vince
 -> END
 
 === EmotionalTone ===
-You might be getting paid now, but what happens when you’re no longer useful? When they’re done with you, they’ll move on like you never mattered. #speaker:Player
-
 …That’s a scary thought. I… I don’t know. I didn’t really think about it. #speaker: Vince
 
 -> END
 
 === ArgumentativeTone ===
-#speaker:Player
-The truth always comes out, and when it does, no one will defend you.
-
 #speaker: Vince
 You really think people will turn on me that fast?
 
@@ -66,9 +59,6 @@ Damn. That’s messed up.
 -> END
 
 === ReservedTone ===
-#speaker:Player
-It’s your choice. Just don’t expect the Mayor to have your back when it all falls apart.
-
 #speaker: Vince
 …You think he’d drop me just like that?
 

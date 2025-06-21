@@ -41,21 +41,15 @@ Smart call. A few clicks might seem small, but lies can do real harm.
     -> ReservedTone
 
 === LogicalTone ===
-History has shown us that these promises often come with strings attached. Why would this time be any different?, It’s always worth questioning the motive behind these things. #speaker: Player
-
 Yeah… I guess I should think twice before jumping into something just because it sounds good. #speaker: Bob
 
 -> END
 
 === EmotionalTone ===
-I hope so, but can we afford to take that risk when so many people are struggling?, It’s not just about words—it’s about real people being affected. #speaker: Player
-
 Yeah… that’s what’s really messing with me. People trust what they read, and I’m just making it worse, I need to do better. Thanks for the reality check. #speaker: Bob
 -> END
 
 === ArgumentativeTone ===
-That’s exactly what they want you to think—to make you drop your guard, The whole point is to manipulate people before they even realize it. #speaker: Player
-
 You really think it’s that calculated?, Never thought about it like that. Guess I need to start paying more attention. #speaker: Bob
 
 #speaker: Player
@@ -67,8 +61,6 @@ Alright. Lesson learned.
 -> END
 
 === ReservedTone ===
-It’s worth hoping, but let’s make sure we’re not being misled, hope is good, but facts matter more. #speaker: Player
-
 Yeah… blind trust never really worked out for anyone, I’ll keep that in mind. Thanks. #speaker: Bob
 
 -> END
