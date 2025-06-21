@@ -50,7 +50,7 @@ public class QuestManager : MonoBehaviour
         {
             return null;
         }
-        return activeQuest.questObjectives.Find(x => x.objectiveType == type);
+        return activeQuest.questObjectives.Find(x => x.objectiveType == type && x.isDone != true);
     }
 
     public void Quest_Update()

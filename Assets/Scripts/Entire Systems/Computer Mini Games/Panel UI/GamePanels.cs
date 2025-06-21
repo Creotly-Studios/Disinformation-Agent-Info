@@ -18,6 +18,8 @@ public class GamePanels : MonoBehaviour
     public string selectedAnswer { get; protected set; } = "";
 
     protected WaitForSeconds waitForSeconds;
+
+    private Teleporter teleporter;
     protected SocialMediaComputer sm_Computer;
     protected ComputerPanel_UI computerPanelUI;
 
@@ -38,6 +40,8 @@ public class GamePanels : MonoBehaviour
     protected void Awake()
     {
         waitForSeconds = new WaitForSeconds(0.5f);
+
+        teleporter = FindFirstObjectByType<Teleporter>();
         sm_Computer = GetComponentInParent<SocialMediaComputer>();
         computerPanelUI = GetComponentInParent<ComputerPanel_UI>();
     }
@@ -189,7 +193,11 @@ public class GamePanels : MonoBehaviour
             QuestSO quest = QuestManager.Instance.activeQuest;
             quest.IncreaseQuestObjectiveProgressLevels(objective, sm_Computer.identifier);
         }
-        if (objective.isDone) { StartCoroutine(computerPanelUI.DisplayObjectiveCompletedPopup()); }
+        if (objective.isDone) 
+        {
+            teleporter.identifier.SetActive(true);
+            StartCoroutine(computerPanelUI.DisplayObjectiveCompletedPopup());
+        }
         computerPanelUI.popupPanel.DisplayPopUpWindow(reasonForAnswer, NoticeType.Correct);
     }
 

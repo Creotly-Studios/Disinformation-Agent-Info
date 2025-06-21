@@ -13,6 +13,8 @@ public class DialogueUIChoice : MonoBehaviour
     {
         dialoguechoice = choice;
         choiceText.text = dialoguechoice.text;
+
+        choiceButton.onClick.RemoveAllListeners();
         choiceButton.onClick.AddListener(() => MakeChoice(choiceIndex, uiPanel));
     }
 
@@ -20,7 +22,7 @@ public class DialogueUIChoice : MonoBehaviour
     {
         DialogueManager.Instance.OnChoiceSelected(choiceIndex);
 
-        NPC npc = DialogueManager.Instance.NPCharacter;
         uiPanel.DisableUIChoices();
+        DialogueManager.Instance.canContinue = true;
     }
 }

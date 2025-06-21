@@ -3,7 +3,8 @@ using UnityEngine;
 public class Teleporter : MonoBehaviour, IInteractable
 {
     private Player_v2 _player;
-    
+
+    public GameObject identifier;
     [SerializeField] private string interactText;
     [SerializeField] private float sceneLoadDelay = 2f;
 

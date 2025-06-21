@@ -6,8 +6,9 @@ using UnityEngine.Events;
 
 public class TeleporterUI_Panel : MonoBehaviour
 {
+    private Teleporter teleporter;
     private WaitForSeconds waitForSeconds;
-
+    
     [Header("UI")] 
     [SerializeField] private Button submitButton;
     [SerializeField] private Button closePanelButton;
@@ -21,7 +22,12 @@ public class TeleporterUI_Panel : MonoBehaviour
 
     [Space]
     [SerializeField] private UnityEvent onCancelTeleport;
-    
+
+    private void Awake()
+    {
+        teleporter = GetComponent<Teleporter>();
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -69,6 +75,7 @@ public class TeleporterUI_Panel : MonoBehaviour
     {
         codeInputField.text = "";
         teleporterUiPanel.SetActive(false);
+        teleporter.identifier.SetActive(false);
         LevelLoader.LoadLevel(quest.questLevelIndex);
     }
 

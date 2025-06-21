@@ -50,12 +50,12 @@ public class QuestSO : ScriptableObject
     private void SetCompletedObjective(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
     {
         questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
-
         if (questObjective.isDone != true)
         {
             return;
         }
         if (identifier != null) { identifier.MarkCompleted(); }
+        Player_v2.Instance.PlayerNav.canResetFilterNavList = true;
         QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective);
     }
 }

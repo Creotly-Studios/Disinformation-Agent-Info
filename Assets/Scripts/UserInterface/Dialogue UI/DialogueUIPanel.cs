@@ -36,7 +36,7 @@ public class DialogueUIPanel : MonoBehaviour
             return;
         }
         Instance = this;
-        typingSpeed = new WaitForSeconds(0.05f);
+        typingSpeed = new WaitForSeconds(0.0035f);
 
         if(skipButton != null) skipButton.onClick.AddListener(HandleSkip);
     }

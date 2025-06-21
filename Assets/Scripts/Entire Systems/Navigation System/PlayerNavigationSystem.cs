@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public class PlayerNavigationSystem : MonoBehaviour
 {
     private Player_v2 player;
-    private QuestObjectives previousObjective;
+    public bool canResetFilterNavList;
 
     private List<QuestObjectiveNavIdentifier> identifierList = new();
     private List<QuestObjectiveNavIdentifier> filteredIdentifiers = new();
@@ -17,43 +17,41 @@ public class PlayerNavigationSystem : MonoBehaviour
     private void Awake()
     {
         player = GetComponent<Player_v2>();
+        canResetFilterNavList = true;
     }
 
     public void Update()
     {
-        HandleNavigation();
+        if(canResetFilterNavList)
+        {
+            QuestSO quest = QuestManager.Instance.activeQuest;
+            if(quest != null) { HandleIdentifierFilter(quest.FindNextObjective()); }
+            if(filteredIdentifiers.Count != 0)
+            {
+                canResetFilterNavList = false;
+            }
+            return;
+        }
 
-        //Remove All Identifiers that are Completed
+        HandleNavigation();
         identifierList.RemoveAll(x => x.IsCompleted);
         filteredIdentifiers.RemoveAll(x => x.IsCompleted);
     }
 
     private void HandleNavigation()
     {
-        HandleIdentifierFilter();
         QuestObjectiveNavIdentifier mainIdentifier = ClosestIdentifier();
         if (mainIdentifier != null) { DirectPlayerTo(mainIdentifier); }
     }
 
-    private void HandleIdentifierFilter()
+    public void HandleIdentifierFilter(QuestObjectives currentObjective)
     {
-        QuestSO quest = QuestManager.Instance.activeQuest;
-        if(quest == null)
-        {
-            return;
-        }
-
-        QuestObjectives currentObjective = quest.FindNextObjective();
         if(currentObjective == null)
         {
             return;
         }
 
-        if(filteredIdentifiers.Count != 0 && previousObjective == currentObjective)
-        {
-            return;
-        }
-
+        filteredIdentifiers.Clear();
         for(int i = 0; i < identifierList.Count; i++)
         {
             QuestObjectiveNavIdentifier identifier = identifierList[i];
@@ -63,7 +61,6 @@ public class PlayerNavigationSystem : MonoBehaviour
             }
             filteredIdentifiers.Add(identifier);
         }
-        previousObjective = currentObjective;
     }
 
     private QuestObjectiveNavIdentifier ClosestIdentifier()

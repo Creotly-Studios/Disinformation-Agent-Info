@@ -165,7 +165,9 @@ public class DialogueManager : MonoBehaviour
         QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
         if (objective != null && objective.isDone != true)
         {
+            NPCharacter.identifier.MarkCompleted();
             NPCharacter.hasCompletedDialogue = true;
+
             QuestSO quest = QuestManager.Instance.activeQuest;
             quest.IncreaseQuestObjectiveProgressLevels(objective, NPCharacter.identifier);
         }
