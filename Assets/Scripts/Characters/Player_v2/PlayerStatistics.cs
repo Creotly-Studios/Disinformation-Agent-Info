@@ -32,11 +32,17 @@ public class PlayerStatistics : MonoBehaviour, IDamagable
         player.CallPlayerDamage();
         PlayHurtSound();
         CurrentHealth -= healthDamage;
-        if (CurrentHealth <= 0.0f)
+        if (CurrentHealth <= 0)
         {
             HandleDeath();
             return;
         }
+    }
+
+    public void PlayerDie()
+    {
+        CurrentHealth = 0;
+        player.CallPlayerDeath();
     }
 
     private void HandleDeath()

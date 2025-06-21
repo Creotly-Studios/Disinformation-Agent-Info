@@ -34,6 +34,7 @@ public class PlayerAttackState : PlayerAbilityState
         
         // Execute the attack
         PerformAttack();
+        player.PlayAttackEffect();
     }
 
     public override void LogicUpdate()

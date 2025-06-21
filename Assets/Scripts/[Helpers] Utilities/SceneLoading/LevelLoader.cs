@@ -25,9 +25,11 @@ public static class LevelLoader
 
         DialogueManager dialogueManager = DialogueManager.Instance;
         if (dialogueManager != null) dialogueManager.EnableDialoguePanel(false);
+        GameManager gm = GameManager.Instance;
+        if (gm != null) gm.UnPause();
+        
         while (!asyncOperation.isDone)
         {
-            
             GC.Collect();
             yield return null;
         }

@@ -10,27 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aadfdebdedcce7c4992a4db770c9ea97, type: 3}
-  m_Name: Island Quest
+  m_Name: 4_ Broadcast Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  <questCode>k__BackingField: 177
-  <questLevelIndex>k__BackingField: 4
-  questTitle: Malign Education
-  description: Educate the masses on the threat of spreading fake news
+  <questCode>k__BackingField: 885
+  <questLevelIndex>k__BackingField: 6
+  questTitle: Brodcast Quest
+  description: Brodcast Quest, Brodcast Station
   <QuestReward>k__BackingField: 0
   <questObjectives>k__BackingField:
   - isDone: 0
-    targetValue: 1
+    targetValue: 5
     progressValue: 0
-    objectiveType: 3
-    description: Get Instrunction From AI Boss
+    objectiveType: 4
+    description: Complete 5 Malign Influence Game
   - isDone: 0
     targetValue: 3
     progressValue: 0
-    objectiveType: 1
-    description: Get A Score Of 5 in Bias Bingo
-  - isDone: 0
-    targetValue: 3
-    progressValue: 0
-    objectiveType: 3
-    description: Discuss with The 3 Special NPCs in regards to fake news
+    objectiveType: 6
+    description: Destory factory generator

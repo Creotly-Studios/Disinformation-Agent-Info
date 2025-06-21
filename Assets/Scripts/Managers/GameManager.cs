@@ -80,7 +80,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    public void Unpause()
+    public void UnPause()
     {
         if (isGamePaused)
         {

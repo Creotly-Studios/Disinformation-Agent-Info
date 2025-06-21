@@ -69,6 +69,7 @@ public class Player_v2 : MonoBehaviour
     
     [Header("VFX")]
     [SerializeField] private ParticleSystem dashEffect;
+    [SerializeField] private ParticleSystem playerCombatFX;
 
     //testing new shit
     public Vector3 WorkSpace { get; set; }
@@ -196,6 +197,8 @@ public class Player_v2 : MonoBehaviour
     public void AnimationFinishTrigger() => StateMachine.CurrentState.AnimationFinishTrigger();
 
     public float _verticalVelocity;
+    
+
     void ApplyGravity()
     {
         if (controller.isGrounded)
@@ -268,6 +271,14 @@ public class Player_v2 : MonoBehaviour
         if (dashEffect != null)
         {
             dashEffect.Play();
+        }
+    }
+    
+    public void PlayAttackEffect()
+    {
+        if (playerCombatFX != null)
+        {
+            playerCombatFX.Play();
         }
     }
 

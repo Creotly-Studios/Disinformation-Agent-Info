@@ -10,22 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: aadfdebdedcce7c4992a4db770c9ea97, type: 3}
-  m_Name: Brodcast Quest
+  m_Name: 5_Boss Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  <questCode>k__BackingField: 888
-  <questLevelIndex>k__BackingField: 5
-  questTitle: Brodcast Quest
-  description: Brodcast Quest, Brodcast Station
+  <questCode>k__BackingField: 451
+  <questLevelIndex>k__BackingField: 7
+  questTitle: Finale
+  description: Defeat the Boss
   <QuestReward>k__BackingField: 0
   <questObjectives>k__BackingField:
   - isDone: 0
     targetValue: 5
     progressValue: 0
-    objectiveType: 4
-    description: Complete 5 Malign Influence Game
+    objectiveType: 5
+    description: Match 5 Articles or Headlines to its mostt credible Source
   - isDone: 0
-    targetValue: 3
+    targetValue: 1
     progressValue: 0
-    objectiveType: 6
-    description: Destory factory generator
+    objectiveType: 2
+    description: Defeat Boss
