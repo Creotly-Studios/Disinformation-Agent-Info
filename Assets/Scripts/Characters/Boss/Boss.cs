@@ -80,7 +80,12 @@ public class Boss : MonoBehaviour, IDamagable
     
     protected void Update()
     {
-        if (isDead) return;
+        if (isDead)
+        {
+            GameManager.Instance.MissionComplete();
+            Destroy(this);
+            return;
+        }
         UpdateStageState();
     }
     
