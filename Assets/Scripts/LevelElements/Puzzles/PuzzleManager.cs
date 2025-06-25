@@ -12,20 +12,24 @@ public class PuzzleManager : MonoBehaviour
 
     private void Awake()
     {
+        puzzle_Objective = combat_Objective = new();
         identifier = GetComponent<QuestObjectiveNavIdentifier>();
     }
 
     private void Update()
     {
+        if(puzzle_Objective.targetValue == 0 || combat_Objective.targetValue == 0)
+        {
+            QuestManager questManager = QuestManager.Instance;
+            puzzle_Objective = questManager.FindQuestObjective(ObjectiveType.Puzzle);
+            combat_Objective = questManager.FindQuestObjective(ObjectiveType.FightBots);
+        }
         CheckPuzzleCompletion();
     }
 
     private void CheckPuzzleCompletion()
     {
-        puzzle_Objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.Puzzle);
         puzzleCompleteReward.SetActive(puzzle_Objective != null && puzzle_Objective.isDone);
-
-        combat_Objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.FightBots);
         combatCompleteReward.SetActive(combat_Objective != null && combat_Objective.isDone);
     }
 }

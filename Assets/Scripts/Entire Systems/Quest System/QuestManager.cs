@@ -44,11 +44,15 @@ public class QuestManager : MonoBehaviour
         return null;
     }
 
-    public QuestObjectives FindQuestObjective(ObjectiveType type)
+    public QuestObjectives FindQuestObjective(ObjectiveType type, bool multipleInScene = false)
     {
         if(activeQuest == null)
         {
             return null;
+        }
+        if(multipleInScene != true)
+        {
+            return activeQuest.questObjectives.Find(x => x.objectiveType == type);
         }
         return activeQuest.questObjectives.Find(x => x.objectiveType == type && x.isDone != true);
     }

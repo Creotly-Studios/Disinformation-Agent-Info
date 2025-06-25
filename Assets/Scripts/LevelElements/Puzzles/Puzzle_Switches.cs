@@ -84,7 +84,6 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
         {
             if (status != true)
             {
-                print(2);
                 quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
                 return;
             }

@@ -162,7 +162,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC);
+        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC, true);
         if (objective != null && objective.isDone != true)
         {
             NPCharacter.identifier.MarkCompleted();
