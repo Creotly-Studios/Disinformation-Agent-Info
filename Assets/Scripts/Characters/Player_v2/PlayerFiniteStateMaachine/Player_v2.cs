@@ -112,7 +112,7 @@ public class Player_v2 : MonoBehaviour
         //initialize the state machine
         StateMachine.Initialize(IdleState);
         speakerInfo = Instantiate(speakerInfo);
-        speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player, EmotionState.Neutral);
+        speakerInfo.Initialize("Agent Kim", characterImage, TypeOfSpeaker.Player);
 
         PlayerStatistics.ResetUI();
         if (DialogueManager.Instance != null) { DialogueManager.Instance.SetPlayerSpeaker(speakerInfo); }

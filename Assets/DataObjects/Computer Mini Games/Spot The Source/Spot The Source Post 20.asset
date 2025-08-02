@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951010b59e28b304fa3d8285b2e887ed, type: 3}
+  m_Name: Spot The Source Post 20
+  m_EditorClassIdentifier: 
+  hasChecked: 0
+  postType: 1
+  postAuthor: Zodwa Sibanda
+  authorImage: {fileID: 0}
+  postHeader: Local Marathon Sees Record Participation
+  postContent: "This year\u2019s race drew 8,000 runners, a 25% jump, organizers
+    credit new training clinics and wider promotion.\n"
+  funFact_Hint: Running events belong in athletic coverage.
+  BiasChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  MalignChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  SourceChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Focuses more on team sports and scores.
+    <Choice>k__BackingField: 8
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Health advice, not event coverage.
+    <Choice>k__BackingField: 1
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Local opinions, not race statistics.
+    <Choice>k__BackingField: 5
+  - <IsCorrectAnswer>k__BackingField: 1
+    <Explanation>k__BackingField: Specializes in endurance sports features.
+    <Choice>k__BackingField: 6

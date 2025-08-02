@@ -29,34 +29,6 @@ public class QuestManager : MonoBehaviour
         }
     }
 
-    public QuestObjectives GetObjective()
-    {
-        for(int i = 0; i < activeQuest.questObjectives.Count; i++)
-        {
-            QuestObjectives potObjective = activeQuest.questObjectives[i];
-
-            ObjectiveType type = potObjective.objectiveType;
-            if (type == ObjectiveType.MisInfoGames || type == ObjectiveType.SpotTheSource || type == ObjectiveType.BiasBingo )
-            {
-                return potObjective;
-            }
-        }
-        return null;
-    }
-
-    public QuestObjectives FindQuestObjective(ObjectiveType type, bool multipleInScene = false)
-    {
-        if(activeQuest == null)
-        {
-            return null;
-        }
-        if(multipleInScene != true)
-        {
-            return activeQuest.questObjectives.Find(x => x.objectiveType == type);
-        }
-        return activeQuest.questObjectives.Find(x => x.objectiveType == type && x.isDone != true);
-    }
-
     public void Quest_Update()
     {
         if (DialogueManager.Instance.dialogueIsPlaying)
@@ -82,6 +54,7 @@ public class QuestManager : MonoBehaviour
                 return;
             }
             activeQuest = questSO;
+            TaskListManager.Instance.SetUpTaskList(activeQuest);
         }
         activeQuest.QuestSO_Update();
 

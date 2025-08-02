@@ -28,16 +28,16 @@ Classic unverified information trap—fake stories linking to other fake stories
 #speaker: Samantha
 Yeah… I should. No way I wanna be part of spreading lies. Thanks for calling me out.
 
-* [Jumping to conclusions just fuels the problem. We have to be careful with what we share.]  
+* Jumping to conclusions just fuels the problem. We have to be careful with what we share.
     -> LogicalTone
 
-* [See? This is exactly how people get manipulated. They count on you not checking.] 
+* See? This is exactly how people get manipulated. They count on you not checking. 
     -> ArgumentativeTone
 
-* [I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.]  
+* I get why you believed it. A lot of people fall for this stuff—it’s designed to trick you.
     -> EmotionalTone
 
-* [Mistakes happen. What matters is what you do next.]  
+* Mistakes happen. What matters is what you do next. 
     -> ReservedTone
 
 === LogicalTone ===

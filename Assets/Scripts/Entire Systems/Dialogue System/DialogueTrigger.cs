@@ -21,7 +21,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     private void Start()
     {
         characterInformation = Instantiate(characterInformation);
-        characterInformation.Initialize(name, characterImage, speakerType, EmotionState.Calm);
+        characterInformation.Initialize(name, characterImage, speakerType);
     }
 
     public string GetInteractText()
@@ -51,8 +51,8 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i], npc);
             return;
         }
-        int random = Random.Range(0, dialogueTexts.Count);
-        TextAsset randomDialogue = dialogueTexts[random];
-        DialogueManager.Instance.HandleDialogue(characterInformation, randomDialogue, npc);
+        var textArray = dialogueTexts.ToArray();
+        currentDialogueText = Tools.RandomObjectWithExclude(currentDialogueText, textArray);
+        DialogueManager.Instance.HandleDialogue(characterInformation, currentDialogueText, npc);
     }
 }

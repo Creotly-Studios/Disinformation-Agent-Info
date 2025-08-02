@@ -20,9 +20,10 @@ public class DialogueUIChoice : MonoBehaviour
 
     private void MakeChoice(int choiceIndex, DialogueUIPanel uiPanel)
     {
-        DialogueManager.Instance.OnChoiceSelected(choiceIndex);
+        DialogueManager dm = DialogueManager.Instance;
+        dm.OnChoiceSelected(choiceIndex);
 
         uiPanel.DisableUIChoices();
-        DialogueManager.Instance.canContinue = true;
+        dm.canContinue = true;
     }
 }

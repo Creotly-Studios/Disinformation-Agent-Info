@@ -1,16 +1,15 @@
-using UnityEngine;
-using UnityEngine.Events;
+﻿using UnityEngine;
 using Ink.Runtime;
+using UnityEngine.Events;
 using System.Collections;
 using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
 {
-    public static DialogueManager Instance { get; private set; }
-
     private WaitForSeconds exitPanelSeconds;
     public NPC NPCharacter { get; private set; }
-    
+    public static DialogueManager Instance { get; private set; }
+
     // Status
     public bool canContinue;
     public bool skipDialogue;
@@ -33,9 +32,6 @@ public class DialogueManager : MonoBehaviour
     public UnityEvent OnDialogueStart;
     public UnityEvent OnDialogueEnd;
 
-    //Player
-    Player_v2 player;
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -49,10 +45,10 @@ public class DialogueManager : MonoBehaviour
 
     private void Start()
     {
-        player = GameObject.Find("Player_v2").GetComponent<Player_v2>();
         dialogueIsPlaying = false;
         dialogueUIPanel.ExitPanel();
         exitPanelSeconds = new WaitForSeconds(0.2f);
+        OnDialogueStart.AddListener(() => ObserveInkVariable());
     }
 
     private void Update()
@@ -98,11 +94,10 @@ public class DialogueManager : MonoBehaviour
 
         // Trigger the "On Dialogue Start" UnityEvent
         OnDialogueStart?.Invoke();
-
         ContinueDialogueStory();
     }
 
-    private void ContinueDialogueStory()
+    public void ContinueDialogueStory()
     {
         if (currentDialogueStory.canContinue)
         {
@@ -118,14 +113,70 @@ public class DialogueManager : MonoBehaviour
 
             if (currentSpeaker != null)
             {
-                currentDialogueStory.variablesState["npcEmotion"] = currentSpeaker.currentEmotion.ToString();
                 dialogueUIPanel.DisplayChoicesUI(currentDialogueStory);
-                dialogueUIPanel.DisplayText(currentSpeaker, text);
+                dialogueUIPanel.DisplayText(currentSpeaker, text, NPCharacter.Profile);
             }
         }
         else
         {
             StartCoroutine(ExitDialogueMode());
+        }
+    }
+
+    public void FastForwardTo(string knotName)
+    {
+        if (currentDialogueStory == null)
+        {
+            Debug.LogWarning("No active story to fast‑forward.");
+            return;
+        }
+        currentDialogueStory.ChoosePathString(knotName);
+        dialogueUIPanel.DisableUIChoices();
+        ContinueDialogueStory();
+    }
+
+    private void ObserveInkVariable()
+    {
+        string baseValue = "baseValue";
+        if (currentDialogueStory.variablesState.GlobalVariableExistsWithName(baseValue) != true)
+        {
+            return;
+        }
+        currentDialogueStory.ObserveVariable(baseValue, (variableName, newValue) => { EvaluateSpecialNPC_Choice(variableName); });
+    }
+
+    private void EvaluateSpecialNPC_Choice(string baseValueStr)
+    {
+        if (NPCharacter == null || NPCharacter.TypeOfNPC != NPCType.Special)
+        {
+            return;
+        }
+        int baseValue = (int)currentDialogueStory.variablesState[baseValueStr];
+        int responseIndex = (int)currentDialogueStory.variablesState["responseIndex"];
+        NPCharacter.Profile.Evaluate_AcceptanceValue(responseIndex, baseValue, NPCharacter.SliderUI, out float delta);
+
+        currentDialogueStory.variablesState["lastDelta"] = delta;
+        HandleConclusion();
+    }
+
+    private void HandleConclusion()
+    {
+        string currentPath = currentDialogueStory.state.currentPathString;
+        if (currentPath != null && currentPath.ToLower().Contains("conclusion"))
+        {
+            float acceptanceValue = NPCharacter.Profile.AcceptanceValue;
+
+            if (acceptanceValue > 70)
+            {
+                FastForwardTo("Convinced");
+                return;
+            }
+            else if (acceptanceValue < 30)
+            {
+                FastForwardTo("Rejected");
+                return;
+            }
+            FastForwardTo("Stalemate");
         }
     }
 
@@ -157,19 +208,28 @@ public class DialogueManager : MonoBehaviour
             return;
         }
 
-        if(NPCharacter.hasCompletedDialogue || NPCharacter.npcType != NPCType.Special)
+        if(NPCharacter.hasCompletedDialogue || NPCharacter.TypeOfNPC != NPCType.Special)
         {
             return;
         }
 
-        QuestObjectives objective = QuestManager.Instance.FindQuestObjective(ObjectiveType.ConvinceNPC, true);
-        if (objective != null && objective.isDone != true)
+        QuestManager questManager = QuestManager.Instance;
+        if(NPCharacter.Profile.AcceptanceValue <= 70.0f)
         {
-            NPCharacter.identifier.MarkCompleted();
-            NPCharacter.hasCompletedDialogue = true;
+            questManager.popupPanel.FailedDialogue($"Failed To Convince {NPCharacter.name}, Try Again !!!");
+            return;
+        }
 
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            quest.IncreaseQuestObjectiveProgressLevels(objective, NPCharacter.identifier);
+        QuestSO quest = questManager.activeQuest;
+        if (quest != null)
+        {
+            QuestObjectives objective = quest.FindQuestObjective(ObjectiveType.ConvinceNPC, true);
+            if (objective != null && objective.isDone != true)
+            {
+                NPCharacter.Identifier.MarkCompleted();
+                NPCharacter.hasCompletedDialogue = true;
+                quest.IncreaseQuestObjectiveProgressLevels(objective, NPCharacter.Identifier);
+            }
         }
     }
 

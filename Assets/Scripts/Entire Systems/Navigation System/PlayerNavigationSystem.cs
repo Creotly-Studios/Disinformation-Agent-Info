@@ -5,6 +5,7 @@ using System.Collections.Generic;
 public class PlayerNavigationSystem : MonoBehaviour
 {
     private Player_v2 player;
+    private Transform cameraObject;
     public bool canResetFilterNavList;
 
     private List<QuestObjectiveNavIdentifier> identifierList = new();
@@ -18,6 +19,11 @@ public class PlayerNavigationSystem : MonoBehaviour
     {
         player = GetComponent<Player_v2>();
         canResetFilterNavList = true;
+    }
+
+    private void Start()
+    {
+        cameraObject = Camera.main.transform;
     }
 
     public void Update()
@@ -84,29 +90,19 @@ public class PlayerNavigationSystem : MonoBehaviour
 
     private void DirectPlayerTo(QuestObjectiveNavIdentifier identifier)
     {
-        Vector3 directionToPlayer = (player.transform.position - identifier.GetPosition());
-        int distance = Mathf.RoundToInt(directionToPlayer.magnitude);
+        Vector3 fwd = transform.forward;
+        Vector3 targetDir = identifier.GetPosition() - player.transform.position;
+        int distance = Mathf.FloorToInt(targetDir.magnitude);
 
+        fwd.y = targetDir.y = 0.0f;
+        Vector2 fwd2D = new Vector2(fwd.x, fwd.z).normalized;
+        Vector2 targetDir2D = new Vector2(targetDir.x, targetDir.z).normalized;
+
+        float angle = Vector2.SignedAngle(fwd2D, targetDir2D);
+        
+        directionImage.localEulerAngles = new Vector3(0, 0, -angle);
         distanceToObject.text = $"{distance}M";
         identifier.EnableIdentifierObjStatus();
-
-        //Rotate image UI to target direction;
-        directionToPlayer.Normalize();
-        Vector2 direction2D = new Vector2(directionToPlayer.x, directionToPlayer.z);
-        float angle = Mathf.Atan2(direction2D.x, direction2D.y) * Mathf.Rad2Deg;
-
-        Quaternion rotationAxis = Quaternion.Euler(0, 0, angle);
-        directionImage.rotation = HandleRotation(rotationAxis,directionToPlayer);
-    }
-
-    private Quaternion HandleRotation(Quaternion rotationAxis, Vector3 direction)
-    {
-        float dotProduct = Vector3.Dot(player.transform.forward, direction);
-        if(dotProduct < 0)
-        {
-            return Quaternion.Euler(0, 0, 180f) * rotationAxis;
-        }
-        return rotationAxis;
     }
 
     public void RegisterIdentifier(QuestObjectiveNavIdentifier identifier)

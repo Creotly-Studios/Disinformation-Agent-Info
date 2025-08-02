@@ -14,18 +14,19 @@ public class NPC : MonoBehaviour
 
     //Added Components
     public NPCFunctions npcFunctions { get; private set; }
+    public QuestObjectiveNavIdentifier Identifier { get; private set; }
 
     [Header("Profile")]
-    public QuestObjectiveNavIdentifier identifier { get; private set; }
+    [field: SerializeField] public BarSliderUI SliderUI { get; private set; }
+    [field: SerializeField] public NPC_CharacterProfile Profile { get; private set; } = new();
 
     [Header("NPC Details")]
     public bool hasCompletedDialogue;
-    [field: SerializeField] public NPCType npcType { get; private set; } = NPCType.Generic;
+    [field: SerializeField] public NPCType TypeOfNPC { get; private set; } = NPCType.Generic;
 
     [Header("NPC Parameters")]
     public bool canMove = true;
-    public float warmingUpRadar;
-    [field: SerializeField] public PatrolState npcState { get; private set; }
+    [field: SerializeField] public PatrolState NPCState { get; private set; }
 
     [Header("Target Private Parameters")]
     public float targetAngle;
@@ -51,24 +52,27 @@ public class NPC : MonoBehaviour
         characterController = GetComponent<CharacterController>();
 
         npcFunctions = GetComponent<NPCFunctions>();
-        identifier = GetComponent<QuestObjectiveNavIdentifier>();
+        Identifier = GetComponent<QuestObjectiveNavIdentifier>();
     }
 
     private void Start()
     {
-        npcState = Instantiate(npcState);
+        NPCState = Instantiate(NPCState);
+        if(SliderUI != null)
+        {
+            Profile.InitializeAcceptanceValue(50.0f, SliderUI);
+        }
 
         if (navMeshAgent == null)
         {
-            GameObject aiObject = new GameObject();
+            GameObject aiObject = new();
             aiObject.transform.SetParent(transform);
 
             navMeshAgent = aiObject.AddComponent<NavMeshAgent>();
             navMeshAgent.stoppingDistance = 1.0f;
         }
-        warmingUpRadar = 55;
         navMeshAgent.enabled = false;
-        currentState = npcState.RobotState_Update(this);
+        currentState = NPCState.RobotState_Update(this);
     }
 
     private void Update()
@@ -91,7 +95,7 @@ public class NPC : MonoBehaviour
 
         if (currentState != null)
         {
-            var nextState = npcState.RobotState_Update(this);
+            var nextState = NPCState.RobotState_Update(this);
             if (nextState != null)
             {
                 currentState = nextState;
@@ -136,7 +140,7 @@ public class NPC : MonoBehaviour
             return true;
         }
 
-        if (npcState.patrolMode == PatrolMode.Walk)
+        if (NPCState.patrolMode == PatrolMode.Walk)
         {
             return true;
         }

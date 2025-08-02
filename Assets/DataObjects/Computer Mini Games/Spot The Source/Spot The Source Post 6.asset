@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951010b59e28b304fa3d8285b2e887ed, type: 3}
+  m_Name: Spot The Source Post 6
+  m_EditorClassIdentifier: 
+  hasChecked: 0
+  postType: 1
+  postAuthor: Ahmed Abubakar
+  authorImage: {fileID: 0}
+  postHeader: City Council Cuts Water Subsidies for Industrial Plants
+  postContent: "Starting next quarter, factories will pay full market rates, freeing
+    up $50 million for housing projects\u2014city officials say."
+  funFact_Hint: "Local-government budget news\u2014where do you find council details?"
+  BiasChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  MalignChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  SourceChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Might note economic effects but not the policy
+      story itself.
+    <Choice>k__BackingField: 12
+  - <IsCorrectAnswer>k__BackingField: 1
+    <Explanation>k__BackingField: Covers municipal policy and budget changes.
+    <Choice>k__BackingField: 10
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Sports site, unrelated.
+    <Choice>k__BackingField: 6
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Focuses on national politics, less on city councils.
+    <Choice>k__BackingField: 9

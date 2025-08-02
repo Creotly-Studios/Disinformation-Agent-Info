@@ -11,7 +11,7 @@ public class Throphy : MonoBehaviour
         {
             pickUpEvent?.Invoke();
             QuestManager questManager = QuestManager.Instance;
-            QuestObjectives objective = questManager.FindQuestObjective(ObjectiveType.Trophy);
+            QuestObjectives objective = questManager.activeQuest.FindQuestObjective(ObjectiveType.Trophy);
 
 
             if (objective != null)

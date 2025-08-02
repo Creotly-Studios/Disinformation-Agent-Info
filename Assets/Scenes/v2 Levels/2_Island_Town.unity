@@ -647,6 +647,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6043556054923075947}
     m_Modifications:
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
       propertyPath: m_Name
       value: NPC_Emote
@@ -757,6 +769,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
   m_PrefabInstance: {fileID: 71821927}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &71821931 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6225884527661647800, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+  m_PrefabInstance: {fileID: 71821927}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295adc03d8940164d815ea113385479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &75008503
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,6 +1182,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 524500911422827921}
     m_Modifications:
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
       propertyPath: m_Name
       value: NPC_Emote
@@ -1269,6 +1304,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
   m_PrefabInstance: {fileID: 133011452}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &133011456 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6225884527661647800, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+  m_PrefabInstance: {fileID: 133011452}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295adc03d8940164d815ea113385479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &134543927
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2051,6 +2097,34 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 3015879467189968422, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -61.999878
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4259298959651815291, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4469984437049931035, guid: 4627ec6010341c742998ccec8681558e, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -2113,6 +2187,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4545953658972066041, guid: 4627ec6010341c742998ccec8681558e, type: 3}
       propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7342244047286327412, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7342244047286327412, guid: 4627ec6010341c742998ccec8681558e, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8922982721457592823, guid: 4627ec6010341c742998ccec8681558e, type: 3}
@@ -7739,6 +7821,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 625248596220532940}
     m_Modifications:
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 130586449796818220, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
       propertyPath: m_Name
       value: NPC_Emote
@@ -7849,6 +7943,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1217183076766375052, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
   m_PrefabInstance: {fileID: 1125742416}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1125742420 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6225884527661647800, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
+  m_PrefabInstance: {fileID: 1125742416}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 295adc03d8940164d815ea113385479e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1137500501
 GameObject:
   m_ObjectHideFlags: 0
@@ -16126,11 +16231,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <SliderUI>k__BackingField: {fileID: 71821931}
+  <Profile>k__BackingField:
+    topicInterestWeight: 0.398
+    criticalThinkingWeight: 0.584
+    confirmationBiasWeight: 0.301
+    emotionalSusceptibilityWeight: 0.894
   hasCompletedDialogue: 0
-  <npcType>k__BackingField: 0
+  <TypeOfNPC>k__BackingField: 0
   canMove: 1
-  warmingUpRadar: 0
-  <npcState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
+  <NPCState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
   targetAngle: 0
   targetDistance: 0
   targetPosition: {x: 0, y: 0, z: 0}
@@ -16544,26 +16654,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 23743527}
     m_Modifications:
-    - target: {fileID: -8880974694853028376, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
-      propertyPath: profile.ignorant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8880974694853028376, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
-      propertyPath: profile.factLover
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8880974694853028376, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
-      propertyPath: profile.echoChamber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8880974694853028376, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
-      propertyPath: profile.loyaltyToSource
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -8880974694853028376, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
-      propertyPath: profile.susceptibleToAnger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1570497980096659101, guid: 7a515d1d7cd222f45897112bf8bb99b3, type: 3}
       propertyPath: m_Name
       value: NPC Female 1
@@ -16625,11 +16715,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <SliderUI>k__BackingField: {fileID: 1125742420}
+  <Profile>k__BackingField:
+    topicInterestWeight: 0.354
+    criticalThinkingWeight: 0.531
+    confirmationBiasWeight: 0.381
+    emotionalSusceptibilityWeight: 0.717
   hasCompletedDialogue: 0
-  <npcType>k__BackingField: 0
+  <TypeOfNPC>k__BackingField: 0
   canMove: 1
-  warmingUpRadar: 0
-  <npcState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
+  <NPCState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
   targetAngle: 0
   targetDistance: 0
   targetPosition: {x: 0, y: 0, z: 0}
@@ -17114,26 +17209,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 23743527}
     m_Modifications:
-    - target: {fileID: -6013463938202397790, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
-      propertyPath: profile.ignorant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6013463938202397790, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
-      propertyPath: profile.factLover
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6013463938202397790, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
-      propertyPath: profile.echoChamber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6013463938202397790, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
-      propertyPath: profile.loyaltyToSource
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -6013463938202397790, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
-      propertyPath: profile.susceptibleToAnger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1473844293818392799, guid: 26cbf04dfed1b2a47b0f3fb282e5c6ff, type: 3}
       propertyPath: m_Name
       value: NPC Male 5
@@ -17357,7 +17432,8 @@ MonoBehaviour:
   speakerType: 0
   characterInformation: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
   dialogueTexts:
-  - {fileID: 4900000, guid: 3f2fa47db6ba3bc4cbf9a90fed4aa106, type: 3}
+  - {fileID: 4900000, guid: 9e985f466508acb4a8f0c34097d31dce, type: 3}
+  - {fileID: 4900000, guid: 40b8aadab09a91b43a4a6275df6643ed, type: 3}
 --- !u!4 &2247926429896309059
 Transform:
   m_ObjectHideFlags: 0
@@ -18515,26 +18591,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 23743527}
     m_Modifications:
-    - target: {fileID: -1069817258080284509, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
-      propertyPath: profile.ignorant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1069817258080284509, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
-      propertyPath: profile.factLover
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1069817258080284509, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
-      propertyPath: profile.echoChamber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1069817258080284509, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
-      propertyPath: profile.loyaltyToSource
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -1069817258080284509, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
-      propertyPath: profile.susceptibleToAnger
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 2856058880702351436, guid: cb1cb2b3146a02440bb55b0deb631ffd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 31.1
@@ -18678,26 +18734,6 @@ PrefabInstance:
     - target: {fileID: 6253328448890001775, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783025224757024314, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
-      propertyPath: profile.ignorant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783025224757024314, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
-      propertyPath: profile.factLover
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783025224757024314, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
-      propertyPath: profile.echoChamber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783025224757024314, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
-      propertyPath: profile.loyaltyToSource
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7783025224757024314, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
-      propertyPath: profile.susceptibleToAnger
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9082743571476419487, guid: 7ff81aaaf047bdc45b5e1823ad9433cb, type: 3}
       propertyPath: m_Name
@@ -19200,7 +19236,8 @@ MonoBehaviour:
   speakerType: 0
   characterInformation: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
   dialogueTexts:
-  - {fileID: 4900000, guid: 7dcd1367b1b36a84cb4cf458ab301f42, type: 3}
+  - {fileID: 4900000, guid: 19ecd8bcda6012d4a967c67fb928fa5c, type: 3}
+  - {fileID: 4900000, guid: 2597b3063b880b74081b07a1d917a115, type: 3}
 --- !u!33 &5375537516850677559
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -20518,13 +20555,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5553ff7e99ebfd947a74134922b09bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentDialogueText: {fileID: 4900000, guid: fcfc1cef36125be49b4d0c6ce09dc4bd, type: 3}
+  currentDialogueText: {fileID: 4900000, guid: d41c341234dab2c47868c1bb3529e925, type: 3}
   interactText: Talk To Bob
   characterImage: {fileID: 0}
   speakerType: 0
   characterInformation: {fileID: 11400000, guid: edcb570723b5a69478df1de57ab182a1, type: 2}
   dialogueTexts:
-  - {fileID: 4900000, guid: fcfc1cef36125be49b4d0c6ce09dc4bd, type: 3}
+  - {fileID: 4900000, guid: d41c341234dab2c47868c1bb3529e925, type: 3}
+  - {fileID: 4900000, guid: 58622457a66afdb43814bc3b9452d5d8, type: 3}
 --- !u!114 &8297787561849486415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20675,26 +20713,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6276347130465728680, guid: cf4f2e10dd667ed42b8bb59ba203dc43, type: 3}
-      propertyPath: profile.ignorant
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6276347130465728680, guid: cf4f2e10dd667ed42b8bb59ba203dc43, type: 3}
-      propertyPath: profile.factLover
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6276347130465728680, guid: cf4f2e10dd667ed42b8bb59ba203dc43, type: 3}
-      propertyPath: profile.echoChamber
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6276347130465728680, guid: cf4f2e10dd667ed42b8bb59ba203dc43, type: 3}
-      propertyPath: profile.loyaltyToSource
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6276347130465728680, guid: cf4f2e10dd667ed42b8bb59ba203dc43, type: 3}
-      propertyPath: profile.susceptibleToAnger
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -20727,11 +20745,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <SliderUI>k__BackingField: {fileID: 133011456}
+  <Profile>k__BackingField:
+    topicInterestWeight: 0.389
+    criticalThinkingWeight: 0.85
+    confirmationBiasWeight: 0.735
+    emotionalSusceptibilityWeight: 0.283
   hasCompletedDialogue: 0
-  <npcType>k__BackingField: 0
+  <TypeOfNPC>k__BackingField: 0
   canMove: 1
-  warmingUpRadar: 0
-  <npcState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
+  <NPCState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
   targetAngle: 0
   targetDistance: 0
   targetPosition: {x: 0, y: 0, z: 0}

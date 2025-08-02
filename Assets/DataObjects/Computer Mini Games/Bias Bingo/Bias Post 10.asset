@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951010b59e28b304fa3d8285b2e887ed, type: 3}
+  m_Name: Bias Post 10
+  m_EditorClassIdentifier: 
+  hasChecked: 0
+  postType: 0
+  postAuthor: Thabo Maseko
+  authorImage: {fileID: 0}
+  postHeader: 
+  postContent: "Focusing solely on the latest riot footage and horror stories, this
+    article omits examples where community policing has reduced crime\u2014presenting
+    only the most shocking incidents.\n"
+  funFact_Hint: Ask what positive facts might have been left on the cutting-room
+    floor.
+  BiasChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 'That bias hypes emotional details; here the issue
+      is ignoring positive examples. '
+    <Choice>k__BackingField: 1
+  - <IsCorrectAnswer>k__BackingField: 1
+    <Explanation>k__BackingField: 'It leaves out success stories of community policing. '
+    <Choice>k__BackingField: 5
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 'Although it scares, the key problem is the absence
+      of balancing information. '
+    <Choice>k__BackingField: 8
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Confirmation bias would select evidence to match
+      beliefs; this is systematic exclusion.
+    <Choice>k__BackingField: 3
+  MalignChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  SourceChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0

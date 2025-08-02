@@ -1,6 +1,7 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+
 public class PauseMenuOptions : MonoBehaviour
 {
     [Header("SFX Player UI")]
@@ -10,6 +11,9 @@ public class PauseMenuOptions : MonoBehaviour
     [Header("Music Manager UI")]
     [SerializeField] private Button musicButton;
     [SerializeField] private TextMeshProUGUI musicText;
+
+    [Header("Extra Buttons")]
+    [SerializeField] private Button backButton;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,6 +32,10 @@ public class PauseMenuOptions : MonoBehaviour
             UpdateText();
         });
 
+        backButton.onClick.AddListener(() =>
+        {
+            gameObject.SetActive(false);
+        });
     }
 
     void UpdateText()

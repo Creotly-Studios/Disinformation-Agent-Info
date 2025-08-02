@@ -31,6 +31,43 @@ public class QuestSO : ScriptableObject
         return questObjectives.Find(x => x.isDone != true);
     }
 
+    public QuestObjectives GetMiniGameObjetive()
+    {
+        for (int i = 0; i < questObjectives.Count; i++)
+        {
+            QuestObjectives potObjective = questObjectives[i];
+
+            ObjectiveType type = potObjective.objectiveType;
+            if (type == ObjectiveType.MiniGame_MalignInfluence || type == ObjectiveType.MiniGame_SpotTheSource || type == ObjectiveType.MiniGame_BiasBingo)
+            {
+                return potObjective;
+            }
+        }
+        return null;
+    }
+
+    public QuestObjectives FindQuestObjective(ObjectiveType type, bool multipleInScene = false)
+    {
+        if (multipleInScene != true)
+        {
+            return questObjectives.Find(x => x.objectiveType == type);
+        }
+        return questObjectives.Find(x => x.objectiveType == type && x.isDone != true);
+    }
+
+    private void SetCompletedObjective(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
+    {
+        TaskListManager.Instance.UpdateTaskProgressLevels(questObjective);
+        questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
+        if (questObjective.isDone != true)
+        {
+            return;
+        }
+        if (identifier != null) { identifier.MarkCompleted(); }
+        Player_v2.Instance.PlayerNav.canResetFilterNavList = true;
+        QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective);
+    }
+
     public void DecreaseQuestObjectiveProgressLevels(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
     {
         questObjective.progressValue--;
@@ -45,17 +82,5 @@ public class QuestSO : ScriptableObject
         }
         questObjective.progressValue++;
         SetCompletedObjective(questObjective, identifier);
-    }
-
-    private void SetCompletedObjective(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
-    {
-        questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
-        if (questObjective.isDone != true)
-        {
-            return;
-        }
-        if (identifier != null) { identifier.MarkCompleted(); }
-        Player_v2.Instance.PlayerNav.canResetFilterNavList = true;
-        QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective);
     }
 }

@@ -73,18 +73,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08a9c22d7fee74f4da6be396006c18c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  profile:
-    ignorant: 0
-    factLover: 0
-    echoChamber: 0
-    loyaltyToSource: 0
-    susceptibleToAnger: 0
-  canInteract: 0
-  haveDialogue: 0
-  <npcType>k__BackingField: 1
+  <SliderUI>k__BackingField: {fileID: 0}
+  <Profile>k__BackingField:
+    topicInterestWeight: 0
+    criticalThinkingWeight: 0
+    confirmationBiasWeight: 0
+    emotionalSusceptibilityWeight: 0
+  hasCompletedDialogue: 0
+  <TypeOfNPC>k__BackingField: 1
   canMove: 1
-  warmingUpRadar: 0
-  <npcState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
+  <NPCState>k__BackingField: {fileID: 11400000, guid: 9d84ea8fa33761e428a812c210a07fe3, type: 2}
   targetAngle: 0
   targetDistance: 0
   targetPosition: {x: 0, y: 0, z: 0}
@@ -94,6 +92,8 @@ MonoBehaviour:
   canRotate: 0
   isGrounded: 0
   performingAction: 0
+  emotion: 0
+  emote: {fileID: 0}
 --- !u!114 &-1285542929751444643
 MonoBehaviour:
   m_ObjectHideFlags: 0

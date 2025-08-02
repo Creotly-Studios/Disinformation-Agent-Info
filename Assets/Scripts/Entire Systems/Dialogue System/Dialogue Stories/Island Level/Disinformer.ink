@@ -20,16 +20,16 @@ The Mayor? He’s protected. You? You’re disposable. #speaker:Player
 
 …You think people will come after me? #speaker: Vince
 
-* [People will turn on you faster than you think. You’re just a pawn in their game.] 
+* People will turn on you faster than you think. You’re just a pawn in their game.
     -> LogicalTone
 
-* [You might be getting paid now, but what happens when you’re no longer useful?] 
+* You might be getting paid now, but what happens when you’re no longer useful?
     -> EmotionalTone
 
-* [The truth always comes out, and when it does, no one will defend you.] 
+* The truth always comes out, and when it does, no one will defend you.
     -> ArgumentativeTone
 
-* [It’s your choice. Just don’t expect the Mayor to have your back when it all falls apart.]  
+* It’s your choice. Just don’t expect the Mayor to have your back when it all falls apart.
     -> ReservedTone
 
 === LogicalTone ===

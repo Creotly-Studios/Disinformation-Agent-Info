@@ -54,36 +54,33 @@ public class DialogueUIPanel : MonoBehaviour
         }
     }
 
-    public void DisplayText(DialogueCharacterInformation speaker, string dialogueText)
+    public void DisplayText(DialogueCharacterInformation speaker, string dialogueText, NPC_CharacterProfile profile)
     {
         DialogueManager dialogueManager = DialogueManager.Instance;
         SpeakerType currentSpeakerType = dialogueManager.currentSpeakerType;
 
         speakerObject.SetActive(true);
-        speakerTextDialogue.color = Color.white;
+        speakerTextDialogue.color = (currentSpeakerType != SpeakerType.Player) ? TextColor(profile) : Color.white;
+
         speakerName.text = speaker.characterName;
-
-        if(currentSpeakerType != SpeakerType.Player)
-        {
-            switch (speaker.currentEmotion)
-            {
-                case EmotionState.Angry:
-                    speakerTextDialogue.color = Color.red;
-                    break;
-                case EmotionState.Calm:
-                    speakerTextDialogue.color = Color.green;
-                    break;
-                default:
-                    speakerTextDialogue.color = Color.white;
-                    break;
-            }
-        }
-
         if(dialogueManager.currentSpeaker.speakerType == TypeOfSpeaker.Instructor)
         {
             speakerTextDialogue.color = Color.green;
         }
         HandleTextTyping(dialogueText);
+    }
+
+    public Color TextColor(NPC_CharacterProfile profile)
+    {
+        if(profile.AcceptanceValue < 50.0f)
+        {
+            return Color.red;
+        }
+        else if(profile.AcceptanceValue > 50.0f)
+        {
+            return Color.green;
+        }
+        return Color.white;
     }
 
     public void DisableUIChoices()

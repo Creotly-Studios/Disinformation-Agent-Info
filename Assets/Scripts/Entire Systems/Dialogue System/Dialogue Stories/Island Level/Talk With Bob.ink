@@ -28,16 +28,16 @@ That’s not just shady—that’s harmful maligned information.Harmful maligned
 Smart call. A few clicks might seem small, but lies can do real harm.
 
 
-* [History has shown us that these promises often come with strings attached. Why would this time be any different?] 
+* History has shown us that these promises often come with strings attached. Why would this time be any different?
     -> LogicalTone
 
-* [I hope so, but can we afford to take that risk when so many people are struggling?] 
+* I hope so, but can we afford to take that risk when so many people are struggling?
     -> EmotionalTone
 
-* [That’s exactly what they want you to think—to make you drop your guard.] 
+* That’s exactly what they want you to think—to make you drop your guard.
     -> ArgumentativeTone
 
-* [It’s worth hoping, but let’s make sure we’re not being misled.] 
+* It’s worth hoping, but let’s make sure we’re not being misled.
     -> ReservedTone
 
 === LogicalTone ===

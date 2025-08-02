@@ -1,12 +1,4 @@
 
-public enum ResponseType
-{
-    Logical,
-    Reserved,
-    Emotional,
-    Argumentative
-}
-
 public enum NPCType
 { 
     Special,
@@ -22,11 +14,11 @@ public enum Switch_Type
 public enum ObjectiveType
 {
     Puzzle,
-    BiasBingo,
+    MiniGame_BiasBingo,
     FightBots,
     ConvinceNPC,
-    MisInfoGames,
-    SpotTheSource,
+    MiniGame_MalignInfluence,
+    MiniGame_SpotTheSource,
     Generator,
     Trophy
 }
@@ -50,11 +42,55 @@ public enum NoticeType
     ObjectiveCompleted
 }
 
-public enum PostFactType
+public enum MalignChecker
 {
-    None,
-    Information,
-    MalignedInformation
+    True,
+    False
+}
+
+public enum BiasChecker
+{
+    NegativityXCrisis_Bias,
+    SensationalismXEmotionalism,
+    False_Balance,
+    Confirmation_Bias,
+    GatekeepingXElite_Bias,
+    Omission_Bias,
+    FramingXSpin,
+    StereotypingXMonolithic_Framing,
+    Fear_Mongering,
+    SelectionXAgenda_Setting_Bias
+}
+
+public enum SourceChecker
+{
+    //Health
+    Health_Review,
+    Health_Buzz_Daily,
+    Global_Health_Journal,
+
+    //Socials
+    Society_Today,
+    Viral_Trends_Daily,
+    Community_Voices_Network,
+
+    //Sports
+    Athletic_Daily,
+    Instant_Sports_Buzz,
+    National_Sports_Review,
+
+    //Government
+    Political_Insight,
+    Gov_Affairs_Weekly,
+    Civic_Affairs_Tribune,
+
+    //Finance
+    Finance_Times,
+    Quick_Stock_Tips,
+    Market_Insight_Africa,
+
+    //Tech
+    Tech_Newsletter
 }
 
 public enum PatrolMode
@@ -77,9 +113,10 @@ public enum CharacterType
     Villain
 }
 
-public enum EmotionState
+public enum PlayerResponseStyle
 {
-    Calm,
-    Angry,
-    Neutral
+    LogicalTone = 0,      // Presents data or logic
+    ReservedTone = 1,    // Cautious, measured warning
+    EmotionalTone = 2,    // Leans on empathy or feeling
+    ArgumentativeTone = 3,// Challenges their assumptions
 }

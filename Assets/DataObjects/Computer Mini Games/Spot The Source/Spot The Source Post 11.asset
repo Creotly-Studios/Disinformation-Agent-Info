@@ -1,0 +1,55 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951010b59e28b304fa3d8285b2e887ed, type: 3}
+  m_Name: Spot The Source Post 11
+  m_EditorClassIdentifier: 
+  hasChecked: 0
+  postType: 1
+  postAuthor: Fatima Suleiman
+  authorImage: {fileID: 0}
+  postHeader: 'Survey: 70% of City Youth See Social Media as Too Stressful'
+  postContent: "High schoolers report anxiety and \u201Cdigital burnout\u201D as
+    platforms push constant updates."
+  funFact_Hint: Youth and media habits, covered by social-interest outlets.
+  BiasChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  MalignChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  SourceChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Focuses on gadgets, not stress studies.
+    <Choice>k__BackingField: 15
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Local opinions, not broad surveys.
+    <Choice>k__BackingField: 5
+  - <IsCorrectAnswer>k__BackingField: 1
+    <Explanation>k__BackingField: Explores societal impacts of technology.
+    <Choice>k__BackingField: 3
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Government angle, not youth social research.
+    <Choice>k__BackingField: 11

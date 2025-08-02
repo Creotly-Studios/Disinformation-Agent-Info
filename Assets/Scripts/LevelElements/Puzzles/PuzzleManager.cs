@@ -21,8 +21,12 @@ public class PuzzleManager : MonoBehaviour
         if(puzzle_Objective.targetValue == 0 || combat_Objective.targetValue == 0)
         {
             QuestManager questManager = QuestManager.Instance;
-            puzzle_Objective = questManager.FindQuestObjective(ObjectiveType.Puzzle);
-            combat_Objective = questManager.FindQuestObjective(ObjectiveType.FightBots);
+            QuestSO quest = questManager.activeQuest;
+            if (quest != null)
+            {
+                puzzle_Objective = quest.FindQuestObjective(ObjectiveType.Puzzle);
+                combat_Objective = quest.FindQuestObjective(ObjectiveType.FightBots);
+            }
         }
         CheckPuzzleCompletion();
     }

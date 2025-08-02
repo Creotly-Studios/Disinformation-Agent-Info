@@ -4,10 +4,15 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private Button menuBtn;
-    
+
+    [Header("Primary Buttons")]
     [SerializeField] private Button replayBtn;
     [SerializeField] private Button resumeBtn;
     [SerializeField] private Button loadSaveBtn;
+
+    [Header("Options Parameters")]
+    [SerializeField] private Button optionsBtn;
+    [SerializeField] private PauseMenuOptions optionsMenu;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -19,20 +24,15 @@ public class PauseMenu : MonoBehaviour
                 LevelLoader.LoadLevel(0);
                 GameManager.Instance.ResetGame();
         });
-        resumeBtn.onClick.AddListener(() =>
-        {
-            GameManager.Instance.TogglePause();
-        });
         replayBtn.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             GameManager.Instance.ResetGame();
         });
-        loadSaveBtn.onClick.AddListener(() =>
-        {
-            SaveManagerSystem.Instance.DisplayMenuPanel();
-        });
 
+        resumeBtn.onClick.AddListener(() => { GameManager.Instance.TogglePause(); });
+        optionsBtn.onClick.AddListener(() => { optionsMenu.gameObject.SetActive(true); });
+        loadSaveBtn.onClick.AddListener(() =>{SaveManagerSystem.Instance.DisplayMenuPanel();});
         Hide();
     }
 
@@ -53,13 +53,15 @@ public class PauseMenu : MonoBehaviour
 
     private void Show()
     {
-        gameObject?.SetActive(true);
+        gameObject.SetActive(true);
         Player_v2.Instance.DisplayPauseButton(false);
     }
 
     public void Hide()
     {
-        gameObject?.SetActive(false);
+        gameObject.SetActive(false);
+
+        optionsMenu.gameObject.SetActive(false);
         Player_v2.Instance.DisplayPauseButton(true);
     }
 }

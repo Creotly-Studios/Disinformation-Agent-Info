@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 951010b59e28b304fa3d8285b2e887ed, type: 3}
+  m_Name: Bias Post 1
+  m_EditorClassIdentifier: 
+  hasChecked: 0
+  postType: 0
+  postAuthor: 'Dr. Amina Okoya '
+  authorImage: {fileID: 0}
+  postHeader: 
+  postContent: "A new herbal supplement\u2014backed by a single small lab study\u2014is
+    being hailed as a cure for every form of cancer. Early users report \u201Cmiraculous\u201D
+    results, and social media influencers are scrambling to get their hands on it.\n"
+  funFact_Hint: 'Ask yourself if the language is meant to make you gasp rather than
+    inform.
+
+'
+  BiasChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 'Negativity bias magnifies bad news or crisis.
+      This piece is over-hyping good news. '
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 1
+    <Explanation>k__BackingField: "Words like \u201Cmiraculous\u201D and \u201Ccure
+      for every form\u201D are meant to shock and excite without solid evidence.
+      \n"
+    <Choice>k__BackingField: 1
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 'False balance would give equal weight to opposing
+      views. Here there is no counter-argument presented. '
+    <Choice>k__BackingField: 2
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: Gatekeeping implies suppressing voices; this article
+      is amplifying a fringe claim.
+    <Choice>k__BackingField: 4
+  MalignChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  SourceChoices:
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0
+  - <IsCorrectAnswer>k__BackingField: 0
+    <Explanation>k__BackingField: 
+    <Choice>k__BackingField: 0

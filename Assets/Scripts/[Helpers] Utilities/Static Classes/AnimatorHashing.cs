@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 //Optimization and Faster to Get Reasons, Rather than letting Unity Hash by itself, store hashed value and used accordingly
 public static class AnimatorHashing
@@ -90,5 +91,24 @@ public static class Maths_PhysicsHelper
             viewAngle = -viewAngle;
         }
         return viewAngle;
+    }
+}
+
+public static class Tools
+{
+    public static T RandomObjectWithExclude<T>(T exclude, T[] objectArray) where T : Object
+    {
+        List<int> indexList = new();
+        for(int i = 0; i < objectArray.Length; i++)
+        {
+            if(objectArray[i] == exclude)
+            {
+                continue;
+            }
+            indexList.Add(i);
+        }
+        if (indexList.Count < 0) { return exclude; }
+        int rnd = Random.Range(0, indexList.Count);
+        return objectArray[indexList[rnd]];
     }
 }

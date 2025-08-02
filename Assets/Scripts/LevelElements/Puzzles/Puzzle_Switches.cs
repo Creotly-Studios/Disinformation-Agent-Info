@@ -15,6 +15,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
     [SerializeField] private Material onMat;
     [SerializeField] private Material offMat;
     [SerializeField] private MeshRenderer indicatorMesh;
+    [SerializeField] private QuestObjectiveNavIdentifier navIdentifier;
 
     [Header("Status")]
     [SerializeField] private Switch_Type switchType;
@@ -71,15 +72,15 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
     private void UpdateObjective(bool status)
     {
         QuestManager questManager = QuestManager.Instance;
-        QuestObjectives objective = questManager.FindQuestObjective(ObjectiveType.Puzzle);
-        if(puzzleManager == null || objective == null)
+        QuestObjectives objective = questManager.activeQuest.FindQuestObjective(ObjectiveType.Puzzle);
+        if(objective == null)
         {
             return;
         }
 
         QuestSO quest = questManager.activeQuest;
-        QuestObjectiveNavIdentifier identifier = puzzleManager.identifier;
-
+        QuestObjectiveNavIdentifier identifier = (puzzleManager != null) ? puzzleManager.identifier : navIdentifier;
+        
         if (switchType == Switch_Type.Main)
         {
             if (status != true)
