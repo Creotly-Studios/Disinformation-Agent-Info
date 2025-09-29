@@ -7,7 +7,10 @@ public class SaveManagerSystem : MonoBehaviour
 {
     public static SaveManagerSystem Instance { get; private set; }
 
+    private bool canAutoSave;
     private string saveDirectory;
+    private bool shouldCompletedAutoSave;
+    
     private SavedData autoSavedFile;
     private const string AUTO_SAVE_SLOT = "AutoSave.agentInfo";
     [field: SerializeField] public SaveMenuUI SaveMenuUI { get; private set;}
@@ -16,7 +19,6 @@ public class SaveManagerSystem : MonoBehaviour
     {
         if(Instance != null)
         {
-            Debug.Log("Multiple Instances of SaveManager in Scene");
             Destroy(gameObject);
             return;
         }
@@ -29,13 +31,20 @@ public class SaveManagerSystem : MonoBehaviour
         InitializeSaveSystem();
     }
 
+    private void Update()
+    {
+        if(shouldCompletedAutoSave && Player_v2.Instance != null)
+        {
+            UpdateSavedFile(autoSavedFile);
+        }
+    }
+
     private void InitializeSaveSystem()
     {
         saveDirectory = Path.Combine(Application.persistentDataPath, "Saved Instances");
         if (!Directory.Exists(saveDirectory))
         {
             Directory.CreateDirectory(saveDirectory);
-            Debug.Log("Saved Directory Created");
         }
 
         string autoSavePath = GetSavePath(AUTO_SAVE_SLOT);
@@ -69,18 +78,15 @@ public class SaveManagerSystem : MonoBehaviour
     {
         if(savedData == null || savedData.isAutoSaveFile)
         {
-            Debug.LogWarning("Cant Delete File");
             return;
         }
 
         string filePath = Path.Combine(saveDirectory, savedData.fileName + ".agentInfo");
         if(!File.Exists(filePath))
         {
-            Debug.LogError($"File {savedData.fileName} doesnt exist at path {filePath}");
             return;
         }
         File.Delete(filePath);
-        Debug.Log($"{savedData.fileName} successfully deleted");
     }
 
     public SavedData LoadGame(SavedData dataToLoad)
@@ -112,7 +118,6 @@ public class SaveManagerSystem : MonoBehaviour
     public SavedData CreateNewSaveData(string filename, bool isAutoSave = false)
     {
         SavedData newData = new(filename, isAutoSave);
-
         UpdateSavedFile(newData);
         return newData;
     }
@@ -121,8 +126,6 @@ public class SaveManagerSystem : MonoBehaviour
     {
         Player_v2 player = Player_v2.Instance;
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
-
-        print(sceneIndex);
         string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         newData.sceneIndex = sceneIndex;
@@ -130,6 +133,7 @@ public class SaveManagerSystem : MonoBehaviour
 
         if (player == null)
         {
+            shouldCompletedAutoSave = true;
             return;
         }
         newData.playerPosition = player.transform.position;
@@ -146,40 +150,54 @@ public class SaveManagerSystem : MonoBehaviour
         for (int i = 0; i < questManager.availableQuests.Count; i++)
         {
             QuestSO quest = questManager.availableQuests[i];
-            newData.questDataList.Add(new SerializableQuestData(quest));
+            SerializableQuestData exist = newData.questDataList.Find(x => x.questName == quest.questTitle);
+            if(exist == null)
+            {
+                newData.questDataList.Add(new(quest));
+            }
+            newData.questDataList[i].UpdateQuestData(quest);
         }
         newData.SetPlayerTransformValues();
+        shouldCompletedAutoSave = false;
     }
 
     public void AutoSave()
     {
+        if(canAutoSave != true)
+        {
+            return;
+        }
+
+        QuestManager questManager = QuestManager.Instance;
+        int currentLevel = questManager.CurrentLevel;
+
+        if (currentLevel < autoSavedFile.currentLevel)
+        {
+            return;
+        }
+
+        if(currentLevel == autoSavedFile.currentLevel)
+        {
+            SerializableQuestData compare = autoSavedFile.GetQuestData(currentLevel);
+            if (questManager.activeQuest.CompletedObjectives < compare.completedObjectives)
+            {
+                return;
+            }
+        }
         SaveGame(autoSavedFile);
+    }
+
+    public void SetAutoSaveBool(bool status)
+    {
+        canAutoSave = status;
     }
 
     private void OnApplicationQuit()
     {
-        if(File.Exists(AUTO_SAVE_SLOT) != true)
+        if(File.Exists(GetSavePath(AUTO_SAVE_SLOT)) != true)
         {
             return;
         }
-        QuestManager questManager = QuestManager.Instance;
-
-        QuestSO currentQuest = questManager.activeQuest;
-        int index = questManager.availableQuests.IndexOf(currentQuest);
-        SerializableQuestData comparedQuest = autoSavedFile.questDataList[index];
-        
-        if(currentQuest != null)
-        {
-            for(int i = 0; i < currentQuest.questObjectives.Count; i++)
-            {
-                QuestObjectives obj = currentQuest.questObjectives[i];
-                if(obj.progressValue <= comparedQuest.objectiveProgressvalue[i])
-                {
-                    continue;
-                }
-                AutoSave();
-                break;
-            }
-        }
+        AutoSave();
     }
 }

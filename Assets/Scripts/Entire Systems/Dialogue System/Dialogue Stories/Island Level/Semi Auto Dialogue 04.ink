@@ -5,208 +5,179 @@ VAR responseIndex = 0
 
 === Start ===
 #speaker:Player
-Hey, I do not think we ave talked much. I am Kim. You look like something is weighing on you.
+Hey Kevin, you seem restless. What’s up?
 
-#speaker:Bob
-Yeah. It is this election stuff. Rumors keep popping up online and it is messing with my head.
+#speaker:Kevin
+It’s all this talk online about social media platforms spying on us. People say our phones are recording even when we don’t use them.
 
-#speaker:Player
-What kind of rumors?
+* If they were recording all the time, wouldn’t storage and bandwidth be impossible?
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> React1
 
-#speaker:Bob
-People are saying officials rigged votes through remote software. That they had a backdoor. Videos, screenshots, the works.
+* Do you trust the source of this claim, or just the people repeating it?
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> React2
 
-* Sounds like a lot of smoke and mirrors. Where is the real proof?
-    ~ responseIndex = 0
-    ~ baseValue = 2
-    -> React1
+* Phones ask permission for mic access. Doesn’t that limit it?
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> React3
 
-* And you think the entire election system would just let that happen?
-    ~ responseIndex = 1
-    ~ baseValue = 3
-    -> React2
-
-* Videos and screenshots can be faked. You know that, right?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> React3
-
-* Even if some data leaked, that does not mean there was a plot.
-    ~ responseIndex = 3
-    ~ baseValue = 1
-    -> React4
+* Maybe it’s not recording—just algorithms making targeted guesses.
+  ~ responseIndex = 3
+  ~ baseValue = 1
+  -> React4
 
 === React1 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you think I am just making things up?
+    You think I don’t understand how tech works? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Maybe you are right. I have not seen any verified source.
-- else:
-    Still, it all adds up in weird ways. Can not just ignore that.
-}
+    {(lastDelta > 0):
+        True. Constant recording would take insane resources. #speaker:Kevin
+    - else:
+        Still, they’ve got deep pockets. Maybe it’s possible. #speaker:Kevin
+    }
 }
 -> SecondWave
 
 === React2 ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is naive. Power does what it wants when no one watches.
+    You don’t believe my sources are legit? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    True... You would think someone would catch it if it were real.
-- else:
-    Maybe the system is too big to catch everything.
-}
+    {(lastDelta > 0):
+        Fair point. I should check if these people are experts. #speaker:Kevin
+    - else:
+        They seem convincing, but maybe I need stronger proof. #speaker:Kevin
+    }
 }
 -> SecondWave
 
 === React3 ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think I can not tell real from fake? That is insulting.
+    Permissions don’t stop hidden code. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Yeah, fair. Stuff like that can be misleading.
-- else:
-    I know they can be faked. But why would so many people share them?
-}
+    {(lastDelta > 0):
+        True, permissions are there for a reason. #speaker:Kevin
+    - else:
+        Some say permissions are just for show. #speaker:Kevin
+    }
 }
 -> SecondWave
 
 === React4 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you are okay with just brushing off a possible scandal?
+    That’s what they want you to think. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Right. If it was a plan, we would see bigger consequences.
-- else:
-    I guess, but how can we really know?
-}
+    {(lastDelta > 0):
+        Maybe it’s just smarter ads, not spying. #speaker:Kevin
+    - else:
+        Could be guesses, but it feels too accurate. #speaker:Kevin
+    }
 }
 -> SecondWave
 
 === SecondWave ===
 #speaker:Player
-So what makes you believe it? What made this story stick with you?
+So why does this theory stick with you?
 
-#speaker:Bob
-It is not just one story. It is the pattern. The way these things always surface right before results.
+#speaker:Kevin
+Because every time I talk about something, an ad shows up for it.
 
-* That pattern exists because losing sides need someone to blame.
-    ~ responseIndex = 0
-    ~ baseValue = 3
-    -> RespondA
+* Ads track browsing, not private talk. That’s been proven.
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> RespondA
 
-* But does pattern mean proof?
-    ~ responseIndex = 1
-    ~ baseValue = 2
-    -> RespondB
+* Could it be coincidence and confirmation bias?
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> RespondB
 
-* Is not it weird how it is always social media, not experts, who break these stories?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> RespondC
+* Maybe your phone listens for wake words, not whole convos.
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> RespondC
 
-* People want to feel cheated instead of facing hard truths.
-    ~ responseIndex = 3
-    ~ baseValue = 4
-    -> RespondD
+* People share these stories because they want to feel watched—it validates their concerns.
+  ~ responseIndex = 3
+  ~ baseValue = 4
+  -> RespondD
 
 === RespondA ===
-#speaker:Bob
 {(lastDelta < -10):
-    You do not get it. It is not about losing. It is about being lied to.
+    You’re ignoring what I experience. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Huh. That does explain a lot of the noise every cycle.
-- else:
-    Still feels different this time, though.
-}
+    {(lastDelta > 0):
+        Yeah. It’s probably just browsing data being tracked. #speaker:Kevin
+    - else:
+        Maybe. But it feels personal. #speaker:Kevin
+    }
 }
 -> FinalPush
 
 === RespondB ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is dismissive. Patterns can mean something.
+    You think I’m imagining things? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    No... I guess pattern without facts is not enough.
-- else:
-    It might not be proof. But it is still worth looking into, right?
-}
+    {(lastDelta > 0):
+        That’s true. I notice it more when it matches. #speaker:Kevin
+    - else:
+        Coincidence is possible, but it’s hard not to suspect. #speaker:Kevin
+    }
 }
 -> FinalPush
 
 === RespondC ===
-#speaker:Bob
 {(lastDelta < -10):
-    Experts can be biased too. That is how they get away with it.
+    That’s just another excuse. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    You have a point. Too many sketchy posts out there.
-- else:
-    Maybe people share what they *want* to believe.
-}
+    {(lastDelta > 0):
+        Makes sense. Wake words don’t mean constant recording. #speaker:Kevin
+    - else:
+        But what if wake words are just the start? #speaker:Kevin
+    }
 }
 -> FinalPush
 
 === RespondD ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think people are just sore losers? That is cold.
+    That’s cynical. People are smarter than that. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Maybe... maybe it *is* easier to blame than accept.
-- else:
-    I do not know. It just all feels so uncertain.
-}
+    {(lastDelta > 0):
+        Maybe. People want proof they’re not paranoid. #speaker:Kevin
+    - else:
+        Could be, but it still creeps me out. #speaker:Kevin
+    }
 }
 -> FinalPush
 
 === FinalPush ===
 #speaker:Player
-If none of it turns out real, what then? Would you accept that?
-
-#speaker:Bob
-{(lastDelta < -10):
-    Guess I was just another pawn. That stings.
-- else:
-{(lastDelta > 0):
-    Then yeah. I was wrong. But at least I asked questions.
-- else:
-    I would be disappointed. But I want to know the truth, even if it hurts.
-}
-}
+If it turns out it’s just algorithms, would you feel relieved?
 -> Conclusion
 
-=== Conclusion ===
-    #speaker:Player
-    I think we made progress. Maybe we can talk again soon.
-
-    #speaker:Bob
-    Yeah... I am not fully there. But I am thinking.
-    -> END
-- else:
-    #speaker:Player
-    Maybe next time we can dive deeper. Worth a fresh look.
-
-    #speaker:Bob
-    Sure. I will keep reading. Maybe I missed something.
-    -> END
-}
-}
-}
-
 === Convinced ===
-#speaker:Bob
-You know... I think you are right. I feel like I see things clearer now.
+#speaker:Kevin
+You know what? I think you’re right. I feel like I see things clearer now.
+
 -> END
 
 === Rejected ===
-#speaker:Bob
-You do not get it. You are too sure of yourself.
+#speaker:Kevin
+You don’t get it. You’re too sure of yourself.
+
+-> END
+
+=== Conclusion ===
+#speaker:Kevin
+Yeah. That would explain it.
+
+#speaker:Player
+Glad we talked it through.
+
+#speaker:Kevin
+Same here. At least I’m questioning it more now.
+
 -> END

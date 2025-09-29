@@ -4,6 +4,8 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "QuestSO", menuName = "Scriptable Objects/QuestSO")]
 public class QuestSO : ScriptableObject
 {
+    public int CompletedObjectives { get; private set; }
+
     [Header("Status")]
     public bool isComplete;
     [field: SerializeField] public int questCode { get; private set; }
@@ -70,6 +72,7 @@ public class QuestSO : ScriptableObject
 
     public void DecreaseQuestObjectiveProgressLevels(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
     {
+        CompletedObjectives--;
         questObjective.progressValue--;
         SetCompletedObjective(questObjective, identifier);
     }
@@ -80,6 +83,7 @@ public class QuestSO : ScriptableObject
         {
             return;
         }
+        CompletedObjectives++;
         questObjective.progressValue++;
         SetCompletedObjective(questObjective, identifier);
     }

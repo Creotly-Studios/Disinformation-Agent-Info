@@ -23,7 +23,6 @@ public class PlayerInteractState : PlayerAbilityState
 
     public override void Enter()
     {
-        Debug.Log("Interact");
         base.Enter();
         AudioManager.Instance.PlaySFX(playerData.interact);
         if (GetInteractableObject() != null)

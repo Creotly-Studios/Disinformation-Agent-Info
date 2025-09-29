@@ -5,208 +5,183 @@ VAR responseIndex = 0
 
 === Start ===
 #speaker:Player
-Hey, I do not think we ave talked much. I am Kim. You look like something is weighing on you.
+Hey Bob, you look deep in thought. Everything okay?
 
 #speaker:Bob
-Yeah. It is this election stuff. Rumors keep popping up online and it is messing with my head.
+Not really. I keep reading these articles saying big pharma hides natural cures so they can keep selling drugs.
 
-#speaker:Player
-What kind of rumors?
-
-#speaker:Bob
-People are saying officials rigged votes through remote software. That they had a backdoor. Videos, screenshots, the works.
-
-* Sounds like a lot of smoke and mirrors. Where is the real proof?
+* If that were true, doctors worldwide would have to be in on it. That seems impossible.
     ~ responseIndex = 0
-    ~ baseValue = 2
+    ~ baseValue = 3
     -> React1
 
-* And you think the entire election system would just let that happen?
+* Are these articles from verified medical journals or random websites?
     ~ responseIndex = 1
-    ~ baseValue = 3
+    ~ baseValue = 2
     -> React2
 
-* Videos and screenshots can be faked. You know that, right?
+* But if natural cures worked so well, wouldn’t there be more evidence?
     ~ responseIndex = 2
     ~ baseValue = 2
     -> React3
 
-* Even if some data leaked, that does not mean there was a plot.
+* It sounds like fear is driving those claims more than facts.
     ~ responseIndex = 3
     ~ baseValue = 1
     -> React4
 
 === React1 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you think I am just making things up?
+    You think I’m gullible enough to believe all doctors? #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Maybe you are right. I have not seen any verified source.
-- else:
-    Still, it all adds up in weird ways. Can not just ignore that.
-}
+    {(lastDelta > 0):
+        True. Not every doctor could be silent about something that huge. #speaker:Bob
+    - else:
+        Still, companies have a lot of money at stake. #speaker:Bob
+    }
 }
 -> SecondWave
 
 === React2 ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is naive. Power does what it wants when no one watches.
+    So you think my sources are trash? #speaker:Bob
 - else:
-{(lastDelta > 0):
-    True... You would think someone would catch it if it were real.
-- else:
-    Maybe the system is too big to catch everything.
-}
+    {(lastDelta > 0):
+        Fair point. Maybe I should check if they’re peer-reviewed. #speaker:Bob
+    - else:
+        They aren’t journals, but they seem convincing. #speaker:Bob
+    }
 }
 -> SecondWave
 
 === React3 ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think I can not tell real from fake? That is insulting.
+    You think I don’t see evidence when it’s there? #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Yeah, fair. Stuff like that can be misleading.
-- else:
-    I know they can be faked. But why would so many people share them?
-}
+    {(lastDelta > 0):
+        Yeah. If there was proof, it would be impossible to hide. #speaker:Bob
+    - else:
+        Some people say evidence is suppressed. #speaker:Bob
+    }
 }
 -> SecondWave
 
 === React4 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you are okay with just brushing off a possible scandal?
+    Don’t just dismiss me. This is serious. #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Right. If it was a plan, we would see bigger consequences.
-- else:
-    I guess, but how can we really know?
-}
+    {(lastDelta > 0):
+        Maybe fear does play a role. Hard to separate feelings from facts. #speaker:Bob
+    - else:
+        It feels like both fear and greed could be involved. #speaker:Bob
+    }
 }
 -> SecondWave
 
 === SecondWave ===
 #speaker:Player
-So what makes you believe it? What made this story stick with you?
+So why do you think people spread these stories?
 
 #speaker:Bob
-It is not just one story. It is the pattern. The way these things always surface right before results.
+Because nobody trusts corporations anymore.
 
-* That pattern exists because losing sides need someone to blame.
+* Lack of trust doesn’t equal proof of wrongdoing.
     ~ responseIndex = 0
     ~ baseValue = 3
     -> RespondA
 
-* But does pattern mean proof?
+* Maybe the distrust is real, but that doesn’t mean cures are hidden.
     ~ responseIndex = 1
     ~ baseValue = 2
     -> RespondB
 
-* Is not it weird how it is always social media, not experts, who break these stories?
+* Doesn’t science thrive on challenging claims and proving them?
     ~ responseIndex = 2
     ~ baseValue = 2
     -> RespondC
 
-* People want to feel cheated instead of facing hard truths.
+* Could it be people just want simple answers to complex health problems?
     ~ responseIndex = 3
     ~ baseValue = 4
     -> RespondD
 
 === RespondA ===
-#speaker:Bob
 {(lastDelta < -10):
-    You do not get it. It is not about losing. It is about being lied to.
+    You’re missing the point. It’s about trust! #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Huh. That does explain a lot of the noise every cycle.
-- else:
-    Still feels different this time, though.
-}
+    {(lastDelta > 0):
+        True. Lack of trust doesn’t prove a cover-up. #speaker:Bob
+    - else:
+        I know, but it still feels like something’s hidden. #speaker:Bob
+    }
 }
 -> FinalPush
 
 === RespondB ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is dismissive. Patterns can mean something.
+    You don’t get it. Mistrust has reasons. #speaker:Bob
 - else:
-{(lastDelta > 0):
-    No... I guess pattern without facts is not enough.
-- else:
-    It might not be proof. But it is still worth looking into, right?
-}
+    {(lastDelta > 0):
+        Yeah, mistrust doesn’t prove they’re guilty. #speaker:Bob
+    - else:
+        But the timing of these stories always feels shady. #speaker:Bob
+    }
 }
 -> FinalPush
 
 === RespondC ===
-#speaker:Bob
 {(lastDelta < -10):
-    Experts can be biased too. That is how they get away with it.
+    Science can be bought too. #speaker:Bob
 - else:
-{(lastDelta > 0):
-    You have a point. Too many sketchy posts out there.
-- else:
-    Maybe people share what they *want* to believe.
-}
+    {(lastDelta > 0):
+        True. Science is about proof, not fear. #speaker:Bob
+    - else:
+        Maybe some science is biased, but not all. #speaker:Bob
+    }
 }
 -> FinalPush
 
 === RespondD ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think people are just sore losers? That is cold.
+    That’s too simple. People are smarter than that. #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Maybe... maybe it *is* easier to blame than accept.
-- else:
-    I do not know. It just all feels so uncertain.
-}
+    {(lastDelta > 0):
+        Maybe. Complex problems don’t have easy fixes. #speaker:Bob
+    - else:
+        I don’t know. It’s hard not to wonder. #speaker:Bob
+    }
 }
 -> FinalPush
 
 === FinalPush ===
 #speaker:Player
-If none of it turns out real, what then? Would you accept that?
+If natural cures are proven safe one day, wouldn’t you want them available?
 
-#speaker:Bob
 {(lastDelta < -10):
-    Guess I was just another pawn. That stings.
+    Yeah. But until then, I’ll keep doubting. #speaker:Bob
 - else:
-{(lastDelta > 0):
-    Then yeah. I was wrong. But at least I asked questions.
-- else:
-    I would be disappointed. But I want to know the truth, even if it hurts.
+    {(lastDelta > 0):
+        Definitely. And until then, I should be careful what I believe. #speaker:Bob
+    - else:
+        Of course. I just want truth, not lies. #speaker:Bob
+    }
 }
-}
--> Conclusion
-
-=== Conclusion ===
-    #speaker:Player
-    I think we made progress. Maybe we can talk again soon.
-
-    #speaker:Bob
-    Yeah... I am not fully there. But I am thinking.
-    -> END
-- else:
-    #speaker:Player
-    Maybe next time we can dive deeper. Worth a fresh look.
-
-    #speaker:Bob
-    Sure. I will keep reading. Maybe I missed something.
-    -> END
-}
-}
-}
+-> Convinced
 
 === Convinced ===
 #speaker:Bob
-You know... I think you are right. I feel like I see things clearer now.
+You know what ?, ... I think you are right. I feel like I see things clearer now.
 -> END
 
 === Rejected ===
 #speaker:Bob
 You do not get it. You are too sure of yourself.
+-> END
+
+=== Conclusion ===
+#speaker:Player
+I’m glad we could talk this through.
+
+#speaker:Bob
+Yeah. I’ll think twice before I click next time.
 -> END

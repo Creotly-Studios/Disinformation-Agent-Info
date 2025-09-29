@@ -31,6 +31,10 @@ public class QuestManager : MonoBehaviour
 
     public void Quest_Update()
     {
+        if (TaskListManager.Instance != null)
+        {
+            TaskListManager.Instance.SetUpTaskList(activeQuest);
+        }
         if (DialogueManager.Instance.dialogueIsPlaying)
         {
             return;
@@ -53,19 +57,24 @@ public class QuestManager : MonoBehaviour
                 allQuestCompleted = true;
                 return;
             }
+
             activeQuest = questSO;
-            TaskListManager.Instance.SetUpTaskList(activeQuest);
+            if(TaskListManager.Instance != null)
+            {
+                TaskListManager.Instance.SetUpTaskList(activeQuest);
+            }
         }
         activeQuest.QuestSO_Update();
 
         if(activeQuest.isComplete) 
         {
             SaveManagerSystem.Instance.AutoSave();
-
             GameManager.Instance.MissionComplete();
             popupPanel.DisplayPopUpWindow(null, NoticeType.QuestCompleted, activeQuest);
         }
     }
+
+    public int CurrentLevel => availableQuests.IndexOf(activeQuest);
 
     public void RestoreQuestProgress(List<SerializableQuestData> questDataList)
     {

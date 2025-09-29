@@ -100,9 +100,9 @@ public static class SaveSerializer
     /// <summary> Serializes Save Data into a custom Binary Format, as the C# Binary Formatter is Obsolete</summary>
     public static byte[] SerializeData(SavedData data)
     {
-        using (MemoryStream ms = new MemoryStream())
+        using (MemoryStream ms = new())
         {
-            using(BinaryWriter writer = new BinaryWriter(ms, Encoding.UTF8))
+            using(BinaryWriter writer = new(ms, Encoding.UTF8))
             {
                 writer.Write(FILE_HEADER);
                 writer.Write(FILE_VERSION);
@@ -135,10 +135,12 @@ public static class SaveSerializer
                 #region Quest Data
 
                 writer.Write(data.sceneIndex);
+                writer.Write(data.currentLevel);
                 writer.Write(data.questDataList.Count);
                 foreach(SerializableQuestData quest in data.questDataList)
                 {
                     writer.Write(quest.questName);
+                    writer.Write(quest.completedObjectives);
                     writer.Write(quest.objectiveProgressvalue.Count);
 
                     foreach(int value in quest.objectiveProgressvalue)
@@ -155,9 +157,9 @@ public static class SaveSerializer
 
     public static SavedData Deserialize(byte[] data)
     {
-        using (MemoryStream ms = new MemoryStream(data))
+        using (MemoryStream ms = new(data))
         {
-            using(BinaryReader reader = new BinaryReader(ms))
+            using(BinaryReader reader = new(ms))
             {
                 string header = reader.ReadString();
                 if(header != FILE_HEADER)
@@ -186,11 +188,13 @@ public static class SaveSerializer
                 #region Quest Data
 
                 int sceneIndex = reader.ReadInt32();
+                int levelIndex = reader.ReadInt32();
                 int questCount = reader.ReadInt32();
                 List<SerializableQuestData> questList = new();
                 for(int i = 0; i < questCount; i++)
                 {
                     string questname = reader.ReadString();
+                    int completedObjCount = reader.ReadInt32();
                     int progressValueCount = reader.ReadInt32();
 
                     List<int> objectProgressiveValues = new List<int>();
@@ -200,12 +204,12 @@ public static class SaveSerializer
                         objectProgressiveValues.Add(progressValue);
                     }
 
-                    SerializableQuestData newQuestData = new (questname, objectProgressiveValues);
+                    SerializableQuestData newQuestData = new (questname, completedObjCount, objectProgressiveValues);
                     questList.Add(newQuestData);
                 }
                 #endregion
 
-                SavedData newData = new(sceneIndex, fileName, modifiedDate, isAutoSave)
+                SavedData newData = new(sceneIndex, levelIndex, fileName, modifiedDate, isAutoSave)
                 {
                     coinAmount = coinAmount,
                     healthCount = healthCount,

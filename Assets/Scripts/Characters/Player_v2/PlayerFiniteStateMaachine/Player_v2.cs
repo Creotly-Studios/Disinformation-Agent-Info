@@ -9,8 +9,6 @@ public class Player_v2 : MonoBehaviour
     public CharacterController controller { get; private set; }
     public PlayerNavigationSystem PlayerNav { get; private set; }
 
-    [SerializeField] private Button pauseButton;
-
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerInputHandler InputHandler { get; private set; }
@@ -306,11 +304,6 @@ public class Player_v2 : MonoBehaviour
     }
 
     #endregion
-
-    public void DisplayPauseButton(bool status)
-    {
-        pauseButton.gameObject.SetActive(status);
-    }
 
     void OnDestroy()
     {

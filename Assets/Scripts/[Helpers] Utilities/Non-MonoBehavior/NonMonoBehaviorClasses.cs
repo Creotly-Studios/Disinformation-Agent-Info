@@ -61,9 +61,9 @@ public class NPC_CharacterProfile
 
         AcceptanceValue = Mathf.Clamp(AcceptanceValue + delta, 0f, 100f);
         slider.SetCurrentValue(AcceptanceValue);
-        if(AcceptanceValue < 10f)
+        if(AcceptanceValue <= 25f)
         {
-            QuestManager.Instance.popupPanel.FailedDialogue($"Has Completely Lost NPC's Trust");
+            QuestManager.Instance.popupPanel.DialoguePopup(Color.red, $"Has Completely Lost NPC's Trust");
             Player_v2.Instance.CallPlayerDeath();
         }
     }

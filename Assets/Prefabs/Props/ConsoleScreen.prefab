@@ -707,6 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   progressButton: []
+  buttonsContainer: {fileID: 0}
   buttonText: []
   titleText: {fileID: 575370065378588234}
   contentText: {fileID: 3836827137355504313}
@@ -1845,7 +1846,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 455578613816110419, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}

@@ -5,208 +5,192 @@ VAR responseIndex = 0
 
 === Start ===
 #speaker:Player
-Hey, I do not think we ave talked much. I am Kim. You look like something is weighing on you.
+Kevin, you’ve been glued to your phone all day. What’s going on?
 
-#speaker:Bob
-Yeah. It is this election stuff. Rumors keep popping up online and it is messing with my head.
+#speaker:Kevin
+I’m reading about how the stock market is just a rigged game. Insiders always win, regular folks lose.
 
-#speaker:Player
-What kind of rumors?
+* If it were entirely rigged, wouldn’t more people just quit investing?
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> React1
 
-#speaker:Bob
-People are saying officials rigged votes through remote software. That they had a backdoor. Videos, screenshots, the works.
+* Are your sources analysts or just angry traders?
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> React2
 
-* Sounds like a lot of smoke and mirrors. Where is the real proof?
-    ~ responseIndex = 0
-    ~ baseValue = 2
-    -> React1
+* Sure, some manipulation happens, but the whole system?
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> React3
 
-* And you think the entire election system would just let that happen?
-    ~ responseIndex = 1
-    ~ baseValue = 3
-    -> React2
-
-* Videos and screenshots can be faked. You know that, right?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> React3
-
-* Even if some data leaked, that does not mean there was a plot.
-    ~ responseIndex = 3
-    ~ baseValue = 1
-    -> React4
+* Sounds like frustration more than fact. Did you lose money?
+  ~ responseIndex = 3
+  ~ baseValue = 1
+  -> React4
 
 === React1 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you think I am just making things up?
+    People *do* quit. They just don’t make headlines. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Maybe you are right. I have not seen any verified source.
-- else:
-    Still, it all adds up in weird ways. Can not just ignore that.
+    {(lastDelta > 0):
+        True. If it was all fake, nobody would stay in. #speaker:Kevin
+    - else:
+        Maybe people stay because they don’t see the truth. #speaker:Kevin
+    }
 }
-}
+
 -> SecondWave
 
 === React2 ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is naive. Power does what it wants when no one watches.
+    So you’re saying my sources are worthless? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    True... You would think someone would catch it if it were real.
-- else:
-    Maybe the system is too big to catch everything.
+    {(lastDelta > 0):
+        Good point. Analysts might be more reliable. #speaker:Kevin
+    - else:
+        They’re mostly forums and channels… maybe biased. #speaker:Kevin
+    }
 }
-}
+
 -> SecondWave
 
 === React3 ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think I can not tell real from fake? That is insulting.
+    You think manipulation isn’t enough to ruin fairness? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Yeah, fair. Stuff like that can be misleading.
-- else:
-    I know they can be faked. But why would so many people share them?
+    {(lastDelta > 0):
+        True. Scams happen, but it doesn’t mean the entire system. #speaker:Kevin
+    - else:
+        I don’t know. Feels like the game is stacked. #speaker:Kevin
+    }
 }
-}
+
 -> SecondWave
 
 === React4 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you are okay with just brushing off a possible scandal?
+    Don’t make this personal. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Right. If it was a plan, we would see bigger consequences.
-- else:
-    I guess, but how can we really know?
+    {(lastDelta > 0):
+        Yeah, maybe I’m letting emotions cloud it. #speaker:Kevin
+    - else:
+        A little. But that doesn’t mean the system is fair. #speaker:Kevin
+    }
 }
-}
+
 -> SecondWave
 
 === SecondWave ===
 #speaker:Player
-So what makes you believe it? What made this story stick with you?
+Why does this belief stick with you?
 
-#speaker:Bob
-It is not just one story. It is the pattern. The way these things always surface right before results.
+#speaker:Kevin
+Because whenever markets crash, it feels like small investors take the hit while the rich bounce back.
 
-* That pattern exists because losing sides need someone to blame.
-    ~ responseIndex = 0
-    ~ baseValue = 3
-    -> RespondA
+* Crashes hurt everyone, but the wealthy recover faster because of resources.
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> RespondA
 
-* But does pattern mean proof?
-    ~ responseIndex = 1
-    ~ baseValue = 2
-    -> RespondB
+* That’s inequality, not necessarily rigging.
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> RespondB
 
-* Is not it weird how it is always social media, not experts, who break these stories?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> RespondC
+* Isn’t that why regulation exists—to keep markets somewhat fair?
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> RespondC
 
-* People want to feel cheated instead of facing hard truths.
-    ~ responseIndex = 3
-    ~ baseValue = 4
-    -> RespondD
+* Maybe people share these stories because anger spreads faster than facts.
+  ~ responseIndex = 3
+  ~ baseValue = 4
+  -> RespondD
 
 === RespondA ===
-#speaker:Bob
 {(lastDelta < -10):
-    You do not get it. It is not about losing. It is about being lied to.
+    So you think I’m just jealous? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Huh. That does explain a lot of the noise every cycle.
-- else:
-    Still feels different this time, though.
+    {(lastDelta > 0):
+        True. It’s more about resources than cheating. #speaker:Kevin
+    - else:
+        Maybe. But it still feels unfair. #speaker:Kevin
+    }
 }
-}
+
 -> FinalPush
 
 === RespondB ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is dismissive. Patterns can mean something.
+    Inequality *is* rigging. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    No... I guess pattern without facts is not enough.
-- else:
-    It might not be proof. But it is still worth looking into, right?
+    {(lastDelta > 0):
+        Yeah, inequality doesn’t always mean crime. #speaker:Kevin
+    - else:
+        Maybe. But inequality is still frustrating. #speaker:Kevin
+    }
 }
-}
+
 -> FinalPush
 
 === RespondC ===
-#speaker:Bob
 {(lastDelta < -10):
-    Experts can be biased too. That is how they get away with it.
+    Regulators are in bed with the big players. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    You have a point. Too many sketchy posts out there.
-- else:
-    Maybe people share what they *want* to believe.
+    {(lastDelta > 0):
+        True. That’s the purpose of oversight. #speaker:Kevin
+    - else:
+        Maybe, but regulation doesn’t feel strong enough. #speaker:Kevin
+    }
 }
-}
+
 -> FinalPush
 
-=== RespondD ===
-#speaker:Bob
+=== RespondD ==
 {(lastDelta < -10):
-    You think people are just sore losers? That is cold.
+    You think I’m just falling for outrage? #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Maybe... maybe it *is* easier to blame than accept.
-- else:
-    I do not know. It just all feels so uncertain.
+    {(lastDelta > 0):
+        Maybe. Anger does make these stories spread. #speaker:Kevin
+    - else:
+        Could be both anger and truth. #speaker:Kevin
+    }
 }
-}
+
 -> FinalPush
 
 === FinalPush ===
 #speaker:Player
-If none of it turns out real, what then? Would you accept that?
+If you learned the system isn’t rigged, just unequal, would that change your view?
 
-#speaker:Bob
 {(lastDelta < -10):
-    Guess I was just another pawn. That stings.
+    Hard to swallow, but maybe. #speaker:Kevin
 - else:
-{(lastDelta > 0):
-    Then yeah. I was wrong. But at least I asked questions.
-- else:
-    I would be disappointed. But I want to know the truth, even if it hurts.
+    {(lastDelta > 0):
+        Yeah. Inequality isn’t rigging. It’s a different fight. #speaker:Kevin
+    - else:
+        I’d still be upset, but at least I’d see it clearer. #speaker:Kevin
+    }
 }
-}
+
 -> Conclusion
 
-=== Conclusion ===
-    #speaker:Player
-    I think we made progress. Maybe we can talk again soon.
-
-    #speaker:Bob
-    Yeah... I am not fully there. But I am thinking.
-    -> END
-- else:
-    #speaker:Player
-    Maybe next time we can dive deeper. Worth a fresh look.
-
-    #speaker:Bob
-    Sure. I will keep reading. Maybe I missed something.
-    -> END
-}
-}
-}
-
 === Convinced ===
-#speaker:Bob
-You know... I think you are right. I feel like I see things clearer now.
+#speaker:Kevin
+You know what? I think you’re right. I see it clearer now — inequality, not a grand conspiracy. #speaker:Kevin
 -> END
 
 === Rejected ===
-#speaker:Bob
-You do not get it. You are too sure of yourself.
+#speaker:Kevin
+I still think there’s more going on. You’re missing the deeper problems. #speaker:Kevin
+-> END
+
+=== Conclusion ===
+#speaker:Player
+Glad we talked this through.
+
+#speaker:Kevin
+Yeah. I won’t stop questioning, but I’ll rethink how I see it.
 -> END

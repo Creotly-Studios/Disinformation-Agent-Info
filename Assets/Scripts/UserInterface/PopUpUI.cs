@@ -1,7 +1,7 @@
-using System.Collections;
-using UnityEngine;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
+using System.Collections;
 
 public class PopUp : MonoBehaviour
 {

@@ -20,6 +20,7 @@ public class DialogueUIPanel : MonoBehaviour
     public TextMeshProUGUI speakerTextDialogue;
 
     [Header("Choices")]
+    [SerializeField] private Color playerTextColor;
     [SerializeField] private Transform choicesDrawer;
     [SerializeField] private List<DialogueUIChoice> choicesUIList;
 
@@ -60,7 +61,7 @@ public class DialogueUIPanel : MonoBehaviour
         SpeakerType currentSpeakerType = dialogueManager.currentSpeakerType;
 
         speakerObject.SetActive(true);
-        speakerTextDialogue.color = (currentSpeakerType != SpeakerType.Player) ? TextColor(profile) : Color.white;
+        speakerTextDialogue.color = (currentSpeakerType != SpeakerType.Player) ? TextColor(profile) : playerTextColor;
 
         speakerName.text = speaker.characterName;
         if(dialogueManager.currentSpeaker.speakerType == TypeOfSpeaker.Instructor)
@@ -125,9 +126,7 @@ public class DialogueUIPanel : MonoBehaviour
 
     private void HandleTextTyping(string text)
     {
-        DialogueManager dialogue = DialogueManager.Instance;
-
-        dialogue.canContinue = false;
+        DialogueManager.Instance.canContinue = false;
         typingCoroutine = StartCoroutine(TypeText(text));
     }
 

@@ -4,209 +4,209 @@ VAR responseIndex = 0
 -> Start
 
 === Start ===
-#speaker:Player
-Hey, I do not think we ave talked much. I am Kim. You look like something is weighing on you.
+# speaker:Player
+Samantha, you look upset. Is it about sports again?
 
-#speaker:Bob
-Yeah. It is this election stuff. Rumors keep popping up online and it is messing with my head.
+# speaker:Samantha
+Yeah. I’ve been reading that major leagues cover up doping and money laundering scandals to protect their image.
 
-#speaker:Player
-What kind of rumors?
+* If they covered everything, wouldn’t athletes and staff eventually expose it?
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> React1
 
-#speaker:Bob
-People are saying officials rigged votes through remote software. That they had a backdoor. Videos, screenshots, the works.
+* Do your sources come from investigative reports or just rumor sites?
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> React2
 
-* Sounds like a lot of smoke and mirrors. Where is the real proof?
-    ~ responseIndex = 0
-    ~ baseValue = 2
-    -> React1
+* Some cases of doping were exposed publicly. Doesn’t that show cover-ups don’t last?
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> React3
 
-* And you think the entire election system would just let that happen?
-    ~ responseIndex = 1
-    ~ baseValue = 3
-    -> React2
-
-* Videos and screenshots can be faked. You know that, right?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> React3
-
-* Even if some data leaked, that does not mean there was a plot.
-    ~ responseIndex = 3
-    ~ baseValue = 1
-    -> React4
+* Maybe fans spread these stories because outrage keeps sports exciting.
+  ~ responseIndex = 3
+  ~ baseValue = 1
+  -> React4
 
 === React1 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you think I am just making things up?
+# speaker:Samantha
+You think I’m naïve?
+
 - else:
-{(lastDelta > 0):
-    Maybe you are right. I have not seen any verified source.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  True. Whistleblowers do speak up eventually.
 - else:
-    Still, it all adds up in weird ways. Can not just ignore that.
-}
+# speaker:Samantha
+  Still, what if many are paid to stay silent?
+  }
 }
 -> SecondWave
 
 === React2 ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is naive. Power does what it wants when no one watches.
+# speaker:Samantha
+You’re dismissing my sources?
+
 - else:
-{(lastDelta > 0):
-    True... You would think someone would catch it if it were real.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  Fair point. Investigative journalism carries more weight.
 - else:
-    Maybe the system is too big to catch everything.
-}
+# speaker:Samantha
+  Some of it’s from blogs and fan channels… maybe biased.
+  }
 }
 -> SecondWave
 
 === React3 ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think I can not tell real from fake? That is insulting.
+# speaker:Samantha
+That doesn’t prove everything is clean.
+
 - else:
-{(lastDelta > 0):
-    Yeah, fair. Stuff like that can be misleading.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  Right. Exposure means not everything can stay hidden.
 - else:
-    I know they can be faked. But why would so many people share them?
-}
+# speaker:Samantha
+  Maybe, but some scandals never fully surface.
+  }
 }
 -> SecondWave
 
 === React4 ===
-#speaker:Bob
 {(lastDelta < -10):
-    So you are okay with just brushing off a possible scandal?
+# speaker:Samantha
+That’s a cheap take.
+
 - else:
-{(lastDelta > 0):
-    Right. If it was a plan, we would see bigger consequences.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  Maybe outrage keeps fans engaged.
 - else:
-    I guess, but how can we really know?
-}
+# speaker:Samantha
+  Could be, but this feels deeper than hype.
+  }
 }
 -> SecondWave
 
 === SecondWave ===
-#speaker:Player
-So what makes you believe it? What made this story stick with you?
+# speaker:Player
+So why does this one stick with you?
 
-#speaker:Bob
-It is not just one story. It is the pattern. The way these things always surface right before results.
+# speaker:Samantha
+Because every time an athlete is caught, it feels like a distraction from bigger scandals.
 
-* That pattern exists because losing sides need someone to blame.
-    ~ responseIndex = 0
-    ~ baseValue = 3
-    -> RespondA
+* Could it be that small scandals are exposed to show accountability?
+  ~ responseIndex = 0
+  ~ baseValue = 3
+  -> RespondA
 
-* But does pattern mean proof?
-    ~ responseIndex = 1
-    ~ baseValue = 2
-    -> RespondB
+* That sounds like perception, not necessarily fact.
+  ~ responseIndex = 1
+  ~ baseValue = 2
+  -> RespondB
 
-* Is not it weird how it is always social media, not experts, who break these stories?
-    ~ responseIndex = 2
-    ~ baseValue = 2
-    -> RespondC
+* Regulators exist to protect integrity in sports.
+  ~ responseIndex = 2
+  ~ baseValue = 2
+  -> RespondC
 
-* People want to feel cheated instead of facing hard truths.
-    ~ responseIndex = 3
-    ~ baseValue = 4
-    -> RespondD
+* Maybe the cycle of scandal keeps fans emotionally hooked.
+  ~ responseIndex = 3
+  ~ baseValue = 4
+  -> RespondD
 
 === RespondA ===
-#speaker:Bob
 {(lastDelta < -10):
-    You do not get it. It is not about losing. It is about being lied to.
+# speaker:Samantha
+Or it’s a smokescreen.
+
 - else:
-{(lastDelta > 0):
-    Huh. That does explain a lot of the noise every cycle.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  True. Sometimes small stories are used to show action.
 - else:
-    Still feels different this time, though.
-}
+# speaker:Samantha
+  Could be. Hard to know the intent.
+  }
 }
 -> FinalPush
 
 === RespondB ===
-#speaker:Bob
 {(lastDelta < -10):
-    That is dismissive. Patterns can mean something.
+# speaker:Samantha
+My perception matters too.
+
 - else:
-{(lastDelta > 0):
-    No... I guess pattern without facts is not enough.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  Fair. Perception doesn’t always equal truth.
 - else:
-    It might not be proof. But it is still worth looking into, right?
-}
+# speaker:Samantha
+  Maybe. But perception shapes trust.
+  }
 }
 -> FinalPush
 
 === RespondC ===
-#speaker:Bob
 {(lastDelta < -10):
-    Experts can be biased too. That is how they get away with it.
+# speaker:Samantha
+Regulators can be bought.
+
 - else:
-{(lastDelta > 0):
-    You have a point. Too many sketchy posts out there.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  True. Regulation exists for fairness.
 - else:
-    Maybe people share what they *want* to believe.
-}
+# speaker:Samantha
+  Sometimes regulation feels weak.
+  }
 }
 -> FinalPush
 
 === RespondD ===
-#speaker:Bob
 {(lastDelta < -10):
-    You think people are just sore losers? That is cold.
+# speaker:Samantha
+You think it’s all about drama?
+
 - else:
-{(lastDelta > 0):
-    Maybe... maybe it *is* easier to blame than accept.
+  {(lastDelta > 0):
+  # speaker:Samantha
+  Maybe. Scandal fuels the industry too.
 - else:
-    I do not know. It just all feels so uncertain.
-}
+# speaker:Samantha
+  Possibly, but money laundering feels beyond hype.
+  }
 }
 -> FinalPush
 
 === FinalPush ===
-#speaker:Player
-If none of it turns out real, what then? Would you accept that?
-
-#speaker:Bob
-{(lastDelta < -10):
-    Guess I was just another pawn. That stings.
-- else:
-{(lastDelta > 0):
-    Then yeah. I was wrong. But at least I asked questions.
-- else:
-    I would be disappointed. But I want to know the truth, even if it hurts.
-}
-}
--> Conclusion
-
-=== Conclusion ===
-    #speaker:Player
-    I think we made progress. Maybe we can talk again soon.
-
-    #speaker:Bob
-    Yeah... I am not fully there. But I am thinking.
-    -> END
-- else:
-    #speaker:Player
-    Maybe next time we can dive deeper. Worth a fresh look.
-
-    #speaker:Bob
-    Sure. I will keep reading. Maybe I missed something.
-    -> END
-}
-}
-}
+# speaker:Player
+If future scandals show leagues punishing offenders transparently, would that ease your doubts?
+  -> Conclusion
 
 === Convinced ===
-#speaker:Bob
-You know... I think you are right. I feel like I see things clearer now.
+# speaker:Samantha
+Okay… maybe I’ve been too cynical. You’ve given me something to think about.
 -> END
 
-=== Rejected ===
-#speaker:Bob
-You do not get it. You are too sure of yourself.
+=== Rejection ===
+# speaker:Samantha
+No. Even with transparency, I’ll always believe the system is rotten.
+-> END
+
+=== Conclusion ===
+# speaker:Samantha
+Maybe. It would help, at least.
+
+# speaker:Player
+Glad you shared this with me.
+
+# speaker:Samantha
+Thanks. I’m not fully convinced, but I’ll look at it with fresh eyes.
 -> END

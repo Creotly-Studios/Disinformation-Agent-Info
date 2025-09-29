@@ -17,6 +17,7 @@ public class SavedData
 
     [Header("Quest Data")]
     public int sceneIndex;
+    public int currentLevel;
     public List<SerializableQuestData> questDataList = new();
 
     //Un-Modifiable Properties for Cleaner Text
@@ -30,14 +31,20 @@ public class SavedData
         InitializeFields();
     }
 
-    public SavedData(int scene, string name, string date, bool isAutoSave)
+    public SavedData(int scene, int level, string name, string date, bool isAutoSave)
     {
         fileName = name;
         modifiedDate = date;
 
         sceneIndex = scene;
+        currentLevel = level;
         isAutoSaveFile = isAutoSave;
         InitializeFields();
+    }
+
+    public SerializableQuestData GetQuestData(int index)
+    {
+        return questDataList[index];
     }
 
     private void InitializeFields()
@@ -58,6 +65,7 @@ public class SavedData
 public class SerializableQuestData
 {
     public string questName;
+    public int completedObjectives;
     public List<int> objectiveProgressvalue = new();
 
     public SerializableQuestData(QuestSO quest)
@@ -70,9 +78,19 @@ public class SerializableQuestData
         }
     }
 
-    public SerializableQuestData(string questName, List<int> objectiveProgressvalue)
+    public void UpdateQuestData(QuestSO quest)
+    {
+        for(int i = 0; i < objectiveProgressvalue.Count; i++)
+        {
+            objectiveProgressvalue[i] = quest.questObjectives[i].progressValue;
+        }
+        completedObjectives = quest.CompletedObjectives;
+    }
+
+    public SerializableQuestData(string questName, int completedObjectives, List<int> objectiveProgressvalue)
     {
         this.questName = questName;
+        this.completedObjectives = completedObjectives;
         this.objectiveProgressvalue = objectiveProgressvalue;
     }
 
@@ -80,7 +98,9 @@ public class SerializableQuestData
     {
         for(int i = 0; i < objectiveProgressvalue.Count; i++)
         {
-            quest.questObjectives[i].LoadProgressValue(objectiveProgressvalue[i]);
+            QuestObjectives objectives = quest.questObjectives[i];
+            objectives.LoadProgressValue(objectiveProgressvalue[i]);
+            TaskListManager.Instance.UpdateTaskProgressLevels(objectives);
         }
         quest.CheckIfQuestIsComplete();
     }

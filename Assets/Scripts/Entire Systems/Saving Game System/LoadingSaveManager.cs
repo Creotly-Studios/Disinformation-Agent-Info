@@ -29,12 +29,10 @@ public static class LoadingSaveManager
         if(player == null)
         {
             Debug.LogError("No Player In Scene");
-            //Instantiate
             return;
         }
         player.StartCoroutine(ResetListeners());
-        player.transform.position = dataToLoad.playerPosition;
-        player.transform.rotation = dataToLoad.playerRotation;
+        player.transform.SetPositionAndRotation(dataToLoad.playerPosition, dataToLoad.playerRotation);
 
         GameManager.Instance.SetCoinAmount(dataToLoad.coinAmount);
         player.PlayerStatistics.SetCurrentHealth(dataToLoad.healthCount);

@@ -54,14 +54,11 @@ public class PauseMenu : MonoBehaviour
     private void Show()
     {
         gameObject.SetActive(true);
-        Player_v2.Instance.DisplayPauseButton(false);
     }
 
     public void Hide()
     {
         gameObject.SetActive(false);
-
         optionsMenu.gameObject.SetActive(false);
-        Player_v2.Instance.DisplayPauseButton(true);
     }
 }

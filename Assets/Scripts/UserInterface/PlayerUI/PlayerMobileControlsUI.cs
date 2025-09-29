@@ -25,14 +25,8 @@ public class PlayerMobileControlsUI : MonoBehaviour
         }
         var player = Player_v2.Instance;
         var gameManager = GameManager.Instance;
-        if (ShouldDisableControlsUI(gameManager, player))
-        {
-            controlsUI.gameObject.SetActive(false);
-        }
-        else
-        {
-            controlsUI.gameObject.SetActive(true);
-        }
+        bool shouldDisableUI = ShouldDisableControlsUI(gameManager, player);
+        controlsUI.gameObject.SetActive(!shouldDisableUI);
     }
 
     private bool ShouldDisableControlsUI(GameManager gameManager, Player_v2 player)

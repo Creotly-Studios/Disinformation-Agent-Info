@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using Action = System.Action;
 
 public class NoticePopup : MonoBehaviour
 {
@@ -57,15 +58,15 @@ public class NoticePopup : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void FailedDialogue(string content)
+    public void DialoguePopup(Color color, string content)
     {
         gameObject.SetActive(true);
-        StartCoroutine(FailedDialogueNotice(content));
+        StartCoroutine(HandleDialoguePopup(color, content));
     }
 
-    private IEnumerator FailedDialogueNotice(string content)
+    private IEnumerator HandleDialoguePopup(Color color, string content)
     {
-        contentText.color = Color.red;
+        contentText.color = color;
 
         contentText.text = content;
         titleText.text = "Quest Not Complete";
@@ -88,7 +89,7 @@ public class NoticePopup : MonoBehaviour
     {
         titleText.text = " ";
         contentText.text = " ";
-        PrepButton("Continue", progressButton[0], buttonText[0], ContinueButton);
+        PrepButton("Continue", progressButton[0], buttonText[0], () => ContinueButton());
 
         if(noticeType == NoticeType.Wrong)
         {
@@ -113,11 +114,21 @@ public class NoticePopup : MonoBehaviour
         contentText.text = " ";
 
         HandleText(" ", Color.white);
-        PrepButton("Continue", progressButton[0], buttonText[0], ContinueButton);
+        PrepButton("Continue", progressButton[0], buttonText[0], () => ContinueButton());
         contentText.text = hintText;
     }
 
-    public void HandleMini_GameOver(string text, System.Action restart, System.Action quit)
+    public void HandleSimplePopup(string body, Action acceptFunc, Action rejectFunc)
+    {
+        print(5);
+        contentText.text = body;
+        gameObject.SetActive(true);
+
+        progressButton[0].onClick.AddListener(() => acceptFunc());
+        progressButton[1].onClick.AddListener(() => rejectFunc());
+    }
+
+    public void HandleMini_GameOver(string text, Action restart, Action quit)
     {
         HandleText("GAME OVER !!!", Color.red);
 
@@ -129,7 +140,7 @@ public class NoticePopup : MonoBehaviour
     }
 
     //Button Functions
-    private void PrepButton(string text, Button button, TextMeshProUGUI btnText, System.Action func)
+    private void PrepButton(string text, Button button, TextMeshProUGUI btnText, Action func)
     {
         foreach (Button btn in progressButton)
         {
@@ -141,8 +152,9 @@ public class NoticePopup : MonoBehaviour
         button.onClick.AddListener(() => func());
     }
 
-    private void ContinueButton()
+    private void ContinueButton(Action func = null)
     {
         gameObject.SetActive(false);
+        func?.Invoke();
     }
 }

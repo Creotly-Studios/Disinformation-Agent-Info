@@ -6,6 +6,7 @@ using System.Collections.Generic;
 
 public class DialogueManager : MonoBehaviour
 {
+    private bool pickedChoice;
     private WaitForSeconds exitPanelSeconds;
     public NPC NPCharacter { get; private set; }
     public static DialogueManager Instance { get; private set; }
@@ -60,6 +61,7 @@ public class DialogueManager : MonoBehaviour
 
         if(skipDialogue)
         {
+            Debug.Log("A");
             StartCoroutine(ExitDialogueMode());
         }
 
@@ -99,29 +101,45 @@ public class DialogueManager : MonoBehaviour
 
     public void ContinueDialogueStory()
     {
-        if (currentDialogueStory.canContinue)
+        if (currentDialogueStory == null)
+        {
+            return;
+        }
+        int safeCounter = 0;
+        const int maxSkips = 10;
+
+        while (currentDialogueStory.canContinue && safeCounter < maxSkips)
         {
             dialogueUIPanel.StopDisplayCoroutine();
-
             string text = currentDialogueStory.Continue();
-            CheckWhoIsSpeaking(currentDialogueStory.currentTags);
 
-            if (text.Equals("") && !currentDialogueStory.canContinue)
+            CheckWhoIsSpeaking(currentDialogueStory.currentTags);
+            if (string.IsNullOrWhiteSpace(text))
             {
-                StartCoroutine(ExitDialogueMode());
+                safeCounter++;
+                if (currentDialogueStory.currentChoices.Count > 0)
+                {
+                    break;
+                }
+                continue;
             }
 
             if (currentSpeaker != null)
             {
                 dialogueUIPanel.DisplayChoicesUI(currentDialogueStory);
-                dialogueUIPanel.DisplayText(currentSpeaker, text, NPCharacter.Profile);
+                dialogueUIPanel.DisplayText(currentSpeaker, text, NPCharacter?.Profile);
             }
+            HandleConclusion();
+            return;
         }
-        else
+
+        if (!currentDialogueStory.canContinue)
         {
+            Debug.Log("B");
             StartCoroutine(ExitDialogueMode());
         }
     }
+
 
     public void FastForwardTo(string knotName)
     {
@@ -154,19 +172,16 @@ public class DialogueManager : MonoBehaviour
         int baseValue = (int)currentDialogueStory.variablesState[baseValueStr];
         int responseIndex = (int)currentDialogueStory.variablesState["responseIndex"];
         NPCharacter.Profile.Evaluate_AcceptanceValue(responseIndex, baseValue, NPCharacter.SliderUI, out float delta);
-
         currentDialogueStory.variablesState["lastDelta"] = delta;
-        HandleConclusion();
     }
 
     private void HandleConclusion()
     {
         string currentPath = currentDialogueStory.state.currentPathString;
-        if (currentPath != null && currentPath.ToLower().Contains("conclusion"))
+        if (currentPath != null && currentPath.ToLower().Contains("finalpush"))
         {
             float acceptanceValue = NPCharacter.Profile.AcceptanceValue;
-
-            if (acceptanceValue > 70)
+            if (acceptanceValue >= 65)
             {
                 FastForwardTo("Convinced");
                 return;
@@ -176,7 +191,6 @@ public class DialogueManager : MonoBehaviour
                 FastForwardTo("Rejected");
                 return;
             }
-            FastForwardTo("Stalemate");
         }
     }
 
@@ -187,16 +201,19 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogueStory = null;
         dialogueUIPanel.ExitPanel();
-        if (skipDialogue != true) { UpdateObective(); }
 
-        // Trigger the "On Dialogue End" UnityEvent
+        print(skipDialogue);
+        if (skipDialogue != true) 
+        {
+            Debug.Log(66);
+            UpdateObective();
+        }
         OnDialogueEnd?.Invoke();
         
         if (Player_v2.Instance != null)
         {
             Player_v2.Instance.SetActiveState();
         }
-
         yield return null;
         skipDialogue = false;
     }
@@ -214,9 +231,11 @@ public class DialogueManager : MonoBehaviour
         }
 
         QuestManager questManager = QuestManager.Instance;
-        if(NPCharacter.Profile.AcceptanceValue <= 70.0f)
+        float acceptanceValue = NPCharacter.Profile.AcceptanceValue;
+        bool notFullyConvinced = acceptanceValue <= 65.0f && acceptanceValue > 25.0f;
+        if (notFullyConvinced && CheckIfSpecialNPC())
         {
-            questManager.popupPanel.FailedDialogue($"Failed To Convince {NPCharacter.name}, Try Again !!!");
+            questManager.popupPanel.DialoguePopup(Color.white, $"Failed To Convince {NPCharacter.name}, Try Again !!!");
             return;
         }
 
@@ -229,24 +248,39 @@ public class DialogueManager : MonoBehaviour
                 NPCharacter.Identifier.MarkCompleted();
                 NPCharacter.hasCompletedDialogue = true;
                 quest.IncreaseQuestObjectiveProgressLevels(objective, NPCharacter.Identifier);
+                questManager.popupPanel.DialoguePopup(Color.green, $"Convinced {NPCharacter.name} Succesfully");
             }
         }
     }
 
+    private bool CheckIfSpecialNPC()
+    {
+        return (NPCharacter.dialogueTrigger != null) && NPCharacter.dialogueTrigger.SpeakerType.Equals(TypeOfSpeaker.NPC);
+    }
+
     private void CheckWhoIsSpeaking(List<string> currentTag)
     {
-        foreach (string tag in currentTag)
+        if(pickedChoice)
         {
-            string[] splitTag = tag.Split(':');
-
-            if (splitTag.Length != 2)
-            {
-                Debug.LogError("Error Parsing Tag: " + tag);
-                return;
-            }
-            string tagValue = splitTag[1].Trim();
-            SetCharacter(tagValue);
+            currentSpeakerType = SpeakerType.Player;
+            currentSpeaker = playableCharacterSpeaker;
         }
+        else
+        {
+            foreach (string tag in currentTag)
+            {
+                string[] splitTag = tag.Split(':');
+
+                if (splitTag.Length != 2)
+                {
+                    Debug.LogError("Error Parsing Tag: " + tag);
+                    return;
+                }
+                string tagValue = splitTag[1].Trim();
+                SetCharacter(tagValue);
+            }
+        }
+        pickedChoice = false;
     }
 
     private void SetCharacter(string tagValue)
@@ -263,6 +297,7 @@ public class DialogueManager : MonoBehaviour
 
     public void OnChoiceSelected(int choiceIndex)
     {
+        pickedChoice = true;
         currentDialogueStory.ChooseChoiceIndex(choiceIndex);
         ContinueDialogueStory();
     }

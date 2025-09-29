@@ -140,7 +140,7 @@ public class GamePanels : MonoBehaviour
 
     private void InitializeButton(MiniGameOptionButton button)
     {
-        gameController.InitializeButton(uiButtons, button, countDownTimer);
+        gameController.InitializeButton(uiButtons, button, scoreCount);
     }
 
     protected virtual void HandleButtonInitialization (bool status)

@@ -2721,7 +2721,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 103.2081}
+  m_AnchoredPosition: {x: 0, y: 103.20801}
   m_SizeDelta: {x: 250, y: 75}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3646865799432506878
@@ -6182,7 +6182,6 @@ GameObject:
   - component: {fileID: 709245002776429135}
   - component: {fileID: 3330819706970778222}
   - component: {fileID: 8091331674849324213}
-  - component: {fileID: 4181992268328777914}
   m_Layer: 5
   m_Name: Computer UI Canvas
   m_TagString: Untagged
@@ -6290,47 +6289,6 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
---- !u!114 &4181992268328777914
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5009836476926861551}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e76228f8aec7be049aba859c54a19bf5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  smComputer: {fileID: 8176453520030295018}
-  biasBingo_Btn: {fileID: 6650226175526129784}
-  infoMatch_Btn: {fileID: 6707525644666521730}
-  spotSource_Btn: {fileID: 7691129378086486382}
-  exitButton: {fileID: 972298836599736258}
-  mainMenuPanel: {fileID: 3944024564699682839}
-  missionCodeUI: {fileID: 0}
-  biasBingoPanel: {fileID: 797888781287470890}
-  infoMatchPanel: {fileID: 485558910739118394}
-  spotTheSourcePanel: {fileID: 4482055670417948940}
-  continuePlaying_Btn: {fileID: 6390256135496533703}
-  stopPlaying_Btn: {fileID: 6660096887745477204}
-  <popupPanel>k__BackingField: {fileID: 8810410940492211223}
-  <objectiveCompletePanel>k__BackingField: {fileID: 6541132607794132073}
-  onExitComputer:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 8176453520030295018}
-        m_TargetAssemblyTypeName: SocialMediaComputer, Assembly-CSharp
-        m_MethodName: ActivatePlayer
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!1 &5018621207233974715
 GameObject:
   m_ObjectHideFlags: 0
@@ -14751,7 +14709,8 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 455578613816110419, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a22c6d3406ee98c48a8ac2fcbc75823f, type: 3}

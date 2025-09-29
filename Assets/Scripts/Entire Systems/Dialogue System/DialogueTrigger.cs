@@ -13,6 +13,8 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
     public DialogueCharacterInformation characterInformation;
     [SerializeField] private List<TextAsset> dialogueTexts = new();
 
+    public TypeOfSpeaker SpeakerType => speakerType;
+
     private void Awake()
     {
         character = GetComponent<NPC>();
@@ -51,8 +53,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
             DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i], npc);
             return;
         }
-        var textArray = dialogueTexts.ToArray();
-        currentDialogueText = Tools.RandomObjectWithExclude(currentDialogueText, textArray);
+        currentDialogueText = dialogueTexts[Random.Range(0, dialogueTexts.Count)];
         DialogueManager.Instance.HandleDialogue(characterInformation, currentDialogueText, npc);
     }
 }

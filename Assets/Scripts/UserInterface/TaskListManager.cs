@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 public class TaskListManager : MonoBehaviour
 {
+    private bool hasSetTask;
+
+    private QuestSO activeQuest;
     private List<TaskSlotContent> contentList = new();
     public static TaskListManager Instance { get; private set; }
 
@@ -25,16 +28,26 @@ public class TaskListManager : MonoBehaviour
 
     public void SetUpTaskList(QuestSO quest)
     {
-        ResetTaskList();
+        if(quest == null)
+        {
+            return;
+        }
 
+        if(hasSetTask && activeQuest == quest)
+        {
+            return;
+        }
+
+        ResetTaskList();
         titleText.text = quest.questTitle;
         foreach(var objective in quest.questObjectives)
         {
             TaskSlotContent content = Instantiate(prefab, contentDrawer);
-
             content.Initialize(objective);
             contentList.Add(content);
         }
+        hasSetTask = true;
+        activeQuest = quest;
     }
 
     public void UpdateTaskProgressLevels(QuestObjectives objectives)

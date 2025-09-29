@@ -1,5 +1,8 @@
 using UnityEngine;
+using Ink.Runtime;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 //Optimization and Faster to Get Reasons, Rather than letting Unity Hash by itself, store hashed value and used accordingly
 public static class AnimatorHashing
@@ -96,7 +99,7 @@ public static class Maths_PhysicsHelper
 
 public static class Tools
 {
-    public static T RandomObjectWithExclude<T>(T exclude, T[] objectArray) where T : Object
+    public static T RandomObjectWithExclude<T>(T exclude, T[] objectArray) where T : UnityEngine.Object
     {
         List<int> indexList = new();
         for(int i = 0; i < objectArray.Length; i++)
@@ -112,3 +115,28 @@ public static class Tools
         return objectArray[indexList[rnd]];
     }
 }
+
+
+public static class InkPathHelpers
+{
+    // Returns a HashSet of candidate path names found in the compiled story JSON
+    public static List<string> GetAllPathsFromStory(Story story)
+    {
+        var outputs = new List<string>();
+        var knots = story.mainContentContainer.namedContent.Keys;
+        knots.ToList().ForEach((knot) =>
+        {
+            outputs.Add(knot);
+        });
+        return outputs;
+    }
+
+    // Check existence (case-sensitive)
+    public static bool PathExistsInStory(Story story, string pathName)
+    {
+        if (story == null || string.IsNullOrEmpty(pathName)) return false;
+        var set = GetAllPathsFromStory(story);
+        return set.Contains(pathName);
+    }
+}
+

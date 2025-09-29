@@ -14,6 +14,7 @@ public class NPC : MonoBehaviour
 
     //Added Components
     public NPCFunctions npcFunctions { get; private set; }
+    public DialogueTrigger dialogueTrigger { get; private set; }
     public QuestObjectiveNavIdentifier Identifier { get; private set; }
 
     [Header("Profile")]
@@ -48,6 +49,7 @@ public class NPC : MonoBehaviour
     private void Awake()
     {
         animator = GetComponent<Animator>();
+        dialogueTrigger = GetComponent<DialogueTrigger>();
         navMeshAgent = GetComponentInChildren<NavMeshAgent>();
         characterController = GetComponent<CharacterController>();
 
@@ -101,7 +103,6 @@ public class NPC : MonoBehaviour
                 currentState = nextState;
             }
         }
-
         navMeshAgent.transform.transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
         CheckIfMoving();
     }
