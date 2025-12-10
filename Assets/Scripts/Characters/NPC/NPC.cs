@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.AI;
 
-public class NPC : MonoBehaviour
+public class NPC : MonoBehaviour, ISaveable
 {
     //States
+    private ObjectSaveData saveData;
     private PatrolState currentState;
 
     //InBuilt Components
@@ -59,8 +60,13 @@ public class NPC : MonoBehaviour
 
     private void Start()
     {
+        saveData = new()
+        {
+            name = name
+        };
         NPCState = Instantiate(NPCState);
-        if(SliderUI != null)
+        SaveManagerSystem.Instance.saveables.Add(this);
+        if (SliderUI != null)
         {
             Profile.InitializeAcceptanceValue(50.0f, SliderUI);
         }
@@ -146,5 +152,20 @@ public class NPC : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public ObjectSaveData GetSaveData()
+    {
+        return saveData;
+    }
+
+    public void ReloadDataFromSavedFile(ObjectSaveData saveData)
+    {
+        transform.SetPositionAndRotation(saveData.ObjectPosition, saveData.ObjectRotation);
+    }
+
+    public void UpdateSavedData()
+    {
+        saveData.UpdateSaveData(transform.position, transform.rotation, false);
     }
 }

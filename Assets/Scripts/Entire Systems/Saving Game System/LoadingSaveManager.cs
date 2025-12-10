@@ -1,5 +1,8 @@
+using System;
+using System.Linq;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public static class LoadingSaveManager
 {
@@ -31,12 +34,22 @@ public static class LoadingSaveManager
             Debug.LogError("No Player In Scene");
             return;
         }
-        player.StartCoroutine(ResetListeners());
-        player.transform.SetPositionAndRotation(dataToLoad.playerPosition, dataToLoad.playerRotation);
+        LoadSavedAssets(dataToLoad.saveableAssets);
 
-        GameManager.Instance.SetCoinAmount(dataToLoad.coinAmount);
-        player.PlayerStatistics.SetCurrentHealth(dataToLoad.healthCount);
+        player.StartCoroutine(ResetListeners());
         QuestManager.Instance.RestoreQuestProgress(dataToLoad.questDataList);
         Debug.Log($"{dataToLoad.fileName} Loaded Succesfully");
+    }
+
+    private static void LoadSavedAssets(List<ObjectSaveData> savedDatas)
+    {
+        ISaveable[] Saveables = GameObject.FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<ISaveable>().ToArray();
+        foreach (ISaveable saveable in Saveables)
+        {
+            ObjectSaveData saveData = savedDatas.Find(x => x.name == saveable.GetSaveData().name)
+                ?? throw new Exception("No Save Data Available");
+            saveable.ReloadDataFromSavedFile(saveData);
+        }
+        GameObject.FindFirstObjectByType<SceneStatusManager>().ReloadEnemies();
     }
 }

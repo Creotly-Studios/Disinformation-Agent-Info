@@ -1,17 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using TMPro;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class SaveMenuUI : MonoBehaviour
 {
     private bool hasInitialized;
     private string saveDirectory;
-
-    private SavedData pickedSavedData;
+    private int pickedSaveDataIndex;
+    private SaveManagerSystem saveManagerSystem;
     private List<SaveSlotUI> slotUIList = new();
 
     [Header("Panels")]
@@ -40,6 +38,7 @@ public class SaveMenuUI : MonoBehaviour
     private void Awake()
     {
         popupPanel.gameObject.SetActive(false);
+        saveManagerSystem = GetComponentInParent<SaveManagerSystem>();
         saveDirectory = Path.Combine(Application.persistentDataPath, "Saved Instances");
     }
 
@@ -68,28 +67,17 @@ public class SaveMenuUI : MonoBehaviour
 
     private void InitializeSlotUI()
     {
-        //Instantiate UI and Add to Canvas
         if(Directory.Exists(saveDirectory) != true)
         {
             return;
         }
 
-        string[] savedFiles = Directory.GetFiles(saveDirectory, "*.agentInfo").OrderByDescending(File.GetLastWriteTimeUtc).ToArray();
-
-        int difference = savedFiles.Length - slotUIList.Count;
+        int difference = saveManagerSystem.SavedDataList.Count - slotUIList.Count;
         for (int i = 0; i < difference; i++)
         {
             SaveSlotUI newSlot = Instantiate(slotPrefab, slotSpawnParent);
+            newSlot.InitializeSavedData(i, saveManagerSystem.SavedDataList[i], this);
             slotUIList.Add(newSlot);
-        }
-
-        for (int i = 0; i < slotUIList.Count; i++)
-        {
-            string file = savedFiles[i];
-            byte[] rawData = SecureSaveUtility.LoadFromFile(file);
-
-            SavedData loadedData = SaveSerializer.Deserialize(rawData);
-            slotUIList[i].InitializeSavedData(loadedData, file, this);
         }
     }
 
@@ -120,25 +108,25 @@ public class SaveMenuUI : MonoBehaviour
         ovewriteButton.onClick.RemoveListener(() => HandleOverwrite("Are You Sure You Want To Overwrite This File"));
     }
 
-    public void SetPickedData(SavedData savedData)
+    public void SetPickedData(int index)
     {
         ShowSavePanel(false);
-        pickedSavedData = savedData;
+        pickedSaveDataIndex = index;
+        SavedData savedData = saveManagerSystem.SavedDataList[pickedSaveDataIndex];
         deleteButton.gameObject.SetActive(savedData.isAutoSaveFile != true);
 
         fileSize.text = $"Modified Date: {10}KB"; //Would Change
-        fileName.text = $"File Name: {pickedSavedData.fileName}";
-        modifiedDate.text = $"Modified Date: {pickedSavedData.modifiedDate}";
+        fileName.text = $"File Name: {savedData.fileName}";
+        modifiedDate.text = $"Modified Date: {savedData.modifiedDate}";
     }
 
     private void HandleLoad()
     {
-        LoadingSaveManager.LoadGame(pickedSavedData);
+        LoadingSaveManager.LoadGame(saveManagerSystem.SavedDataList[pickedSaveDataIndex]);
     }
 
     public void DisablePanel()
     {
-        pickedSavedData = null;
         savePanel.SetActive(false);
         loadPanel.SetActive(false);
         HandleQuit();
@@ -155,20 +143,11 @@ public class SaveMenuUI : MonoBehaviour
             return;
         }
         string candidatePath = Path.Combine(saveDirectory, fileName);
+
         bool exactFileExists = File.Exists(candidatePath);
         bool exactDirExists = Directory.Exists(candidatePath);
+        bool filenameWithoutExtMatch = saveManagerSystem.SavedDataList.Exists(x => x.fileName == rawName);
         bool nameWithExtensionExists = Directory.GetFiles(saveDirectory, fileName + ".*", SearchOption.TopDirectoryOnly).Length > 0;
-
-        bool filenameWithoutExtMatch = false;
-        foreach (var f in Directory.GetFiles(saveDirectory))
-        {
-            if (string.Equals(Path.GetFileNameWithoutExtension(f), fileName, StringComparison.OrdinalIgnoreCase))
-            {
-                filenameWithoutExtMatch = true;
-                break;
-            }
-        }
-
         if (exactFileExists || exactDirExists || nameWithExtensionExists || filenameWithoutExtMatch)
         {
             HandleOverwrite("File Already Exists, Do You Want To Overwrite ?");
@@ -187,9 +166,9 @@ public class SaveMenuUI : MonoBehaviour
 
     private void OverwriteSavedData()
     {
-        SaveManagerSystem.Instance.SaveGame(pickedSavedData);
+        SaveManagerSystem.Instance.SaveGame(saveManagerSystem.SavedDataList[pickedSaveDataIndex]);
         InitializeSlotUI();
-        SetPickedData(pickedSavedData);
+        SetPickedData(pickedSaveDataIndex);
 
         popupPanel.gameObject.SetActive(false);
     }
@@ -202,7 +181,8 @@ public class SaveMenuUI : MonoBehaviour
 
     private void HandleDelete()
     {
-        if(pickedSavedData.isAutoSaveFile)
+        SavedData pickedSavedData = saveManagerSystem.SavedDataList[pickedSaveDataIndex];
+        if (pickedSavedData.isAutoSaveFile)
         {
             return;
         }

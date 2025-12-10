@@ -1,8 +1,9 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class Puzzle_Switches : MonoBehaviour, IInteractable
+public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
 {
+    private ObjectSaveData saveData;
     private PuzzleManager puzzleManager;
     public bool Switch { get; private set; }
 
@@ -21,15 +22,23 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
     [SerializeField] private Switch_Type switchType;
     [SerializeField] private Transform switchHandle;
     [SerializeField] private string interactText = "Switch";
-    [SerializeField] private Vector3 handleRotationTrue = new Vector3(0, 0, 50);
+    [SerializeField] private Vector3 handleRotationTrue = new(0, 0, 50);
 
-
-    private void Start()
+    private void Awake()
     {
         Switch = false;
+        SetSwitchHandleRotation();
         indicatorMesh.material = offMat;
-        SetSwitchHandleRotation(false);
         puzzleManager = GetComponentInParent<PuzzleManager>();
+    }
+
+    private void Start()
+    {  
+        saveData = new()
+        {
+            name = name
+        };
+        SaveManagerSystem.Instance.saveables.Add(this);
     }
 
     public string GetInteractText()
@@ -57,12 +66,12 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
         uEvent?.Invoke();
         UpdateObjective(Switch);
         indicatorMesh.material = mat;
-        SetSwitchHandleRotation(Switch);
+        SetSwitchHandleRotation();
     }
 
-    private void SetSwitchHandleRotation(bool _switch_B)
+    private void SetSwitchHandleRotation()
     {
-        if (_switch_B == true)
+        if (Switch == true)
         {
             switchHandle.eulerAngles = handleRotationTrue;
         }
@@ -99,5 +108,22 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable
             }
             quest.IncreaseQuestObjectiveProgressLevels(objective, identifier);
         }
+    }
+
+    public ObjectSaveData GetSaveData()
+    {
+        return saveData;
+    }
+
+    public void UpdateSavedData()
+    {
+        saveData.UpdateSaveData(transform.position, transform.rotation, Switch);
+    }
+
+    public void ReloadDataFromSavedFile(ObjectSaveData saveData)
+    {
+        Switch = saveData.SwitchStatus;
+        SetSwitchHandleRotation();
+        indicatorMesh.material = (Switch) ? onMat : offMat;
     }
 }

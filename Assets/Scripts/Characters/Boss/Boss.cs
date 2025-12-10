@@ -5,8 +5,10 @@ using System.Collections.Generic;
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))]
-public class Boss : MonoBehaviour, IDamagable
+public class Boss : MonoBehaviour, IDamagable, ISaveable
 {
+    private ObjectSaveData saveData;
+
     [Header("References")]
     public Transform Player { get; protected set; }
     [SerializeField] protected NavMeshAgent agent;
@@ -63,8 +65,13 @@ public class Boss : MonoBehaviour, IDamagable
     protected void Start()
     {
         // Initialize
+        saveData = new()
+        {
+            name = name
+        };
         SetBossStage(BossStage.Stage_one);
-        
+        SaveManagerSystem.Instance.saveables.Add(this);
+
         if (Player_v2.Instance != null)
             Player = Player_v2.Instance.transform;
             
@@ -88,20 +95,11 @@ public class Boss : MonoBehaviour, IDamagable
         }
         UpdateStageState();
     }
-    
-    protected void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, detectRange);
 
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
-    }
-    
     #endregion
-    
+
     #region Health Management
-    
+
     public void TakeDamage(int healthDamage)
     {
         if (isDead) return;
@@ -414,8 +412,22 @@ public class Boss : MonoBehaviour, IDamagable
         if (agent != null && !isDead)
             agent.enabled = true;
     }
-    
     #endregion
+
+    public ObjectSaveData GetSaveData()
+    {
+        return saveData;
+    }
+
+    public void ReloadDataFromSavedFile(ObjectSaveData saveData)
+    {
+        transform.SetPositionAndRotation(saveData.ObjectPosition, saveData.ObjectRotation);
+    }
+        
+    public void UpdateSavedData()
+    {
+        saveData.UpdateSaveData(transform.position, transform.rotation, false);
+    }
 }
 
 public enum BossStage { Stage_one, Stage_two, Dead }

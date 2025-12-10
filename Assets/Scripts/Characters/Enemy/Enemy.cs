@@ -1,16 +1,16 @@
-using System;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using System.Collections;
 
 [RequireComponent(typeof(NavMeshAgent))]
 [RequireComponent(typeof(Animator))]
 [RequireComponent(typeof(Rigidbody))] // Add Rigidbody for knockback
-public abstract class Enemy : MonoBehaviour, IDamagable
+public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
 {
     public Transform Player { get; protected set; }
     public LayerMask whatIsGround, whatIsPlayer;
     public int currentHealth;
+    private SceneStatusManager sceneStatusManager;
 
     [Header("Enemy Settings")]
     public EnemyData e_data;
@@ -20,6 +20,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
     protected bool isDead;
     protected bool isAttacking;
+    protected ObjectSaveData saveData;
     public bool isKnockedBack; // Track if the enemy is currently being knocked back
 
     [SerializeField] bool isBotEnemy;
@@ -34,12 +35,19 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
         rb.isKinematic = true; // Ensure Rigidbody doesn't interfere with NavMeshAgent by default
+        sceneStatusManager = FindFirstObjectByType<SceneStatusManager>();
     }
 
     protected void Start()
     {
+        saveData = new()
+        {
+            name = name
+        };
+        SaveManagerSystem.Instance.saveables.Add(this);
         Player = Player_v2.Instance.gameObject.transform;
         currentHealth = e_data.maxhealth;
+
         isDead = false;
         isAttacking = false;
         isKnockedBack = false;
@@ -63,7 +71,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         return false;
     }
 
-    // Call this when attack animation/action is complete
     protected void FinishAttack()
     {
         isAttacking = false;
@@ -76,6 +83,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
         currentHealth -= healthDamage;
         PlayHurtSound();
+        sceneStatusManager.AddKilledEnemy(this);
         Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
         ApplyKnockback(knockbackDirection, e_data.knockbackForce); // Apply knockback when taking damage
 
@@ -131,6 +139,17 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         }
     }
 
+    public void HandleReloadDeath()
+    {
+        if (!isDead)
+        {
+            PlayDeadAnim();
+            isDead = true;
+            PlayDeathDissolve();
+            Destroy(gameObject, e_data.destroyTime);
+        }
+    }
+
     public bool IsDead()
     {
         return isDead;
@@ -149,17 +168,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable
     public bool PlayerInAttackRange()
     {
         return Physics.CheckSphere(transform.position, e_data.attackRange, whatIsPlayer);
-    }
-
-    protected void OnDrawGizmosSelected()
-    {
-        if (e_data == null) return;
-
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, e_data.detectRange);
-
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(transform.position, e_data.attackRange);
     }
 
     public void PlayIdleAnim()
@@ -190,14 +198,18 @@ public abstract class Enemy : MonoBehaviour, IDamagable
         if (isBotEnemy)
         {
             AudioManager.Instance.PlaySFX(e_data.botDie);
-        } else AudioManager.Instance.PlaySFX(e_data.trollDie);
+            return;
+        }
+        AudioManager.Instance.PlaySFX(e_data.trollDie);
     }
     public void PlayHurtSound()
     {
         if (isBotEnemy)
         {
             AudioManager.Instance.PlaySFX(e_data.botHit);
-        } else AudioManager.Instance.PlaySFX(e_data.trollHit);
+            return;
+        }
+        AudioManager.Instance.PlaySFX(e_data.trollHit);
     }
 
     void PlayDeathDissolve()
@@ -207,45 +219,47 @@ public abstract class Enemy : MonoBehaviour, IDamagable
 
     private IEnumerator DissolveEffect()
     {
-        // Get all renderers in the enemy and its children
         Renderer[] renderers = GetComponentsInChildren<Renderer>();
-
-        // Replace all materials with the dissolve material
         foreach (var renderer in renderers)
         {
-            // Create an array of dissolve materials with the same length as the renderer's materials
             Material[] dissolveMaterials = new Material[renderer.materials.Length];
             for (int i = 0; i < dissolveMaterials.Length; i++)
             {
-                dissolveMaterials[i] = e_data.dissolveMaterial; // Use the dissolve material from EnemyData
+                dissolveMaterials[i] = e_data.dissolveMaterial;
             }
-            renderer.materials = dissolveMaterials; // Apply the dissolve materials
+            renderer.materials = dissolveMaterials;
         }
-
-        // Animate the dissolve effect
-        float dissolveTime = e_data.destroyTime; // Use the destroy time from EnemyData
+        float dissolveTime = e_data.destroyTime;
         float elapsedTime = 0f;
 
         while (elapsedTime < dissolveTime)
         {
             elapsedTime += Time.deltaTime;
-            float cutoff = Mathf.Lerp(4f, -5f, elapsedTime / dissolveTime); // Adjust cutoff from 0 to 1
-
-            // Update the _Cutoff property in all dissolve materials
+            float cutoff = Mathf.Lerp(4f, -5f, elapsedTime / dissolveTime);
             foreach (var renderer in renderers)
             {
                 foreach (var material in renderer.materials)
                 {
-                    material.SetFloat("Vector1_CFBBCBA", cutoff); // Update the _Cutoff property
+                    material.SetFloat("Vector1_CFBBCBA", cutoff);
                 }
             }
-
             yield return null;
         }
-
-        // Destroy the GameObject after the dissolve effect is complete
         Destroy(gameObject);
     }
 
+    public ObjectSaveData GetSaveData()
+    {
+        return saveData;
+    }
 
+    public void ReloadDataFromSavedFile(ObjectSaveData saveData)
+    {
+        transform.SetPositionAndRotation(saveData.ObjectPosition, saveData.ObjectRotation);
+    }
+
+    public void UpdateSavedData()
+    {
+        saveData.UpdateSaveData(transform.position, transform.rotation, false);
+    }
 }

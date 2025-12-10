@@ -9,20 +9,12 @@ public class SavedData
     public string modifiedDate;
     public bool isAutoSaveFile;
 
-    [Header("Player Data")]
-    public int coinAmount;
-    public int healthCount;
-    public Vector3 playerPosition;
-    public Quaternion playerRotation;
-
     [Header("Quest Data")]
     public int sceneIndex;
     public int currentLevel;
+    public List<int> killedEnemiesIndex = new();
+    public List<ObjectSaveData> saveableAssets = new();
     public List<SerializableQuestData> questDataList = new();
-
-    //Un-Modifiable Properties for Cleaner Text
-    public float[] playerPos { get; private set; }
-    public float[] playerRot { get; private set; }
 
     public SavedData(string name, bool isAutoSave)
     {
@@ -49,15 +41,7 @@ public class SavedData
 
     private void InitializeFields()
     {
-        playerPos = new float[3];
-        playerRot = new float[4];
         questDataList = new List<SerializableQuestData>();
-    }
-
-    public void SetPlayerTransformValues()
-    {
-        playerPos = new float[] {playerPosition.x, playerPosition.y, playerPosition.z};
-        playerRot = new float[] {playerRotation.x, playerRotation.y, playerRotation.z, playerRotation.w};
     }
 }
 

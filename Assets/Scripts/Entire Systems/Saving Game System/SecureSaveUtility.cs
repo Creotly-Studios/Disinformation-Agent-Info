@@ -1,7 +1,6 @@
 using System;
 using System.IO;
 using System.Text;
-using UnityEngine;
 using System.IO.Compression;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -13,9 +12,9 @@ public static class SecureSaveUtility
 
     public static byte[] CompressData(byte[] data)
     {
-        using (MemoryStream ms = new MemoryStream())
+        using (MemoryStream ms = new())
         {
-            using(GZipStream gzip = new GZipStream(ms, CompressionMode.Compress))
+            using(GZipStream gzip = new(ms, CompressionMode.Compress))
             {
                 gzip.Write(data, 0, data.Length);
             }
@@ -59,9 +58,9 @@ public static class SecureSaveUtility
             aes.Key = SecretKey32;
             aes.IV = SecretKey16;
 
-            using (MemoryStream ms = new MemoryStream())
+            using (MemoryStream ms = new())
             {
-                using (CryptoStream cryptoStream = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
+                using (CryptoStream cryptoStream = new(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
                 {
                     cryptoStream.Write(data, 0, data.Length);
                     cryptoStream.FlushFinalBlock();
@@ -115,25 +114,7 @@ public static class SaveSerializer
 
                 #endregion
 
-                # region Player Data
-
-                writer.Write(data.coinAmount);
-                writer.Write(data.healthCount);
-
-                //Player Position
-                foreach(float value in data.playerPos)
-                {
-                    writer.Write(value);
-                }
-                //Player Rotation
-                foreach (float value in data.playerRot)
-                {
-                    writer.Write(value);
-                }
-                #endregion
-
                 #region Quest Data
-
                 writer.Write(data.sceneIndex);
                 writer.Write(data.currentLevel);
                 writer.Write(data.questDataList.Count);
@@ -148,7 +129,20 @@ public static class SaveSerializer
                         writer.Write(value);
                     }
                 }
+                #endregion
 
+                #region Scene Instances
+                writer.Write(data.killedEnemiesIndex.Count);
+                foreach(int value in data.killedEnemiesIndex)
+                {
+                    writer.Write(value);
+                }
+
+                writer.Write(data.saveableAssets.Count);
+                foreach(var asset in data.saveableAssets)
+                {
+                    asset.WriteToSavedData(writer);
+                }
                 #endregion
                 return ms.ToArray();
             }
@@ -157,69 +151,91 @@ public static class SaveSerializer
 
     public static SavedData Deserialize(byte[] data)
     {
-        using (MemoryStream ms = new(data))
+        using MemoryStream ms = new(data);
+        using BinaryReader reader = new(ms, Encoding.UTF8);
+        string header = reader.ReadString();
+        if (header != FILE_HEADER)
         {
-            using(BinaryReader reader = new(ms))
-            {
-                string header = reader.ReadString();
-                if(header != FILE_HEADER)
-                {
-                    throw new Exception("Invalid Save File Format");
-                }
-                int fileVersion = reader.ReadInt32();
-
-                #region Data File
-
-                string fileName = reader.ReadString();
-                string modifiedDate = reader.ReadString();
-                bool isAutoSave = reader.ReadBoolean();
-
-                #endregion
-
-                # region Player Data
-
-                int coinAmount = reader.ReadInt32();
-                int healthCount = reader.ReadInt32();
-
-                Vector3 position = new(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                Quaternion rotation = new(reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle(), reader.ReadSingle());
-                #endregion
-
-                #region Quest Data
-
-                int sceneIndex = reader.ReadInt32();
-                int levelIndex = reader.ReadInt32();
-                int questCount = reader.ReadInt32();
-                List<SerializableQuestData> questList = new();
-                for(int i = 0; i < questCount; i++)
-                {
-                    string questname = reader.ReadString();
-                    int completedObjCount = reader.ReadInt32();
-                    int progressValueCount = reader.ReadInt32();
-
-                    List<int> objectProgressiveValues = new List<int>();
-                    for(int x = 0; x < progressValueCount; x++)
-                    {
-                        int progressValue = reader.ReadInt32();
-                        objectProgressiveValues.Add(progressValue);
-                    }
-
-                    SerializableQuestData newQuestData = new (questname, completedObjCount, objectProgressiveValues);
-                    questList.Add(newQuestData);
-                }
-                #endregion
-
-                SavedData newData = new(sceneIndex, levelIndex, fileName, modifiedDate, isAutoSave)
-                {
-                    coinAmount = coinAmount,
-                    healthCount = healthCount,
-                    playerPosition = position,
-                    playerRotation = rotation
-                };
-                newData.questDataList.Clear();
-                newData.questDataList.AddRange(questList);
-                return newData;
-            }
+            throw new Exception("Invalid Save File Format");
         }
+        int fileVersion = reader.ReadInt32();
+
+        #region Data File
+        string fileName = reader.ReadString();
+        string modifiedDate = reader.ReadString();
+        bool isAutoSave = reader.ReadBoolean();
+        #endregion
+
+        #region Quest Data
+        int sceneIndex = reader.ReadInt32();
+        int levelIndex = reader.ReadInt32();
+        int questCount = reader.ReadInt32();
+        List<SerializableQuestData> questList = new();
+        for (int i = 0; i < questCount; i++)
+        {
+            string questname = reader.ReadString();
+            int completedObjCount = reader.ReadInt32();
+            int progressValueCount = reader.ReadInt32();
+
+            List<int> objectProgressiveValues = new();
+            for (int x = 0; x < progressValueCount; x++)
+            {
+                int progressValue = reader.ReadInt32();
+                objectProgressiveValues.Add(progressValue);
+            }
+            SerializableQuestData newQuestData = new(questname, completedObjCount, objectProgressiveValues);
+            questList.Add(newQuestData);
+        }
+        #endregion
+
+        #region Scene Instances
+        int killedEnemiesCount = reader.ReadInt32();
+        int[] killedEnemies = new int[killedEnemiesCount];
+        for (int i = 0; i < killedEnemiesCount; i++)
+        {
+            killedEnemies[i] = reader.ReadInt32();
+        }
+
+        int savedAssetsCount = reader.ReadInt32();
+        List<ObjectSaveData> loadedAssets = new(savedAssetsCount);
+        for (int i = 0; i < savedAssetsCount; i++)
+        {
+            // Create a temporary ObjectSaveData and let it read its data (it reads TypeId & PersistentId first)
+            // We must peek the type to construct the correct subclass. Because ReadFromSavedData reads the type
+            // internally, we will read TypeId & PersistentId manually, then create appropriate typed instance
+            long posBefore = ms.Position;
+
+            // Peek the TypeId & PersistentId strings (we must read them in same order written)
+            string typeId = reader.ReadString();
+            string persistentId = reader.ReadString();
+
+            // Rewind back to beginning of this asset block so we can let the typed instance read everything
+            ms.Position = posBefore;
+            ObjectSaveData assetData;
+            if (string.Equals(typeId, "Character", StringComparison.OrdinalIgnoreCase))
+            {
+                assetData = new CharacterSaveData();
+            }
+            else
+            {
+                assetData = new ObjectSaveData();
+            }
+            assetData.ReadFromSavedData(reader);
+            loadedAssets.Add(assetData);
+        }
+        #endregion
+
+        // Create SavedData and populate the fields you expect
+        SavedData newData = new(sceneIndex, levelIndex, fileName, modifiedDate, isAutoSave);
+        newData.questDataList.Clear();
+        newData.questDataList.AddRange(questList);
+
+        // Attach loaded scene instance data
+        // IMPORTANT: ensure SavedData has a List<ObjectSaveData> saveableAssets property
+        newData.saveableAssets.Clear();
+        newData.saveableAssets.AddRange(loadedAssets);
+        newData.killedEnemiesIndex.Clear();
+        newData.killedEnemiesIndex.AddRange(killedEnemies);
+        return newData;
     }
 }

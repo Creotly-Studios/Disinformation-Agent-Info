@@ -1,20 +1,27 @@
 using System;
 using System.IO;
 using UnityEngine;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 
 public class SaveManagerSystem : MonoBehaviour
 {
     public static SaveManagerSystem Instance { get; private set; }
 
+    private SceneStatusManager sceneStatusManager;
+
     private bool canAutoSave;
+    private bool hasInitialized;
     private string saveDirectory;
     private bool shouldCompletedAutoSave;
+    public List<ISaveable> saveables = new();
     
-    private SavedData autoSavedFile;
+    [SerializeField] private SavedData autoSavedFile;
     private const string AUTO_SAVE_SLOT = "AutoSave.agentInfo";
     [field: SerializeField] public SaveMenuUI SaveMenuUI { get; private set;}
-    
+    [field: SerializeField] public List<SavedData> SavedDataList { get; private set; } = new();
+
     private void Awake()
     {
         if(Instance != null)
@@ -26,13 +33,12 @@ public class SaveManagerSystem : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void Start()
-    {
-        InitializeSaveSystem();
-    }
-
     private void Update()
     {
+        if(hasInitialized != true)
+        {
+            InitializeSaveSystem();
+        }
         if(shouldCompletedAutoSave && Player_v2.Instance != null)
         {
             UpdateSavedFile(autoSavedFile);
@@ -42,19 +48,21 @@ public class SaveManagerSystem : MonoBehaviour
     private void InitializeSaveSystem()
     {
         saveDirectory = Path.Combine(Application.persistentDataPath, "Saved Instances");
-        if (!Directory.Exists(saveDirectory))
+        string[] files = Directory.GetFiles(saveDirectory, "*.agentInfo").OrderByDescending(File.GetLastWriteTimeUtc).ToArray();
+        for (int i = 0; i < files.Length; i++)
         {
-            Directory.CreateDirectory(saveDirectory);
+            byte[] rawData = SecureSaveUtility.LoadFromFile(files[i]);
+            SavedData loadedData = SaveSerializer.Deserialize(rawData);
+            SavedDataList.Add(loadedData);
         }
 
-        string autoSavePath = GetSavePath(AUTO_SAVE_SLOT);
-        if(!File.Exists(autoSavePath))
+        autoSavedFile = SavedDataList.Find(x => x.fileName == "Auto Save");
+        if(autoSavedFile == null)
         {
             autoSavedFile = CreateNewSaveData("Auto Save", true);
             SaveGame(autoSavedFile);
-            return;
         }
-        autoSavedFile = FindSaveData(autoSavePath);
+        hasInitialized = true;
     }
 
     public void DisplayMenuPanel()
@@ -87,11 +95,15 @@ public class SaveManagerSystem : MonoBehaviour
             return;
         }
         File.Delete(filePath);
+        SavedDataList.Remove(savedData);
     }
 
     public SavedData LoadGame(SavedData dataToLoad)
     {
-        if (dataToLoad == null) { return null; }
+        if (dataToLoad == null)
+        { 
+            return null;
+        }
         string newDataPath = $"{dataToLoad.fileName}.agentInfo";
         string savePath = GetSavePath(dataToLoad.isAutoSaveFile ? AUTO_SAVE_SLOT : newDataPath);
 
@@ -100,6 +112,8 @@ public class SaveManagerSystem : MonoBehaviour
             throw new FileNotFoundException($"Save File Not Found At {savePath}");
         }
         byte[] loadedData = SecureSaveUtility.LoadFromFile(savePath);
+
+        saveables.Clear();
         return SaveSerializer.Deserialize(loadedData);
     }
 
@@ -108,39 +122,28 @@ public class SaveManagerSystem : MonoBehaviour
         return Path.Combine(saveDirectory, fileName);
     }
 
-    public SavedData FindSaveData(string file)
-    {
-        byte[] rawData = SecureSaveUtility.LoadFromFile(file);
-        SavedData loadedData = SaveSerializer.Deserialize(rawData);
-        return loadedData;
-    }
-
     public SavedData CreateNewSaveData(string filename, bool isAutoSave = false)
     {
         SavedData newData = new(filename, isAutoSave);
         UpdateSavedFile(newData);
+        SavedDataList.Add(newData);
         return newData;
     }
 
-    private void UpdateSavedFile(SavedData newData)
+    private void UpdateSavedFile(SavedData saveData)
     {
         Player_v2 player = Player_v2.Instance;
         int sceneIndex = SceneManager.GetActiveScene().buildIndex;
         string dateTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
-        newData.sceneIndex = sceneIndex;
-        newData.modifiedDate = dateTime;
+        saveData.sceneIndex = sceneIndex;
+        saveData.modifiedDate = dateTime;
 
         if (player == null)
         {
             shouldCompletedAutoSave = true;
             return;
         }
-        newData.playerPosition = player.transform.position;
-        newData.playerRotation = player.transform.rotation;
-        newData.coinAmount = GameManager.Instance.PlayerCoinAmount;
-        newData.healthCount = player.PlayerStatistics.CurrentHealth;
-
         QuestManager questManager = QuestManager.Instance;
         if(questManager == null)
         {
@@ -150,14 +153,23 @@ public class SaveManagerSystem : MonoBehaviour
         for (int i = 0; i < questManager.availableQuests.Count; i++)
         {
             QuestSO quest = questManager.availableQuests[i];
-            SerializableQuestData exist = newData.questDataList.Find(x => x.questName == quest.questTitle);
+            SerializableQuestData exist = saveData.questDataList.Find(x => x.questName == quest.questTitle);
             if(exist == null)
             {
-                newData.questDataList.Add(new(quest));
+                saveData.questDataList.Add(new(quest));
             }
-            newData.questDataList[i].UpdateQuestData(quest);
+            saveData.questDataList[i].UpdateQuestData(quest);
         }
-        newData.SetPlayerTransformValues();
+
+        saveData.saveableAssets.Clear();
+        saveables.RemoveAll(x => x == null);
+        foreach(var asset in saveables)
+        {
+            asset.UpdateSavedData();
+            saveData.saveableAssets.Add(asset.GetSaveData());
+        }
+        saveData.killedEnemiesIndex.Clear();
+        saveData.killedEnemiesIndex.AddRange(sceneStatusManager.KilledEnemies);
         shouldCompletedAutoSave = false;
     }
 
@@ -184,20 +196,22 @@ public class SaveManagerSystem : MonoBehaviour
                 return;
             }
         }
+
+        if(File.Exists(GetSavePath(AUTO_SAVE_SLOT)) != true)
+        {
+            autoSavedFile = CreateNewSaveData("Auto Save", true);
+        }
         SaveGame(autoSavedFile);
     }
 
-    public void SetAutoSaveBool(bool status)
+    public void SetAutoSaveBool(bool status, SceneStatusManager sceneStatusManager)
     {
         canAutoSave = status;
+        this.sceneStatusManager = sceneStatusManager;
     }
 
     private void OnApplicationQuit()
     {
-        if(File.Exists(GetSavePath(AUTO_SAVE_SLOT)) != true)
-        {
-            return;
-        }
         AutoSave();
     }
 }

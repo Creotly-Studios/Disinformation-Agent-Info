@@ -2,12 +2,14 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player_v2 : MonoBehaviour
+public class Player_v2 : MonoBehaviour, ISaveable
 {
     public static Player_v2 Instance { get; private set; }
     public PlayerCombat playerCombat { get; private set; }
     public CharacterController controller { get; private set; }
     public PlayerNavigationSystem PlayerNav { get; private set; }
+
+    private CharacterSaveData saveData;
 
     #region Components
     public PlayerStateMachine StateMachine { get; private set; }
@@ -107,6 +109,13 @@ public class Player_v2 : MonoBehaviour
 
     void Start()
     {
+        saveData = new()
+        {
+            name = name
+        };
+        Debug.Log(saveData);
+        SaveManagerSystem.Instance.saveables.Add(this);
+
         //initialize the state machine
         StateMachine.Initialize(IdleState);
         speakerInfo = Instantiate(speakerInfo);
@@ -310,4 +319,22 @@ public class Player_v2 : MonoBehaviour
         Anim = null;
     }
 
+    public ObjectSaveData GetSaveData()
+    {
+        return saveData;
+    }
+
+    public void ReloadDataFromSavedFile(ObjectSaveData saveData)
+    {
+        CharacterSaveData characterData = saveData as CharacterSaveData;
+        GameManager.Instance.SetCoinAmount(characterData.coinAmount);
+        PlayerStatistics.SetCurrentHealth(characterData.healthCount);
+        transform.SetPositionAndRotation(characterData.ObjectPosition, characterData.ObjectRotation);
+    }
+
+    public void UpdateSavedData()
+    {
+        saveData.UpdateSaveData
+            (GameManager.Instance.PlayerCoinAmount, PlayerStatistics.CurrentHealth, transform.position, transform.rotation);
+    }
 }
