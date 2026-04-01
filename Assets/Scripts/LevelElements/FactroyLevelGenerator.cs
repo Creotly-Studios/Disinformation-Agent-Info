@@ -36,15 +36,7 @@ public class FactroyLevelGenerator : MonoBehaviour, IDamagable
             Destroy(_, 1.25f);    
         }
 
-        QuestSO quest = QuestManager.Instance.activeQuest;
-        if (quest != null)
-        {
-            QuestObjectives objective = quest.FindQuestObjective(ObjectiveType.Generator);
-            if (objective != null && objective.isDone != true)
-            {
-                quest.IncreaseQuestObjectiveProgressLevels(objective, null);
-            }
-        }
+        EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.Generator, null);
         gameObject.SetActive(false); //or destroy idk
     }
 

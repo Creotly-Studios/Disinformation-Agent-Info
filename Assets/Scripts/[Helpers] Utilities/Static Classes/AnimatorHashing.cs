@@ -1,46 +1,20 @@
 using UnityEngine;
 using Ink.Runtime;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Linq;
+using System.Collections.Generic;
 
 //Optimization and Faster to Get Reasons, Rather than letting Unity Hash by itself, store hashed value and used accordingly
 public static class AnimatorHashing
 {
-    #region States
-
-    //Damage
-    public static int deathAnimation;
-    public static int damageAnimation;
-
-    //Turning
-    public static int turn_L_90;
-    public static int turn_R_90;
-    public static int turn_L_180;
-    public static int turn_R_180;
-
-    //Movement
-    public static int stepBackHash;
-
-    //Action States
-    public static int attackingHash;
-
-    #endregion
-
-    #region Animator Parameters
+    public static int ISMIRROR_HASH;
+    public static int ISATTACKING_HASH;
+    public static int ISPERFORMING_HASH;
 
     //Locomotion Parameter
-    public static int movingHash;
-    public static int canRotateHash;
-    public static int isGroundedHash;
-
-    //Action Parameters
-    public static int isJumpingHash;
-    public static int isAttackingHash;
-    public static int rootMotionRotateHash;
-    public static int isPerformingActionHash;
-
-    #endregion
+    public static int Y_VEL_HASH;
+    public static int ISMOVING_HASH;
+    public static int CANROTATE_HASH;
+    public static int ISGROUNDED_HASH;
 
     public static int ConvertToHash(string parameterName)
     {
@@ -49,35 +23,14 @@ public static class AnimatorHashing
 
     public static void StringToHash()
     {
-        //State
-        deathAnimation = Animator.StringToHash("Death");
-        attackingHash = Animator.StringToHash("Attack");
+        ISMIRROR_HASH = Animator.StringToHash("isMirror");
+        ISATTACKING_HASH = Animator.StringToHash("isAttacking");
+        ISPERFORMING_HASH = Animator.StringToHash("performingAction");
 
-        //Turning
-        turn_L_90 = Animator.StringToHash("Turn_90_L");
-        turn_R_90 = Animator.StringToHash("Turn_90_R");
-        turn_L_180 = Animator.StringToHash("Turn_180_L");
-        turn_R_180 = Animator.StringToHash("Turn_180_R");
-
-        //Movement
-        stepBackHash = Animator.StringToHash("StepBack");
-
-        //Locomotion Param
-        movingHash = Animator.StringToHash("isMoving");
-        canRotateHash = Animator.StringToHash("canRotate");
-        isGroundedHash = Animator.StringToHash("isGrounded");
-
-        //Action Parameters
-        isAttackingHash = Animator.StringToHash("isAttacking");
-        isJumpingHash = Animator.StringToHash("isJumping");
-        isPerformingActionHash = Animator.StringToHash("performingAction");
-    }
-
-    public static void PlayTargetAnimation(Animator animator, int targetAnimation, bool performAction, float transitionDuration = 0.1f)
-    {
-        animator.applyRootMotion = performAction;
-        animator.SetBool(AnimatorHashing.isPerformingActionHash, performAction);
-        animator.CrossFade(targetAnimation, transitionDuration);
+        Y_VEL_HASH = Animator.StringToHash("yVelocity");
+        ISMOVING_HASH = Animator.StringToHash("isMoving");
+        CANROTATE_HASH = Animator.StringToHash("canRotate");
+        ISGROUNDED_HASH = Animator.StringToHash("isGrounded");
     }
 }
 

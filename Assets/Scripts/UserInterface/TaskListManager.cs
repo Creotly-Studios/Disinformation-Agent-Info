@@ -4,11 +4,7 @@ using System.Collections.Generic;
 
 public class TaskListManager : MonoBehaviour
 {
-    private bool hasSetTask;
-
-    private QuestSO activeQuest;
-    private List<TaskSlotContent> contentList = new();
-    public static TaskListManager Instance { get; private set; }
+    private readonly List<TaskSlotContent> contentList = new();
 
     [Header("Parameters")]
     [SerializeField] private GameObject panel;
@@ -16,44 +12,37 @@ public class TaskListManager : MonoBehaviour
     [SerializeField] private Transform contentDrawer;
     [SerializeField] private TextMeshProUGUI titleText;
 
-    private void Awake()
+    private void Start()
     {
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
+        EventBus.TaskList.OnRefreshTaskList += SetUpTaskList;
+        EventBus.TaskList.OnUpdateTaskListValues += UpdateTaskProgressLevels;
     }
 
-    public void SetUpTaskList(QuestSO quest)
+    private void OnDestroy()
     {
-        if(quest == null)
-        {
-            return;
-        }
+        EventBus.TaskList.OnRefreshTaskList -= SetUpTaskList;
+        EventBus.TaskList.OnUpdateTaskListValues -= UpdateTaskProgressLevels;
+    }
 
-        if(hasSetTask && activeQuest == quest)
-        {
-            return;
-        }
-
+    private void SetUpTaskList(QuestSO quest)
+    {
         ResetTaskList();
         titleText.text = quest.questTitle;
-        foreach(var objective in quest.questObjectives)
+        foreach(var objective in quest.QuestObjectives)
         {
             TaskSlotContent content = Instantiate(prefab, contentDrawer);
             content.Initialize(objective);
             contentList.Add(content);
         }
-        hasSetTask = true;
-        activeQuest = quest;
     }
 
-    public void UpdateTaskProgressLevels(QuestObjectives objectives)
+    public void UpdateTaskProgressLevels(QuestObjective objectives)
     {
-        TaskSlotContent content =contentList.Find(x => x.questObjective == objectives);
-        if(content != null) { content.UpdateProgressLevels(); }
+        TaskSlotContent content = contentList.Find(x => x.questObjective == objectives);
+        if(content != null)
+        { 
+            content.UpdateProgressLevels();
+        }
     }
 
     private void ResetTaskList()

@@ -1,110 +1,92 @@
-using System;
-using System.Collections;
+﻿using System;
 using UnityEngine;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance;
-    private InputSystem_Actions InputSystemActions;
-    public GameState GameState { get; private set; }
-    public GameOverState GameOverState {get; private set;}
-    public event EventHandler OnStateChange;
+    public static GameManager Instance { get; private set; }
+
+    private InputSystem_Actions inputSystemActions;
+    private bool isGamePaused;
+
+    [Header("Notification")]
+    [SerializeField] private NoticePopup paymentPopup;
 
     public event EventHandler OnGamePause;
+    public event EventHandler OnStateChange;
 
-    private bool isGamePaused = false;
-    private bool canPause = true;
+    public int PlayerCoinAmount { get; private set; }
+    public GameState GameState { get; private set; }
+    public GameOverState GameOverState { get; private set; }
 
-    [Header("-- Variables")]
-    public int PlayerCoinAmount {get; private set;}
-    public int PlayerRank {get; private set;} //1 min - 5 max... 
+    public bool IsGamePaused() => isGamePaused;
+    public bool IsGameOver() => GameState == GameState.GameOver;
+    public bool IsPlayerDead() => GameOverState == GameOverState.PlayerDie;
+    public bool IsMissionComplete() => GameOverState == GameOverState.MissionComplete;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        Time.timeScale = 1;
-        isGamePaused = false;
-        GameState = GameState.Playing;
-        if (Instance != null)
-        {
-            Destroy(gameObject);
-            return;
-        }
+        if (Instance != null) { Destroy(gameObject); return; }
         Instance = this;
+        Time.timeScale = 1;
+        GameState = GameState.Playing;
     }
 
-    void OnEnable()
+    private void Start() => SetCoinAmount(10);
+    private void OnDestroy() => OnGamePause = null;
+
+    private void OnEnable()
     {
-        if(InputSystemActions == null)
+        if (inputSystemActions == null)
         {
-            InputSystemActions = new InputSystem_Actions();
-            InputSystemActions.Player.Pause.performed += ctx => TogglePause();
+            inputSystemActions = new InputSystem_Actions();
+            inputSystemActions.Player.Pause.performed += OnPausePerformed;
         }
-        InputSystemActions.Enable();
-    }
-
-    void Update()
-    {
-        if (QuestManager.Instance != null)
-        {
-            QuestManager.Instance.Quest_Update();
-        }
-    }
-
-    public void SetGameState(GameState _)
-    {
-        GameState = _;
-        OnStateChange?.Invoke(this, EventArgs.Empty);
-    }
-
-    private void OnDestroy()
-    {
-        OnGamePause = null;
+        inputSystemActions.Enable();
     }
 
     private void OnDisable()
     {
-        if (InputSystemActions != null)
-        {
-            InputSystemActions.Player.Pause.performed -= ctx => TogglePause();
-            InputSystemActions.Dispose();
-        }
+        if (inputSystemActions == null) return;
+        inputSystemActions.Player.Pause.performed -= OnPausePerformed;
+        inputSystemActions.Dispose();
+        inputSystemActions = null;
     }
+
+    private void OnPausePerformed(UnityEngine.InputSystem.InputAction.CallbackContext _)
+        => TogglePause();
+
+    // ── Payment ───────────────────────────────────────────────────────────────
+
+    public void HandleCoinPaymentPopup(int amount, string body, Action onPaid) =>
+        EventBus.Notification.OnShow?.Invoke(
+            paymentPopup, NotificationRequest.Payment(amount, body, onPaid));
+
+    // ── Pause ─────────────────────────────────────────────────────────────────
 
     public void TogglePause()
     {
-        if(canPause)
-        {
-            if (!IsGameOver())
-            {
-                Pause();
-            }
-        }
+        if (IsGameOver()) return;
+        isGamePaused = !isGamePaused;
+        Time.timeScale = isGamePaused ? 0 : 1;
+        OnGamePause?.Invoke(this, EventArgs.Empty);
     }
+
     public void UnPause()
     {
-        if (isGamePaused)
-        {
-            Time.timeScale = 1;
-            isGamePaused = false;
-        }
+        if (!isGamePaused) return;
+        isGamePaused = false;
+        Time.timeScale = 1;
     }
 
-    public bool IsGamePaused()
-    {
-        return isGamePaused;
-    }
-    public bool IsGameOver()
-    {
-        return GameState == GameState.GameOver;
-    }
+    // ── Game State ────────────────────────────────────────────────────────────
 
-    public bool IsMissionComplete()
+    public void SetGameState(GameState state)
     {
-        return GameOverState == GameOverState.MissionComplete;
-    }
-    public bool IsPlayerDead()
-    {
-        return GameOverState == GameOverState.PlayerDie;
+        GameState = state;
+        OnStateChange?.Invoke(this, EventArgs.Empty);
     }
 
     public void PlayerDie()
@@ -117,69 +99,26 @@ public class GameManager : MonoBehaviour
     {
         GameOverState = GameOverState.MissionComplete;
         SetGameState(GameState.GameOver);
-        LoadAgencyScene();
-    }
-
-    void Pause()
-    {
-        isGamePaused = !isGamePaused;
-        if (isGamePaused)
-        {
-            Time.timeScale = 0;
-            OnGamePause?.Invoke(this, EventArgs.Empty);
-        }
-        else
-        {
-            Time.timeScale = 1;
-            OnGamePause?.Invoke(this, EventArgs.Empty);
-        }
-    }
-
-    //stuff and data
-    public void PlayerCoinAdd()
-    {
-        PlayerCoinAmount++;
-    }
-
-    public void SetCoinAmount(int value)
-    {
-        PlayerCoinAmount = value;
-    }
-
-    public int PlayerCoins()
-    {
-        return PlayerCoinAmount;
-    }
-
-    public void SetCanPause(bool _)
-    {
-        canPause = _;
-    }
-    public bool CheckIfCanPause() {return canPause;}
-
-    void LoadAgencyScene()
-    {
         StartCoroutine(ToAgencyScene());
     }
 
-    IEnumerator ToAgencyScene()
+    private IEnumerator ToAgencyScene()
     {
         ResetGame();
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(5f);
         LevelLoader.LoadLevel(2);
     }
 
     public void ResetGame()
     {
-        GameOverState = GameOverState.None;
         GameState = GameState.Playing;
-        Time.timeScale = 1;
+        GameOverState = GameOverState.None;
         isGamePaused = false;
+        Time.timeScale = 1;
     }
-}
 
-public enum GameState { Playing, GameOver }
-public enum GameOverState
-{
-    None, PlayerDie, MissionComplete
+    // ── Coins ─────────────────────────────────────────────────────────────────
+
+    public void PlayerCoinAdd() => PlayerCoinAmount++;
+    public void SetCoinAmount(int value) => PlayerCoinAmount = value;
 }

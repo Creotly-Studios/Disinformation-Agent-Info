@@ -13,24 +13,9 @@ MonoBehaviour:
   m_Name: 4_ Broadcast Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  <questCode>k__BackingField: 885
-  <questLevelIndex>k__BackingField: 6
+  <QuestCode>k__BackingField: 344
+  <QuestLevelIndex>k__BackingField: 3
   questTitle: Brodcast Quest
   description: Brodcast Quest, Brodcast Station
   <QuestReward>k__BackingField: 0
-  <questObjectives>k__BackingField:
-  - isDone: 0
-    targetValue: 1
-    progressValue: 0
-    objectiveType: 3
-    description: Speak to Instructor
-  - isDone: 0
-    targetValue: 5
-    progressValue: 0
-    objectiveType: 4
-    description: Complete 5 Malign Influence Game
-  - isDone: 0
-    targetValue: 2
-    progressValue: 0
-    objectiveType: 0
-    description: Switch Puzzle Levers
+  <QuestObjectives>k__BackingField: []

@@ -10,51 +10,48 @@ public class PauseMenu : MonoBehaviour
     [SerializeField] private Button resumeBtn;
     [SerializeField] private Button loadSaveBtn;
 
-    [Header("Options Parameters")]
+    [Header("Options")]
     [SerializeField] private Button optionsBtn;
     [SerializeField] private PauseMenuOptions optionsMenu;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
-        GameManager.Instance.OnGamePause += GameManager_OnGamePaused;
+        GameManager.Instance.OnGamePause += OnGamePaused;
 
         menuBtn.onClick.AddListener(() =>
         {
-                LevelLoader.LoadLevel(0);
-                GameManager.Instance.ResetGame();
+            LevelLoader.LoadLevel(0);
+            GameManager.Instance.ResetGame();
         });
+
         replayBtn.onClick.AddListener(() =>
         {
             LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
             GameManager.Instance.ResetGame();
         });
 
-        resumeBtn.onClick.AddListener(() => { GameManager.Instance.TogglePause(); });
-        optionsBtn.onClick.AddListener(() => { optionsMenu.gameObject.SetActive(true); });
-        loadSaveBtn.onClick.AddListener(() =>{SaveManagerSystem.Instance.DisplayMenuPanel();});
+        resumeBtn.onClick.AddListener(() => GameManager.Instance.TogglePause());
+        optionsBtn.onClick.AddListener(() => optionsMenu.gameObject.SetActive(true));
+
+        // Uses EventBus so PauseMenu has no dependency on SaveManagerSystem.
+        loadSaveBtn.onClick.AddListener(() => EventBus.Save.OnDisplaySaveMenu?.Invoke());
+
         Hide();
     }
 
     private void OnDestroy()
     {
         if (GameManager.Instance != null)
-            GameManager.Instance.OnGamePause -= GameManager_OnGamePaused;
+            GameManager.Instance.OnGamePause -= OnGamePaused;
     }
 
-    void GameManager_OnGamePaused(object sender, System.EventArgs e)
+    private void OnGamePaused(object sender, System.EventArgs e)
     {
-        if (GameManager.Instance.IsGamePaused())
-        {
-            Show();
-        }
+        if (GameManager.Instance.IsGamePaused()) Show();
         else Hide();
     }
 
-    private void Show()
-    {
-        gameObject.SetActive(true);
-    }
+    private void Show() => gameObject.SetActive(true);
 
     public void Hide()
     {

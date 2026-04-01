@@ -4,14 +4,14 @@ using UnityEngine.UI;
 
 public class TaskSlotContent : MonoBehaviour
 {
-    public QuestObjectives questObjective { get; private set; }
+    public QuestObjective questObjective { get; private set; }
 
     [Header("Parameters")]
     [SerializeField] private Slider progressBar;
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI descriptionText;
 
-    public void Initialize(QuestObjectives objective)
+    public void Initialize(QuestObjective objective)
     {
         questObjective = objective;
         progressBar.maxValue = questObjective.targetValue;

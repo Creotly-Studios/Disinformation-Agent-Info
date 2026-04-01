@@ -40,7 +40,7 @@ public class MainMenu : MonoBehaviour
     {
         AudioManager.Instance.PlayMusicWithXFade(mainMenuMusic);
         SetCurrentPanel(CurrentPanel.None);
-        Button[] allButtons = FindObjectsOfType<Button>(true);
+        Button[] allButtons = FindObjectsByType<Button>(FindObjectsSortMode.None);
         foreach (var btn in allButtons)
         {
             btn.onClick.AddListener(() =>

@@ -1,16 +1,20 @@
-using TMPro;
+﻿using TMPro;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 public class SaveMenuUI : MonoBehaviour
 {
     private bool hasInitialized;
-    private string saveDirectory;
     private int pickedSaveDataIndex;
     private SaveManagerSystem saveManagerSystem;
-    private List<SaveSlotUI> slotUIList = new();
+    private readonly List<SaveSlotUI> slotUIList = new();
+
+    // Cached delegates — same reference for Add and Remove.
+    private UnityAction onNewSave;
+    private UnityAction onOverwrite;
 
     [Header("Panels")]
     [SerializeField] private GameObject savePanel;
@@ -18,111 +22,169 @@ public class SaveMenuUI : MonoBehaviour
 
     [Header("Tools")]
     [SerializeField] private SaveSlotUI slotPrefab;
-    [SerializeField] private NoticePopup popupPanel;
     [SerializeField] private Transform slotSpawnParent;
+
+    [Header("Notification")]
+    [SerializeField] private NoticePopup savePopup;
 
     [Header("Buttons")]
     [SerializeField] private Button loadButton;
     [SerializeField] private Button exitButton;
     [SerializeField] private Button deleteButton;
     [SerializeField] private Button newSaveButton;
-    [SerializeField] private Button ovewriteButton;
+    [SerializeField] private Button overwriteButton;
     [SerializeField] private Button completeSaveButton;
 
     [Header("Save Properties")]
-    [SerializeField] private TextMeshProUGUI fileName;
-    [SerializeField] private TextMeshProUGUI fileSize;
-    [SerializeField] private TextMeshProUGUI modifiedDate;
+    [SerializeField] private TextMeshProUGUI fileNameLabel;
+    [SerializeField] private TextMeshProUGUI fileSizeLabel;
+    [SerializeField] private TextMeshProUGUI modifiedDateLabel;
     [SerializeField] private TMP_InputField fileNameInputField;
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
 
     private void Awake()
     {
-        popupPanel.gameObject.SetActive(false);
         saveManagerSystem = GetComponentInParent<SaveManagerSystem>();
-        saveDirectory = Path.Combine(Application.persistentDataPath, "Saved Instances");
+        onNewSave = () => ShowSavePanel(true);
+        onOverwrite = () => ShowOverwriteConfirm("Are You Sure You Want To Overwrite This File?");
     }
 
     private void OnEnable()
     {
-        if(hasInitialized)
-        {
-            return;
-        }
-        InitializeButtons(true);
-
-        InitializeSlotUI();
-        hasInitialized = true;
+        if (hasInitialized) return;
+        SetupButtonListeners(true);
+        RefreshSlotUI();
         savePanel.SetActive(false);
+        hasInitialized = true;
     }
 
     private void OnDisable()
     {
-        if (hasInitialized != true)
-        {
-            return;
-        }
+        if (!hasInitialized) return;
+        SetupButtonListeners(false);
         hasInitialized = false;
-        InitializeButtons(false);
     }
 
-    private void InitializeSlotUI()
-    {
-        if(Directory.Exists(saveDirectory) != true)
-        {
-            return;
-        }
+    // ── Button Wiring ─────────────────────────────────────────────────────────
 
-        int difference = saveManagerSystem.SavedDataList.Count - slotUIList.Count;
-        for (int i = 0; i < difference; i++)
-        {
-            SaveSlotUI newSlot = Instantiate(slotPrefab, slotSpawnParent);
-            newSlot.InitializeSavedData(i, saveManagerSystem.SavedDataList[i], this);
-            slotUIList.Add(newSlot);
-        }
-    }
-
-    private void HandleQuit()
+    public void SetupButtonListeners(bool enable)
     {
-        gameObject.SetActive(false);
-    }
-
-    public void InitializeButtons(bool status)
-    {
-        if(status)
+        if (enable)
         {
             loadButton.onClick.AddListener(HandleLoad);
             exitButton.onClick.AddListener(HandleQuit);
             deleteButton.onClick.AddListener(HandleDelete);
-
             completeSaveButton.onClick.AddListener(HandleSave);
-            newSaveButton.onClick.AddListener(() => ShowSavePanel(true));
-            ovewriteButton.onClick.AddListener(() => HandleOverwrite("Are You Sure You Want To Overwrite This File"));
-            return;
+            newSaveButton.onClick.AddListener(onNewSave);
+            overwriteButton.onClick.AddListener(onOverwrite);
         }
-        loadButton.onClick.RemoveListener(HandleLoad);
-        exitButton.onClick.RemoveListener(HandleQuit);
-        deleteButton.onClick.RemoveListener(HandleDelete);
-
-        completeSaveButton.onClick.RemoveListener(HandleSave);
-        newSaveButton.onClick.RemoveListener(() => ShowSavePanel(true));
-        ovewriteButton.onClick.RemoveListener(() => HandleOverwrite("Are You Sure You Want To Overwrite This File"));
+        else
+        {
+            loadButton.onClick.RemoveListener(HandleLoad);
+            exitButton.onClick.RemoveListener(HandleQuit);
+            deleteButton.onClick.RemoveListener(HandleDelete);
+            completeSaveButton.onClick.RemoveListener(HandleSave);
+            newSaveButton.onClick.RemoveListener(onNewSave);
+            overwriteButton.onClick.RemoveListener(onOverwrite);
+        }
     }
+
+    // ── Slot UI ───────────────────────────────────────────────────────────────
+
+    private void RefreshSlotUI()
+    {
+        List<SavedData> allData = saveManagerSystem.SavedDataList;
+        int startIndex = slotUIList.Count;
+        for (int i = startIndex; i < allData.Count; i++)
+        {
+            SaveSlotUI slot = Instantiate(slotPrefab, slotSpawnParent);
+            slot.InitializeSavedData(i, allData[i], this);
+            slotUIList.Add(slot);
+        }
+    }
+
+    // ── Slot Selection ────────────────────────────────────────────────────────
 
     public void SetPickedData(int index)
     {
         ShowSavePanel(false);
         pickedSaveDataIndex = index;
-        SavedData savedData = saveManagerSystem.SavedDataList[pickedSaveDataIndex];
-        deleteButton.gameObject.SetActive(savedData.isAutoSaveFile != true);
 
-        fileSize.text = $"Modified Date: {10}KB"; //Would Change
-        fileName.text = $"File Name: {savedData.fileName}";
-        modifiedDate.text = $"Modified Date: {savedData.modifiedDate}";
+        SavedData data = saveManagerSystem.SavedDataList[index];
+        deleteButton.gameObject.SetActive(!data.isAutoSaveFile);
+        fileNameLabel.text = $"File Name: {data.fileName}";
+        modifiedDateLabel.text = $"Modified: {data.modifiedDate}";
+        fileSizeLabel.text = "File Size: --";
     }
 
-    private void HandleLoad()
-    {
+    // ── Save / Load / Delete ──────────────────────────────────────────────────
+
+    private void HandleLoad() =>
         LoadingSaveManager.LoadGame(saveManagerSystem.SavedDataList[pickedSaveDataIndex]);
+
+    private void HandleSave()
+    {
+        string name = (fileNameInputField.text ?? string.Empty).Trim();
+        if (string.IsNullOrEmpty(name))
+        {
+            Debug.LogWarning("[SaveMenuUI] File name cannot be empty.");
+            return;
+        }
+
+        bool nameExists = saveManagerSystem.SavedDataList.Exists(x => x.fileName == name);
+        bool fileExists = Directory.GetFiles(saveManagerSystem.SaveDirectory,
+            name + ".*", SearchOption.TopDirectoryOnly).Length > 0;
+
+        if (nameExists || fileExists)
+        {
+            int match = saveManagerSystem.SavedDataList.FindIndex(x => x.fileName == name);
+            if (match >= 0) pickedSaveDataIndex = match;
+            ShowOverwriteConfirm("File Already Exists — Overwrite?");
+            return;
+        }
+
+        SavedData saved = saveManagerSystem.CreateNewSaveData(name, isAutoSave: false);
+        saveManagerSystem.SaveGame(saved);
+        RefreshSlotUI();
+    }
+
+    private void ShowOverwriteConfirm(string message)
+    {
+        EventBus.Notification.OnShow?.Invoke(savePopup, NotificationRequest.Confirm(
+            message,
+            accept: OverwriteSavedData,
+            reject: () => EventBus.Notification.OnDismiss?.Invoke(savePopup)));
+    }
+
+    private void OverwriteSavedData()
+    {
+        saveManagerSystem.SaveGame(saveManagerSystem.SavedDataList[pickedSaveDataIndex]);
+        RefreshSlotUI();
+        SetPickedData(pickedSaveDataIndex);
+        EventBus.Notification.OnDismiss?.Invoke(savePopup);
+    }
+
+    private void HandleDelete()
+    {
+        SavedData picked = saveManagerSystem.SavedDataList[pickedSaveDataIndex];
+        if (picked.isAutoSaveFile) return;
+
+        SaveSlotUI slot = slotUIList.Find(x => x.savedData == picked);
+        saveManagerSystem.DeleteSave(picked);
+        if (slot == null) return;
+        slotUIList.Remove(slot);
+        Destroy(slot.gameObject);
+    }
+
+    // ── Utilities ─────────────────────────────────────────────────────────────
+
+    private void HandleQuit() => gameObject.SetActive(false);
+
+    private void ShowSavePanel(bool show)
+    {
+        savePanel.SetActive(show);
+        loadPanel.SetActive(!show);
     }
 
     public void DisablePanel()
@@ -130,71 +192,5 @@ public class SaveMenuUI : MonoBehaviour
         savePanel.SetActive(false);
         loadPanel.SetActive(false);
         HandleQuit();
-    }
-
-    private void HandleSave()
-    {
-        string rawName = fileNameInputField.text ?? "";
-        string fileName = rawName.Trim();
-
-        if (string.IsNullOrEmpty(fileName))
-        {
-            Debug.LogWarning("[HandleSave] Empty file name.");
-            return;
-        }
-        string candidatePath = Path.Combine(saveDirectory, fileName);
-
-        bool exactFileExists = File.Exists(candidatePath);
-        bool exactDirExists = Directory.Exists(candidatePath);
-        bool filenameWithoutExtMatch = saveManagerSystem.SavedDataList.Exists(x => x.fileName == rawName);
-        bool nameWithExtensionExists = Directory.GetFiles(saveDirectory, fileName + ".*", SearchOption.TopDirectoryOnly).Length > 0;
-        if (exactFileExists || exactDirExists || nameWithExtensionExists || filenameWithoutExtMatch)
-        {
-            HandleOverwrite("File Already Exists, Do You Want To Overwrite ?");
-            return;
-        }
-        SavedData savedData = SaveManagerSystem.Instance.CreateNewSaveData(fileName, false);
-        SaveManagerSystem.Instance.SaveGame(savedData);
-        InitializeSlotUI();
-    }
-
-
-    private void HandleOverwrite(string message)
-    {
-        popupPanel.HandleSimplePopup(message, OverwriteSavedData, () => popupPanel.gameObject.SetActive(false));
-    }
-
-    private void OverwriteSavedData()
-    {
-        SaveManagerSystem.Instance.SaveGame(saveManagerSystem.SavedDataList[pickedSaveDataIndex]);
-        InitializeSlotUI();
-        SetPickedData(pickedSaveDataIndex);
-
-        popupPanel.gameObject.SetActive(false);
-    }
-
-    private void ShowSavePanel(bool status)
-    {
-        savePanel.SetActive(status);
-        loadPanel.SetActive(!status);
-    }
-
-    private void HandleDelete()
-    {
-        SavedData pickedSavedData = saveManagerSystem.SavedDataList[pickedSaveDataIndex];
-        if (pickedSavedData.isAutoSaveFile)
-        {
-            return;
-        }
-
-        SaveSlotUI deletedSlot = slotUIList.Find(x => x.savedData == pickedSavedData);
-        SaveManagerSystem.Instance.DeleteSave(pickedSavedData);
-
-        if(deletedSlot != null)
-        {
-            slotUIList.Remove(deletedSlot);
-            Destroy(deletedSlot.gameObject);
-            Debug.Log($"{pickedSavedData.fileName} has been deleted succesfully");
-        }
     }
 }

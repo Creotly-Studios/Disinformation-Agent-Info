@@ -10,7 +10,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
     public Transform Player { get; protected set; }
     public LayerMask whatIsGround, whatIsPlayer;
     public int currentHealth;
-    private SceneStatusManager sceneStatusManager;
 
     [Header("Enemy Settings")]
     public EnemyData e_data;
@@ -20,7 +19,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
 
     protected bool isDead;
     protected bool isAttacking;
-    protected ObjectSaveData saveData;
+    protected CharacterSaveData saveData;
     public bool isKnockedBack; // Track if the enemy is currently being knocked back
 
     [SerializeField] bool isBotEnemy;
@@ -33,9 +32,8 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
         e_data = Instantiate(e_data);
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        rb = GetComponent<Rigidbody>(); // Get the Rigidbody component
-        rb.isKinematic = true; // Ensure Rigidbody doesn't interfere with NavMeshAgent by default
-        sceneStatusManager = FindFirstObjectByType<SceneStatusManager>();
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
     }
 
     protected void Start()
@@ -44,7 +42,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
         {
             name = name
         };
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
         Player = Player_v2.Instance.gameObject.transform;
         currentHealth = e_data.maxhealth;
 
@@ -83,7 +81,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
 
         currentHealth -= healthDamage;
         PlayHurtSound();
-        sceneStatusManager.AddKilledEnemy(this);
         Vector3 knockbackDirection = (transform.position - Player.transform.position).normalized;
         ApplyKnockback(knockbackDirection, e_data.knockbackForce); // Apply knockback when taking damage
 
@@ -124,28 +121,10 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
                 FinishAttack(); // Release attack lock if dead while attacking
             }
 
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            if (quest != null)
-            {
-                QuestObjectives objective = quest.FindQuestObjective(ObjectiveType.FightBots);
-                if (objective != null && objective.isDone != true)
-                {
-                    quest.IncreaseQuestObjectiveProgressLevels(objective, null);
-                }
-            }
+            EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.FightBots, null);
             PlayDeathSound();
             PlayDeathDissolve();
-            Destroy(gameObject, e_data.destroyTime);
-        }
-    }
-
-    public void HandleReloadDeath()
-    {
-        if (!isDead)
-        {
-            PlayDeadAnim();
-            isDead = true;
-            PlayDeathDissolve();
+            saveData.UpdateSaveData(0, currentHealth, transform.position, transform.rotation);
             Destroy(gameObject, e_data.destroyTime);
         }
     }
@@ -175,7 +154,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
         if (animator)
         {
             animator.SetBool("idle", true);
-            animator.SetBool("isWalking", false);
         }
     }
 
@@ -183,7 +161,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
     {
         if (animator)
         {
-            animator.SetBool("isWalking", false);
             animator.SetTrigger("attack");
         }
     }
@@ -255,11 +232,23 @@ public abstract class Enemy : MonoBehaviour, IDamagable, ISaveable
 
     public void ReloadDataFromSavedFile(ObjectSaveData saveData)
     {
+        CharacterSaveData characterData = saveData as CharacterSaveData;
+
+        currentHealth = characterData.healthCount;
+        if(currentHealth <= 0 && isDead != true)
+        {
+            isDead = true;
+            Destroy(gameObject);
+        }
         transform.SetPositionAndRotation(saveData.ObjectPosition, saveData.ObjectRotation);
     }
 
     public void UpdateSavedData()
     {
-        saveData.UpdateSaveData(transform.position, transform.rotation, false);
+        if(saveData == null || this == null)
+        {
+            return;
+        }
+        saveData.UpdateSaveData(0, currentHealth, transform.position, transform.rotation);
     }
 }

@@ -44,7 +44,7 @@ public class DialogueUIPanel : MonoBehaviour
 
     public void HandleSkip()
     {
-        DialogueManager.Instance.skipDialogue = true;
+        DialogueManager.Instance.SkipDialogue = true;
     }
 
     public void StopDisplayCoroutine()
@@ -58,13 +58,13 @@ public class DialogueUIPanel : MonoBehaviour
     public void DisplayText(DialogueCharacterInformation speaker, string dialogueText, NPC_CharacterProfile profile)
     {
         DialogueManager dialogueManager = DialogueManager.Instance;
-        SpeakerType currentSpeakerType = dialogueManager.currentSpeakerType;
+        SpeakerType currentSpeakerType = dialogueManager.CurrentSpeakerType;
 
         speakerObject.SetActive(true);
         speakerTextDialogue.color = (currentSpeakerType != SpeakerType.Player) ? TextColor(profile) : playerTextColor;
 
         speakerName.text = speaker.characterName;
-        if(dialogueManager.currentSpeaker.speakerType == TypeOfSpeaker.Instructor)
+        if(dialogueManager.CurrentSpeaker.speakerType == TypeOfSpeaker.Instructor)
         {
             speakerTextDialogue.color = Color.green;
         }
@@ -126,7 +126,7 @@ public class DialogueUIPanel : MonoBehaviour
 
     private void HandleTextTyping(string text)
     {
-        DialogueManager.Instance.canContinue = false;
+        DialogueManager.Instance.CanContinue = false;
         typingCoroutine = StartCoroutine(TypeText(text));
     }
 
@@ -137,10 +137,10 @@ public class DialogueUIPanel : MonoBehaviour
         PlayerInputHandler inputManager = Player_v2.Instance.InputHandler;
         DialogueManager dialogueManager = DialogueManager.Instance;
 
-        inputManager.jumpPressed = false;
+        inputManager.spaceBarPressed = false;
         foreach (char c in text)
         {
-            if (inputManager.jumpPressed && textFullyRevealed != true)
+            if (inputManager.spaceBarPressed && textFullyRevealed != true)
             {
                 speakerTextDialogue.text = text;
                 textFullyRevealed = true;
@@ -149,7 +149,7 @@ public class DialogueUIPanel : MonoBehaviour
             speakerTextDialogue.text += c;
             yield return typingSpeed;
         }
-        yield return new WaitUntil(() => inputManager.jumpPressed != true);
-        dialogueManager.canContinue = true;
+        yield return new WaitUntil(() => inputManager.spaceBarPressed != true);
+        dialogueManager.CanContinue = true;
     }
 }

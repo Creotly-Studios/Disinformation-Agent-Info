@@ -65,7 +65,7 @@ public class NPC : MonoBehaviour, ISaveable
             name = name
         };
         NPCState = Instantiate(NPCState);
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
         if (SliderUI != null)
         {
             Profile.InitializeAcceptanceValue(50.0f, SliderUI);
@@ -95,7 +95,7 @@ public class NPC : MonoBehaviour, ISaveable
 
     private void HandleStateChange()
     {
-        if (DialogueManager.Instance.dialogueIsPlaying || canMove != true)
+        if (DialogueManager.Instance.DialogueIsPlaying || canMove != true)
         {
             isMoving = false;
             return;
@@ -125,10 +125,10 @@ public class NPC : MonoBehaviour, ISaveable
 
     public void SetAnimatorBool()
     {
-        animator.SetBool(AnimatorHashing.movingHash, isMoving);
+        animator.SetBool(AnimatorHashing.ISMOVING_HASH, isMoving);
 
-        canRotate = animator.GetBool(AnimatorHashing.canRotateHash);
-        performingAction = animator.GetBool(AnimatorHashing.isPerformingActionHash);
+        canRotate = animator.GetBool(AnimatorHashing.CANROTATE_HASH);
+        performingAction = animator.GetBool(AnimatorHashing.ISPERFORMING_HASH);
     }
 
     public void SetPersonalTargetDetails(Vector3 targetPosition)

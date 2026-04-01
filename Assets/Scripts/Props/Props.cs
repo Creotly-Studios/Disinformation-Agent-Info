@@ -10,7 +10,7 @@ public class Props : MonoBehaviour, ISaveable
         {
             name = name
         };
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
     }
 
     public ObjectSaveData GetSaveData()

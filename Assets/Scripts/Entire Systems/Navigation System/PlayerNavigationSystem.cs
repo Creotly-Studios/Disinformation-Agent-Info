@@ -1,89 +1,79 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using System.Collections.Generic;
 
 public class PlayerNavigationSystem : MonoBehaviour
 {
     private Player_v2 player;
-    private Transform cameraObject;
-    public bool canResetFilterNavList;
-
-    private List<QuestObjectiveNavIdentifier> identifierList = new();
-    private List<QuestObjectiveNavIdentifier> filteredIdentifiers = new();
+    private readonly List<QuestObjectiveNavIdentifier> identifierList = new();
+    private readonly List<QuestObjectiveNavIdentifier> filteredIdentifiers = new();
 
     [Header("UI Fields")]
     [SerializeField] private RectTransform directionImage;
     [SerializeField] private TextMeshProUGUI distanceToObject;
 
-    private void Awake()
+    private void Awake() => player = GetComponent<Player_v2>();
+
+    private void OnEnable()
     {
-        player = GetComponent<Player_v2>();
-        canResetFilterNavList = true;
+        EventBus.Quest.OnActiveQuestChanged += OnActiveQuestChanged;
+        EventBus.Quest.OnNavigationRefreshNeeded += OnNavigationRefreshNeeded;
     }
 
-    private void Start()
+    private void OnDisable()
     {
-        cameraObject = Camera.main.transform;
+        EventBus.Quest.OnActiveQuestChanged -= OnActiveQuestChanged;
+        EventBus.Quest.OnNavigationRefreshNeeded -= OnNavigationRefreshNeeded;
     }
 
-    public void Update()
+    private void OnActiveQuestChanged(QuestSO quest)
     {
-        if(canResetFilterNavList)
-        {
-            QuestSO quest = QuestManager.Instance.activeQuest;
-            if(quest != null) { HandleIdentifierFilter(quest.FindNextObjective()); }
-            if(filteredIdentifiers.Count != 0)
-            {
-                canResetFilterNavList = false;
-            }
-            return;
-        }
+        if (quest == null) return;
+        HandleIdentifierFilter(quest.FindNextObjective());
+    }
 
+    private void OnNavigationRefreshNeeded(QuestObjective _)
+    {
+        QuestSO quest = QuestManager.Instance.ActiveQuest;
+        if (quest != null) HandleIdentifierFilter(quest.FindNextObjective());
+    }
+
+    // ── Update ────────────────────────────────────────────────────────────────
+
+    private void Update()
+    {
         HandleNavigation();
         identifierList.RemoveAll(x => x.IsCompleted);
         filteredIdentifiers.RemoveAll(x => x.IsCompleted);
     }
 
+    // ── Navigation ────────────────────────────────────────────────────────────
+
     private void HandleNavigation()
     {
-        QuestObjectiveNavIdentifier mainIdentifier = ClosestIdentifier();
-        if (mainIdentifier != null) { DirectPlayerTo(mainIdentifier); }
+        QuestObjectiveNavIdentifier target = ClosestIdentifier();
+        if (target != null) DirectPlayerTo(target);
     }
 
-    public void HandleIdentifierFilter(QuestObjectives currentObjective)
+    public void HandleIdentifierFilter(QuestObjective currentObjective)
     {
-        if(currentObjective == null)
-        {
-            return;
-        }
-
+        if (currentObjective == null) return;
         filteredIdentifiers.Clear();
-        for(int i = 0; i < identifierList.Count; i++)
+        foreach (QuestObjectiveNavIdentifier id in identifierList)
         {
-            QuestObjectiveNavIdentifier identifier = identifierList[i];
-            if(filteredIdentifiers.Contains(identifier) || identifier.ObjType != currentObjective.objectiveType)
-            {
-                continue;
-            }
-            filteredIdentifiers.Add(identifier);
+            if (!filteredIdentifiers.Contains(id) && id.ObjType == currentObjective.objectiveType)
+                filteredIdentifiers.Add(id);
         }
     }
 
     private QuestObjectiveNavIdentifier ClosestIdentifier()
     {
-        float minDistance = float.MaxValue;
+        float minDist = float.MaxValue;
         QuestObjectiveNavIdentifier closest = null;
-
-        for(int i = 0; i < filteredIdentifiers.Count; i++)
+        foreach (QuestObjectiveNavIdentifier id in filteredIdentifiers)
         {
-            QuestObjectiveNavIdentifier identifier = filteredIdentifiers[i];
-            float distance = Vector3.SqrMagnitude(identifier.GetPosition() - player.transform.position);
-
-            if(distance < minDistance)
-            {
-                minDistance = distance;
-                closest = identifier;
-            }
+            float dist = Vector3.SqrMagnitude(id.GetPosition() - player.transform.position);
+            if (dist < minDist) { minDist = dist; closest = id; }
         }
         return closest;
     }
@@ -94,23 +84,18 @@ public class PlayerNavigationSystem : MonoBehaviour
         Vector3 targetDir = identifier.GetPosition() - player.transform.position;
         int distance = Mathf.FloorToInt(targetDir.magnitude);
 
-        fwd.y = targetDir.y = 0.0f;
+        fwd.y = targetDir.y = 0f;
         Vector2 fwd2D = new Vector2(fwd.x, fwd.z).normalized;
-        Vector2 targetDir2D = new Vector2(targetDir.x, targetDir.z).normalized;
+        Vector2 target2D = new Vector2(targetDir.x, targetDir.z).normalized;
 
-        float angle = Vector2.SignedAngle(fwd2D, targetDir2D);
-        
-        directionImage.localEulerAngles = new Vector3(0, 0, -angle);
+        directionImage.localEulerAngles = new Vector3(0f, 0f, -Vector2.SignedAngle(fwd2D, target2D));
         distanceToObject.text = $"{distance}M";
         identifier.EnableIdentifierObjStatus();
     }
 
     public void RegisterIdentifier(QuestObjectiveNavIdentifier identifier)
     {
-        if(identifierList.Contains(identifier) || identifier.IsCompleted)
-        {
-            return;
-        }
-        identifierList.Add(identifier);
+        if (!identifierList.Contains(identifier) && !identifier.IsCompleted)
+            identifierList.Add(identifier);
     }
 }

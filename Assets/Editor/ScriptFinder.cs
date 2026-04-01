@@ -3,11 +3,27 @@ using UnityEditor;
 using UnityEngine;
 using System.Collections.Generic;
 
+[CustomPropertyDrawer(typeof(ReadOnlyAttribute))]
+public class ReadOnlyDrawer : PropertyDrawer
+{
+    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+    {
+        return EditorGUI.GetPropertyHeight(property, label, true);
+    }
+
+    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+    {
+        EditorGUI.BeginDisabledGroup(true);
+        EditorGUI.PropertyField(position, property, label, true);
+        EditorGUI.EndDisabledGroup();
+    }
+}
+
 public class ScriptFinder : EditorWindow
 {
     private Vector2 scrollPos;
     private string keyword = "Input.";
-    private Dictionary<string, List<int>> results = new Dictionary<string, List<int>>();
+    private readonly Dictionary<string, List<int>> results = new();
 
     [MenuItem("Tools/Keyword Scanner")]
     private static void ShowWindow()

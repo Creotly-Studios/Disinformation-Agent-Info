@@ -4,41 +4,20 @@ using UnityEngine;
 public class PunchSO : ScriptableObject
 {
     private int attackHash;
-    private int performActHash;
 
     [Header("Parameters")]
     public int damage = 1;
-    public float hitFrameDelay = 0.2f;
     public string punchName;
-    public AnimatorOverrideController animation;
-
-    [Header("AI Attack Status")]
-    public int weight;
-    public float recoveryTime = 1.5f;
-
-    [Header("AI Attack Parameters")]
-    public BoundaryFloat attackAngle = new BoundaryFloat(-180f, 180f);
-    public BoundaryFloat distanceToAttack = new BoundaryFloat(0f, 2.5f);
+    [SerializeField] private AudioClip audio;
 
     public void Initialize()
     {
         attackHash = Animator.StringToHash(punchName);
-        performActHash = Animator.StringToHash("performingAction");
     }
 
-    public void PerformAttackAction(Animator animator)
+    public void PerformAttackAction(bool isMirror, PlayerAnimationManager animationManager)
     {
-        PlayTargetAnimation(animator, true);
+        animationManager.PlayAttackAnimation(attackHash, isMirror);
+        AudioManager.Instance.PlaySFX(audio);
     }
-
-    private void PlayTargetAnimation(Animator animator, bool performAction, float transitionDuration = 0.2f)
-    {
-        animator.applyRootMotion = performAction;
-
-        animator.SetBool(performActHash, performAction);
-        animator.CrossFade(attackHash, transitionDuration);
-    }
-
-    //vfx
-    //float knockback
 }

@@ -92,6 +92,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   progressButton: []
   buttonText: []
+  buttonsContainer: {fileID: 0}
   titleText: {fileID: 1986776650231703611}
   contentText: {fileID: 1017876578327720499}
 --- !u!114 &7357998863836597925
@@ -256,9 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60ed41df3d1473246b1a792130662ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeQuest: {fileID: 0}
-  <popupPanel>k__BackingField: {fileID: 6969535618046135983}
-  <availableQuests>k__BackingField:
+  <AvailableQuests>k__BackingField:
   - {fileID: 11400000, guid: 6adb6b4da9766a643849338b71f36cef, type: 2}
   - {fileID: 11400000, guid: 7516e72fee28b2e4e8a5551bfc519ab5, type: 2}
   - {fileID: 11400000, guid: 0a1c3b208cf51ca458a704db60358c7e, type: 2}

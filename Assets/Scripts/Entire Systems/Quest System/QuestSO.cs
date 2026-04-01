@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "QuestSO", menuName = "Scriptable Objects/QuestSO")]
@@ -7,84 +7,90 @@ public class QuestSO : ScriptableObject
     public int CompletedObjectives { get; private set; }
 
     [Header("Status")]
-    public bool isComplete;
-    [field: SerializeField] public int questCode { get; private set; }
-    [field: SerializeField] public int questLevelIndex { get; private set; }
+    [ReadOnly] public bool isComplete;
+    [field: SerializeField] public int QuestCode { get; private set; }
+    [field: SerializeField] public int QuestLevelIndex { get; private set; }
 
     [field: Header("Quest Information")]
     public string questTitle;
     [TextArea] public string description;
     [field: SerializeField] public int QuestReward { get; private set; }
-    [field: SerializeField] public List<QuestObjectives> questObjectives { get; private set; }
+    [field: SerializeField] public List<QuestObjective> QuestObjectives { get; private set; }
 
-    public void QuestSO_Update()
-    {
-        CheckIfQuestIsComplete();
-    }
+    // ── Public Query API ──────────────────────────────────────────────────────
+
+    public QuestObjective FindNextObjective() => QuestObjectives.Find(x => !x.isDone);
+    public QuestObjective FindQuestObjective(ObjectiveType t) => FindQuestObjective(t, false);
 
     public void CheckIfQuestIsComplete()
     {
-        QuestObjectives objective = questObjectives.Find(x => x.isDone != true);
-        isComplete = (objective == null);
+        if (QuestObjectives.Find(x => !x.isDone) == null)
+            isComplete = true;
     }
 
-    public QuestObjectives FindNextObjective()
+    public QuestObjective GetMiniGameObjetive()
     {
-        return questObjectives.Find(x => x.isDone != true);
-    }
-
-    public QuestObjectives GetMiniGameObjetive()
-    {
-        for (int i = 0; i < questObjectives.Count; i++)
+        foreach (QuestObjective obj in QuestObjectives)
         {
-            QuestObjectives potObjective = questObjectives[i];
-
-            ObjectiveType type = potObjective.objectiveType;
-            if (type == ObjectiveType.MiniGame_MalignInfluence || type == ObjectiveType.MiniGame_SpotTheSource || type == ObjectiveType.MiniGame_BiasBingo)
-            {
-                return potObjective;
-            }
+            if (obj.objectiveType == ObjectiveType.MiniGame_MalignInfluence
+             || obj.objectiveType == ObjectiveType.MiniGame_SpotTheSource
+             || obj.objectiveType == ObjectiveType.MiniGame_BiasBingo)
+                return obj;
         }
         return null;
     }
 
-    public QuestObjectives FindQuestObjective(ObjectiveType type, bool multipleInScene = false)
+    // ── Objective Update Pipeline ─────────────────────────────────────────────
+
+    public void UpdateQuestObjectiveLevels(bool increase, bool multiple,
+        ObjectiveType type, QuestObjectiveNavIdentifier identifier)
     {
-        if (multipleInScene != true)
-        {
-            return questObjectives.Find(x => x.objectiveType == type);
-        }
-        return questObjectives.Find(x => x.objectiveType == type && x.isDone != true);
+        QuestObjective objective = FindQuestObjective(type, multiple);
+        if (increase) IncreaseQuestObjectiveProgressLevels(objective, identifier);
+        else DecreaseQuestObjectiveProgressLevels(objective, identifier);
     }
 
-    private void SetCompletedObjective(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
+    public void IncreaseQuestObjectiveProgressLevels(QuestObjective objective,
+        QuestObjectiveNavIdentifier identifier)
     {
-        TaskListManager.Instance.UpdateTaskProgressLevels(questObjective);
-        questObjective.isDone = (questObjective.progressValue >= questObjective.targetValue);
-        if (questObjective.isDone != true)
-        {
-            return;
-        }
-        if (identifier != null) { identifier.MarkCompleted(); }
-        Player_v2.Instance.PlayerNav.canResetFilterNavList = true;
-        QuestManager.Instance.popupPanel.DisplayPopUpWindow(null, NoticeType.ObjectiveCompleted, null, questObjective);
-    }
-
-    public void DecreaseQuestObjectiveProgressLevels(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
-    {
-        CompletedObjectives--;
-        questObjective.progressValue--;
-        SetCompletedObjective(questObjective, identifier);
-    }
-
-    public void IncreaseQuestObjectiveProgressLevels(QuestObjectives questObjective, QuestObjectiveNavIdentifier identifier)
-    {
-        if(questObjective.isDone)
-        {
-            return;
-        }
+        if (objective == null || objective.isDone) return;
         CompletedObjectives++;
-        questObjective.progressValue++;
-        SetCompletedObjective(questObjective, identifier);
+        objective.progressValue++;
+        SetCompletedObjective(objective, identifier);
+    }
+
+    private void DecreaseQuestObjectiveProgressLevels(QuestObjective objective,
+        QuestObjectiveNavIdentifier identifier)
+    {
+        if (objective == null) return;
+        CompletedObjectives--;
+        objective.progressValue--;
+        SetCompletedObjective(objective, identifier);
+    }
+
+    private void SetCompletedObjective(QuestObjective objective, QuestObjectiveNavIdentifier identifier)
+    {
+        EventBus.TaskList.OnUpdateTaskListValues?.Invoke(objective);
+        objective.isDone = objective.progressValue >= objective.targetValue;
+
+        if (!objective.isDone)
+        {
+            return;
+        }
+
+        CheckIfQuestIsComplete();
+        if(identifier != null)
+        {
+            identifier.MarkCompleted();
+            EventBus.Quest.OnNavigationRefreshNeeded?.Invoke(objective);
+        }
+        EventBus.Quest.OnObjectiveCompleted?.Invoke(objective);
+    }
+
+    private QuestObjective FindQuestObjective(ObjectiveType type, bool multipleInQuest)
+    {
+        return multipleInQuest
+            ? QuestObjectives.Find(x => x.objectiveType == type && !x.isDone)
+            : QuestObjectives.Find(x => x.objectiveType == type);
     }
 }

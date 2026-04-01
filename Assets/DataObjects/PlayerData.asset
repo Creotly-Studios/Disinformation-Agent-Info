@@ -19,7 +19,7 @@ MonoBehaviour:
   sprintCooldown: 5.5
   sprintRechargeRate: 2
   gravity: -19.62
-  jumpHeight: 2.5
+  jumpHeight: 5
   jumpForwardForce: 8.01
   turnSmoothTime: 0.1
   variableJumpHieghtMultiplier: 0.5
@@ -31,22 +31,12 @@ MonoBehaviour:
   pushForce: 1
   attackRange: 0.75
   attackSphereSize: 1.5
-  attackDamage: 1
-  attackArray:
-  - {fileID: 11400000, guid: cfd66faf0eaf3b54db2db3c23d75d84f, type: 2}
-  - {fileID: 11400000, guid: bb3e416d4d4b5bf418b18eb02afea802, type: 2}
-  timeBetweenCombos: 0.375
-  timeBetweenAttackUsage: 0.375
-  timeBetweenAttacks: 0
   jump: {fileID: 8300000, guid: f2ab68febfeb27647840c5486ab2096e, type: 3}
   dash: {fileID: 8300000, guid: a8d3674984a991c48b45d0346d0640b8, type: 3}
   land: {fileID: 8300000, guid: 27cab8dfece32fb43a9936b788b87517, type: 3}
   interact: {fileID: 8300000, guid: 59f68579b0c27674a983bdf2798948c8, type: 3}
   dead_GameOver: {fileID: 8300000, guid: 32248103b18ece64795f964eed5d12fc, type: 3}
   inactiveStateCamSound: {fileID: 8300000, guid: 1b409c45eb92dff439c2dc4220062148, type: 3}
-  attack:
-  - {fileID: 8300000, guid: 56446fb21fb031a48bc0caba783865d1, type: 3}
-  - {fileID: 8300000, guid: 5fdd59025deabdd44b70985a54fe06c6, type: 3}
   attackHit: {fileID: 8300000, guid: 459a118ce66bcfe4c90ccdfe07688731, type: 3}
   footsteps:
   - {fileID: 8300000, guid: 23630cc70167cab459e980f317b43abd, type: 3}

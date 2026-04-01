@@ -24,6 +24,6 @@ public class DialogueUIChoice : MonoBehaviour
         dm.OnChoiceSelected(choiceIndex);
 
         uiPanel.DisableUIChoices();
-        dm.canContinue = true;
+        dm.CanContinue = true;
     }
 }

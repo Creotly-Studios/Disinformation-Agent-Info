@@ -32,14 +32,6 @@ public class PlayerData : ScriptableObject
     [Header("ATTACKING/COMBOS")]
     public float attackRange = 3f;
     public float attackSphereSize = 2f;
-    public int attackDamage = 1;
-    [Space]
-    public List<PunchSO> attackArray;
-    [Space]
-    public float timeBetweenCombos = 0.2f;
-    public float timeBetweenAttackUsage = 0.2f;
-    [Space]
-    public float timeBetweenAttacks = 1f;
 
     [Header("SFX")]
     public AudioClip jump;
@@ -49,7 +41,6 @@ public class PlayerData : ScriptableObject
     public AudioClip dead_GameOver;
     public AudioClip inactiveStateCamSound;
     [Space]
-    public AudioClip[] attack;
     public AudioClip attackHit;
     public AudioClip[] footsteps;
     public float footstepInterval = 0.35f;

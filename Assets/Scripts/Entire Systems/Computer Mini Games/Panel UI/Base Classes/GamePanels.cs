@@ -1,17 +1,15 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using System.Collections.Generic;
 
 public class GamePanels : MonoBehaviour
 {
-    //Status
     protected bool hasInitialized;
 
     private Teleporter teleporter;
     private GameController gameController;
-
-    protected SocialMediaComputer sm_Computer;
     protected ComputerPanel_UI computerPanelUI;
 
     [field: Header("Content Arrays")]
@@ -31,33 +29,29 @@ public class GamePanels : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI hintButtonText;
     [SerializeField] protected TextMeshProUGUI countDownTimer;
 
+    // Cached per-button actions — ensures RemoveListener matches the stored delegate.
+    private readonly List<UnityAction> cachedButtonActions = new();
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
     private void Awake()
     {
         teleporter = FindFirstObjectByType<Teleporter>();
-        sm_Computer = GetComponentInParent<SocialMediaComputer>();
         computerPanelUI = GetComponentInParent<ComputerPanel_UI>();
-
-        gameController = new(this, computerPanelUI, sm_Computer);
+        gameController = new GameController(this, computerPanelUI);
     }
 
-    protected virtual void OnEnable()
-    {
-        ResetGame();
-    }
-
-    protected virtual void OnDisable()
-    {
-        UnInitializePanel();
-    }
+    protected virtual void OnEnable() => ResetGame();
+    protected virtual void OnDisable() => UninitializePanel();
 
     private void ResetGame()
     {
-        InitalizePanel();
+        InitializePanel();
         HandleButtonInitialization(true);
         DisplayPanel(true);
     }
 
-    protected void InitalizePanel()
+    protected void InitializePanel()
     {
         hasInitialized = true;
         gameController.ResetGameLogic(scoreCount);
@@ -65,16 +59,15 @@ public class GamePanels : MonoBehaviour
         hintButton.onClick.AddListener(gameController.ProvideHint);
     }
 
-    protected void UnInitializePanel()
+    protected void UninitializePanel()
     {
         hasInitialized = false;
-
         HandleButtonInitialization(false);
         exitButton.onClick.RemoveAllListeners();
         hintButton.onClick.RemoveAllListeners();
     }
 
-    #region Panel Functions
+    // ── Panel Control ─────────────────────────────────────────────────────────
 
     public void DisplayPanel(bool status)
     {
@@ -85,47 +78,39 @@ public class GamePanels : MonoBehaviour
     public virtual void InitializePostContents(PostSO post)
     {
         for (int i = 0; i < post.PostCheckerOptions.Count; i++)
-        {
             uiButtons[i].Initialize(post.PostCheckerOptions[i], PanelObjectiveType);
-        }
     }
 
-    #endregion
+    // ── Game Loop (driven by ComputerPanel_UI.Update) ─────────────────────────
 
     public void GamePanel_Update()
     {
-        if (gameObject.activeSelf != true || gameController.IsGameOver)
-        {
-            return;
-        }
+        if (!gameObject.activeSelf || gameController.IsGameOver) return;
 
-        bool popupActive = (computerPanelUI.popupPanel.gameObject.activeSelf == true) || (computerPanelUI.objectiveCompletePanel.activeSelf == true);
-        EnableButtons(popupActive != true);
-        if (popupActive)
-        {
-            return;
-        }
+        bool popupActive = computerPanelUI.IsPopupActive
+                        || computerPanelUI.ObjectiveCompletePanel.activeSelf;
+        EnableButtons(!popupActive);
+        if (popupActive) return;
+
         gameController.HandleMiniGame_Update(Time.deltaTime, hintButtonText);
     }
 
     protected virtual void EnableButtons(bool status)
     {
-        foreach(var btn in uiButtons)
-        {
+        foreach (var btn in uiButtons)
             btn.optionButton.interactable = status;
-        }
     }
 
     public void UpdateCountdownUI(float remainingTime)
     {
-        int minutes = Mathf.FloorToInt(remainingTime / 60);
-        int seconds = Mathf.FloorToInt(remainingTime % 60);
-        int milliSecond = Mathf.FloorToInt((remainingTime * 1000) % 1000);
-        countDownTimer.color = (remainingTime < 30f) ? Color.red : Color.white;
-        countDownTimer.text = string.Format("{0:00} : {1:00} : {2:000}", minutes, seconds, milliSecond);
+        int min = Mathf.FloorToInt(remainingTime / 60);
+        int sec = Mathf.FloorToInt(remainingTime % 60);
+        int ms = Mathf.FloorToInt((remainingTime * 1000) % 1000);
+        countDownTimer.color = remainingTime < 30f ? Color.red : Color.white;
+        countDownTimer.text = $"{min:00} : {sec:00} : {ms:000}";
     }
 
-    #region Button Initalization
+    // ── Objective / Button Helpers ────────────────────────────────────────────
 
     public void CompletedObjective()
     {
@@ -133,32 +118,33 @@ public class GamePanels : MonoBehaviour
         StartCoroutine(computerPanelUI.DisplayObjectiveCompletedPopup());
     }
 
-    public void AllowButtonInteraction(bool status)
-    {
+    public void AllowButtonInteraction(bool status) =>
         uiButtons.ForEach(x => x.optionButton.interactable = status);
-    }
 
-    private void InitializeButton(MiniGameOptionButton button)
-    {
+    private void OnButtonClicked(MiniGameOptionButton button) =>
         gameController.InitializeButton(uiButtons, button, scoreCount);
-    }
 
-    protected virtual void HandleButtonInitialization (bool status)
+    protected virtual void HandleButtonInitialization(bool add)
     {
-        var currentPost = gameController.CurrentPost;
-        for (int i = 0; i < currentPost.PostCheckerOptions.Count; i++)
+        PostSO currentPost = gameController.CurrentPost;
+        if (currentPost == null) return;
+
+        if (add)
         {
-            MiniGameOptionButton uiButton = uiButtons[i];
-            
-            Button button = uiButton.optionButton;
-            OptionBase option = currentPost.PostCheckerOptions[i];
-            if (status)
+            cachedButtonActions.Clear();
+            for (int i = 0; i < currentPost.PostCheckerOptions.Count; i++)
             {
-                button.onClick.AddListener(() => InitializeButton(uiButton));
-                continue;
+                MiniGameOptionButton captured = uiButtons[i];
+                void action() => OnButtonClicked(captured);
+                cachedButtonActions.Add(action);
+                captured.optionButton.onClick.AddListener(action);
             }
-            button.onClick.RemoveListener(() => InitializeButton(uiButton));
+        }
+        else
+        {
+            for (int i = 0; i < uiButtons.Count && i < cachedButtonActions.Count; i++)
+                uiButtons[i].optionButton.onClick.RemoveListener(cachedButtonActions[i]);
+            cachedButtonActions.Clear();
         }
     }
-    #endregion
 }

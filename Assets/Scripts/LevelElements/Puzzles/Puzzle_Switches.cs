@@ -38,7 +38,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
         {
             name = name
         };
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
     }
 
     public string GetInteractText()
@@ -80,34 +80,9 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
 
     private void UpdateObjective(bool status)
     {
-        QuestManager questManager = QuestManager.Instance;
-        QuestObjectives objective = questManager.activeQuest.FindQuestObjective(ObjectiveType.Puzzle);
-        if(objective == null)
-        {
-            return;
-        }
-
-        QuestSO quest = questManager.activeQuest;
-        QuestObjectiveNavIdentifier identifier = (puzzleManager != null) ? puzzleManager.identifier : navIdentifier;
-        
-        if (switchType == Switch_Type.Main)
-        {
-            if (status != true)
-            {
-                quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
-                return;
-            }
-            quest.IncreaseQuestObjectiveProgressLevels(objective, identifier);
-        }
-        else if (switchType == Switch_Type.Blockers)
-        {
-            if(status)
-            {
-                quest.DecreaseQuestObjectiveProgressLevels(objective, identifier);
-                return;
-            }
-            quest.IncreaseQuestObjectiveProgressLevels(objective, identifier);
-        }
+        bool shouldIncrease = (switchType.Equals(Switch_Type.Main) && status);
+        QuestObjectiveNavIdentifier identifier = (puzzleManager != null) ? puzzleManager.Identifier : navIdentifier;
+        EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(shouldIncrease, false, ObjectiveType.Puzzle, identifier);
     }
 
     public ObjectSaveData GetSaveData()

@@ -1,82 +1,140 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using System.Collections;
 
 public class ComputerPanel_UI : MonoBehaviour
 {
-    private bool hasInitalized;
+    private bool hasInitialized;
+    private GamePanels activePanel;
+    private QuestObjective currentMiniGameObjective;
+    private WaitForSeconds objectivePanelDelay;
+
     [SerializeField] private SocialMediaComputer smComputer;
 
-    private GamePanels activePanel;
-    private QuestObjectives objective;
-    private WaitForSeconds secondsDelay;
+    [Header("Notification")]
+    [field: SerializeField] public NoticePopup Popup { get; private set; }
 
-    [Header("User Buttons")]
+    // Queried by GamePanels.GamePanel_Update() to pause the game timer.
+    public bool IsPopupActive => _isPopupActive;
+    private bool _isPopupActive;
+
+    // Cached button actions — ensures RemoveListener matches the stored delegate.
+    private UnityAction showBiasBingo;
+    private UnityAction showInfoMatch;
+    private UnityAction showSpotSource;
+    private UnityAction onStopPlaying;
+    private UnityAction onContinuePlaying;
+
+    [Header("Navigation Buttons")]
     [SerializeField] private Button biasBingo_Btn;
     [SerializeField] private Button infoMatch_Btn;
     [SerializeField] private Button spotSource_Btn;
-    [Space]
     [SerializeField] private Button exitButton;
 
-    [Header("User Interface")]
+    [Header("Sub-Panels")]
     [SerializeField] private GameObject mainMenuPanel;
     [SerializeField] private MissionCodeUI missionCodeUI;
     [SerializeField] private BiasBingoPanel biasBingoPanel;
     [SerializeField] private MisinformationPanel infoMatchPanel;
-    [SerializeField] public SpotTheSourcePanel spotTheSourcePanel;
+    [field: SerializeField] public SpotTheSourcePanel SpotTheSourcePanel { get; private set; }
 
-    [field: Header("Popup Panels")]
-    [SerializeField] private Button continuePlaying_Btn, stopPlaying_Btn;
-    [field: SerializeField] public NoticePopup popupPanel { get; private set; }
-    [field: SerializeField] public GameObject objectiveCompletePanel { get; private set; }
+    [Header("Objective Complete")]
+    [SerializeField] private Button continuePlaying_Btn;
+    [SerializeField] private Button stopPlaying_Btn;
+    [field: SerializeField] public GameObject ObjectiveCompletePanel { get; private set; }
 
-    [Space]
     [SerializeField] private UnityEvent onExitComputer;
-    
+
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+    private void Awake()
+    {
+        showBiasBingo = () => DisplayPanel(biasBingoPanel);
+        showInfoMatch = () => DisplayPanel(infoMatchPanel);
+        showSpotSource = () => DisplayPanel(SpotTheSourcePanel);
+        onStopPlaying = () => DisplayPanel_Objective(true);
+        onContinuePlaying = () => DisplayPanel_Objective(false);
+    }
+
     private void OnEnable()
     {
-        if(hasInitalized == true)
-        {
-            return;
-        }
+        if (hasInitialized) return;
+        hasInitialized = true;
+        objectivePanelDelay = new WaitForSeconds(1.2f);
 
-        hasInitalized = true;
-        secondsDelay = new WaitForSeconds(1.2f);
-        stopPlaying_Btn.onClick.AddListener(() => DisplayPanel_Objective(true));
-        continuePlaying_Btn.onClick.AddListener(() => DisplayPanel_Objective(false));
+        stopPlaying_Btn.onClick.AddListener(onStopPlaying);
+        continuePlaying_Btn.onClick.AddListener(onContinuePlaying);
+        biasBingo_Btn.onClick.AddListener(showBiasBingo);
+        infoMatch_Btn.onClick.AddListener(showInfoMatch);
+        spotSource_Btn.onClick.AddListener(showSpotSource);
+        exitButton.onClick.AddListener(() => onExitComputer?.Invoke());
 
-        biasBingo_Btn.onClick.AddListener(() => DisplayPanel(biasBingoPanel));
-        infoMatch_Btn.onClick.AddListener(() => DisplayPanel(infoMatchPanel));
-        spotSource_Btn.onClick.AddListener(() => DisplayPanel(spotTheSourcePanel));
-
-        exitButton.onClick.AddListener(() =>
-        {
-            onExitComputer?.Invoke();
-        });
+        EventBus.Quest.OnActiveQuestChanged += OnActiveQuestChanged;
+        EventBus.Notification.OnShow += OnNotificationShown;
+        EventBus.Notification.OnDismiss += OnNotificationDismissed;
     }
 
     private void OnDisable()
     {
-        if(hasInitalized != true)
+        if (!hasInitialized) return;
+        hasInitialized = false;
+
+        stopPlaying_Btn.onClick.RemoveListener(onStopPlaying);
+        continuePlaying_Btn.onClick.RemoveListener(onContinuePlaying);
+        biasBingo_Btn.onClick.RemoveListener(showBiasBingo);
+        infoMatch_Btn.onClick.RemoveListener(showInfoMatch);
+        spotSource_Btn.onClick.RemoveListener(showSpotSource);
+
+        EventBus.Quest.OnActiveQuestChanged -= OnActiveQuestChanged;
+        EventBus.Notification.OnShow -= OnNotificationShown;
+        EventBus.Notification.OnDismiss -= OnNotificationDismissed;
+    }
+
+    private void Start() => DisablePanels();
+
+    // ── EventBus Handlers ─────────────────────────────────────────────────────
+
+    private void OnActiveQuestChanged(QuestSO quest)
+    {
+        if (quest == null) { UnlockAllMiniGames(); return; }
+
+        currentMiniGameObjective = quest.GetMiniGameObjetive();
+        if (currentMiniGameObjective == null) { UnlockAllMiniGames(); return; }
+
+        SetMiniGameInteractability(currentMiniGameObjective.objectiveType);
+        smComputer.identifier.SetObjectiveType(currentMiniGameObjective.objectiveType);
+        missionCodeUI.SetParameters(currentMiniGameObjective.isDone, quest);
+    }
+
+    // Only track this panel's popup — ignores all others.
+    private void OnNotificationShown(NoticePopup popup, NotificationRequest _) =>
+        _isPopupActive = popup == Popup || _isPopupActive;
+
+    private void OnNotificationDismissed(NoticePopup popup)
+    {
+        if (popup == Popup) _isPopupActive = false;
+    }
+
+    // ── Update ────────────────────────────────────────────────────────────────
+
+    private void Update()
+    {
+        if(activePanel == null)
         {
             return;
         }
-
-        hasInitalized = false;
-        biasBingo_Btn.onClick.RemoveListener(() => DisplayPanel(biasBingoPanel));
-        infoMatch_Btn.onClick.RemoveListener(() => DisplayPanel(infoMatchPanel));
-        spotSource_Btn.onClick.RemoveListener(() => DisplayPanel(spotTheSourcePanel));
+        activePanel.GamePanel_Update();
     }
+
+    // ── Panel Control ─────────────────────────────────────────────────────────
 
     public void DisablePanels()
     {
         mainMenuPanel.SetActive(true);
-
         biasBingoPanel.gameObject.SetActive(false);
         infoMatchPanel.gameObject.SetActive(false);
-        spotTheSourcePanel.gameObject.SetActive(false);
-        popupPanel.gameObject.SetActive(false);
+        SpotTheSourcePanel.gameObject.SetActive(false);
     }
 
     private void DisplayPanel(GamePanels panel)
@@ -86,84 +144,39 @@ public class ComputerPanel_UI : MonoBehaviour
         mainMenuPanel.SetActive(false);
     }
 
-    private void DisplayPanel_Objective(bool status)
+    private void DisplayPanel_Objective(bool stopPlaying)
     {
-        if(status == true)
+        if (stopPlaying)
         {
             mainMenuPanel.SetActive(true);
-            if (activePanel != null) { activePanel.gameObject.SetActive(false); }
-            activePanel = null;
+            if(activePanel != null)
+            {
+                activePanel.gameObject.SetActive(false);
+                activePanel = null;
+            }
         }
-        objectiveCompletePanel.SetActive(false);
+        ObjectiveCompletePanel.SetActive(false);
     }
 
-    private void Start()
-    {
-        DisablePanels();
-    }
+    // ── Mini-Game Interactability ─────────────────────────────────────────────
 
-    private void Update()
-    {
-        UnlockGames();
-        if(activePanel != null)
-        {
-            activePanel.GamePanel_Update();
-        }
-        UpdateMissionQuestLevel();
-    }
-
-    private void UpdateMissionQuestLevel()
-    {
-        QuestManager questManager = QuestManager.Instance;
-
-        if(objective != null)
-        {
-            missionCodeUI.SetParameters(objective.isDone, questManager.activeQuest);
-        }
-    }
-
-    private void UnlockGames()
-    {
-        QuestManager questManager = QuestManager.Instance;
-        if (questManager == null)
-        {
-            return;
-        }
-        
-        QuestSO activeQuest = questManager.activeQuest;
-        if (activeQuest == null)
-        {
-            SetMiniGame();
-            return;
-        }
-
-        objective = questManager.activeQuest.GetMiniGameObjetive();
-        if(objective == null)
-        {
-            SetMiniGame();
-            return;
-        } 
-        SetMiniGame(objective.objectiveType);
-        smComputer.identifier.SetObjectiveType(objective.objectiveType);
-    }
-
-    public IEnumerator DisplayObjectiveCompletedPopup()
-    {
-        yield return secondsDelay;
-        objectiveCompletePanel.SetActive(true);
-    }
-
-    private void SetMiniGame()
+    private void UnlockAllMiniGames()
     {
         biasBingo_Btn.interactable = true;
         infoMatch_Btn.interactable = true;
         spotSource_Btn.interactable = true;
     }
 
-    private void SetMiniGame(ObjectiveType type)
+    private void SetMiniGameInteractability(ObjectiveType type)
     {
-        biasBingo_Btn.interactable = (type == ObjectiveType.MiniGame_BiasBingo);
-        infoMatch_Btn.interactable = (type == ObjectiveType.MiniGame_MalignInfluence);
-        spotSource_Btn.interactable = (type == ObjectiveType.MiniGame_SpotTheSource);
+        biasBingo_Btn.interactable = type == ObjectiveType.MiniGame_BiasBingo;
+        infoMatch_Btn.interactable = type == ObjectiveType.MiniGame_MalignInfluence;
+        spotSource_Btn.interactable = type == ObjectiveType.MiniGame_SpotTheSource;
+    }
+
+    public IEnumerator DisplayObjectiveCompletedPopup()
+    {
+        yield return objectivePanelDelay;
+        ObjectiveCompletePanel.SetActive(true);
     }
 }

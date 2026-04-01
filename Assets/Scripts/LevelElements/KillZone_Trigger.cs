@@ -18,7 +18,7 @@ public class KillZone_Trigger : MonoBehaviour
         {
             if (killType == KillZoneType.InstaKill)
             {
-                Player_v2.Instance.PlayerStatistics.PlayerDie();
+                Player_v2.Instance.Damage.TakeDamage(100000);
                 Debug.Log("Player has been killed by an insta-kill zone.");
             }
             else if (killType == KillZoneType.SlowKill)
@@ -30,13 +30,16 @@ public class KillZone_Trigger : MonoBehaviour
 
     private IEnumerator SlowKill()
     {
-        if (!Player_v2.Instance.IsPlayerDead())
+        Player_v2 player = Player_v2.Instance;
+        if (!player.IsPlayerDead())
         {
-            Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
+            PlayerDamageHandler damage = player.Damage;
+
+            damage.TakeDamage(slowKillDamage);
             yield return new WaitForSeconds(slowKillRate);
-            Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
+            damage.TakeDamage(slowKillDamage);
             yield return new WaitForSeconds(slowKillRate);
-            Player_v2.Instance.PlayerStatistics.TakeDamage(slowKillDamage);
+            damage.TakeDamage(slowKillDamage);
             yield return new WaitForSeconds(slowKillRate);
         }
 

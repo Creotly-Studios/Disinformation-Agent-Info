@@ -1,97 +1,100 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Events;
 
+// The inline wrong-code notice (noticePanel) is intentionally kept as a local
+// text overlay — it's a brief, button-free flash that doesn't need the full
+// NoticePopup system. The payment confirmation uses the central popup.
 public class TeleporterUI_Panel : MonoBehaviour
 {
     private Teleporter teleporter;
-    private WaitForSeconds waitForSeconds;
-    
-    [Header("UI")] 
+    private WaitForSeconds noticeDuration;
+
+    [Header("UI")]
     [SerializeField] private Button submitButton;
     [SerializeField] private Button closePanelButton;
     [SerializeField] private TMP_InputField codeInputField;
-    [Space] [SerializeField] private GameObject teleporterUiPanel;
+    [SerializeField] private GameObject teleporterUiPanel;
 
-    [Header("Notice Panel")]
+    [Header("Inline Wrong-Code Notice")]
     [SerializeField] private GameObject noticePanel;
-    [SerializeField] private float panelDisableSecond;
+    [SerializeField] private float noticeDurationSeconds;
     [SerializeField] private TextMeshProUGUI noticeTextUI;
 
-    [Space]
+    [Header("Notification")]
+    [SerializeField] private NoticePopup teleporterPopup;
     [SerializeField] private UnityEvent onCancelTeleport;
 
-    private void Awake()
-    {
-        teleporter = GetComponent<Teleporter>();
-    }
+    private void Awake() => teleporter = GetComponent<Teleporter>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         teleporterUiPanel.SetActive(false);
-        submitButton.onClick.AddListener(() =>
-        {
-            OnSubmitButtonClick();
-        });
+        noticeDuration = new WaitForSeconds(noticeDurationSeconds);
+
+        submitButton.onClick.AddListener(OnSubmitButtonClick);
         closePanelButton.onClick.AddListener(() =>
         {
             teleporterUiPanel.SetActive(false);
             onCancelTeleport?.Invoke();
         });
-
-        waitForSeconds = new WaitForSeconds(panelDisableSecond);
     }
-    
+
+    // ── Submit Handler ────────────────────────────────────────────────────────
+
     private void OnSubmitButtonClick()
     {
         QuestManager questManager = QuestManager.Instance;
-        QuestSO quest = questManager.activeQuest;
+        QuestSO activeQuest = questManager.ActiveQuest;
 
-        //If Completed All Quests Player Can Teleport To Any Scene
-        if (quest == null)
+        if (activeQuest == null)
         {
-            QuestSO teleportQuest = questManager.availableQuests.Find(x => x.questCode.ToString() == codeInputField.text);
-            if (teleportQuest == null)
-            {
-                InCorrectCode(true);
+            QuestSO target = questManager.AvailableQuests.Find(x => x.QuestCode.ToString() == codeInputField.text);
+            if (target == null)
+            { 
+                ShowInlineNotice(wrongCode: true);
                 return;
             }
-            Teleport(teleportQuest);
+            Teleport(target);
             return;
         }
 
-        if (quest.questCode.ToString() != codeInputField.text)
+        if (activeQuest.QuestCode.ToString() != codeInputField.text)
         {
-            InCorrectCode(false);
+            ShowInlineNotice(wrongCode: false);
             return;
         }
-        Teleport(quest);
+
+        EventBus.Notification.OnShow?.Invoke(teleporterPopup,
+            NotificationRequest.Payment(3, "Pay 3 Coins To Teleport", () => Teleport(activeQuest)));
     }
+
+    // ── Teleport ──────────────────────────────────────────────────────────────
 
     private void Teleport(QuestSO quest)
     {
-        codeInputField.text = "";
+        codeInputField.text = string.Empty;
         teleporterUiPanel.SetActive(false);
         teleporter.identifier.SetActive(false);
-        LevelLoader.LoadLevel(quest.questLevelIndex);
+        LevelLoader.LoadLevel(quest.QuestLevelIndex);
     }
 
-    private void InCorrectCode(bool completedQuest)
+    // ── Inline Notice (no buttons, auto-hides) ────────────────────────────────
+
+    private void ShowInlineNotice(bool wrongCode)
     {
-        codeInputField.text = "";
-        string noticeText = (completedQuest) ? "In-Correct Code, Please Try Again" : "Cannot Play Level At The Time";
-        StartCoroutine(DisableNoticePanel(noticeText));
+        codeInputField.text = string.Empty;
+        string text = wrongCode ? "Incorrect Code — Please Try Again" : "Cannot Play This Level Yet";
+        StartCoroutine(FlashNotice(text));
     }
 
-    private IEnumerator DisableNoticePanel(string text)
+    private IEnumerator FlashNotice(string text)
     {
         noticeTextUI.text = text;
         noticePanel.SetActive(true);
-
-        yield return waitForSeconds;
+        yield return noticeDuration;
         noticePanel.SetActive(false);
     }
 }

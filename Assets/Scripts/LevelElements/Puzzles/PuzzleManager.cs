@@ -2,38 +2,44 @@ using UnityEngine;
 
 public class PuzzleManager : MonoBehaviour
 {
-    QuestObjectives puzzle_Objective;
-    QuestObjectives combat_Objective;
-    public QuestObjectiveNavIdentifier identifier { get; private set; }
+    private QuestObjective puzzleObjective;
+    private QuestObjective combatObjective;
+    public QuestObjectiveNavIdentifier Identifier { get; private set; }
 
     [Header("Rewards")]
     [SerializeField] private GameObject combatCompleteReward;
     [SerializeField] private GameObject puzzleCompleteReward;
 
-    private void Awake()
+    private void Awake() => Identifier = GetComponent<QuestObjectiveNavIdentifier>();
+
+    private void OnEnable()
     {
-        puzzle_Objective = combat_Objective = new();
-        identifier = GetComponent<QuestObjectiveNavIdentifier>();
+        EventBus.Quest.OnActiveQuestChanged += OnQuestChanged;
+        EventBus.Quest.OnNavigationRefreshNeeded += OnObjectiveCompleted;
     }
 
-    private void Update()
+    private void OnDisable()
     {
-        if(puzzle_Objective.targetValue == 0 || combat_Objective.targetValue == 0)
+        EventBus.Quest.OnActiveQuestChanged -= OnQuestChanged;
+        EventBus.Quest.OnNavigationRefreshNeeded -= OnObjectiveCompleted;
+    }
+
+    private void OnQuestChanged(QuestSO quest)
+    {
+        if (quest == null)
         {
-            QuestManager questManager = QuestManager.Instance;
-            QuestSO quest = questManager.activeQuest;
-            if (quest != null)
-            {
-                puzzle_Objective = quest.FindQuestObjective(ObjectiveType.Puzzle);
-                combat_Objective = quest.FindQuestObjective(ObjectiveType.FightBots);
-            }
+            return;
         }
-        CheckPuzzleCompletion();
+        puzzleObjective = quest.FindQuestObjective(ObjectiveType.Puzzle);
+        combatObjective = quest.FindQuestObjective(ObjectiveType.FightBots);
+        RefreshRewards();
     }
 
-    private void CheckPuzzleCompletion()
+    private void OnObjectiveCompleted(QuestObjective _) => RefreshRewards();
+
+    private void RefreshRewards()
     {
-        puzzleCompleteReward.SetActive(puzzle_Objective != null && puzzle_Objective.isDone);
-        combatCompleteReward.SetActive(combat_Objective != null && combat_Objective.isDone);
+        puzzleCompleteReward.SetActive(puzzleObjective != null && puzzleObjective.isDone);
+        combatCompleteReward.SetActive(combatObjective != null && combatObjective.isDone);
     }
 }

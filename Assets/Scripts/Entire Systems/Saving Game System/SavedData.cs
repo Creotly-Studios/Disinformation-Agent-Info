@@ -12,7 +12,6 @@ public class SavedData
     [Header("Quest Data")]
     public int sceneIndex;
     public int currentLevel;
-    public List<int> killedEnemiesIndex = new();
     public List<ObjectSaveData> saveableAssets = new();
     public List<SerializableQuestData> questDataList = new();
 
@@ -55,9 +54,9 @@ public class SerializableQuestData
     public SerializableQuestData(QuestSO quest)
     {
         questName = quest.questTitle;
-        for(int i = 0; i < quest.questObjectives.Count; i++)
+        for(int i = 0; i < quest.QuestObjectives.Count; i++)
         {
-            int progressvalues = quest.questObjectives[i].progressValue;
+            int progressvalues = quest.QuestObjectives[i].progressValue;
             objectiveProgressvalue.Add(progressvalues);
         }
     }
@@ -66,7 +65,7 @@ public class SerializableQuestData
     {
         for(int i = 0; i < objectiveProgressvalue.Count; i++)
         {
-            objectiveProgressvalue[i] = quest.questObjectives[i].progressValue;
+            objectiveProgressvalue[i] = quest.QuestObjectives[i].progressValue;
         }
         completedObjectives = quest.CompletedObjectives;
     }
@@ -82,9 +81,9 @@ public class SerializableQuestData
     {
         for(int i = 0; i < objectiveProgressvalue.Count; i++)
         {
-            QuestObjectives objectives = quest.questObjectives[i];
+            QuestObjective objectives = quest.QuestObjectives[i];
             objectives.LoadProgressValue(objectiveProgressvalue[i]);
-            TaskListManager.Instance.UpdateTaskProgressLevels(objectives);
+            EventBus.TaskList.OnUpdateTaskListValues(objectives);
         }
         quest.CheckIfQuestIsComplete();
     }

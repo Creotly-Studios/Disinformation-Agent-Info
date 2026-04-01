@@ -1,4 +1,4 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
@@ -7,192 +7,156 @@ using System.Collections.Generic;
 [System.Serializable]
 public class GameController
 {
+    private bool hasAnswered;    // True after a button is pressed; gates post-reset.
+    private bool isResetting;    // Guard: prevents spawning multiple reset coroutines.
     private int hintCount;
     private int currentScore;
-
-    private bool hasSet;
     private float remainingTime;
+
     public bool IsGameOver { get; private set; }
 
-    private WaitForSeconds waitForSeconds;
+    private readonly WaitForSeconds postResetDelay;
     private List<PostSO> dynamicContentList;
 
-    //Game Panel Inherited Panels
     private readonly GamePanels gamePanel;
     private readonly ComputerPanel_UI computerPanel;
-    private readonly SocialMediaComputer sm_Computer;
 
     private OptionBase selectedOption;
     public PostSO CurrentPost { get; private set; }
 
-    [Header("Quest Parameters")]
     [SerializeField] private ObjectiveType objectiveType;
-    [SerializeField] private QuestObjectives questObjective;
+    [SerializeField] private QuestObjective questObjective;
 
-    public GameController(GamePanels gp, ComputerPanel_UI cp, SocialMediaComputer smc)
+    // Convenience: all notifications from this controller target the computer's popup.
+    private NoticePopup Popup => computerPanel.Popup;
+
+    public GameController(GamePanels gp, ComputerPanel_UI cp)
     {
         gamePanel = gp;
-        sm_Computer = smc;
         computerPanel = cp;
-        waitForSeconds = new WaitForSeconds(1.5f);
+        postResetDelay = new WaitForSeconds(1.5f);
         objectiveType = gamePanel.PanelObjectiveType;
     }
+
+    // ── Update (called from GamePanel_Update every frame) ─────────────────────
 
     public void HandleMiniGame_Update(float delta, TextMeshProUGUI hintText)
     {
         TimerCountdown(delta);
-        hintText.text = $"Hint: {hintCount:00}";
-        gamePanel.StartCoroutine(ResetCurrentPost());
+        hintText.text = $"Hints: {hintCount:00}";
     }
 
-    //Game Logic
-    private void GameOver(string text)
+    // ── Game Logic ────────────────────────────────────────────────────────────
+
+    private void GameOver(string reason)
     {
         IsGameOver = true;
-
         gamePanel.DisplayPanel(false);
-        computerPanel.popupPanel.HandleMini_GameOver(text, () => ResetGameLogic(null), ExitGame);
+        EventBus.Notification.OnShow?.Invoke(
+            Popup, NotificationRequest.MiniGameOver(reason, () => ResetGameLogic(null), ExitGame));
     }
 
-    protected void TimerCountdown(float delta)
+    private void TimerCountdown(float delta)
     {
-        bool popUp = computerPanel.popupPanel.gameObject.activeSelf;
-        if (IsGameOver || popUp) return;
-
+        if (IsGameOver || computerPanel.IsPopupActive) return;
         remainingTime -= delta;
-        if (remainingTime <= 0.0f)
-        {
-            remainingTime = 0.0f;
-            GameOver("Time's up!");
-            return;
-        }
+        if (remainingTime <= 0f) { remainingTime = 0f; GameOver("Time's up!"); return; }
         gamePanel.UpdateCountdownUI(remainingTime);
     }
 
-    private void WrongAnswer(Image pickedAnswer, Image correctAnswer)
-    {
-        if (objectiveType == ObjectiveType.MiniGame_MalignInfluence)
-        {
-            return;
-        }
-        if (pickedAnswer != null) { pickedAnswer.color = Color.red; }
-        if (correctAnswer != null) { correctAnswer.color = Color.green; }
-    }
+    // ── Answer Evaluation ─────────────────────────────────────────────────────
 
-    private void CorrectAnswer(Image buttonImage, TextMeshProUGUI counterText)
+    // Called by each game panel button via GamePanels.InitializeButton.
+    public void InitializeButton(List<MiniGameOptionButton> uiButtons,
+        MiniGameOptionButton button, TextMeshProUGUI counterText)
     {
-        currentScore++;
-        counterText.text = currentScore.ToString();
-
-        QuestSO quest = QuestManager.Instance.activeQuest;
-        if (quest != null)
-        {
-            QuestObjectives objective = quest.FindQuestObjective(objectiveType);
-            if (objective != null && objective.isDone != true)
-            {
-                quest.IncreaseQuestObjectiveProgressLevels(objective, sm_Computer.identifier);
-            }
-            if (objective.isDone)
-            {
-                gamePanel.CompletedObjective();
-            }
-        }
-        if (objectiveType != ObjectiveType.MiniGame_MalignInfluence) buttonImage.color = Color.green;
-    }
-
-    public void InitializeButton(List<MiniGameOptionButton> uiButtons, MiniGameOptionButton button, TextMeshProUGUI counterText)
-    {
-        if (IsGameOver)
-        {
-            return;
-        }
+        if (IsGameOver || hasAnswered) return;
 
         Image correct = null;
         selectedOption = button.Option;
         button.optionButton.interactable = false;
         bool isCorrect = selectedOption.IsCorrectAnswer;
 
-        if (isCorrect != true)
+        if (!isCorrect)
         {
             var crrtBtn = uiButtons.Find(x => x.IsCorrect());
-            correct = (crrtBtn == null) ? null : crrtBtn.optionButton.image;
+            correct = crrtBtn.optionButton.image;
         }
-        EvaluateAnswer(isCorrect, correct, button.optionButton.image, counterText);
-        ResultNotificationPopup(isCorrect, selectedOption.Explanation);
-    }
 
-    private void ResultNotificationPopup(bool isCorrect, string explanation)
-    {
-        NoticeType noticeType = (isCorrect) ? NoticeType.Correct : NoticeType.Wrong;
-        computerPanel.popupPanel.DisplayPopUpWindow(explanation, noticeType);
+        EvaluateAnswer(isCorrect, correct, button.optionButton.image, counterText);
+
+        NoticeType resultType = isCorrect ? NoticeType.Correct : NoticeType.Wrong;
+        EventBus.Notification.OnShow?.Invoke(
+            Popup, NotificationRequest.QuizResult(resultType, selectedOption.Explanation));
+
+        // Trigger post-reset exactly once per answered question.
+        if (!isResetting)
+            gamePanel.StartCoroutine(ResetAfterDelay());
     }
 
     public void EvaluateAnswer(bool isCorrect, Image correct, Image picked, TextMeshProUGUI counterText)
     {
-        if (hasSet == true)
-        {
-            return;
-        }
-
-        hasSet = true;
-
+        hasAnswered = true;
         if (isCorrect)
         {
-            CorrectAnswer(picked, counterText);
-            return;
+            currentScore++;
+            counterText.text = currentScore.ToString();
+            EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, objectiveType, null);
+            if (questObjective.isDone) gamePanel.CompletedObjective();
+            if (objectiveType != ObjectiveType.MiniGame_MalignInfluence)
+                picked.color = Color.green;
         }
-        WrongAnswer(picked, correct);
+        else
+        {
+            if (objectiveType != ObjectiveType.MiniGame_MalignInfluence)
+            {
+                if (picked != null) picked.color = Color.red;
+                if (correct != null) correct.color = Color.green;
+            }
+        }
     }
 
-    //Post Logic
-    private IEnumerator ResetCurrentPost()
-    {
-        hasSet = false;
+    // ── Post Logic ────────────────────────────────────────────────────────────
 
-        yield return waitForSeconds;
-        SetCurrentPost_Complete();
+    // Bug fix: was called every frame from HandleMiniGame_Update, spawning
+    // ~60 coroutines/second. Now triggered once per answer via InitializeButton.
+    private IEnumerator ResetAfterDelay()
+    {
+        isResetting = true;
+        yield return postResetDelay;
+
+        if (selectedOption != null)
+        {
+            CurrentPost.hasChecked = true;
+            GetCurrentPost();
+            gamePanel.AllowButtonInteraction(true);
+            selectedOption = null;
+        }
+
+        hasAnswered = false;
+        isResetting = false;
     }
 
     private void GetCurrentPost()
     {
-        int count = dynamicContentList.Count;
-        if (count <= 0)
+        if (dynamicContentList.Count == 0)
         {
-            Debug.Log("All posts have been answered.");
             GameOver("Congratulations! You've completed all posts!");
             return;
         }
-        int random = Random.Range(0, count);
-        CurrentPost = dynamicContentList[random];
-
+        int index = Random.Range(0, dynamicContentList.Count);
+        CurrentPost = dynamicContentList[index];
         gamePanel.InitializePostContents(CurrentPost);
-        dynamicContentList.Remove(CurrentPost);
+        dynamicContentList.RemoveAt(index);
     }
 
-    private void SetCurrentPost_Complete()
-    {
-        if(selectedOption == null)
-        {
-            return;
-        }
+    // ── Button Actions ────────────────────────────────────────────────────────
 
-        CurrentPost.hasChecked = true;
-        if (CurrentPost == null || CurrentPost.hasChecked)
-        {
-            GetCurrentPost();
-            gamePanel.AllowButtonInteraction(true);
-        }
-        selectedOption = null;
-    }
-
-    //Button Functionalities
     public void ExitGame()
     {
-        if(questObjective != null && questObjective.isDone != true)
-        {
+        if (questObjective != null && !questObjective.isDone)
             questObjective.progressValue = 0;
-        }
-        dynamicContentList.Clear();
+        dynamicContentList?.Clear();
         computerPanel.DisablePanels();
     }
 
@@ -200,30 +164,36 @@ public class GameController
     {
         if (hintCount <= 0)
         {
-            hintCount = 0;
+            EventBus.Notification.OnShow?.Invoke(
+                Popup, NotificationRequest.Payment(3, "Pay 3 Coins for a Hint", DisplayHint));
+            return;
         }
         hintCount--;
-        computerPanel.popupPanel.DisplayPopUpWindow(CurrentPost.funFact_Hint, NoticeType.Hint);
+        DisplayHint();
     }
+
+    private void DisplayHint() =>
+        EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.Hint(CurrentPost.funFact_Hint));
+
+    // ── Initialisation ────────────────────────────────────────────────────────
 
     public void ResetGameLogic(TextMeshProUGUI counterText)
     {
-        QuestSO quest = QuestManager.Instance.activeQuest;
+        QuestSO quest = QuestManager.Instance.ActiveQuest;
         questObjective = quest.FindQuestObjective(objectiveType);
 
         currentScore = 0;
         IsGameOver = false;
-        if(counterText != null)
-        {
-            counterText.text = currentScore.ToString("00");
-        }
-        
-        remainingTime = gamePanel.MaxTime;
-        hintCount = questObjective.targetValue - 2;
+        hasAnswered = false;
+        isResetting = false;
 
-        int length = gamePanel.ContentArray.Length;
-        dynamicContentList = new(gamePanel.ContentArray);
-        for (int i = 0; i < length; i++)
+        if (counterText != null) counterText.text = "00";
+
+        remainingTime = gamePanel.MaxTime;
+        hintCount = Mathf.Max(0, questObjective.targetValue - 2);
+
+        dynamicContentList = new List<PostSO>(gamePanel.ContentArray);
+        for (int i = 0; i < dynamicContentList.Count; i++)
         {
             dynamicContentList[i] = ScriptableObject.Instantiate(dynamicContentList[i]);
             dynamicContentList[i].Initialize();

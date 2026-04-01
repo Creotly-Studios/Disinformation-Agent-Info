@@ -14,7 +14,7 @@ public class Coin : MonoBehaviour, ISaveable
         {
             name = gameObject.name
         };
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
     }
 
     public ObjectSaveData GetSaveData()

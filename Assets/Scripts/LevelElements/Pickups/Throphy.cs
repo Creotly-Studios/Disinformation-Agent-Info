@@ -10,16 +10,9 @@ public class Throphy : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             pickUpEvent?.Invoke();
-            QuestManager questManager = QuestManager.Instance;
-            QuestObjectives objective = questManager.activeQuest.FindQuestObjective(ObjectiveType.Trophy);
-
-
-            if (objective != null)
-            {
-                questManager.activeQuest.IncreaseQuestObjectiveProgressLevels(objective, null);
-            }
-            //GameManager.Instance.MissionComplete();
-            //Destroy(gameObject);
+            EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.Trophy, null);
+            GameManager.Instance.MissionComplete();
+            Destroy(gameObject);
         }
     }
 }

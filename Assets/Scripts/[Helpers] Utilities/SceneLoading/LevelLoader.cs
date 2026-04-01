@@ -17,19 +17,13 @@ public class LevelLoaderRunner : MonoBehaviour
 
     private IEnumerator LoadAsync()
     {
-        var dialogueManager = DialogueManager.Instance;
-        if (dialogueManager != null)
-        {
-            dialogueManager.EnableDialoguePanel(false);
-        }
+        if (DialogueManager.Instance != null)
+            DialogueManager.Instance.EnableDialoguePanel(false);
 
-        var gm = GameManager.Instance;
-        if (gm != null)    
-        {
-            gm.UnPause();
-        }
+        if (GameManager.Instance != null)
+            GameManager.Instance.UnPause();
 
-        var op = SceneManager.LoadSceneAsync(_sceneIndex);
+        AsyncOperation op = SceneManager.LoadSceneAsync(_sceneIndex);
         if (op == null)
         {
             Finish();
@@ -40,21 +34,16 @@ public class LevelLoaderRunner : MonoBehaviour
         LevelLoader.SetCurrentAsyncOperation(op);
 
         while (!op.isDone)
-        {
             yield return null;
-        }
+
         yield return null;
 
         _onComplete?.Invoke();
         Finish();
     }
 
-    private void Finish()
-    {
-        Destroy(gameObject);
-    }
+    private void Finish() => Destroy(gameObject);
 }
-
 
 public static class LevelLoader
 {
@@ -62,17 +51,15 @@ public static class LevelLoader
     private static Action onComplete;
     private static AsyncOperation asyncOperation;
 
-    /// <summary>
-    /// Call to begin loading a target scene via the "Loading" scene.
-    /// </summary>
+    /// <summary>Loads a target scene via the "Loading" scene.</summary>
     public static void LoadLevel(int levelIndex, Action action = null)
     {
         onComplete = action;
         targetSceneIndex = levelIndex;
 
-        SceneManager.LoadScene("Loading");
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneLoaded += OnSceneLoaded;
+        SceneManager.LoadScene("Loading");
     }
 
     private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -80,10 +67,9 @@ public static class LevelLoader
         if (scene.name != "Loading") return;
         SceneManager.sceneLoaded -= OnSceneLoaded;
 
-        var go = new GameObject("LevelLoaderRunner");
+        GameObject go = new("LevelLoaderRunner");
         GameObject.DontDestroyOnLoad(go);
-        var runner = go.AddComponent<LevelLoaderRunner>();
-        runner.BeginLoad(targetSceneIndex, OnLoadCompleteCallback);
+        go.AddComponent<LevelLoaderRunner>().BeginLoad(targetSceneIndex, OnLoadCompleteCallback);
     }
 
     private static void OnLoadCompleteCallback()
@@ -91,19 +77,14 @@ public static class LevelLoader
         onComplete?.Invoke();
         if (onComplete == null)
         {
-            var save = SaveManagerSystem.Instance;
-            if (save != null) save.AutoSave();
+            EventBus.Save.OnHandleAutoSave?.Invoke();
         }
         onComplete = null;
         targetSceneIndex = -1;
         asyncOperation = null;
     }
 
-    public static float GetLoadingProgress()
-    {
-        if (asyncOperation != null) return asyncOperation.progress;
-        return 1f;
-    }
+    public static float GetLoadingProgress() => asyncOperation?.progress ?? 1f;
 
     internal static void SetCurrentAsyncOperation(AsyncOperation op) => asyncOperation = op;
 }

@@ -46,15 +46,7 @@ public class Enemy_Kamikaze : MonoBehaviour, IDamagable
 
     private void HandleDeath()
     {
-        QuestSO quest = QuestManager.Instance.activeQuest;
-        if(quest != null)
-        {
-            QuestObjectives objective = quest.FindQuestObjective(ObjectiveType.FightBots);
-            if (objective != null && objective.isDone != true)
-            {
-                quest.IncreaseQuestObjectiveProgressLevels(objective, null);
-            }
-        }
+        EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.FightBots, null);
         Destroy(gameObject, e_data.destroyTime);
     }
 }

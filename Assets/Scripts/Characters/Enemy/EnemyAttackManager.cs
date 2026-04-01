@@ -10,10 +10,10 @@ public class EnemyAttackManager : MonoBehaviour
         {
             if (instance == null)
             {
-                instance = FindObjectOfType<EnemyAttackManager>();
+                instance = FindFirstObjectByType<EnemyAttackManager>();
                 if (instance == null)
                 {
-                    GameObject go = new GameObject("EnemyAttackManager");
+                    GameObject go = new("EnemyAttackManager");
                     instance = go.AddComponent<EnemyAttackManager>();
                 }
             }

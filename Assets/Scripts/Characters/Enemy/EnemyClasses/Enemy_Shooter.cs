@@ -7,7 +7,7 @@ public class Enemy_Shooter : Enemy
 
     void Update()
     {
-        if (currentHealth <= 0 || IsDead() || Player_v2.Instance.IsPlayerAttacking()) return;
+        if (currentHealth <= 0 || IsDead() || Player_v2.Instance.isAttacking) return;
         
         if (Player != null && !Player_v2.Instance.IsPlayerDead())
         {

@@ -9,6 +9,8 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
 {
     private ObjectSaveData saveData;
 
+    private Collider[] buffer;
+
     [Header("References")]
     public Transform Player { get; protected set; }
     [SerializeField] protected NavMeshAgent agent;
@@ -24,7 +26,7 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
     [SerializeField] private float chaseOffset = 3f;
     
     [Header("Health Settings")]
-    [SerializeField] public int maxHealth = 10;
+    public int maxHealth = 10;
     [SerializeField] private int stageTransitionThreshold = 6;
     
     [Header("Attack Settings")]
@@ -43,22 +45,21 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
     [SerializeField] float spawnEnemyRate = 3f;
     
     // State tracking
-    [SerializeField] public BossStage Stage { get; private set; }
+    public BossStage Stage { get; private set; }
     private int currentHealth;
     private bool isDead;
     private bool isKnockedBack;
     private float nextSpawnTime;
     private float lastAttackTime;
     private Rigidbody rb;
-    private List<GameObject> spawnedEnemies = new List<GameObject>();
+    private readonly List<GameObject> spawnedEnemies = new();
 
     #region Unity Lifecycle Methods
     
     protected void Awake()
     {
-        // Get components
-        animator = GetComponent<Animator>() ?? animator;
-        agent = GetComponent<NavMeshAgent>() ?? agent;
+        animator = GetComponent<Animator>();
+        agent = GetComponent<NavMeshAgent>();
         rb = GetComponent<Rigidbody>();
     }
     
@@ -69,8 +70,9 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
         {
             name = name
         };
+        buffer = new Collider[5];
         SetBossStage(BossStage.Stage_one);
-        SaveManagerSystem.Instance.saveables.Add(this);
+        EventBus.Save.OnRegisterSaveableAsset?.Invoke(this);
 
         if (Player_v2.Instance != null)
             Player = Player_v2.Instance.transform;
@@ -340,15 +342,18 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
     
     private void ApplyMeleeDamage()
     {
-        if (meleeAttackPoint == null) return;
-        
-        Collider[] hitPlayers = Physics.OverlapSphere(meleeAttackPoint.position, attackRange, whatIsPlayer);
-        foreach (var player in hitPlayers)
+        if (meleeAttackPoint == null)
         {
+            return;
+        }
+        
+        int count = Physics.OverlapSphereNonAlloc(meleeAttackPoint.position, attackRange, buffer, whatIsPlayer);
+        for(int i = 0; i < count; i++)
+        {
+            Collider player = buffer[i];
             if (player != null && player.CompareTag("Player"))
             {
-                IDamagable damagable = player.GetComponent<IDamagable>();
-                if (damagable != null)
+                if (player.TryGetComponent<IDamagable>(out var damagable))
                 {
                     damagable.TakeDamage(attackDamage);
                 }

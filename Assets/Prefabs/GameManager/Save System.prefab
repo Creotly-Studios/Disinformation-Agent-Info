@@ -46,6 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <SaveMenuUI>k__BackingField: {fileID: 8399354377773744945}
+  <SavedDataList>k__BackingField: []
 --- !u!1 &263704290666177051
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,17 +380,17 @@ MonoBehaviour:
   savePanel: {fileID: 6076734946509681446}
   loadPanel: {fileID: 5422403091210983533}
   slotPrefab: {fileID: 3121096895494531804, guid: 856840b57c5bdbe498ac090082ba3155, type: 3}
-  popupPanel: {fileID: 7046320097881112007}
   slotSpawnParent: {fileID: 7974393164956995979}
+  savePopup: {fileID: 7046320097881112007}
   loadButton: {fileID: 1519236752593748483}
   exitButton: {fileID: 4588131994051001631}
   deleteButton: {fileID: 347242542881659766}
   newSaveButton: {fileID: 3578109884502955844}
-  ovewriteButton: {fileID: 3020342976656185710}
+  overwriteButton: {fileID: 0}
   completeSaveButton: {fileID: 6185046813293298468}
-  fileName: {fileID: 5013987279370535536}
-  fileSize: {fileID: 6281972206066545066}
-  modifiedDate: {fileID: 3479192256272432406}
+  fileNameLabel: {fileID: 0}
+  fileSizeLabel: {fileID: 0}
+  modifiedDateLabel: {fileID: 0}
   fileNameInputField: {fileID: 5942156419130174023}
 --- !u!1 &1144546290116227778
 GameObject:
@@ -2676,10 +2677,10 @@ MonoBehaviour:
   progressButton:
   - {fileID: 7592353271597999363}
   - {fileID: 8445862116780491348}
-  buttonsContainer: {fileID: 0}
   buttonText:
   - {fileID: 254381098965839844}
   - {fileID: 7367629938615171768}
+  buttonsContainer: {fileID: 0}
   titleText: {fileID: 0}
   contentText: {fileID: 6422738951718224021}
 --- !u!114 &1524462171988113314

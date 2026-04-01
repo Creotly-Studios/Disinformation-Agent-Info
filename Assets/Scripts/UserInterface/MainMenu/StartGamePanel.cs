@@ -3,73 +3,51 @@ using UnityEngine.UI;
 
 public class StartGamePanel : MonoBehaviour
 {
-    
     [Header("Buttons")]
     [SerializeField] private Button loadGame;
     [SerializeField] private Button startNewGame;
+    [SerializeField] private Button backToMainMenu;
+
+    [Header("Level Indices")]
+    [SerializeField] private int agencyOfficeLevelIndex;
+    [SerializeField] private int currentLevelIndex;
 
     private MainMenu _mainMenu;
 
-    [Space] [SerializeField] private Button backToMainMenu;
-    
-    [Header("Debug for loading level")]
-    [SerializeField] private int agencyOfficeLevelIndex; //level1 tutorial index lol
-    [SerializeField] private int currentLevelIndex; //store last level player played
-    
-    void Start()
+    private void Start()
     {
-        loadGame.onClick.AddListener(() =>
-        {
-            SaveManagerSystem.Instance.DisplayMenuPanel();
-        });
-        
-        startNewGame.onClick.AddListener(() =>
-        {
-            //continue with save file and play
-            LevelLoader.LoadLevel(agencyOfficeLevelIndex);
-        });
-        
-        MainMenu.instance.OnPanelChanged += MainMenu_OnPanelChanged;
+        loadGame.onClick.AddListener(() => EventBus.Save.OnDisplaySaveMenu?.Invoke());
+        startNewGame.onClick.AddListener(() => LevelLoader.LoadLevel(agencyOfficeLevelIndex));
+
         backToMainMenu.onClick.AddListener(() =>
         {
             Camera.main.GetComponent<MainMenuCamera>().ResetPosition();
             _mainMenu.SetCurrentPanelToNone();
         });
-        
+        MainMenu.instance.OnPanelChanged += OnPanelChanged;
+
         SetCanvasOpacity(1);
         Hide();
     }
 
-    private void MainMenu_OnPanelChanged(object sender, MainMenu e)
+    private void OnPanelChanged(object sender, MainMenu e)
     {
         _mainMenu = e;
-        if (_mainMenu.GetCurrentPanel() == MainMenu.CurrentPanel.StartPanel)
-        {
-            Show();
-        }
-        else
-        {
-            Hide();
-        }
+        if (_mainMenu.GetCurrentPanel() == MainMenu.CurrentPanel.StartPanel) Show();
+        else Hide();
     }
 
-    void Hide()
-    {
-        gameObject.SetActive(false);
-    }
-
-    void Show()
+    private void Show()
     {
         Camera.main.GetComponent<MainMenuCamera>().MoveToStartMenu();
         gameObject.SetActive(true);
     }
-    
-    void SetCanvasOpacity(int value)
+
+    private void Hide() => gameObject.SetActive(false);
+
+    private void SetCanvasOpacity(int value)
     {
-        if (GetComponent<CanvasGroup>() != null)
-        {
-            GetComponent<CanvasGroup>().alpha = value;
-        }
+        CanvasGroup cg = GetComponent<CanvasGroup>();
+        if (cg != null) cg.alpha = value;
     }
-    
 }

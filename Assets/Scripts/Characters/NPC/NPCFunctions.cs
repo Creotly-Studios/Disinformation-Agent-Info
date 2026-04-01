@@ -136,7 +136,7 @@ public class NPCFunctions : MonoBehaviour
     {
         npcManager.animator.applyRootMotion = performingAction;
         npcManager.canRotate = canRotate;
-        npcManager.animator.SetBool(AnimatorHashing.isPerformingActionHash, performingAction);
+        npcManager.animator.SetBool(AnimatorHashing.ISPERFORMING_HASH, performingAction);
         npcManager.animator.CrossFade(targetAnimation, transitionDuration);
     }
 

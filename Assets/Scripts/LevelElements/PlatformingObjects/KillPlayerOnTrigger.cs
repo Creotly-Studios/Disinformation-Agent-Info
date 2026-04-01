@@ -6,7 +6,7 @@ public class KillPlayerOnTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player") && !Player_v2.Instance.IsPlayerDead())
         {
-            Player_v2.Instance.PlayerStatistics.TakeDamage(1000);
+            Player_v2.Instance.Damage.TakeDamage(1000);
         }
     }
 }

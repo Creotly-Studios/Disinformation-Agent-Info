@@ -12,7 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MovementInput { get; private set; }
     public Vector2 CameraInput { get; private set; }
 
-    public bool jumpPressed = false;
+    public bool spaceBarPressed = false;
     public bool JumpInput { get; private set; }
     public bool DashInput { get; private set; }
     public bool SprintInput { get; private set; }
@@ -36,8 +36,8 @@ public class PlayerInputHandler : MonoBehaviour
             InputSystemActions.Player.Jump.started += OnJumpInput;
             InputSystemActions.Player.Dash.started += OnDashInput;
 
-            InputSystemActions.Player.Jump.started += ctx => jumpPressed = ctx.ReadValueAsButton();
-            InputSystemActions.Player.Jump.canceled += ctx => jumpPressed = ctx.ReadValueAsButton();
+            InputSystemActions.Player.Jump.started += ctx => spaceBarPressed = ctx.ReadValueAsButton();
+            InputSystemActions.Player.Jump.canceled += ctx => spaceBarPressed = ctx.ReadValueAsButton();
 
             InputSystemActions.Player.Sprint.started += OnSprintInput;
             InputSystemActions.Player.Sprint.canceled += OnSprintInput;
@@ -81,7 +81,7 @@ public class PlayerInputHandler : MonoBehaviour
         if (context.started && player.CanUseMovementInput())
         {
             // Check if the player has enough stamina to dash
-            if (player.PlayerStatistics.CanDash())
+            if (player.Locomotion.CanDash())
             {
                 DashInput = true;
             }

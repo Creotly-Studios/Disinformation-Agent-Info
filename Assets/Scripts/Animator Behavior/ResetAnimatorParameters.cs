@@ -5,9 +5,8 @@ public class ResetAnimatorParameters : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        animator.SetBool(AnimatorHashing.canRotateHash, true);
-        animator.SetBool(AnimatorHashing.rootMotionRotateHash, true);
-        animator.SetBool(AnimatorHashing.isPerformingActionHash, false);
+        animator.SetBool(AnimatorHashing.ISATTACKING_HASH, false);
+        animator.SetBool(AnimatorHashing.ISPERFORMING_HASH, false);
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

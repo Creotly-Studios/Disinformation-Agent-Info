@@ -1,160 +1,216 @@
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using Action = System.Action;
 
+// Central, self-contained notification panel.
+// Subscribes to EventBus.Notification.OnShow/OnDismiss and filters events
+// by object reference, so multiple panels in the scene never cross-trigger.
 public class NoticePopup : MonoBehaviour
 {
+    private static readonly WaitForSeconds AutoDismiss = new(2.0f);
+
     [Header("Buttons")]
     [SerializeField] private Button[] progressButton;
-    [SerializeField] private GameObject buttonsContainer;
     [SerializeField] private TextMeshProUGUI[] buttonText;
+    [SerializeField] private GameObject buttonsContainer;
 
-    [Header("Parameters")]
+    [Header("Text")]
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI contentText;
 
+    // ── Lifecycle ─────────────────────────────────────────────────────────────
+
+    private void OnEnable()
+    {
+        EventBus.Notification.OnShow += HandleShow;
+        EventBus.Notification.OnDismiss += HandleDismiss;
+    }
+
     private void OnDisable()
     {
-        foreach(Button btn in progressButton)
+        EventBus.Notification.OnShow -= HandleShow;
+        EventBus.Notification.OnDismiss -= HandleDismiss;
+        foreach (Button btn in progressButton) btn.onClick.RemoveAllListeners();
+    }
+
+    // ── Event Filtering ───────────────────────────────────────────────────────
+
+    private void HandleShow(NoticePopup target, NotificationRequest request)
+    {
+        if (target != this) return;
+        StopAllCoroutines();
+        Dispatch(request);
+    }
+
+    private void HandleDismiss(NoticePopup target)
+    {
+        if (target != this) return;
+        Dismiss();
+    }
+
+    // ── Dispatch ──────────────────────────────────────────────────────────────
+
+    private void Dispatch(NotificationRequest r)
+    {
+        switch (r.Type)
         {
-            btn.onClick.RemoveAllListeners();
+            case NoticeType.QuestCompleted:
+                StartCoroutine(TimedBanner(r.Duration,
+                    r.Quest.isComplete ? "Quest Completed" : "New Mission",
+                    r.Quest.questTitle,
+                    r.Quest.isComplete ? Color.green : Color.white));
+                break;
+
+            case NoticeType.ObjectiveCompleted:
+                StartCoroutine(TimedBanner(r.Duration,
+                    r.Objective.isDone ? "Objective Completed" : "New Objective",
+                    r.Objective.description,
+                    r.Objective.isDone ? Color.green : Color.white));
+                break;
+
+            case NoticeType.Dialogue:
+                StartCoroutine(TimedBanner(0f, "Notice", r.Body, r.TextColor));
+                break;
+
+            case NoticeType.Correct:
+            case NoticeType.Wrong:
+                ShowQuizResult(r);
+                break;
+
+            case NoticeType.Hint:
+                ShowSingleButton(" ", r.Body, "Continue");
+                break;
+
+            case NoticeType.GameOver:
+                ShowTwoButton("GAME OVER !!!", r.Body, Color.red,
+                    r.PrimaryLabel, () => { Dismiss(); r.PrimaryAction?.Invoke(); },
+                    r.SecondaryLabel, () => { Dismiss(); r.SecondaryAction?.Invoke(); });
+                break;
+
+            case NoticeType.Payment:
+                ShowPayment(r);
+                break;
+
+            case NoticeType.Confirm:
+                ShowTwoButton(string.Empty, r.Body, Color.white,
+                    r.PrimaryLabel, () => { Dismiss(); r.PrimaryAction?.Invoke(); },
+                    r.SecondaryLabel, () => { Dismiss(); r.SecondaryAction?.Invoke(); });
+                break;
         }
     }
 
-    public void DisplayPopUpWindow(string text, NoticeType noticeType, QuestSO quest = null, QuestObjectives objective = null)
+    // ── Banner (timed auto-dismiss) ───────────────────────────────────────────
+
+    private IEnumerator TimedBanner(float delay, string title, string body, Color bodyColor)
     {
+        if (delay > 0f) yield return new WaitForSeconds(delay);
         gameObject.SetActive(true);
+        yield return null; // One frame for layout to settle.
 
-        if(noticeType == NoticeType.Hint)
-        {
-            HandleHint(text);
-        }
-        if(noticeType == NoticeType.QuestCompleted)
-        {
-            StartCoroutine(QuestCompletedNotice(quest));
-        }
-        if(noticeType == NoticeType.ObjectiveCompleted)
-        {
-            StartCoroutine(ObjectiveCompletedNotice(objective));
-        }
-        if (noticeType == NoticeType.Correct || noticeType == NoticeType.Wrong)
-        {
-            QuizNotice(text, noticeType);
-        }
+        contentText.color = bodyColor;
+        SetText(title, body);
+
+        yield return AutoDismiss;
+        Dismiss();
     }
 
-    private IEnumerator QuestCompletedNotice(QuestSO questSO)
-    {
-        if(questSO.isComplete)
-        {
-            contentText.color = Color.green;
+    // ── Quiz Result ───────────────────────────────────────────────────────────
 
-            titleText.text = "Quest Completed";
-            contentText.text = questSO.questTitle;
-        }
-        yield return new WaitForSeconds(2.0f);
-        gameObject.SetActive(false);
-    }
-
-    public void DialoguePopup(Color color, string content)
+    private void ShowQuizResult(NotificationRequest r)
     {
-        gameObject.SetActive(true);
-        StartCoroutine(HandleDialoguePopup(color, content));
-    }
+        bool correct = r.Type == NoticeType.Correct;
+        Color color = correct ? Color.green : Color.red;
+        string title = correct ? "You are Correct" : "You are Incorrect";
 
-    private IEnumerator HandleDialoguePopup(Color color, string content)
-    {
+        titleText.color = color;
         contentText.color = color;
-
-        contentText.text = content;
-        titleText.text = "Quest Not Complete";
-        yield return new WaitForSeconds(2.0f);
-        gameObject.SetActive(false);
+        ShowSingleButton(title, r.Body, "Continue");
     }
 
-    private IEnumerator ObjectiveCompletedNotice(QuestObjectives objective)
+    // ── Payment ───────────────────────────────────────────────────────────────
+
+    private void ShowPayment(NotificationRequest r)
     {
-        if(objective.isDone)
-        {
-            titleText.text = "Objective Completed";
-            contentText.text = objective.description;
-        }
-        yield return new WaitForSeconds(2.0f);
-        gameObject.SetActive(false);
-    }
-
-    private void QuizNotice(string answer, NoticeType noticeType)
-    {
-        titleText.text = " ";
-        contentText.text = " ";
-        PrepButton("Continue", progressButton[0], buttonText[0], () => ContinueButton());
-
-        if(noticeType == NoticeType.Wrong)
-        {
-            HandleText("You are Incorrect", Color.red);
-        }
-        else if(noticeType == NoticeType.Correct)
-        {
-            HandleText("You are Correct", Color.green);
-        }
-        contentText.text = answer;
-    }
-
-    private void HandleText(string title, Color textColor)
-    {
-        titleText.color = textColor;
-        contentText.color = textColor;
-        titleText.text = title;
-    }
-
-    private void HandleHint(string hintText)
-    {
-        contentText.text = " ";
-
-        HandleText(" ", Color.white);
-        PrepButton("Continue", progressButton[0], buttonText[0], () => ContinueButton());
-        contentText.text = hintText;
-    }
-
-    public void HandleSimplePopup(string body, Action acceptFunc, Action rejectFunc)
-    {
-        print(5);
-        contentText.text = body;
         gameObject.SetActive(true);
-
-        progressButton[0].onClick.AddListener(() => acceptFunc());
-        progressButton[1].onClick.AddListener(() => rejectFunc());
+        buttonsContainer.SetActive(true);
+        SetText("Payment Needed", r.Body);
+        SetButtonVisibility(true, true);
+        PrepButton(r.PrimaryLabel, 0, () => ProcessPayment(r));
+        PrepButton(r.SecondaryLabel, 1, Dismiss);
     }
 
-    public void HandleMini_GameOver(string text, Action restart, Action quit)
+    private void ProcessPayment(NotificationRequest r)
     {
-        HandleText("GAME OVER !!!", Color.red);
-
-        contentText.color = Color.red;
-        contentText.text = text;
-
-        PrepButton("Quit Game", progressButton[1], buttonText[1], quit);
-        PrepButton("Restart", progressButton[0], buttonText[0], restart);
+        GameManager gm = GameManager.Instance;
+        int coins = gm.PlayerCoinAmount;
+        bool sufficient = coins >= r.CoinCost;
+        if (sufficient) gm.SetCoinAmount(coins - r.CoinCost);
+        StartCoroutine(PaymentResult(sufficient, r.PrimaryAction));
     }
 
-    //Button Functions
-    private void PrepButton(string text, Button button, TextMeshProUGUI btnText, Action func)
+    private IEnumerator PaymentResult(bool success, Action onSuccess)
     {
-        foreach (Button btn in progressButton)
-        {
-            btn.gameObject.SetActive(false);
-        }
-        button.gameObject.SetActive(true);
-
-        btnText.text = text;
-        button.onClick.AddListener(() => func());
+        buttonsContainer.SetActive(false);
+        SetText("Payment Status", success ? "Payment Successful" : "Insufficient Funds");
+        yield return AutoDismiss;
+        Dismiss();
+        if (success) onSuccess?.Invoke();
     }
 
-    private void ContinueButton(Action func = null)
+    // ── Layout Helpers ────────────────────────────────────────────────────────
+
+    private void ShowSingleButton(string title, string body, string btnLabel)
     {
+        gameObject.SetActive(true);
+        SetText(title, body);
+        SetButtonVisibility(true, false);
+        PrepButton(btnLabel, 0, Dismiss);
+    }
+
+    private void ShowTwoButton(string title, string body, Color titleColor,
+        string primaryLabel, Action primaryAction,
+        string secondaryLabel, Action secondaryAction)
+    {
+        gameObject.SetActive(true);
+        titleText.color = titleColor;
+        contentText.color = titleColor;
+        SetText(title, body);
+        SetButtonVisibility(true, true);
+        PrepButton(primaryLabel, 0, primaryAction);
+        PrepButton(secondaryLabel, 1, secondaryAction);
+    }
+
+    private void SetButtonVisibility(bool first, bool second)
+    {
+        progressButton[0].gameObject.SetActive(first);
+        if (progressButton.Length > 1)
+            progressButton[1].gameObject.SetActive(second);
+    }
+
+    private void PrepButton(string label, int index, Action onClick)
+    {
+        progressButton[index].onClick.RemoveAllListeners();
+        progressButton[index].onClick.AddListener(() => onClick?.Invoke());
+        buttonText[index].text = label;
+        progressButton[index].gameObject.SetActive(true);
+    }
+
+    private void SetText(string title, string body)
+    {
+        titleText.text = title;
+        contentText.text = body;
+    }
+
+    // ── Dismiss ───────────────────────────────────────────────────────────────
+
+    // Single exit point. Fires OnDismiss(this) before deactivating so all
+    // subscribers (e.g. ComputerPanel_UI.IsPopupActive) update in the same frame.
+    private void Dismiss()
+    {
+        StopAllCoroutines();
+        EventBus.Notification.OnDismiss?.Invoke(this);
         gameObject.SetActive(false);
-        func?.Invoke();
     }
 }

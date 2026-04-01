@@ -13,29 +13,9 @@ MonoBehaviour:
   m_Name: 3_Factory Quest
   m_EditorClassIdentifier: 
   isComplete: 0
-  <questCode>k__BackingField: 888
-  <questLevelIndex>k__BackingField: 5
+  <QuestCode>k__BackingField: 312
+  <QuestLevelIndex>k__BackingField: 2
   questTitle: Factory Quest
   description: Factory Quest, Destory Fctory Generator
   <QuestReward>k__BackingField: 0
-  <questObjectives>k__BackingField:
-  - isDone: 0
-    targetValue: 1
-    progressValue: 0
-    objectiveType: 3
-    description: Speak To Instructor
-  - isDone: 0
-    targetValue: 5
-    progressValue: 0
-    objectiveType: 5
-    description: Complete 5 spot the source games
-  - isDone: 0
-    targetValue: 1
-    progressValue: 0
-    objectiveType: 6
-    description: Destory factory generator
-  - isDone: 0
-    targetValue: 1
-    progressValue: 0
-    objectiveType: 7
-    description: Collect trophy
+  <QuestObjectives>k__BackingField: []

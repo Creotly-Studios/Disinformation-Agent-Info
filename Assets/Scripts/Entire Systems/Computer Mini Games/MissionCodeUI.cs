@@ -10,6 +10,6 @@ public class MissionCodeUI : MonoBehaviour
     public void SetParameters(bool showCode, QuestSO quest)
     {
         missionName.text = quest.name;
-        missionCode.text = (showCode) ? $"Mission Code: {quest.questCode}" : "---";
+        missionCode.text = (showCode) ? $"Mission Code: {quest.QuestCode}" : "---";
     }
 }

@@ -1,15 +1,23 @@
 
-public enum NPCType
-{ 
-    Special,
-    Generic
+public enum NPCType{ Special,Generic}
+
+public enum NoticeType
+{
+    QuestCompleted,
+    ObjectiveCompleted,
+    Dialogue,
+    Correct,
+    Wrong,
+    Hint,
+    GameOver,
+    Payment,
+    Confirm,
 }
 
-public enum Switch_Type
-{
-    Main,
-    Blockers
-}
+public enum GameState { Playing, GameOver }
+public enum GameOverState { None, PlayerDie, MissionComplete }
+
+public enum Switch_Type{Main,Blockers}
 
 public enum ObjectiveType
 {
@@ -29,17 +37,6 @@ public enum TypeOfSpeaker
     Player,
     Villain,
     Instructor
-}
-
-public enum NoticeType
-{
-    Hint,
-    Exit,
-    Wrong,
-    Correct,
-    Progress,
-    QuestCompleted,
-    ObjectiveCompleted
 }
 
 public enum MalignChecker

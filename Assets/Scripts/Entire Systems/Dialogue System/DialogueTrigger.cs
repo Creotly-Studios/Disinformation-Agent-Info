@@ -1,24 +1,22 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections.Generic;
 
 public class DialogueTrigger : MonoBehaviour, IInteractable
 {
     private NPC character;
     public TextAsset currentDialogueText;
-    [SerializeField] private string interactText = "Talk to Agency Cheif";
+
+    [SerializeField] private string interactText = "Talk to Agency Chief";
 
     [Header("Parameters")]
     [SerializeField] private Sprite characterImage;
     [SerializeField] private TypeOfSpeaker speakerType;
-    public DialogueCharacterInformation characterInformation;
     [SerializeField] private List<TextAsset> dialogueTexts = new();
 
+    public DialogueCharacterInformation characterInformation;
     public TypeOfSpeaker SpeakerType => speakerType;
 
-    private void Awake()
-    {
-        character = GetComponent<NPC>();
-    }
+    private void Awake() => character = GetComponent<NPC>();
 
     private void Start()
     {
@@ -26,10 +24,7 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         characterInformation.Initialize(name, characterImage, speakerType);
     }
 
-    public string GetInteractText()
-    {
-        return interactText;
-    }
+    public string GetInteractText() => interactText;
 
     public void Interact(Player_v2 player)
     {
@@ -38,18 +33,15 @@ public class DialogueTrigger : MonoBehaviour, IInteractable
         player.SetInactiveState();
     }
 
-    public void PlayInteractNPCSound()
-    {
-
-    }
+    public void PlayInteractNPCSound() { }
 
     private void TriggerDialogue(NPC npc = null)
     {
         if (characterInformation.speakerType == TypeOfSpeaker.Instructor)
         {
             QuestManager questManager = QuestManager.Instance;
-
-            int i = questManager.availableQuests.IndexOf(questManager.activeQuest);
+            // Fix: was questManager.activeQuest (private [SerializeField]) → ActiveQuest property.
+            int i = questManager.AvailableQuests.IndexOf(questManager.ActiveQuest);
             DialogueManager.Instance.HandleDialogue(characterInformation, dialogueTexts[i], npc);
             return;
         }
