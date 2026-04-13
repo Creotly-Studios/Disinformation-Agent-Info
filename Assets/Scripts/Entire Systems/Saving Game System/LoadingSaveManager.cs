@@ -26,11 +26,8 @@ public static class LoadingSaveManager
             Debug.LogError("[LoadingSaveManager] No Player in scene after load.");
             return;
         }
-
         LoadSavedAssets(dataToLoad.saveableAssets);
-        player.StartCoroutine(ResetListeners());
-        QuestManager.Instance.RestoreQuestProgress(dataToLoad.questDataList);
-        Debug.Log($"[LoadingSaveManager] '{dataToLoad.fileName}' loaded successfully.");
+        player.StartCoroutine(ResetSceneParameters(dataToLoad));
     }
 
     private static void LoadSavedAssets(List<ObjectSaveData> savedDatas)
@@ -57,11 +54,15 @@ public static class LoadingSaveManager
         }
     }
 
-    // Brief listener reset to avoid double-firing after scene reload.
-    private static IEnumerator ResetListeners()
+    private static IEnumerator ResetSceneParameters(SavedData dataToLoad)
     {
         SaveManagerSystem.Instance.SaveMenuUI.SetupButtonListeners(false);
+
         yield return new WaitForSeconds(0.5f);
         SaveManagerSystem.Instance.SaveMenuUI.SetupButtonListeners(true);
+
+        yield return null;
+        yield return new WaitForSeconds(1.5f);
+        QuestManager.Instance.RestoreQuestProgress(dataToLoad.questDataList);
     }
 }

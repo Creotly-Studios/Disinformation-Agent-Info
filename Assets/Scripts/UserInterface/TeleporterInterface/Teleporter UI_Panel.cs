@@ -4,9 +4,6 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Events;
 
-// The inline wrong-code notice (noticePanel) is intentionally kept as a local
-// text overlay — it's a brief, button-free flash that doesn't need the full
-// NoticePopup system. The payment confirmation uses the central popup.
 public class TeleporterUI_Panel : MonoBehaviour
 {
     private Teleporter teleporter;
@@ -40,14 +37,22 @@ public class TeleporterUI_Panel : MonoBehaviour
             teleporterUiPanel.SetActive(false);
             onCancelTeleport?.Invoke();
         });
+        teleporterPopup.SubscribeEvents();
     }
 
-    // ── Submit Handler ────────────────────────────────────────────────────────
+    private void OnDestroy() => teleporterPopup.UnSubscribeEvents();
 
     private void OnSubmitButtonClick()
     {
         QuestManager questManager = QuestManager.Instance;
         QuestSO activeQuest = questManager.ActiveQuest;
+
+        if(CheckIfCanTeleport(activeQuest, out string message) != true)
+        {
+            codeInputField.text = string.Empty;
+            StartCoroutine(FlashNotice(message));
+            return;
+        }
 
         if (activeQuest == null)
         {
@@ -66,12 +71,9 @@ public class TeleporterUI_Panel : MonoBehaviour
             ShowInlineNotice(wrongCode: false);
             return;
         }
-
         EventBus.Notification.OnShow?.Invoke(teleporterPopup,
             NotificationRequest.Payment(3, "Pay 3 Coins To Teleport", () => Teleport(activeQuest)));
     }
-
-    // ── Teleport ──────────────────────────────────────────────────────────────
 
     private void Teleport(QuestSO quest)
     {
@@ -81,7 +83,17 @@ public class TeleporterUI_Panel : MonoBehaviour
         LevelLoader.LoadLevel(quest.QuestLevelIndex);
     }
 
-    // ── Inline Notice (no buttons, auto-hides) ────────────────────────────────
+    private bool CheckIfCanTeleport(QuestSO quest, out string message)
+    {
+        bool canTeleport = quest.QuestObjectives[0].isDone;
+        message = "Get Instructions From Agency Boss Before Teleportation";
+        if (canTeleport)
+        {
+            message = "Complete Mini Game Objective before Teleportation";
+            canTeleport = quest.GetMiniGameObjetive().isDone;
+        }
+        return canTeleport;
+    }
 
     private void ShowInlineNotice(bool wrongCode)
     {

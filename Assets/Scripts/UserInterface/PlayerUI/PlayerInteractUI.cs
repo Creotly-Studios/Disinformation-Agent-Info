@@ -12,9 +12,19 @@ public class PlayerInteractUI : MonoBehaviour
         if (Player_v2.Instance != null)
         {
             player = Player_v2.Instance;
+            EventBus.CharacterStat.OnPlayerInteract += Hide;
             player.OnInteractObjectFind += Player_PlayerHasInteractableObject;
         }
         Hide();
+    }
+
+    void OnDestroy()
+    {
+        if (player != null)
+        {
+            EventBus.CharacterStat.OnPlayerInteract -= Hide;
+            player.OnInteractObjectFind -= Player_PlayerHasInteractableObject;
+        }
     }
 
     private void Player_PlayerHasInteractableObject(object sender, GameObject e)
@@ -42,13 +52,5 @@ public class PlayerInteractUI : MonoBehaviour
     void Show()
     {
         interactUI.SetActive(true);
-    }
-
-    void OnDestroy()
-    {
-        if (player != null)
-        {
-            player.OnInteractObjectFind -= Player_PlayerHasInteractableObject;
-        }
     }
 }

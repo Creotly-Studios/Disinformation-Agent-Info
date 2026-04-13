@@ -23,9 +23,6 @@ public class MainMenu : MonoBehaviour
     [Space][SerializeField] private CanvasGroup sidePanelsHolder;
 
     [Header("Debug checking for the UI in the menu ")]
-    [SerializeField] private bool hasGameData = true;
-    [SerializeField] private bool hasCompletedGame = true;
-
     [SerializeField] AudioClip mainMenuMusic;
 
     private void Awake()

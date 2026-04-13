@@ -11,13 +11,17 @@ public class PlayerInactiveState : PlayerState
         base.Enter();
         AudioManager.Instance.PlaySFX(playerData.inactiveStateCamSound);
         if (player.dialogue_InactiveCamera != null)
+        {
             player.dialogue_InactiveCamera.SetActive(true);
+        }
     }
 
     public override void Exit()
     {
         if (player.dialogue_InactiveCamera != null)
+        {
             player.dialogue_InactiveCamera.SetActive(false);
+        }
         player.Combat.SetInteractiveFlag(false);
         base.Exit();
     }

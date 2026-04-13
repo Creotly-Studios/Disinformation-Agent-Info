@@ -4,11 +4,10 @@ using UnityEngine.UI;
 using System.Collections;
 using Action = System.Action;
 
-// Central, self-contained notification panel.
-// Subscribes to EventBus.Notification.OnShow/OnDismiss and filters events
-// by object reference, so multiple panels in the scene never cross-trigger.
 public class NoticePopup : MonoBehaviour
 {
+    private bool isDismissing;
+    private bool hasInitialized;
     private static readonly WaitForSeconds AutoDismiss = new(2.0f);
 
     [Header("Buttons")]
@@ -20,33 +19,49 @@ public class NoticePopup : MonoBehaviour
     [SerializeField] private TextMeshProUGUI titleText;
     [SerializeField] private TextMeshProUGUI contentText;
 
-    // ── Lifecycle ─────────────────────────────────────────────────────────────
-
-    private void OnEnable()
+    public void SubscribeEvents()
     {
+        if (hasInitialized)
+        {
+            return;
+        }
+        hasInitialized = true;
         EventBus.Notification.OnShow += HandleShow;
         EventBus.Notification.OnDismiss += HandleDismiss;
     }
 
-    private void OnDisable()
+    public void UnSubscribeEvents()
     {
+        if (hasInitialized != true)
+        {
+            return;
+        }
+
+        hasInitialized = false;
         EventBus.Notification.OnShow -= HandleShow;
         EventBus.Notification.OnDismiss -= HandleDismiss;
-        foreach (Button btn in progressButton) btn.onClick.RemoveAllListeners();
+        foreach (Button btn in progressButton)
+        {
+            btn.onClick.RemoveAllListeners();
+        }
     }
-
-    // ── Event Filtering ───────────────────────────────────────────────────────
-
     private void HandleShow(NoticePopup target, NotificationRequest request)
     {
-        if (target != this) return;
+        if (target != this)
+        {
+            return;
+        }
         StopAllCoroutines();
+
         Dispatch(request);
     }
 
     private void HandleDismiss(NoticePopup target)
     {
-        if (target != this) return;
+        if (target != this)
+        {
+            return;
+        }
         Dismiss();
     }
 
@@ -57,6 +72,7 @@ public class NoticePopup : MonoBehaviour
         switch (r.Type)
         {
             case NoticeType.QuestCompleted:
+                gameObject.SetActive(true);
                 StartCoroutine(TimedBanner(r.Duration,
                     r.Quest.isComplete ? "Quest Completed" : "New Mission",
                     r.Quest.questTitle,
@@ -64,6 +80,7 @@ public class NoticePopup : MonoBehaviour
                 break;
 
             case NoticeType.ObjectiveCompleted:
+                gameObject.SetActive(true);
                 StartCoroutine(TimedBanner(r.Duration,
                     r.Objective.isDone ? "Objective Completed" : "New Objective",
                     r.Objective.description,
@@ -71,6 +88,7 @@ public class NoticePopup : MonoBehaviour
                 break;
 
             case NoticeType.Dialogue:
+                gameObject.SetActive(true);
                 StartCoroutine(TimedBanner(0f, "Notice", r.Body, r.TextColor));
                 break;
 
@@ -101,12 +119,9 @@ public class NoticePopup : MonoBehaviour
         }
     }
 
-    // ── Banner (timed auto-dismiss) ───────────────────────────────────────────
-
     private IEnumerator TimedBanner(float delay, string title, string body, Color bodyColor)
     {
         if (delay > 0f) yield return new WaitForSeconds(delay);
-        gameObject.SetActive(true);
         yield return null; // One frame for layout to settle.
 
         contentText.color = bodyColor;
@@ -115,8 +130,6 @@ public class NoticePopup : MonoBehaviour
         yield return AutoDismiss;
         Dismiss();
     }
-
-    // ── Quiz Result ───────────────────────────────────────────────────────────
 
     private void ShowQuizResult(NotificationRequest r)
     {
@@ -128,8 +141,6 @@ public class NoticePopup : MonoBehaviour
         contentText.color = color;
         ShowSingleButton(title, r.Body, "Continue");
     }
-
-    // ── Payment ───────────────────────────────────────────────────────────────
 
     private void ShowPayment(NotificationRequest r)
     {
@@ -159,8 +170,6 @@ public class NoticePopup : MonoBehaviour
         if (success) onSuccess?.Invoke();
     }
 
-    // ── Layout Helpers ────────────────────────────────────────────────────────
-
     private void ShowSingleButton(string title, string body, string btnLabel)
     {
         gameObject.SetActive(true);
@@ -170,12 +179,11 @@ public class NoticePopup : MonoBehaviour
     }
 
     private void ShowTwoButton(string title, string body, Color titleColor,
-        string primaryLabel, Action primaryAction,
-        string secondaryLabel, Action secondaryAction)
+        string primaryLabel, Action primaryAction, string secondaryLabel, Action secondaryAction)
     {
         gameObject.SetActive(true);
-        titleText.color = titleColor;
-        contentText.color = titleColor;
+        SetTextColor(titleText, titleColor);
+        SetTextColor(contentText,titleColor);
         SetText(title, body);
         SetButtonVisibility(true, true);
         PrepButton(primaryLabel, 0, primaryAction);
@@ -184,9 +192,16 @@ public class NoticePopup : MonoBehaviour
 
     private void SetButtonVisibility(bool first, bool second)
     {
+        if(progressButton.Length < 1)
+        {
+            return;
+        }
+
         progressButton[0].gameObject.SetActive(first);
         if (progressButton.Length > 1)
+        {
             progressButton[1].gameObject.SetActive(second);
+        }
     }
 
     private void PrepButton(string label, int index, Action onClick)
@@ -199,18 +214,31 @@ public class NoticePopup : MonoBehaviour
 
     private void SetText(string title, string body)
     {
-        titleText.text = title;
+        if(titleText != null)
+        {
+            titleText.text = title;
+        }
         contentText.text = body;
     }
 
-    // ── Dismiss ───────────────────────────────────────────────────────────────
+    private void SetTextColor(TextMeshProUGUI text, Color color)
+    {
+        if(text != null)
+        {
+            text.color = color;
+        }
+    }
 
-    // Single exit point. Fires OnDismiss(this) before deactivating so all
-    // subscribers (e.g. ComputerPanel_UI.IsPopupActive) update in the same frame.
     private void Dismiss()
     {
+        if (isDismissing)
+        {
+            return;
+        }
+        isDismissing = true;
         StopAllCoroutines();
-        EventBus.Notification.OnDismiss?.Invoke(this);
+        EventBus.Notification.OnDismiss?.Invoke(this); // Notify subscribers (e.g. ComputerPanel_UI) before deactivating.
         gameObject.SetActive(false);
+        isDismissing = false;
     }
 }

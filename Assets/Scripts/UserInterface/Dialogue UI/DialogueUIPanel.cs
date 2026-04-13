@@ -32,7 +32,6 @@ public class DialogueUIPanel : MonoBehaviour
     {
         if (Instance != null && Instance != this)
         {
-            Debug.LogWarning("A duplicate DialogueManager was found and destroyed.");
             Destroy(gameObject);
             return;
         }

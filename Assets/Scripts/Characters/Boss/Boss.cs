@@ -91,7 +91,7 @@ public class Boss : MonoBehaviour, IDamagable, ISaveable
     {
         if (isDead)
         {
-            GameManager.Instance.MissionComplete();
+            EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.FightBots, null);
             Destroy(this);
             return;
         }

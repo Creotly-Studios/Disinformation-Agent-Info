@@ -54,9 +54,10 @@ public class PlayerCombatController : MonoBehaviour
         {
             return;
         }
+        IsInteractActive = true;
+        EventBus.CharacterStat.OnPlayerInteract?.Invoke();
         AudioManager.Instance.PlaySFX(player.PlayerData.interact);
         interactable.GetComponent<IInteractable>().Interact(player);
-        IsInteractActive = true;
     }
 
     // NonAlloc — no per-attack allocation.

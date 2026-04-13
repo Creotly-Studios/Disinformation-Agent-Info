@@ -14,8 +14,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isComplete: 0
   <QuestCode>k__BackingField: 222
-  <QuestLevelIndex>k__BackingField: 1
+  <QuestLevelIndex>k__BackingField: 4
   questTitle: Malign Education
   description: Educate the masses on the threat of spreading fake news
   <QuestReward>k__BackingField: 0
-  <QuestObjectives>k__BackingField: []
+  <QuestObjectives>k__BackingField:
+  - isDone: 0
+    targetValue: 1
+    progressValue: 0
+    objectiveType: 3
+    description: Speak To Instructor
+  - isDone: 0
+    targetValue: 3
+    progressValue: 0
+    objectiveType: 1
+    description: Spot 3 Biases in the Quiz
+  - isDone: 0
+    targetValue: 3
+    progressValue: 0
+    objectiveType: 3
+    description: Convince The Three NPCs

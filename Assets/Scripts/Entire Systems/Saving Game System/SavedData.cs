@@ -81,9 +81,9 @@ public class SerializableQuestData
     {
         for(int i = 0; i < objectiveProgressvalue.Count; i++)
         {
-            QuestObjective objectives = quest.QuestObjectives[i];
-            objectives.LoadProgressValue(objectiveProgressvalue[i]);
-            EventBus.TaskList.OnUpdateTaskListValues(objectives);
+            QuestObjective objective = quest.QuestObjectives[i];
+            objective.LoadProgressValue(objectiveProgressvalue[i]);
+            EventBus.TaskList.OnUpdateTaskListValues(objective);
         }
         quest.CheckIfQuestIsComplete();
     }

@@ -6,7 +6,6 @@ public class LevelCompleteButton : MonoBehaviour
 {
     [SerializeField] private bool buttonActive;
     [SerializeField] private int agencySceneIndex;
-    [SerializeField] private float loadDelay = 2f;
 
     [Header("Events")]
     [SerializeField] private UnityEvent _buttonPressed;
@@ -16,17 +15,7 @@ public class LevelCompleteButton : MonoBehaviour
         if (!buttonActive)
         {
             buttonActive = true;
-            StartCoroutine(CompleteLevel());
+            _buttonPressed?.Invoke();
         }
-    }
-
-    private IEnumerator CompleteLevel()
-    {
-        _buttonPressed?.Invoke();
-        GameManager.Instance.MissionComplete();
-        
-        yield return new WaitForSeconds(loadDelay);
-        
-        LevelLoader.LoadLevel(agencySceneIndex);
     }
 }

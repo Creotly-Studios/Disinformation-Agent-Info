@@ -6,7 +6,6 @@ public class Teleporter : MonoBehaviour, IInteractable
 
     public GameObject identifier;
     [SerializeField] private string interactText;
-    [SerializeField] private float sceneLoadDelay = 2f;
 
     [Header("UI")] 
     [SerializeField] private GameObject teleporterUiPanel;

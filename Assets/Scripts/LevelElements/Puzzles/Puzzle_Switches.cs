@@ -48,7 +48,8 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
 
     public void Interact(Player_v2 player)
     {
-        if(Switch == true)
+        player.SetInactiveState();
+        if (Switch == true)
         {
             Switch = false;
             UpdateSwitch(offMat, _switchOff);
@@ -59,6 +60,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
             UpdateSwitch(onMat, _switchOn);
         }
         switchInteract?.Invoke();
+        player.SetActiveState();
     }
 
     private void UpdateSwitch(Material mat, UnityEvent uEvent)
@@ -80,7 +82,7 @@ public class Puzzle_Switches : MonoBehaviour, IInteractable, ISaveable
 
     private void UpdateObjective(bool status)
     {
-        bool shouldIncrease = (switchType.Equals(Switch_Type.Main) && status);
+        bool shouldIncrease = (switchType.Equals(Switch_Type.Main)) ? status : status != true;
         QuestObjectiveNavIdentifier identifier = (puzzleManager != null) ? puzzleManager.Identifier : navIdentifier;
         EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(shouldIncrease, false, ObjectiveType.Puzzle, identifier);
     }

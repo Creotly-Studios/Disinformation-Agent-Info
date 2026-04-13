@@ -51,6 +51,8 @@ public class SaveManagerSystem : MonoBehaviour
         EventBus.Save.OnDisplaySaveMenu += DisplayMenuPanel;
         EventBus.Save.OnSetSceneAutoSave += SetAutoSaveEnabled;
         EventBus.Save.OnRegisterSaveableAsset += RegisterSaveableAsset;
+        EventBus.Save.OnUnregisterSaveableAsset -= UnregisterSaveableAsset;  // safety
+        EventBus.Save.OnUnregisterSaveableAsset += UnregisterSaveableAsset;
     }
 
     private void UnsubscribeFromEvents()
@@ -59,6 +61,7 @@ public class SaveManagerSystem : MonoBehaviour
         EventBus.Save.OnDisplaySaveMenu -= DisplayMenuPanel;
         EventBus.Save.OnSetSceneAutoSave -= SetAutoSaveEnabled;
         EventBus.Save.OnRegisterSaveableAsset -= RegisterSaveableAsset;
+        EventBus.Save.OnUnregisterSaveableAsset -= UnregisterSaveableAsset;
     }
 
     // ── Initialization ────────────────────────────────────────────────────────
@@ -138,9 +141,10 @@ public class SaveManagerSystem : MonoBehaviour
         if (currentLevel == autoSavedFile.currentLevel)
         {
             SerializableQuestData compare = autoSavedFile.GetQuestData(currentLevel);
-            // Fix: was questManager.activeQuest (private field) → ActiveQuest property
             if (questManager.ActiveQuest.CompletedObjectives < compare.completedObjectives)
+            {
                 return;
+            }
         }
 
         if (!File.Exists(GetSavePath(AUTO_SAVE_SLOT)))
@@ -160,6 +164,11 @@ public class SaveManagerSystem : MonoBehaviour
             saveables.Add(saveable);
     }
 
+    private void UnregisterSaveableAsset(ISaveable saveable)
+    {
+        saveables.Remove(saveable);
+    }
+
     // ── Internal ──────────────────────────────────────────────────────────────
 
     private void UpdateSavedFile(SavedData saveData)
@@ -168,27 +177,35 @@ public class SaveManagerSystem : MonoBehaviour
         saveData.modifiedDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
         Player_v2 player = Player_v2.Instance;
-        if (player == null) { pendingAutoSave = true; return; }
+        if (player == null) 
+        { 
+            pendingAutoSave = true;
+            return;
+        }
 
         QuestManager questManager = QuestManager.Instance;
-        if (questManager == null) return;
+        if (questManager == null)
+        {
+            return;
+        }
 
         for (int i = 0; i < questManager.AvailableQuests.Count; i++)
         {
             QuestSO quest = questManager.AvailableQuests[i];
             if (saveData.questDataList.Find(x => x.questName == quest.questTitle) == null)
+            {
                 saveData.questDataList.Add(new SerializableQuestData(quest));
+            }
             saveData.questDataList[i].UpdateQuestData(quest);
         }
 
         saveData.saveableAssets.Clear();
-        saveables.RemoveAll(x => x == null);
+        saveables.RemoveAll(x => x is UnityEngine.Object uo && !uo);
         foreach (ISaveable asset in saveables)
         {
             asset.UpdateSavedData();
             saveData.saveableAssets.Add(asset.GetSaveData());
         }
-
         pendingAutoSave = false;
     }
 }

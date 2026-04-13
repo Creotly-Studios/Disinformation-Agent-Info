@@ -11,11 +11,9 @@ public class GameManager : MonoBehaviour
 
     [Header("Notification")]
     [SerializeField] private NoticePopup paymentPopup;
-
-    public event EventHandler OnGamePause;
     public event EventHandler OnStateChange;
 
-    public int PlayerCoinAmount { get; private set; }
+    [field: SerializeField] public int PlayerCoinAmount { get; private set; }
     public GameState GameState { get; private set; }
     public GameOverState GameOverState { get; private set; }
 
@@ -28,14 +26,27 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null) { Destroy(gameObject); return; }
+        if (Instance != null) 
+        { 
+            Destroy(gameObject);
+            return; 
+        }
         Instance = this;
         Time.timeScale = 1;
         GameState = GameState.Playing;
+        paymentPopup.SubscribeEvents();
     }
 
-    private void Start() => SetCoinAmount(10);
-    private void OnDestroy() => OnGamePause = null;
+    private void Start()
+    {
+        SetCoinAmount(10);
+        EventBus.Quest.OnActiveQuestChanged += MissionComplete;
+    }
+
+    private void OnDestroy()
+    {
+        paymentPopup.UnSubscribeEvents();
+    }
 
     private void OnEnable()
     {
@@ -49,34 +60,38 @@ public class GameManager : MonoBehaviour
 
     private void OnDisable()
     {
-        if (inputSystemActions == null) return;
+        if (inputSystemActions == null)
+        {
+            return;
+        }
         inputSystemActions.Player.Pause.performed -= OnPausePerformed;
         inputSystemActions.Dispose();
         inputSystemActions = null;
     }
 
-    private void OnPausePerformed(UnityEngine.InputSystem.InputAction.CallbackContext _)
-        => TogglePause();
-
-    // ── Payment ───────────────────────────────────────────────────────────────
-
+    private void OnPausePerformed(UnityEngine.InputSystem.InputAction.CallbackContext _) => TogglePause();
     public void HandleCoinPaymentPopup(int amount, string body, Action onPaid) =>
-        EventBus.Notification.OnShow?.Invoke(
-            paymentPopup, NotificationRequest.Payment(amount, body, onPaid));
+        EventBus.Notification.OnShow?.Invoke(paymentPopup, NotificationRequest.Payment(amount, body, onPaid));
 
     // ── Pause ─────────────────────────────────────────────────────────────────
 
     public void TogglePause()
     {
-        if (IsGameOver()) return;
+        if (IsGameOver())
+        {
+            return;
+        }
         isGamePaused = !isGamePaused;
         Time.timeScale = isGamePaused ? 0 : 1;
-        OnGamePause?.Invoke(this, EventArgs.Empty);
+        EventBus.Gameplay.OnGamePausedDisplay?.Invoke(isGamePaused);
     }
 
     public void UnPause()
     {
-        if (!isGamePaused) return;
+        if (!isGamePaused)
+        {
+            return;
+        }
         isGamePaused = false;
         Time.timeScale = 1;
     }
@@ -95,8 +110,12 @@ public class GameManager : MonoBehaviour
         SetGameState(GameState.GameOver);
     }
 
-    public void MissionComplete()
+    private void MissionComplete(bool runLoad, QuestSO _)
     {
+        if(runLoad != true)
+        {
+            return;
+        }
         GameOverState = GameOverState.MissionComplete;
         SetGameState(GameState.GameOver);
         StartCoroutine(ToAgencyScene());
@@ -105,7 +124,7 @@ public class GameManager : MonoBehaviour
     private IEnumerator ToAgencyScene()
     {
         ResetGame();
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(2f);
         LevelLoader.LoadLevel(2);
     }
 

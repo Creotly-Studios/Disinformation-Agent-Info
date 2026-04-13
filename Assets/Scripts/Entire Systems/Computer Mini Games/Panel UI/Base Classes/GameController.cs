@@ -7,8 +7,8 @@ using System.Collections.Generic;
 [System.Serializable]
 public class GameController
 {
-    private bool hasAnswered;    // True after a button is pressed; gates post-reset.
-    private bool isResetting;    // Guard: prevents spawning multiple reset coroutines.
+    private bool hasAnswered;
+    private bool isResetting;
     private int hintCount;
     private int currentScore;
     private float remainingTime;
@@ -52,25 +52,32 @@ public class GameController
     {
         IsGameOver = true;
         gamePanel.DisplayPanel(false);
-        EventBus.Notification.OnShow?.Invoke(
-            Popup, NotificationRequest.MiniGameOver(reason, () => ResetGameLogic(null), ExitGame));
+        EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.MiniGameOver(reason, () => ResetGameLogic(null), ExitGame));
     }
 
     private void TimerCountdown(float delta)
     {
-        if (IsGameOver || computerPanel.IsPopupActive) return;
+        if (IsGameOver || computerPanel.IsPopupActive)
+        {
+            return;
+        }
+
         remainingTime -= delta;
-        if (remainingTime <= 0f) { remainingTime = 0f; GameOver("Time's up!"); return; }
+        if (remainingTime <= 0f)
+        { 
+            remainingTime = 0f;
+            GameOver("Time's up!");
+            return;
+        }
         gamePanel.UpdateCountdownUI(remainingTime);
     }
 
-    // ── Answer Evaluation ─────────────────────────────────────────────────────
-
-    // Called by each game panel button via GamePanels.InitializeButton.
-    public void InitializeButton(List<MiniGameOptionButton> uiButtons,
-        MiniGameOptionButton button, TextMeshProUGUI counterText)
+    public void InitializeButton(List<MiniGameOptionButton> uiButtons, MiniGameOptionButton button, TextMeshProUGUI counterText)
     {
-        if (IsGameOver || hasAnswered) return;
+        if (IsGameOver || hasAnswered)
+        {
+            return;
+        }
 
         Image correct = null;
         selectedOption = button.Option;
@@ -86,12 +93,11 @@ public class GameController
         EvaluateAnswer(isCorrect, correct, button.optionButton.image, counterText);
 
         NoticeType resultType = isCorrect ? NoticeType.Correct : NoticeType.Wrong;
-        EventBus.Notification.OnShow?.Invoke(
-            Popup, NotificationRequest.QuizResult(resultType, selectedOption.Explanation));
-
-        // Trigger post-reset exactly once per answered question.
+        EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.QuizResult(resultType, selectedOption.Explanation));
         if (!isResetting)
+        {
             gamePanel.StartCoroutine(ResetAfterDelay());
+        }
     }
 
     public void EvaluateAnswer(bool isCorrect, Image correct, Image picked, TextMeshProUGUI counterText)
@@ -102,9 +108,14 @@ public class GameController
             currentScore++;
             counterText.text = currentScore.ToString();
             EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, objectiveType, null);
-            if (questObjective.isDone) gamePanel.CompletedObjective();
+            if (questObjective.isDone)
+            {
+                gamePanel.CompletedObjective();
+            }
             if (objectiveType != ObjectiveType.MiniGame_MalignInfluence)
+            {
                 picked.color = Color.green;
+            }
         }
         else
         {
@@ -116,10 +127,6 @@ public class GameController
         }
     }
 
-    // ── Post Logic ────────────────────────────────────────────────────────────
-
-    // Bug fix: was called every frame from HandleMiniGame_Update, spawning
-    // ~60 coroutines/second. Now triggered once per answer via InitializeButton.
     private IEnumerator ResetAfterDelay()
     {
         isResetting = true;
@@ -132,7 +139,6 @@ public class GameController
             gamePanel.AllowButtonInteraction(true);
             selectedOption = null;
         }
-
         hasAnswered = false;
         isResetting = false;
     }
@@ -155,7 +161,9 @@ public class GameController
     public void ExitGame()
     {
         if (questObjective != null && !questObjective.isDone)
+        {
             questObjective.progressValue = 0;
+        }
         dynamicContentList?.Clear();
         computerPanel.DisablePanels();
     }
@@ -164,18 +172,14 @@ public class GameController
     {
         if (hintCount <= 0)
         {
-            EventBus.Notification.OnShow?.Invoke(
-                Popup, NotificationRequest.Payment(3, "Pay 3 Coins for a Hint", DisplayHint));
+            EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.Payment(3, "Pay 3 Coins for a Hint", DisplayHint));
             return;
         }
         hintCount--;
         DisplayHint();
     }
 
-    private void DisplayHint() =>
-        EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.Hint(CurrentPost.funFact_Hint));
-
-    // ── Initialisation ────────────────────────────────────────────────────────
+    private void DisplayHint() => EventBus.Notification.OnShow?.Invoke(Popup, NotificationRequest.Hint(CurrentPost.funFact_Hint));
 
     public void ResetGameLogic(TextMeshProUGUI counterText)
     {

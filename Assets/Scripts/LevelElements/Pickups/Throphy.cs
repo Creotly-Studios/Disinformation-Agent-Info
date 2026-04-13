@@ -11,8 +11,6 @@ public class Throphy : MonoBehaviour
         {
             pickUpEvent?.Invoke();
             EventBus.Quest.OnQuestObjectiveCompleted?.Invoke(true, false, ObjectiveType.Trophy, null);
-            GameManager.Instance.MissionComplete();
-            Destroy(gameObject);
         }
     }
 }

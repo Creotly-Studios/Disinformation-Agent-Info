@@ -16,24 +16,12 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        GameManager.Instance.OnGamePause += OnGamePaused;
-
-        menuBtn.onClick.AddListener(() =>
-        {
-            LevelLoader.LoadLevel(0);
-            GameManager.Instance.ResetGame();
-        });
-
-        replayBtn.onClick.AddListener(() =>
-        {
-            LevelLoader.LoadLevel(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-            GameManager.Instance.ResetGame();
-        });
+        EventBus.Gameplay.OnGamePausedDisplay += OnGamePaused;
+        menuBtn.onClick.AddListener(() => HandleLoadScene(0));
+        replayBtn.onClick.AddListener(() => HandleLoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex));
 
         resumeBtn.onClick.AddListener(() => GameManager.Instance.TogglePause());
         optionsBtn.onClick.AddListener(() => optionsMenu.gameObject.SetActive(true));
-
-        // Uses EventBus so PauseMenu has no dependency on SaveManagerSystem.
         loadSaveBtn.onClick.AddListener(() => EventBus.Save.OnDisplaySaveMenu?.Invoke());
 
         Hide();
@@ -41,14 +29,24 @@ public class PauseMenu : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (GameManager.Instance != null)
-            GameManager.Instance.OnGamePause -= OnGamePaused;
+        EventBus.Gameplay.OnGamePausedDisplay -= OnGamePaused;
     }
 
-    private void OnGamePaused(object sender, System.EventArgs e)
+    private void OnGamePaused(bool isPaused)
     {
-        if (GameManager.Instance.IsGamePaused()) Show();
-        else Hide();
+        if (isPaused)
+        {
+            Show();
+            return;
+        }
+        Hide();
+    }
+
+    private void HandleLoadScene(int index)
+    {
+        Hide();
+        LevelLoader.LoadLevel(index);
+        GameManager.Instance.ResetGame();
     }
 
     private void Show() => gameObject.SetActive(true);

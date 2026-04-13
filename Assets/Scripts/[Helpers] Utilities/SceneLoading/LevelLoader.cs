@@ -75,6 +75,8 @@ public static class LevelLoader
     private static void OnLoadCompleteCallback()
     {
         onComplete?.Invoke();
+        EventBus.Gameplay.OnNewSceneLoaded?.Invoke(false);
+
         if (onComplete == null)
         {
             EventBus.Save.OnHandleAutoSave?.Invoke();

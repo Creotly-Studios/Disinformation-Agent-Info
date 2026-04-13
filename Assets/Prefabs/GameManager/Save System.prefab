@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1785060698640355725}
-  - component: {fileID: 3396421819022485709}
+  - component: {fileID: 4479404619810208571}
   m_Layer: 0
   m_Name: Save System
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 2300970492907687304}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3396421819022485709
+--- !u!114 &4479404619810208571
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -386,11 +386,11 @@ MonoBehaviour:
   exitButton: {fileID: 4588131994051001631}
   deleteButton: {fileID: 347242542881659766}
   newSaveButton: {fileID: 3578109884502955844}
-  overwriteButton: {fileID: 0}
+  overwriteButton: {fileID: 3020342976656185710}
   completeSaveButton: {fileID: 6185046813293298468}
-  fileNameLabel: {fileID: 0}
-  fileSizeLabel: {fileID: 0}
-  modifiedDateLabel: {fileID: 0}
+  fileNameLabel: {fileID: 5013987279370535536}
+  fileSizeLabel: {fileID: 6281972206066545066}
+  modifiedDateLabel: {fileID: 3479192256272432406}
   fileNameInputField: {fileID: 5942156419130174023}
 --- !u!1 &1144546290116227778
 GameObject:
@@ -2603,7 +2603,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8780426463103326733
 RectTransform:
   m_ObjectHideFlags: 0

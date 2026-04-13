@@ -12,7 +12,7 @@ public class TaskListManager : MonoBehaviour
     [SerializeField] private Transform contentDrawer;
     [SerializeField] private TextMeshProUGUI titleText;
 
-    private void Start()
+    private void Awake()
     {
         EventBus.TaskList.OnRefreshTaskList += SetUpTaskList;
         EventBus.TaskList.OnUpdateTaskListValues += UpdateTaskProgressLevels;

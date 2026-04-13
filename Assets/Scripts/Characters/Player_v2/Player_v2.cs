@@ -71,7 +71,7 @@ public class Player_v2 : MonoBehaviour, ISaveable
     public bool IsPlayerDead() => isDead;
     public ObjectSaveData GetSaveData() => saveData;
 
-    public void PlayDashEffect() => dashVFX.Play();  
+    public void PlayDashEffect() => dashVFX.Play();
     public void PlayAttackEffect() => attackVFX.Play();
     public void SetActiveState() => StateMachine.ChangeState(IdleState);
     public void SetInactiveState() => StateMachine.ChangeState(InactiveState);
@@ -82,7 +82,7 @@ public class Player_v2 : MonoBehaviour, ISaveable
 
     private void Awake()
     {
-        if(Instance != null)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -106,7 +106,7 @@ public class Player_v2 : MonoBehaviour, ISaveable
     {
         detectionBuffer = new RaycastHit[20];
         saveData = new CharacterSaveData { name = name };
-        
+
         Normal = Instantiate(normalState);
         Dashing = Instantiate(dashingState);
         Jumping = Instantiate(jumpingState);
@@ -142,7 +142,12 @@ public class Player_v2 : MonoBehaviour, ISaveable
         StateMachine.CurrentState.PhysicsUpdate();
     }
 
-    private void OnDestroy() => Anim = null;
+    private void OnDestroy()
+    {
+        EventBus.Save.OnUnregisterSaveableAsset?.Invoke(this);
+        if (Instance == this) Instance = null;
+        Anim = null;
+    }
 
     // ── Locomotion State Construction ─────────────────────────────────────────
 
@@ -196,7 +201,7 @@ public class Player_v2 : MonoBehaviour, ISaveable
 
     public void UpdateSavedData()
     {
-        saveData.UpdateSaveData(GameManager.Instance.PlayerCoinAmount, Damage.CurrentHealth,transform.position, transform.rotation);
+        saveData.UpdateSaveData(GameManager.Instance.PlayerCoinAmount, Damage.CurrentHealth, transform.position, transform.rotation);
     }
 
     public void ReloadDataFromSavedFile(ObjectSaveData data)

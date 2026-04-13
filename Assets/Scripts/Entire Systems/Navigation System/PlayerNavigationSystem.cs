@@ -26,9 +26,12 @@ public class PlayerNavigationSystem : MonoBehaviour
         EventBus.Quest.OnNavigationRefreshNeeded -= OnNavigationRefreshNeeded;
     }
 
-    private void OnActiveQuestChanged(QuestSO quest)
+    private void OnActiveQuestChanged(bool _, QuestSO quest)
     {
-        if (quest == null) return;
+        if (quest == null)
+        {
+            return;
+        }
         HandleIdentifierFilter(quest.FindNextObjective());
     }
 

@@ -59,7 +59,10 @@ public class ComputerPanel_UI : MonoBehaviour
 
     private void OnEnable()
     {
-        if (hasInitialized) return;
+        if (hasInitialized)
+        {
+            return;
+        }
         hasInitialized = true;
         objectivePanelDelay = new WaitForSeconds(1.2f);
 
@@ -73,6 +76,7 @@ public class ComputerPanel_UI : MonoBehaviour
         EventBus.Quest.OnActiveQuestChanged += OnActiveQuestChanged;
         EventBus.Notification.OnShow += OnNotificationShown;
         EventBus.Notification.OnDismiss += OnNotificationDismissed;
+        Popup.SubscribeEvents();
     }
 
     private void OnDisable()
@@ -89,27 +93,36 @@ public class ComputerPanel_UI : MonoBehaviour
         EventBus.Quest.OnActiveQuestChanged -= OnActiveQuestChanged;
         EventBus.Notification.OnShow -= OnNotificationShown;
         EventBus.Notification.OnDismiss -= OnNotificationDismissed;
+        Popup.UnSubscribeEvents();
     }
 
     private void Start() => DisablePanels();
 
     // ── EventBus Handlers ─────────────────────────────────────────────────────
 
-    private void OnActiveQuestChanged(QuestSO quest)
+    private void OnActiveQuestChanged(bool _, QuestSO quest)
     {
-        if (quest == null) { UnlockAllMiniGames(); return; }
+        Debug.Log(quest);
+        if (quest == null)
+        { 
+            UnlockAllMiniGames();
+            return;
+        }
 
         currentMiniGameObjective = quest.GetMiniGameObjetive();
-        if (currentMiniGameObjective == null) { UnlockAllMiniGames(); return; }
-
+        if (currentMiniGameObjective == null) 
+        { 
+            UnlockAllMiniGames();
+            return;
+        }
         SetMiniGameInteractability(currentMiniGameObjective.objectiveType);
         smComputer.identifier.SetObjectiveType(currentMiniGameObjective.objectiveType);
-        missionCodeUI.SetParameters(currentMiniGameObjective.isDone, quest);
     }
 
-    // Only track this panel's popup — ignores all others.
-    private void OnNotificationShown(NoticePopup popup, NotificationRequest _) =>
+    private void OnNotificationShown(NoticePopup popup, NotificationRequest _)
+    {
         _isPopupActive = popup == Popup || _isPopupActive;
+    }
 
     private void OnNotificationDismissed(NoticePopup popup)
     {
@@ -131,10 +144,19 @@ public class ComputerPanel_UI : MonoBehaviour
 
     public void DisablePanels()
     {
-        mainMenuPanel.SetActive(true);
+        EnableMainMenu();
         biasBingoPanel.gameObject.SetActive(false);
         infoMatchPanel.gameObject.SetActive(false);
         SpotTheSourcePanel.gameObject.SetActive(false);
+    }
+
+    private void EnableMainMenu()
+    {
+        if(currentMiniGameObjective != null)
+        {
+            missionCodeUI.SetParameters(currentMiniGameObjective.isDone);
+        }   
+        mainMenuPanel.SetActive(true);
     }
 
     private void DisplayPanel(GamePanels panel)
@@ -148,8 +170,8 @@ public class ComputerPanel_UI : MonoBehaviour
     {
         if (stopPlaying)
         {
-            mainMenuPanel.SetActive(true);
-            if(activePanel != null)
+            EnableMainMenu();
+            if (activePanel != null)
             {
                 activePanel.gameObject.SetActive(false);
                 activePanel = null;

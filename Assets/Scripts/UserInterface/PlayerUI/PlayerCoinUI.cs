@@ -11,31 +11,27 @@ public class PlayerCoinUI : MonoBehaviour
 
     private Coroutine hideCoroutine;
 
-    private void OnEnable()
+    private void Start()
     {
-        // Subscribe here so the listener is properly removed if the object is disabled.
-        // Was in Start() with no corresponding unsubscribe — listener would stack on re-enable.
-        if (Player_v2.Instance != null)
-            Player_v2.Instance.OnCollectCoin += OnCoinCollected;
+        Player_v2.Instance.OnCollectCoin += OnCoinCollected;
+        Show();
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        if (Player_v2.Instance != null)
+        if(Player_v2.Instance != null)
+        {
             Player_v2.Instance.OnCollectCoin -= OnCoinCollected;
+        }
     }
-
-    private void Start() => Show();
 
     private void OnCoinCollected(object sender, EventArgs e) => Show();
 
     public void Show()
     {
-        // Fix: was GameManager.Instance.PlayerCoins() — method removed, property is PlayerCoinAmount.
         coinAmountText.text = GameManager.Instance.PlayerCoinAmount.ToString();
         coinUIPanel.SetActive(true);
 
-        // Cancel any in-progress hide so the timer resets on rapid pickups.
         if (hideCoroutine != null) StopCoroutine(hideCoroutine);
         hideCoroutine = StartCoroutine(DisplayAndHide());
     }

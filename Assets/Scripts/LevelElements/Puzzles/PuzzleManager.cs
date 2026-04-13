@@ -14,24 +14,28 @@ public class PuzzleManager : MonoBehaviour
 
     private void OnEnable()
     {
+        QuestSO quest = QuestManager.Instance.ActiveQuest;
+        puzzleObjective = quest.FindQuestObjective(ObjectiveType.Puzzle);
+        combatObjective = quest.FindQuestObjective(ObjectiveType.FightBots);
+
         EventBus.Quest.OnActiveQuestChanged += OnQuestChanged;
         EventBus.Quest.OnNavigationRefreshNeeded += OnObjectiveCompleted;
+        EventBus.Gameplay.OnNewSceneLoaded += (bool _) => RefreshRewards();
     }
 
     private void OnDisable()
     {
         EventBus.Quest.OnActiveQuestChanged -= OnQuestChanged;
         EventBus.Quest.OnNavigationRefreshNeeded -= OnObjectiveCompleted;
+        EventBus.Gameplay.OnNewSceneLoaded -= (bool _) => RefreshRewards();
     }
 
-    private void OnQuestChanged(QuestSO quest)
+    private void OnQuestChanged(bool _, QuestSO quest)
     {
         if (quest == null)
         {
             return;
         }
-        puzzleObjective = quest.FindQuestObjective(ObjectiveType.Puzzle);
-        combatObjective = quest.FindQuestObjective(ObjectiveType.FightBots);
         RefreshRewards();
     }
 

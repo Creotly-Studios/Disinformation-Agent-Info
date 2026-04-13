@@ -38,8 +38,21 @@ public class DialogueManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this) { Destroy(gameObject); return; }
+        if (Instance != null && Instance != this)
+        { 
+            Destroy(gameObject);
+            return;
+        }
         Instance = this;
+        dialoguePopup.SubscribeEvents();
+    }
+
+    private void OnDestroy()
+    {
+        if (dialoguePopup != null)
+        {
+            dialoguePopup.UnSubscribeEvents();
+        }
     }
 
     private void Start()

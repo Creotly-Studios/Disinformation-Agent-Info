@@ -17,15 +17,12 @@ public class QuestSO : ScriptableObject
     [field: SerializeField] public int QuestReward { get; private set; }
     [field: SerializeField] public List<QuestObjective> QuestObjectives { get; private set; }
 
-    // ── Public Query API ──────────────────────────────────────────────────────
-
     public QuestObjective FindNextObjective() => QuestObjectives.Find(x => !x.isDone);
     public QuestObjective FindQuestObjective(ObjectiveType t) => FindQuestObjective(t, false);
 
     public void CheckIfQuestIsComplete()
     {
-        if (QuestObjectives.Find(x => !x.isDone) == null)
-            isComplete = true;
+        isComplete = QuestObjectives.Find(x => !x.isDone) == null;
     }
 
     public QuestObjective GetMiniGameObjetive()
@@ -42,27 +39,34 @@ public class QuestSO : ScriptableObject
 
     // ── Objective Update Pipeline ─────────────────────────────────────────────
 
-    public void UpdateQuestObjectiveLevels(bool increase, bool multiple,
-        ObjectiveType type, QuestObjectiveNavIdentifier identifier)
+    public void UpdateQuestObjectiveLevels(bool increase, bool multiple, ObjectiveType type, QuestObjectiveNavIdentifier identifier)
     {
         QuestObjective objective = FindQuestObjective(type, multiple);
-        if (increase) IncreaseQuestObjectiveProgressLevels(objective, identifier);
-        else DecreaseQuestObjectiveProgressLevels(objective, identifier);
+        if (increase)
+        {
+            IncreaseQuestObjectiveProgressLevels(objective, identifier);
+            return;
+        }
+        DecreaseQuestObjectiveProgressLevels(objective, identifier);
     }
 
-    public void IncreaseQuestObjectiveProgressLevels(QuestObjective objective,
-        QuestObjectiveNavIdentifier identifier)
+    public void IncreaseQuestObjectiveProgressLevels(QuestObjective objective, QuestObjectiveNavIdentifier identifier)
     {
-        if (objective == null || objective.isDone) return;
+        if (objective == null || objective.isDone)
+        {
+            return;
+        }
         CompletedObjectives++;
         objective.progressValue++;
         SetCompletedObjective(objective, identifier);
     }
 
-    private void DecreaseQuestObjectiveProgressLevels(QuestObjective objective,
-        QuestObjectiveNavIdentifier identifier)
+    private void DecreaseQuestObjectiveProgressLevels(QuestObjective objective, QuestObjectiveNavIdentifier identifier)
     {
-        if (objective == null) return;
+        if (objective == null)
+        {
+            return;
+        }
         CompletedObjectives--;
         objective.progressValue--;
         SetCompletedObjective(objective, identifier);
@@ -82,9 +86,9 @@ public class QuestSO : ScriptableObject
         if(identifier != null)
         {
             identifier.MarkCompleted();
-            EventBus.Quest.OnNavigationRefreshNeeded?.Invoke(objective);
         }
-        EventBus.Quest.OnObjectiveCompleted?.Invoke(objective);
+        EventBus.Quest.OnObjectiveCompletedVisuals?.Invoke(objective);
+        EventBus.Quest.OnNavigationRefreshNeeded?.Invoke(objective);
     }
 
     private QuestObjective FindQuestObjective(ObjectiveType type, bool multipleInQuest)

@@ -15,6 +15,7 @@ public static class EventBus
         public UnityAction OnDisplaySaveMenu;
         public UnityAction<bool> OnSetSceneAutoSave;
         public UnityAction<ISaveable> OnRegisterSaveableAsset;
+        public UnityAction<ISaveable> OnUnregisterSaveableAsset;
     }
 
     public class TaskListEvents
@@ -26,30 +27,33 @@ public static class EventBus
     public class QuestEvents
     {
         // Fired by QuestManager when the active quest changes.
-        public UnityAction<QuestSO> OnActiveQuestChanged;
+        public UnityAction<bool, QuestSO> OnActiveQuestChanged;
 
         // Fired by QuestSO when an objective is marked done.
         // QuestManager subscribes to chain "Completed → Next Objective" notifications.
-        public UnityAction<QuestObjective> OnObjectiveCompleted;
+        public UnityAction<QuestObjective> OnObjectiveCompletedVisuals;
 
         // Fired by QuestSO to signal nav system to refilter identifiers.
         public UnityAction<QuestObjective> OnNavigationRefreshNeeded;
 
         // General progress event consumed by QuestManager → QuestSO.
-        public UnityAction<bool, bool, ObjectiveType, QuestObjectiveNavIdentifier>
-                                             OnQuestObjectiveCompleted;
+        public UnityAction<bool, bool, ObjectiveType, QuestObjectiveNavIdentifier> OnQuestObjectiveCompleted;
     }
 
     public class GameplayEvents
     {
         public UnityAction OnGameCompleted;
         public UnityAction OnCoinCollected;
+
+        public UnityAction<bool> OnNewSceneLoaded;
+        public UnityAction<bool> OnGamePausedDisplay;
     }
 
     public class CharacterStatEvents
     {
         // Fired by NPC_CharacterProfile when trust falls to or below 25.
         // DialogueManager subscribes and handles consequences.
+        public UnityAction OnPlayerInteract;
         public UnityAction OnPlayerTrustLost;
     }
 
